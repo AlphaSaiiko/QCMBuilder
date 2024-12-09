@@ -3,6 +3,8 @@ package vue;
 import java.awt.*;
 import javax.swing.*;
 
+import modele.Ressource;
+
 public class CreerNotion extends JFrame
 {
 	/*
@@ -19,7 +21,7 @@ public class CreerNotion extends JFrame
 		gbc.insets = new Insets(5, 5, 5, 5); // Marges entre les composants
 
 		// JComboBox pour choisir le type de ressource
-		String[] ressources = { "R1.01", "R1.02", "R1.03", "R1.04" };
+		String[] ressources = Ressource.getAllRessources();
 		JComboBox<String> choixRessource = new JComboBox<>(ressources);
 		choixRessource.setBorder(BorderFactory.createTitledBorder("Ressource"));
 		gbc.gridx = 0;
