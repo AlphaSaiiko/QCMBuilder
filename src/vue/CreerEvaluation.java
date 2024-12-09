@@ -4,32 +4,15 @@ import java.awt.*;
 import java.io.File;
 import javax.swing.*;
 
-public class CreerEvaluation {
+public class CreerEvaluation extends JFrame {
 
 	public CreerEvaluation() {
-		/*
-		 * +------------+
-		 * | PARAMETRES |
-		 * +------------+
-		 */
+		setTitle("Génération d'évaluation");
 
-		JFrame fenetre;
+		JPanel panelPrincipal = new JPanel();
+		panelPrincipal.setLayout(new BorderLayout());
 
-		/*
-		 * +--------------+
-		 * | CONSTRUCTEUR |
-		 * +--------------+
-		 */
-
-		// Créer la fenêtre principale
-		fenetre = new JFrame("Génération d'évaluation");
-		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		fenetre.setSize(500, 300);
-		fenetre.setLocationRelativeTo(null);
-		fenetre.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-
-		// Ajouter le bouton de retour en haut à gauche
+		// Bouton de retour
 		String imageRet = "QCMBuilder/lib/icones/home.png";
 		ImageIcon icon = new ImageIcon(imageRet);
 		Image img = icon.getImage();
@@ -37,17 +20,12 @@ public class CreerEvaluation {
 		icon = new ImageIcon(newImg);
 		JButton retourButton = new JButton(icon);
 		retourButton.addActionListener(e -> {
-			new Accueil();
-			fenetre.dispose();
+			System.out.println("Retour à l'accueil");
+			dispose();
 		});
 		JPanel panelRetour = new JPanel();
 		panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelRetour.add(retourButton);
-
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		fenetre.add(panelRetour, gbc);
 
 		// Panel pour regrouper les composants sur une seule ligne
 		JPanel linePanel = new JPanel(new GridBagLayout());
@@ -107,20 +85,22 @@ public class CreerEvaluation {
 		linePanel.add(radioPanel, lineGbc);
 
 		// Ajouter le panel regroupant les composants à la fenêtre principale
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.CENTER;
-		fenetre.add(linePanel, gbc);
+		panelPrincipal.add(panelRetour, BorderLayout.NORTH);
+		panelPrincipal.add(linePanel, BorderLayout.CENTER);
 
 		// Ajouter un bouton en bas centré
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.anchor = GridBagConstraints.CENTER;
 		JButton creerButton = new JButton("Créer une nouvelle évaluation");
-		fenetre.add(creerButton, gbc);
+		JPanel panelBouton = new JPanel();
+		panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
+		panelBouton.add(creerButton);
 
-		// Rendre la fenêtre visible
-		fenetre.setVisible(true);
+		panelPrincipal.add(panelBouton, BorderLayout.SOUTH);
+
+		this.add(panelPrincipal);
+		this.setSize(500, 300);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
 	}
 
 	public static void main(String[] args) {
