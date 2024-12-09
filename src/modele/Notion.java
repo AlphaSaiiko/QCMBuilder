@@ -12,6 +12,8 @@ public class Notion
 	 */ 
 	private String nom;
 
+	private Ressource ressource;
+
 	private List<Question> ensQuestions;
 
 	
@@ -20,9 +22,10 @@ public class Notion
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public Notion(String nom)
+	public Notion(String nom, Ressource ressource)
 	{
 		this.nom = nom;
+		this.ressource = ressource;
 		this.ensQuestions = new ArrayList<Question>();
 	}
 
