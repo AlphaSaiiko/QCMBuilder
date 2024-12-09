@@ -1,7 +1,7 @@
 package vue;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class CreerQuestion extends JFrame
 {
@@ -41,26 +41,62 @@ public class CreerQuestion extends JFrame
 		panelDifficulte.setLayout(new BorderLayout());
 		panelDifficulte.add(new JLabel("niveau"), BorderLayout.NORTH);
 
-		// Creation des boutons rond pour les niveaux de difficultés avec les couleurs et texte correspondant
-		JButton tresfacile = creerButtonRond(Color.GREEN, "TF");
-		JButton facile = creerButtonRond(Color.CYAN, "F");
-		JButton moyen = creerButtonRond(Color.RED, "M");
-		JButton dur = creerButtonRond(Color.GRAY, "D");
+        // Création des boutons ronds pour les niveaux de difficultés avec les couleurs et texte correspondants
+        RoundButton tresfacile = creerButtonRond(Color.GREEN, "TF");
+        RoundButton facile = creerButtonRond(Color.CYAN, "F");
+        RoundButton moyen = creerButtonRond(Color.RED, "M");
+        RoundButton dur = creerButtonRond(Color.WHITE, "D");
 
-		// Définir la taille du texte
-		Font font = new Font("Arial", Font.BOLD, 8);
-		tresfacile.setFont(font);
-		facile.setFont(font);
-		moyen.setFont(font);
-		dur.setFont(font);
-		
-		// Panel pour les ronds de difficultés
-		JPanel panelRond = new JPanel();
-		panelRond.setLayout(new FlowLayout());
-		panelRond.add(tresfacile);
-		panelRond.add(facile);
-		panelRond.add(moyen);
-		panelRond.add(dur);
+        // Définir la taille du texte
+        Font font = new Font("Arial", Font.BOLD, 8);
+        tresfacile.setFont(font);
+        facile.setFont(font);
+        moyen.setFont(font);
+        dur.setFont(font);
+
+        // Grouper les boutons pour permettre une seule sélection à la fois
+        ButtonGroup group = new ButtonGroup();
+        group.add(tresfacile);
+        group.add(facile);
+        group.add(moyen);
+        group.add(dur);
+
+        // Ajouter des action listeners pour changer la couleur lorsqu'un bouton est sélectionné
+        tresfacile.addActionListener(e -> {
+            tresfacile.setBackground(Color.GREEN);
+            facile.setBackground(Color.GRAY);
+            moyen.setBackground(Color.GRAY);
+            dur.setBackground(Color.GRAY);
+        });
+
+        facile.addActionListener(e -> {
+            tresfacile.setBackground(Color.GRAY);
+            facile.setBackground(Color.CYAN);
+            moyen.setBackground(Color.GRAY);
+            dur.setBackground(Color.GRAY);
+        });
+
+        moyen.addActionListener(e -> {
+            tresfacile.setBackground(Color.GRAY);
+            facile.setBackground(Color.GRAY);
+            moyen.setBackground(Color.RED);
+            dur.setBackground(Color.GRAY);
+        });
+
+        dur.addActionListener(e -> {
+            tresfacile.setBackground(Color.GRAY);
+            facile.setBackground(Color.GRAY);
+            moyen.setBackground(Color.GRAY);
+            dur.setBackground(Color.WHITE);
+        });
+
+        // Panel pour les ronds de difficultés
+        JPanel panelRond = new JPanel();
+        panelRond.setLayout(new FlowLayout());
+        panelRond.add(tresfacile);
+        panelRond.add(facile);
+        panelRond.add(moyen);
+        panelRond.add(dur);
 		
 		panelDifficulte.add(panelRond, BorderLayout.CENTER);
 		
@@ -96,20 +132,27 @@ public class CreerQuestion extends JFrame
 		rassemble.add(points);
 		rassemble.add(temps);
 
-		// Ajout des différents panels à panel principal
+        // Bouton pour créer une nouvelle question
+        JButton creerQuestionButton = new JButton("Créer nouvelle question");
+        JPanel panelBouton = new JPanel();
+        panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panelBouton.add(creerQuestionButton);
+
+        // Ajout du bouton au panel principal
 		panelprincipal.add(rassemble, BorderLayout.NORTH);
 		panelprincipal.add(ressourceNotionLvl, BorderLayout.CENTER);
+        panelprincipal.add(panelBouton, BorderLayout.SOUTH);
 		
 		this.add(panelprincipal);
-		this.setSize(700, 160);
+		this.setSize(700, 180);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
 
 	// Création des boutons ronds pour les niveaux de difficultés
-	public static JButton creerButtonRond(Color couleur, String texte)
+	public static RoundButton creerButtonRond(Color couleur, String texte)
 	{
-		JButton button = new RoundButton(texte);
+		RoundButton button = new RoundButton(texte);
 		button.setPreferredSize(new Dimension(45, 45));
 		button.setBackground(couleur);
 		button.setOpaque(false);
