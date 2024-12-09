@@ -49,7 +49,7 @@ public class TestRessource
 		}
 
 
-		TestCreerFichier fichier = new TestCreerFichier(lstRes);
+		CreerFichier fichier = new CreerFichier(lstRes);
 		fichier.creerRessource();
 
 
