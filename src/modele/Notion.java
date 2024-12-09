@@ -30,23 +30,6 @@ public class Notion
 		this.id = ++nbNotion;
 		this.ensQuestions = new ArrayList<Question>();
 	}
-
-
-	/*
-	 *  +----------+
-	 *  | METHODES |
-	 *  +----------+
-	 */
-	
-	public void ajouterQuestion(Question question)
-	{
-		if (question != null && this.ensQuestions != null)
-		{
-			this.ensQuestions.add(question);
-		}
-	}
-
-
 	/*
 	 *  +----------+
 	 *  | GETTEURS |
@@ -68,4 +51,41 @@ public class Notion
 	 *  +----------+
 	 */ 
 	public void setNom(String nom) { this.nom = nom; }
+
+
+	/*
+	 *  +----------+
+	 *  | METHODES |
+	 *  +----------+
+	 */
+	
+	public void ajouterQuestion(Question question)
+	{
+		if (question != null && this.ensQuestions != null)
+		{
+			this.ensQuestions.add(question);
+		}
+	}
+
+	public void modifierQuestion(Question question)
+	{
+		for (Question qst : this.ensQuestions)
+		{
+			if (question.getId() == qst.getId())
+			{
+				qst = question;
+			}
+		}
+	}
+
+	public void supprimerQuestion(Question question)
+	{
+		for (Question qst : this.ensQuestions)
+		{
+			if (question.equals(qst))
+			{
+				this.ensQuestions.remove(qst);
+			}
+		}
+	}
 }
