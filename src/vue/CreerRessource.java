@@ -2,6 +2,7 @@ package vue;
 
 import java.awt.*;
 import javax.swing.*;
+import modele.Ressource;
 
 public class CreerRessource extends JFrame
 {
@@ -38,6 +39,17 @@ public class CreerRessource extends JFrame
 		gbc.weightx = 0.2;
 		gbc.weighty = 0;
 		panelprincipal.add(ajouter, gbc);
+
+		// Récupérer le contenu du JTextArea et créer une nouvelle ressource
+		ajouter.addActionListener(e -> {
+			String titreRessource = titre.getText();
+			if (!titreRessource.trim().isEmpty()) {
+				Ressource ressource = new Ressource(titreRessource);
+				System.out.println("Nouvelle ressource créée avec le titre: " + titreRessource);
+			} else {
+				JOptionPane.showMessageDialog(this, "Le titre de la ressource ne peut pas être vide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+			}
+		});
 
 		this.add(panelprincipal);
 		this.setSize(500, 150);
