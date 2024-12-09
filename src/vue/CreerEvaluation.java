@@ -4,9 +4,9 @@ import java.awt.*;
 import java.io.File;
 import javax.swing.*;
 
-public class GenerationDEvaluation {
+public class CreerEvaluation {
 
-	public GenerationDEvaluation() {
+	public CreerEvaluation() {
 		/*
 		 * +------------+
 		 * | PARAMETRES |
@@ -124,6 +124,6 @@ public class GenerationDEvaluation {
 	}
 
 	public static void main(String[] args) {
-		new GenerationDEvaluation();
+		new CreerEvaluation();
 	}
 }
