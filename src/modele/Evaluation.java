@@ -28,6 +28,8 @@ public class Evaluation
 		this.ressource = ressource;
 		this.listeQuestions = new ArrayList<Question>();
 	}
+
+	
 	/*
 	 *  +----------+
 	 *  | GETTEURS |
