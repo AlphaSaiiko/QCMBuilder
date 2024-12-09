@@ -19,6 +19,9 @@ public class Question
 	private int temps     ;
 	private int difficulte;
 
+	private final  int id;
+	private static int nbQuestion = 0;
+
 	private List<String> complements; // Les pièces jointes ou petites images
 
 	private List<IOption> ensOptions;
@@ -37,6 +40,8 @@ public class Question
 		this.temps       = temps      ;
 		this.difficulte  = difficulte ;
 		this.notion      = notion     ;
+
+		this.id = ++Question.nbQuestion;
 
 		this.complements = new ArrayList<String>();
 		this.ensOptions = new ArrayList<IOption>();
@@ -57,13 +62,15 @@ public class Question
 	public int getTemps     () { return temps     ; }
 	public int getDifficulte() { return difficulte; }
 
-	public List<String> getComplements() { return complements; }
-
 	public Notion getNotion() { return notion; }
 
-	public List<IOption> getEnsOptions() { return ensOptions; }
+	public int getId       () { return this.id;} 
+
+	public List<String> getComplements() { return complements; }
 
 	public IOption getOptions(int ind) { return ensOptions.get(ind);}
+
+	public List<IOption> getEnsOptions() { return ensOptions; }
 
 
 	/*
