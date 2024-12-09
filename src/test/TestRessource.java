@@ -12,7 +12,7 @@ public class TestRessource
 		tmpRes = new Ressource("ressource1");
 
 		// Création d'un objet File représentant le répertoire
-		File repertoire = new File("../../lib/ressources/"+tmpRes.getNom());
+		File repertoire = new File("../lib/ressources/"+tmpRes.getNom());
 
 		// Vérification et création du répertoire
 		if (!repertoire.exists()) {
