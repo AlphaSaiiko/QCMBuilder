@@ -12,6 +12,8 @@ public class Notion
 	 */ 
 	private String nom;
 
+	private Ressource ressource;
+
 	private final  int id;
 	private static int nbNotion = 0;
 
@@ -23,13 +25,15 @@ public class Notion
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-
-	public Notion(String nom)
+	public Notion(String nom, Ressource ressource)
 	{
 		this.nom = nom;
+		this.ressource = ressource;
 		this.id = ++nbNotion;
 		this.ensQuestions = new ArrayList<Question>();
 	}
+
+
 	/*
 	 *  +----------+
 	 *  | GETTEURS |

@@ -4,6 +4,8 @@ import java.awt.*;
 import java.io.File;
 import javax.swing.*;
 
+import modele.Ressource;
+
 public class CreerQuestion extends JFrame
 {
 	/*
@@ -102,7 +104,7 @@ public class CreerQuestion extends JFrame
 		panelDifficulte.add(panelRond, BorderLayout.CENTER);
 		
 		//Creation JComboBox pour les ressources et matières
-		JComboBox<String> ressourcesList = new JComboBox<String>(new String[] { "R1.01.Init Dev", "R1.01.Init Dev", "R1.01.Init Dev", "R1.01.Init Dev" });
+		JComboBox<String> ressourcesList = new JComboBox<String>(Ressource.getAllRessources());
 		ressourcesList.setPreferredSize(new Dimension(150, 25));
 		
 		JComboBox<String> matieresList = new JComboBox<String>(new String[] { "Variable", "Intro_Php", "Fuction", "MVC" });
