@@ -48,7 +48,12 @@ public class Accueil extends JFrame
 			new CreerQuestion();
 			this.dispose();
 		});
-		btnParametres.addActionListener(e -> System.out.println("Paramètres"));
+		
+		btnParametres.addActionListener(e ->
+		{
+			new Parametre();
+			this.dispose();
+		});
 
 		panelBoutons.add(btnCreerQCM);
 		panelBoutons.add(btnCreerQuestion);
