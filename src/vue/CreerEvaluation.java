@@ -6,6 +6,11 @@ import javax.swing.*;
 
 public class CreerEvaluation extends JFrame {
 
+	/*
+	 *  +--------------+
+	 *  | CONSTRUCTEUR |
+	 *  +--------------+
+	 */
 	public CreerEvaluation() {
 		setTitle("Génération d'évaluation");
 
