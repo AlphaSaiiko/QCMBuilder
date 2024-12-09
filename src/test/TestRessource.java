@@ -3,6 +3,8 @@ package test;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.swing.text.html.Option;
+
 import modele.*;
 import modele.option.*;
 
@@ -41,7 +43,7 @@ public class TestRessource
 					ressource.getNotion(j).ajouterQuestion(new Question("type", "intitulé", i, k, i, ressource.getNotion(j)));
 					for(int l=0; l<=5;l++)
 					{
-						ressource.getNotion(j).getQuestion(k).ajouterOption(new Option("Question", "çava?", true));
+						//ressource.getNotion(j).getQuestion(k).ajouterOption(new Option("Question", "çava?", true));
 					}
 				}
 			}
@@ -51,6 +53,10 @@ public class TestRessource
 
 		CreerFichier fichier = new CreerFichier(lstRes);
 		fichier.creerRessource();
+
+		Fichier fich = new Fichier("lib/ressources/ressource1/notion1/");
+		fich.ajouterTxt("testFichier");
+		fich.ajouterFichier("repertoirTest");
 
 
 		
