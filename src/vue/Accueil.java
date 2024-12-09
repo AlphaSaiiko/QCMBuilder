@@ -1,5 +1,3 @@
-package vue;
-
 import java.awt.*;
 import javax.swing.*;
 
@@ -48,9 +46,8 @@ public class Accueil extends JFrame
 			new CreerQuestion();
 			this.dispose();
 		});
-		
-		btnParametres.addActionListener(e ->
-		{
+
+		btnParametres.addActionListener(e ->{
 			new Parametre();
 			this.dispose();
 		});

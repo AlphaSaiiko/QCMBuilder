@@ -78,7 +78,8 @@ public class Parametre extends JFrame {
         icon = new ImageIcon(newImg);
         JButton retourButton = new JButton(icon);
         retourButton.addActionListener(e -> {
-            new Accueil();
+            Accueil accueil = new Accueil();
+            accueil.setVisible(true);
             dispose();
         });
         JPanel panelRetour = new JPanel();
