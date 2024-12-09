@@ -3,7 +3,6 @@ package vue;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
-
 import modele.Ressource;
 
 public class CreerQuestion extends JFrame
@@ -104,7 +103,7 @@ public class CreerQuestion extends JFrame
 		panelDifficulte.add(panelRond, BorderLayout.CENTER);
 		
 		//Creation JComboBox pour les ressources et matières
-		JComboBox<String> ressourcesList = new JComboBox<String>(Ressource.getAllRessources());
+		JComboBox<String> ressourcesList = new JComboBox<String>(Ressource.getNomsRessources());
 		ressourcesList.setPreferredSize(new Dimension(150, 25));
 		
 		JComboBox<String> matieresList = new JComboBox<String>(new String[] { "Variable", "Intro_Php", "Fuction", "MVC" });

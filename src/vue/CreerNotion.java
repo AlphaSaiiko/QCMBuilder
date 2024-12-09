@@ -20,7 +20,7 @@ public class CreerNotion extends JFrame
 		gbc.insets = new Insets(5, 5, 5, 5); // Marges entre les composants
 
 		// JComboBox pour choisir le type de ressource
-		String[] allRessources = Ressource.getAllRessources();
+		String[] allRessources = Ressource.getNomsRessources();
 		if (allRessources == null) {
 			allRessources = new String[0];
 		}

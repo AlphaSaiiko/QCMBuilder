@@ -3,6 +3,7 @@ package modele;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+// import modele.Notion; // This import is unnecessary as it's in the same package
 
 public class Ressource
 {
@@ -16,7 +17,7 @@ public class Ressource
 
 	private static int nbRessource = 0;
 
-	private List<Notion> ensNotions;
+	private final List<Notion> ensNotions;
 
 	/*
 	 *  +--------------+
@@ -27,7 +28,7 @@ public class Ressource
 	{
 		this.nom = nom;
 		this.id = ++nbRessource;
-		this.ensNotions = new ArrayList<Notion>();
+		this.ensNotions = new ArrayList<>();
 	}
 
 
@@ -51,6 +52,14 @@ public class Ressource
 
 	public List<Notion> getEnsNotions ()        
 	{ return this.ensNotions; }
+	
+	public String[] getNomsNotions() {
+		String[] nomsNotions = new String[this.ensNotions.size()];
+		for (int i = 0; i < this.ensNotions.size(); i++) {
+			nomsNotions[i] = this.ensNotions.get(i).getNom();
+		}
+		return nomsNotions;
+	}
 
 	public Notion getNotion           (int ind) 
 	{return this.ensNotions.get(ind);}
@@ -100,10 +109,23 @@ public class Ressource
 		}
 	}
 
-	public static String[] getAllRessources()
+	public static String[] getNomsRessources()
 	{
-		ArrayList<String> ensRessources = new ArrayList<>();
-		
+		ArrayList<Ressource> ensRessources = getAllRessources();
+
+		if (ensRessources.size() < 1)
+			return null;
+
+		String[] nomsRessources = new String[ensRessources.size()];
+		for (int i = 0; i < ensRessources.size(); i++) {
+			nomsRessources[i] = ensRessources.get(i).getNom();
+		}
+		return nomsRessources;
+	}
+
+	public static ArrayList<Ressource> getAllRessources() {
+		ArrayList<Ressource> ensRessources = new ArrayList<>();
+
 		// Le chemin du dossier à parcourir
 		String cheminDossier = "../QCMBuilder/lib/ressources";
 
@@ -111,38 +133,36 @@ public class Ressource
 		File dossier = new File(cheminDossier);
 
 		// Vérifier si le chemin est bien un dossier
-		if (dossier.exists() && dossier.isDirectory()) 
-		{
+		if (dossier.exists() && dossier.isDirectory()) {
 			// Lister tous les fichiers/dossiers dans ce répertoire
 			File[] fichiers = dossier.listFiles();
 
 			// Si le répertoire contient des éléments
-			if (fichiers != null) 
-			{
-				for (File fichier : fichiers) 
-				{
+			if (fichiers != null) {
+				for (File fichier : fichiers) {
 					// Vérifier si l'élément est un répertoire
-					if (fichier.isDirectory()) 
-					{
-						ensRessources.add(fichier.getName());
+					if (fichier.isDirectory()) {
+						ensRessources.add(new Ressource(fichier.getName()));
 					}
 				}
-			} else 
-			{
+			} else {
 				System.out.println("Erreur lors de la lecture du dossier.");
 			}
-		} else 
-		{
+		} else {
 			System.out.println("Le chemin spécifié n'est pas un répertoire valide.");
 		}
 
-		if (ensRessources.size() < 1)
-			return null;
-
-		String[] tabRessource = ensRessources.toArray(new String[0]);
-
-		return tabRessource;
+		return ensRessources;
 	}
 
-
+	public static Ressource trouverRessourceParNom(String nom) 
+	{
+		ArrayList<Ressource> ressources = getAllRessources();
+		for (Ressource ressource : ressources) {
+			if (ressource.getNom().equalsIgnoreCase(nom)) {
+				return ressource;
+			}
+		}
+		return null;
+	}
 }
