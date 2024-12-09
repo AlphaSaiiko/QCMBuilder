@@ -37,7 +37,7 @@ public class TestRessource
 			lstRes.add(ressource);
 
 			for (int j = 0; j <= 3; j++) {
-				ressource.ajouterNotion(new Notion("notion" + (j+1), ressource));
+				ressource.ajouterNotion(new Notion("notion" + (i) + (j+1), ressource));
 				for (int k=0; k<=5 ;k++)
 				{
 					ressource.getNotion(j).ajouterQuestion(new Question("type", "intitulé", i, k, i, ressource.getNotion(j)));
