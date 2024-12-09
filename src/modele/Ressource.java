@@ -24,21 +24,6 @@ public class Ressource
 		this.nom = nom;
 		this.ensNotions = new ArrayList<Notion>();
 	}
-
-	/*
-	 *  +----------+
-	 *  | METHODES |
-	 *  +----------+
-	 */ 
-	public void ajouterNotion(Notion notion)
-	{
-		if (notion != null && this.ensNotions != null)
-		{
-			this.ensNotions.add(notion);
-		}
-	}
-
-
 	/*
 	 *  +----------+
 	 *  | GETTEURS |
@@ -56,4 +41,29 @@ public class Ressource
 	 *  +----------+
 	 */ 
 	public void setNom(String nom) { this.nom = nom; }
+
+
+
+	/*
+	 *  +----------+
+	 *  | METHODES |
+	 *  +----------+
+	 */ 
+	public void ajouterNotion(Notion notion)
+	{
+		if (notion != null && this.ensNotions != null)
+		{
+			this.ensNotions.add(notion);
+		}
+	}
+
+	public void supprimerNotion(Notion notion)
+	{
+		if (notion != null)
+		{
+			this.ensNotions.remove(notion);
+		}
+	}
+
+
 }
