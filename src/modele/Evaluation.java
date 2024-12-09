@@ -28,17 +28,6 @@ public class Evaluation
 		this.ressource = ressource;
 		this.listeQuestions = new ArrayList<Question>();
 	}
-
-	public boolean ajouterQuestion(Question qt)
-	{
-		if (this.listeQuestions != null && qt != null)
-		{
-			this.listeQuestions.add(qt);
-			return true;
-		}
-		return false;
-	}
-
 	/*
 	 *  +----------+
 	 *  | GETTEURS |
@@ -76,6 +65,24 @@ public class Evaluation
 	public void setLienEval(String lienEval) {
 		this.lienEval = lienEval;
 	}
+
+
+	/*
+	 *  +----------+
+	 *  | METHODES |
+	 *  +----------+
+	 */
+	
+	public boolean ajouterQuestion(Question qt)
+	{
+		if (this.listeQuestions != null && qt != null)
+		{
+			this.listeQuestions.add(qt);
+			return true;
+		}
+		return false;
+	}
+
 
 	 
 }
