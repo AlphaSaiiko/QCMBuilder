@@ -1,8 +1,8 @@
 package vue;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import javax.swing.*;
 
 
 public class GenerationDEvaluation 
@@ -56,11 +56,14 @@ public class GenerationDEvaluation
 		lineGbc.anchor = GridBagConstraints.CENTER;
 		String imagePath = "QCMBuilder/lib/icones/timer.png";
         File imageFile = new File(imagePath);
-        if (imageFile.exists()) {
+        if (imageFile.exists())
+		{
             ImageIcon timerIcon = new ImageIcon(imagePath);
             JLabel timerLabel = new JLabel(timerIcon);
             linePanel.add(timerLabel, lineGbc);
-        } else {
+        }
+		else
+		{
             JLabel errorLabel = new JLabel("Image non trouvée : " + imagePath);
             errorLabel.setForeground(Color.RED);
             linePanel.add(errorLabel, lineGbc);
@@ -95,6 +98,13 @@ public class GenerationDEvaluation
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.CENTER;
 		fenetre.add(linePanel, gbc);
+
+		// Ajouter un bouton en bas centré
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.anchor = GridBagConstraints.CENTER;
+		JButton creerButton = new JButton("Créer une nouvelle évaluation");
+		fenetre.add(creerButton, gbc);
 
 		// Rendre la fenêtre visible
 		fenetre.setVisible(true);
