@@ -1,9 +1,10 @@
 package vue;
 
-import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class Accueil extends JFrame implements ActionListener
 {
@@ -60,7 +61,11 @@ public class Accueil extends JFrame implements ActionListener
 		btn3.setPreferredSize(buttonSize);
 
 		btn1.addActionListener(e -> System.out.println("Créer un QCM"));
-		btn2.addActionListener(e -> System.out.println("Créer une question"));
+		
+		btn2.addActionListener(e -> {
+			new CreerQuestion();
+			this.dispose();
+		});
 		btn3.addActionListener(e -> System.out.println("Paramètres"));
 
 		panel2.add(btn1, gbc);
