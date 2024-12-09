@@ -1,5 +1,8 @@
 package modele;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Notion
 {
 	/*
@@ -9,6 +12,22 @@ public class Notion
 	 */ 
 	private String nom;
 
+	private List<Question> ensQuestions;
+
+	public Notion(String nom)
+	{
+		this.nom = nom;
+		this.ensQuestions = new ArrayList<Notion>();
+	}
+
+	public void ajouterQuestion(Question question)
+	{
+		if (question != null && this.ensQuestions != null)
+		{
+			this.ensQuestions.add(question);
+		}
+	}
+
 
 	/*
 	 *  +----------+
@@ -16,6 +35,8 @@ public class Notion
 	 *  +----------+
 	 */ 
 	public String getNom() { return nom; }
+	
+	public List<Question> getEnsQuestions() { return ensQuestions; }
 
 
 	/*
