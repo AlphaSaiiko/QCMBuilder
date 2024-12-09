@@ -12,7 +12,7 @@ public class Accueil extends JFrame implements ActionListener
 	 *  | PARAMETRES |
 	 *  +------------+
 	 */
-	private JButton btn1, btn2, btn3, btn4;
+	private JButton btn1, btn2, btn3;
 
 	private JLabel lbl1;
 	
@@ -27,37 +27,52 @@ public class Accueil extends JFrame implements ActionListener
 	public Accueil()
 	{
 		setTitle("Accueil");
-		setSize(400, 400);
+		setSize(600, 400);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setLayout(new GridLayout(2, 1));
 
+		// Panel supérieur avec le titre
 		panel1 = new JPanel();
-		panel2 = new JPanel();
-
-		lbl1 = new JLabel("Bienvenue dans notre application");
-		lbl1.setFont(new Font("Arial", Font.BOLD, 20));
+		lbl1 = new JLabel("Bienvenue dans l'Application QCM Builder");
+		lbl1.setFont(new Font("Arial", Font.BOLD, 24));
+		lbl1.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 		panel1.add(lbl1);
 
-		btn1 = new JButton("Ajouter un produit");
-		btn2 = new JButton("Consulter les produits");
-		btn3 = new JButton("Modifier un produit");
-		btn4 = new JButton("Supprimer un produit");
+		// Panel central avec les boutons
+		panel2 = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0;
+		gbc.gridy = GridBagConstraints.RELATIVE;
+		gbc.insets = new Insets(10, 10, 10, 10);
+		gbc.anchor = GridBagConstraints.CENTER;
 
-		btn1.addActionListener(this);
-		btn2.addActionListener(this);
-		btn3.addActionListener(this);
-		btn4.addActionListener(this);
+		btn1 = new JButton("Créer un QCM");
+		btn2 = new JButton("Créer une question");
+		btn3 = new JButton("Paramètres");
 
-		panel2.add(btn1);
-		panel2.add(btn2);
-		panel2.add(btn3);
-		panel2.add(btn4);
+		btn1.setFont(new Font("Arial", Font.PLAIN, 18));
+		btn2.setFont(new Font("Arial", Font.PLAIN, 18));
+		btn3.setFont(new Font("Arial", Font.PLAIN, 18));
 
-		add(panel1);
-		add(panel2);
+		Dimension buttonSize = new Dimension(300, 50);
+		btn1.setPreferredSize(buttonSize);
+		btn2.setPreferredSize(buttonSize);
+		btn3.setPreferredSize(buttonSize);
 
-		setVisible(true);
+		btn1.addActionListener(e -> System.out.println("Créer un QCM"));
+		btn2.addActionListener(e -> System.out.println("Créer une question"));
+		btn3.addActionListener(e -> System.out.println("Paramètres"));
+
+		panel2.add(btn1, gbc);
+		panel2.add(btn2, gbc);
+		panel2.add(btn3, gbc);
+
+		// Ajouter les panels au frame
+		setLayout(new BorderLayout());
+		add(panel1, BorderLayout.NORTH);
+		add(panel2, BorderLayout.CENTER);
+
+		setVisible(true);	
 	}
 
 
