@@ -12,6 +12,9 @@ public class Notion
 	 */ 
 	private String nom;
 
+	private final  int id;
+	private static int nbNotion = 0;
+
 	private List<Question> ensQuestions;
 
 	
@@ -20,9 +23,11 @@ public class Notion
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
+
 	public Notion(String nom)
 	{
 		this.nom = nom;
+		this.id = ++nbNotion;
 		this.ensQuestions = new ArrayList<Question>();
 	}
 
@@ -32,6 +37,7 @@ public class Notion
 	 *  | METHODES |
 	 *  +----------+
 	 */
+	
 	public void ajouterQuestion(Question question)
 	{
 		if (question != null && this.ensQuestions != null)
@@ -46,7 +52,10 @@ public class Notion
 	 *  | GETTEURS |
 	 *  +----------+
 	 */ 
+
 	public String getNom() { return nom; }
+
+	public int getId() { return this.id;}
 
 	public List<Question> getEnsQuestions() { return ensQuestions; }
 
