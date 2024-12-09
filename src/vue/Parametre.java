@@ -24,52 +24,34 @@ public class Parametre extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Création des labels
-        JLabel Ressources = new JLabel("Ressources : ");
-        JLabel Notions = new JLabel("Notions : ");
-
         // Création des boutons verts
         JButton ajtRessource = new JButton("Ajouter une ressource");
         ajtRessource.setBackground(Color.GREEN);
         ajtRessource.setPreferredSize(new Dimension(200, 50));
+        ajtRessource.addActionListener(e -> {
+            // Code pour lancer la création d'une notion
+            CreerRessource creerRessource = new CreerRessource();
+            creerRessource.setVisible(true);
+        });
+
 
         JButton ajtNotion = new JButton("Ajouter une notion");
         ajtNotion.setBackground(Color.GREEN);
         ajtNotion.setPreferredSize(new Dimension(200, 50));
-
-        // Création des boutons rouges
-        JButton supprRessource = new JButton("Supprimer une ressource");
-        supprRessource.setBackground(Color.RED);
-        supprRessource.setPreferredSize(new Dimension(200, 50));
-
-        JButton supprNotion = new JButton("Supprimer une notion");
-        supprNotion.setBackground(Color.RED);
-        supprNotion.setPreferredSize(new Dimension(200, 50));
+        ajtNotion.addActionListener(e -> {
+            // Code pour lancer la création d'une notion
+            CreerNotion creerNotion = new CreerNotion();
+            creerNotion.setVisible(true);
+        });
 
         // Ajout des composants au panel
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panelCreation.add(Ressources, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 0;
         panelCreation.add(ajtRessource, gbc);
 
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        panelCreation.add(supprRessource, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        panelCreation.add(Notions, gbc);
-
         gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 0;
         panelCreation.add(ajtNotion, gbc);
-
-        gbc.gridx = 2;
-        gbc.gridy = 1;
-        panelCreation.add(supprNotion, gbc);
 
         // Bouton de retour
         String imagePath = "QCMBuilder/lib/icones/home.png";
