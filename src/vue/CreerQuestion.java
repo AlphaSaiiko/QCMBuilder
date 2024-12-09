@@ -169,6 +169,7 @@ public class CreerQuestion extends JFrame
 		this.add(panelprincipal);
 		this.setSize(700, 250);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 

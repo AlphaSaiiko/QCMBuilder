@@ -14,7 +14,8 @@ public class CreerEvaluation extends JFrame {
 	public CreerEvaluation() {
 		setTitle("Génération d'évaluation");
 
-		JPanel panelPrincipal = new JPanel(new BorderLayout());
+		JPanel panelPrincipal = new JPanel();
+		panelPrincipal.setLayout(new BorderLayout());
 
 		// Bouton de retour
 		String imageRet = "QCMBuilder/lib/icones/home.png";
@@ -27,7 +28,8 @@ public class CreerEvaluation extends JFrame {
 			new Accueil();
 			dispose();
 		});
-		JPanel panelRetour = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JPanel panelRetour = new JPanel();
+		panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelRetour.add(retourButton);
 
 		// Panel pour regrouper les composants sur une seule ligne
@@ -93,7 +95,8 @@ public class CreerEvaluation extends JFrame {
 
 		// Ajouter un bouton en bas centré
 		JButton creerButton = new JButton("Créer une nouvelle évaluation");
-		JPanel panelBouton = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		JPanel panelBouton = new JPanel();
+		panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
 		panelBouton.add(creerButton);
 
 		panelPrincipal.add(panelBouton, BorderLayout.SOUTH);
