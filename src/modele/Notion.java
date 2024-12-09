@@ -50,6 +50,8 @@ public class Notion
 
 	public List<Question> getEnsQuestions() { return ensQuestions; }
 
+	public Question getQuestion (int indice) { return ensQuestions.get(indice);}
+
 
 	/*
 	 *  +----------+

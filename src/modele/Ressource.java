@@ -48,6 +48,8 @@ public class Ressource
 
 	public List<Notion> getEnsNotions() { return ensNotions; }
 
+	public Notion getNotion(int ind) {return ensNotions.get(ind);}
+
 	/*
 	 *  +----------+
 	 *  | SETTEURS |

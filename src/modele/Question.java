@@ -21,6 +21,8 @@ public class Question
 
 	private List<String> complements; // Les pièces jointes ou petites images
 
+	private List<IOption> ensOptions;
+
 	
 	/*
 	 *  +--------------+
@@ -37,6 +39,7 @@ public class Question
 		this.notion      = notion     ;
 
 		this.complements = new ArrayList<String>();
+		this.ensOptions = new ArrayList<IOption>();
 	}
 
 
@@ -58,6 +61,10 @@ public class Question
 
 	public Notion getNotion() { return notion; }
 
+	public List<IOption> getEnsOptions() { return ensOptions; }
+
+	public IOption getOptions(int ind) { return ensOptions.get(ind);}
+
 
 	/*
 	 *  +----------+
@@ -76,6 +83,7 @@ public class Question
 	public void setNotion(Notion notion) { this.notion = notion; }
 
 
+
 	/*
 	 *  +----------+
 	 *  | METHODES |
@@ -83,6 +91,7 @@ public class Question
 	 */
 	public boolean ajouterOption(IOption opt)
 	{
+		ensOptions.add(opt);
 		return true; // Temporaire
 	}
 
