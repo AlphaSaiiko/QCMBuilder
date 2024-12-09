@@ -20,7 +20,7 @@ public class CreerEvaluation extends JFrame {
 		icon = new ImageIcon(newImg);
 		JButton retourButton = new JButton(icon);
 		retourButton.addActionListener(e -> {
-			System.out.println("Retour à l'accueil");
+			new Accueil();
 			dispose();
 		});
 		JPanel panelRetour = new JPanel();
