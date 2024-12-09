@@ -1,6 +1,7 @@
 package vue;
 
 import java.awt.*;
+import java.io.File;
 import javax.swing.*;
 
 public class CreerQuestion extends JFrame
@@ -138,13 +139,35 @@ public class CreerQuestion extends JFrame
         panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
         panelBouton.add(creerQuestionButton);
 
-        // Ajout du bouton au panel principal
-		panelprincipal.add(rassemble, BorderLayout.NORTH);
-		panelprincipal.add(ressourceNotionLvl, BorderLayout.CENTER);
-        panelprincipal.add(panelBouton, BorderLayout.SOUTH);
+		// Bouton de retour
+		String imagePath = "QCMBuilder/lib/icones/home.png";
+		File imageFile = new File(imagePath);
+		ImageIcon icon = new ImageIcon(imageFile.getAbsolutePath());
+		Image img = icon.getImage();
+		Image newImg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+		icon = new ImageIcon(newImg);
+		JButton retourButton = new JButton(icon);
+		retourButton.addActionListener(e -> {
+			new Accueil();
+			dispose();
+		});
+		JPanel panelRetour = new JPanel();
+		panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelRetour.add(retourButton);
+
+		//Création d'un panel gérant la création de question
+		JPanel panelCreation = new JPanel();
+		panelCreation.setLayout(new GridLayout(2, 1));
+		panelCreation.add(rassemble);
+		panelCreation.add(ressourceNotionLvl);
+
+		// Ajout des panels au panel principal
+		panelprincipal.add(panelRetour, BorderLayout.NORTH);
+		panelprincipal.add(panelCreation, BorderLayout.CENTER);
+		panelprincipal.add(panelBouton, BorderLayout.SOUTH);
 		
 		this.add(panelprincipal);
-		this.setSize(700, 180);
+		this.setSize(700, 250);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
