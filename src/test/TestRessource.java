@@ -30,16 +30,16 @@ public class TestRessource
 
 		ArrayList<Ressource> lstRes = new ArrayList<>();
 
-		for (int i = 0; i <= 6; i++) {
+		for (int i = 0; i <= 2; i++) {
 			Ressource ressource = new Ressource("ressource" + (i+1));
 			lstRes.add(ressource);
 
 			for (int j = 0; j <= 3; j++) {
 				ressource.ajouterNotion(new Notion("notion" + (j+1)));
-				for (int k=0; k<=10 ;k++)
+				for (int k=0; k<=5 ;k++)
 				{
 					ressource.getNotion(j).ajouterQuestion(new Question("type", "intitulé", i, k, i, ressource.getNotion(j)));
-					for(int l=0; l<=10;l++)
+					for(int l=0; l<=5;l++)
 					{
 						ressource.getNotion(j).getQuestion(k).ajouterOption(new Option("Question", "çava?", true));
 					}
@@ -49,7 +49,7 @@ public class TestRessource
 		}
 
 
-		TestCreerFichier fichier = new TestCreerFichier(lstRes);
+		CreerFichier fichier = new CreerFichier(lstRes);
 		fichier.creerRessource();
 
 
