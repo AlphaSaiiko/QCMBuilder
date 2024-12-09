@@ -4,33 +4,50 @@ import java.awt.*;
 import java.io.File;
 import javax.swing.*;
 
+public class GenerationDEvaluation {
 
-public class GenerationDEvaluation 
-{
-
-	public GenerationDEvaluation()
-	{
+	public GenerationDEvaluation() {
 		/*
-		 * +------------+ 
-		 * | PARAMETRES | 
+		 * +------------+
+		 * | PARAMETRES |
 		 * +------------+
 		 */
 
 		JFrame fenetre;
 
 		/*
-		 * +--------------+ 
+		 * +--------------+
 		 * | CONSTRUCTEUR |
 		 * +--------------+
 		 */
 
-		 // Créer la fenêtre principale
+		// Créer la fenêtre principale
 		fenetre = new JFrame("Génération d'évaluation");
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fenetre.setSize(500, 300);
 		fenetre.setLocationRelativeTo(null);
 		fenetre.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
+
+		// Ajouter le bouton de retour en haut à gauche
+		String imageRet = "QCMBuilder/lib/icones/home.png";
+		ImageIcon icon = new ImageIcon(imageRet);
+		Image img = icon.getImage();
+		Image newImg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+		icon = new ImageIcon(newImg);
+		JButton retourButton = new JButton(icon);
+		retourButton.addActionListener(e -> {
+			new Accueil();
+			fenetre.dispose();
+		});
+		JPanel panelRetour = new JPanel();
+		panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelRetour.add(retourButton);
+
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		fenetre.add(panelRetour, gbc);
 
 		// Panel pour regrouper les composants sur une seule ligne
 		JPanel linePanel = new JPanel(new GridBagLayout());
@@ -47,7 +64,7 @@ public class GenerationDEvaluation
 		lineGbc.gridy = 0;
 		lineGbc.anchor = GridBagConstraints.CENTER;
 		JComboBox<String> ressources = new JComboBox<>(
-				new String[] { "R1.05 Intro Bd", "R1.05 Intro Bd", "R1.05 Intro Bd", "R1.05 Intro Bd" });
+				new String[]{"R1.05 Intro Bd", "R1.05 Intro Bd", "R1.05 Intro Bd", "R1.05 Intro Bd"});
 		linePanel.add(ressources, lineGbc);
 
 		// Ajout du chronomètre
@@ -55,19 +72,16 @@ public class GenerationDEvaluation
 		lineGbc.gridy = 0;
 		lineGbc.anchor = GridBagConstraints.CENTER;
 		String imagePath = "QCMBuilder/lib/icones/timer.png";
-        File imageFile = new File(imagePath);
-        if (imageFile.exists())
-		{
-            ImageIcon timerIcon = new ImageIcon(imagePath);
-            JLabel timerLabel = new JLabel(timerIcon);
-            linePanel.add(timerLabel, lineGbc);
-        }
-		else
-		{
-            JLabel errorLabel = new JLabel("Image non trouvée : " + imagePath);
-            errorLabel.setForeground(Color.RED);
-            linePanel.add(errorLabel, lineGbc);
-        }
+		File imageFile = new File(imagePath);
+		if (imageFile.exists()) {
+			ImageIcon timerIcon = new ImageIcon(imagePath);
+			JLabel timerLabel = new JLabel(timerIcon);
+			linePanel.add(timerLabel, lineGbc);
+		} else {
+			JLabel errorLabel = new JLabel("Image non trouvée : " + imagePath);
+			errorLabel.setForeground(Color.RED);
+			linePanel.add(errorLabel, lineGbc);
+		}
 
 		// Ajout des boutons radio
 		lineGbc.gridx = 3;
@@ -87,7 +101,6 @@ public class GenerationDEvaluation
 		radioGbc.insets = new Insets(5, 5, 5, 5);
 		radioGbc.anchor = GridBagConstraints.CENTER;
 
-
 		radioPanel.add(ouiButton, radioGbc);
 		radioPanel.add(nonButton, radioGbc);
 
@@ -95,13 +108,13 @@ public class GenerationDEvaluation
 
 		// Ajouter le panel regroupant les composants à la fenêtre principale
 		gbc.gridx = 0;
-		gbc.gridy = 0;
+		gbc.gridy = 1;
 		gbc.anchor = GridBagConstraints.CENTER;
 		fenetre.add(linePanel, gbc);
 
 		// Ajouter un bouton en bas centré
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		gbc.anchor = GridBagConstraints.CENTER;
 		JButton creerButton = new JButton("Créer une nouvelle évaluation");
 		fenetre.add(creerButton, gbc);
@@ -110,8 +123,7 @@ public class GenerationDEvaluation
 		fenetre.setVisible(true);
 	}
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		new GenerationDEvaluation();
 	}
 }
