@@ -12,12 +12,10 @@ public class Notion
 	 */ 
 	private String nom;
 
-<<<<<<< HEAD
 	private Ressource ressource;
-=======
+
 	private final  int id;
 	private static int nbNotion = 0;
->>>>>>> 7cb81c917bd2c4dd650dbf83ea5a7ec127fa92a1
 
 	private List<Question> ensQuestions;
 
@@ -27,20 +25,15 @@ public class Notion
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-<<<<<<< HEAD
 	public Notion(String nom, Ressource ressource)
 	{
 		this.nom = nom;
 		this.ressource = ressource;
-=======
-
-	public Notion(String nom)
-	{
-		this.nom = nom;
 		this.id = ++nbNotion;
->>>>>>> 7cb81c917bd2c4dd650dbf83ea5a7ec127fa92a1
 		this.ensQuestions = new ArrayList<Question>();
 	}
+
+
 	/*
 	 *  +----------+
 	 *  | GETTEURS |
