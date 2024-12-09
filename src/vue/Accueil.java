@@ -60,7 +60,10 @@ public class Accueil extends JFrame implements ActionListener
 		btn2.setPreferredSize(buttonSize);
 		btn3.setPreferredSize(buttonSize);
 
-		btn1.addActionListener(e -> System.out.println("Créer un QCM"));
+		btn1.addActionListener(e -> {
+			new GenerationDEvaluation();
+			this.dispose();
+		});
 		
 		btn2.addActionListener(e -> {
 			new CreerQuestion();
