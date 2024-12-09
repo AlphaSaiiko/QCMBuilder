@@ -1,6 +1,7 @@
 package modele;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import modele.option.IOption;
 
@@ -18,7 +19,7 @@ public class Question
 	private int temps     ;
 	private int difficulte;
 
-	private ArrayList<String> complements; // Les pièces jointes ou petites images
+	private List<String> complements; // Les pièces jointes ou petites images
 
 	
 	/*
@@ -26,15 +27,16 @@ public class Question
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public Question(String type, String intitule, int nbPoints, int temps, int difficulte, ArrayList<String> complements, Notion notion)
+	public Question(String type, String intitule, int nbPoints, int temps, int difficulte, Notion notion)
 	{
 		this.type        = type       ;
 		this.intitule    = intitule   ;
 		this.nbPoints    = nbPoints   ;
 		this.temps       = temps      ;
 		this.difficulte  = difficulte ;
-		this.complements = complements;
 		this.notion      = notion     ;
+
+		this.complements = new ArrayList<String>();
 	}
 
 
@@ -52,7 +54,7 @@ public class Question
 	public int getTemps     () { return temps     ; }
 	public int getDifficulte() { return difficulte; }
 
-	public ArrayList<String> getComplements() { return complements; }
+	public List<String> getComplements() { return complements; }
 
 	public Notion getNotion() { return notion; }
 
