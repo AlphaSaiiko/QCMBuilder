@@ -17,7 +17,7 @@ public class Notion
 	public Notion(String nom)
 	{
 		this.nom = nom;
-		this.ensQuestions = new ArrayList<Notion>();
+		this.ensQuestions = new ArrayList<Question>();
 	}
 
 	public void ajouterQuestion(Question question)
@@ -35,7 +35,7 @@ public class Notion
 	 *  +----------+
 	 */ 
 	public String getNom() { return nom; }
-	
+
 	public List<Question> getEnsQuestions() { return ensQuestions; }
 
 
