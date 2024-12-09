@@ -1,4 +1,4 @@
-controleur/controleur.java
+controleur/Controleur.java
 
 modele/option/IOption.java
 modele/option/Option.java
