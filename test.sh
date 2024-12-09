@@ -32,8 +32,7 @@ if [ ! -d "$BIN_DIR" ]; then
 fi
 
 # Normaliser le nom de la classe (sans tenir compte des majuscules et avec ou sans "Test")
-CLASS_TO_TEST=$(echo "$1" | sed -e 's/^test//i')
-CLASS_TO_TEST="Test${CLASS_TO_TEST^}"
+CLASS_TO_TEST=$(echo "$1")
 
 # Exécuter la classe de test
 echo "Exécution de la classe de test : $CLASS_TO_TEST"

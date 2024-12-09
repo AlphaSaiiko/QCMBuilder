@@ -40,8 +40,6 @@ if errorlevel 1 (
 
 REM Normaliser le nom de la classe a tester
 set CLASS_TO_TEST=%1
-set CLASS_TO_TEST=%CLASS_TO_TEST:Test=%
-set CLASS_TO_TEST=Test%CLASS_TO_TEST%
 
 REM Exécuter la classe de test
 echo Execution de la classe de test : %CLASS_TO_TEST%
