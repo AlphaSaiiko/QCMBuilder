@@ -3,7 +3,7 @@
 # Vérifier si un argument est fourni
 if [ -z "$1" ]; then
     echo "Erreur : Vous devez fournir le nom de la classe à tester."
-    echo "Exemple : ./test.sh TestNomDeLaClasseATester"
+    echo "Exemple : ./test.sh [nom de la classe à tester]"
     exit 1
 fi
 
@@ -19,7 +19,7 @@ fi
 
 # Compiler les fichiers Java
 echo "Compilation des fichiers Java..."
-javac @"$SRC_DIR/sources.txt" -d "$BIN_DIR"
+javac $(find "$SRC_DIR" -name "*.java") -d "$BIN_DIR"
 if [ $? -ne 0 ]; then
     echo "Erreur : La compilation a échoué."
     exit 1
@@ -31,10 +31,15 @@ if [ ! -d "$BIN_DIR" ]; then
     exit 1
 fi
 
+# Normaliser le nom de la classe (sans tenir compte des majuscules et avec ou sans "Test")
+CLASS_TO_TEST=$(echo "$1" | sed -e 's/^test//i')
+CLASS_TO_TEST="Test${CLASS_TO_TEST^}"
+
 # Exécuter la classe de test
-echo "Exécution de la classe de test : $1"
-java -cp "$BIN_DIR" test."$1"
+echo "Exécution de la classe de test : $CLASS_TO_TEST"
+java -cp "$BIN_DIR" test."$CLASS_TO_TEST"
 if [ $? -ne 0 ]; then
-    echo "Erreur : Impossible d'exécuter la classe $1."
+    echo "Erreur : Impossible d'exécuter la classe $CLASS_TO_TEST."
     exit 1
 fi
+
