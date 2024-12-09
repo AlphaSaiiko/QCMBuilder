@@ -61,7 +61,7 @@ public class Accueil extends JFrame implements ActionListener
 		btn3.setPreferredSize(buttonSize);
 
 		btn1.addActionListener(e -> {
-			new GenerationDEvaluation();
+			new CreerEvaluation();
 			this.dispose();
 		});
 		
