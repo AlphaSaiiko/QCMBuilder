@@ -11,7 +11,8 @@ public class Evaluation
 	 *  +------------+
 	 */
 
-	private Ressource ressource;
+	private Ressource     ressource     ;
+	private Notion        notion        ;
 	private List<Question> listeQuestions;
 
 	private String lienEval; // Lien de l'évaluation à mettre sur l'intranet
@@ -23,13 +24,15 @@ public class Evaluation
 	 *  +--------------+
 	 */
 
-	public Evaluation(Ressource ressource)
+	public Evaluation(Ressource ressource, Notion notion)
 	{
 		this.ressource = ressource;
+		this.notion    = notion;
+
 		this.listeQuestions = new ArrayList<Question>();
 	}
 
-	
+
 	/*
 	 *  +----------+
 	 *  | GETTEURS |
@@ -41,6 +44,11 @@ public class Evaluation
 	public Ressource getRessource() 
 	{
 		return ressource;
+	}
+
+	public Notion getNotion() 
+	{
+		return notion;
 	}
 
 	public List<Question> getListeQuestions() 
@@ -60,11 +68,18 @@ public class Evaluation
 	 *  +----------+
 	 */
 
-	public void setRessource(Ressource ressource) {
+	public void setRessource(Ressource ressource) 
+	{
 		this.ressource = ressource;
 	}
 
-	public void setLienEval(String lienEval) {
+	public void setNotion(Notion notion) 
+	{
+		this.notion = notion;
+	}
+
+	public void setLienEval(String lienEval) 
+	{
 		this.lienEval = lienEval;
 	}
 
