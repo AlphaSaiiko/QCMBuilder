@@ -1,0 +1,7 @@
+# Ignore les fichiers de compilation
+
+*.class
+
+# Ignore le dossier bin complet
+
+/bin/
