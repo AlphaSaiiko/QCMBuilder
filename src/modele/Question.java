@@ -46,7 +46,7 @@ public class Question
 		this.id = ++Question.nbQuestion;
 
 		this.complements = new ArrayList<String>();
-		this.ensOptions = new ArrayList<IOption>();
+		this.ensOptions  = new ArrayList<IOption>();
 
 		this.creerFichierQuestion();
 
@@ -104,6 +104,7 @@ public class Question
 	public void creerFichierQuestion()
 	{
 		Fichier tmp = new Fichier("lib/ressources/"+notion.getRessource().getNom()+"/"+notion.getNom()+"/");
+
 		tmp.ajouterFichier("question"+notion.getNbQuestion());
 		tmp.ajouterRtf("question"+notion.getNbQuestion()+"/"+"question"+notion.getNbQuestion());
 		tmp.ecrireQuestion("question"+notion.getNbQuestion()+"/"+"question"+notion.getNbQuestion(), this);
@@ -111,8 +112,10 @@ public class Question
 
 	public boolean ajouterOption(IOption opt)
 	{
-		ensOptions.add(opt);
-		return true; // Temporaire
+		if (opt == null || this.ensOptions == null) return false;
+
+		this.ensOptions.add(opt);
+		return true;
 	}
 
 
