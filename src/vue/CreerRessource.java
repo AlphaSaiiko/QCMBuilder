@@ -53,7 +53,7 @@ public class CreerRessource extends JFrame
 
 		this.add(panelprincipal);
 		this.setSize(500, 150);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}

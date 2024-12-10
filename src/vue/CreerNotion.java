@@ -13,7 +13,7 @@ public class CreerNotion extends JFrame
 	 */
 	public CreerNotion() {
 
-		setTitle("Créer une ressource");
+		setTitle("Créer une notion");
 
 		JPanel panelprincipal = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -35,7 +35,7 @@ public class CreerNotion extends JFrame
 
 		// JTextArea pour le titre de la ressource
 		JTextArea titre = new JTextArea(1, 20); // Taille réduite
-		titre.setBorder(BorderFactory.createTitledBorder("Titre de la ressource"));
+		titre.setBorder(BorderFactory.createTitledBorder("Titre de la notion"));
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
@@ -54,7 +54,7 @@ public class CreerNotion extends JFrame
 
 		this.add(panelprincipal);
 		this.setSize(600, 100);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
