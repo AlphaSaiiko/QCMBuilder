@@ -2,6 +2,7 @@ package vue;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class Accueil extends JFrame
 {
@@ -13,7 +14,8 @@ public class Accueil extends JFrame
 	public Accueil() {
 		setTitle("Accueil");
 
-		JPanel panelPrincipal = new JPanel();
+		JPanel panelPrincipal = new JPanel();        
+		panelPrincipal.setBorder(new EmptyBorder(25, 0, 0, 0));
 		panelPrincipal.setLayout(new BorderLayout());
 
 		JPanel panelTitre = new JPanel();
