@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-
-import modele.option.*;
 
 public class Fichier{
 
@@ -42,7 +39,6 @@ public class Fichier{
 	{
 		nomFichier = this.chemin+nomFichier;
 		File fichier = new File(nomFichier);
-		System.out.println("rerere");
 
 		// Vérification et création du répertoire
 		if (!fichier.exists()) {
