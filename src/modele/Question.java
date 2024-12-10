@@ -26,6 +26,8 @@ public class Question
 
 	private List<IOption> ensOptions;
 
+	private Notion notion;
+
 	
 	/*
 	 *  +--------------+
@@ -45,6 +47,9 @@ public class Question
 
 		this.complements = new ArrayList<String>();
 		this.ensOptions = new ArrayList<IOption>();
+
+		this.creerFichierQuestion();
+
 	}
 
 
@@ -53,7 +58,6 @@ public class Question
 	 *  | GETTEURS |
 	 *  +----------+
 	 */
-	private Notion notion;
 
 	public String getType    () { return type    ; }
 	public String getIntitule() { return intitule; }
@@ -96,6 +100,13 @@ public class Question
 	 *  | METHODES |
 	 *  +----------+
 	 */
+
+	public void creerFichierQuestion()
+	{
+		Fichier tmp = new Fichier("lib/ressources/"+notion.getRessource().getNom()+"/"+notion.getNom()+"/");
+		tmp.ajouterFichier("question"+notion.getNbQuestion());
+		tmp.ajouterRtf("question"+notion.getNbQuestion()+"/"+"question"+notion.getNbQuestion());
+	}
 	public boolean ajouterOption(IOption opt)
 	{
 		ensOptions.add(opt);

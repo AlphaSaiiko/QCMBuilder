@@ -11,6 +11,7 @@ public class Notion
 	 *  +------------+
 	 */ 
 	private String nom;
+	private int nbQuestion;
 
 	private Ressource ressource;
 
@@ -18,7 +19,6 @@ public class Notion
 	private static int nbNotion = 0;
 
 	private List<Question> ensQuestions;
-
 	
 	/*
 	 *  +--------------+
@@ -30,6 +30,7 @@ public class Notion
 		this.nom = nom;
 		this.ressource = ressource;
 		this.id = ++nbNotion;
+		this.nbQuestion = 0;
 		this.ensQuestions = new ArrayList<Question>();
 		this.creerFichierNotion();
 		ressource.ajouterNotion(this);
@@ -49,6 +50,8 @@ public class Notion
 	public List<Question> getEnsQuestions() { return ensQuestions; }
 
 	public Question getQuestion (int indice) { return ensQuestions.get(indice);}
+
+	public Ressource getRessource() {return this.ressource;}
 
 
 	/*
@@ -76,8 +79,11 @@ public class Notion
 		if (question != null && this.ensQuestions != null)
 		{
 			this.ensQuestions.add(question);
+			this.nbQuestion++;
 		}
 	}
+
+	public int getNbQuestion(){return this.nbQuestion;}
 
 	public void modifierQuestion(Question question)
 	{

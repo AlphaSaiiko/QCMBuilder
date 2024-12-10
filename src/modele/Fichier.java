@@ -42,7 +42,6 @@ public class Fichier{
 	{
 		nomFichier = this.chemin+nomFichier;
 		File fichier = new File(nomFichier);
-		System.out.println("rerere");
 
 		// Vérification et création du répertoire
 		if (!fichier.exists()) {
