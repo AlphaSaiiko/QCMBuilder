@@ -81,11 +81,12 @@ public class Ressource
 	 *  +----------+
 	 */ 
 
-	 public void creerFichierRessource()
-	 {
+	public void creerFichierRessource()
+	{
 		Fichier tmp = new Fichier("lib/ressources/");
 		tmp.ajouterFichier(this.getNom());
-	 }
+	}
+	
 	public void ajouterNotion(Notion notion)
 	{
 		if (notion != null && this.ensNotions != null)

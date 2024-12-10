@@ -46,6 +46,7 @@ public class CreerRessource extends JFrame
 			if (!titreRessource.trim().isEmpty()) {
 				Ressource ressource = new Ressource(titreRessource);
 				System.out.println("Nouvelle ressource créée avec le titre: " + titreRessource);
+				this.dispose();
 			} else {
 				JOptionPane.showMessageDialog(this, "Le titre de la ressource ne peut pas être vide.", "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
