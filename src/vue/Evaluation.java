@@ -23,8 +23,8 @@ public class Evaluation extends JFrame
 
 		// Modèle pour le tableau
 		String[] columnNames = { "Notion", "Sélectionner", "TF", "F", "M", "D" };
-		Object[][] data = { { "Projection", false, "", "", "", "" }, { "Restriction", false, "2", "2", "3", "4" },
-				{ "Tri", false, "1", "1", "", "" }, { "Jointure", false, "5", "5", "", "" },
+		Object[][] data = { { "Projection", false, "", "", "", "" }, { "Restriction", false, "", "", "", "" },
+				{ "Tri", false, "", "", "", "" }, { "Jointure", false, "", "", "", "" },
 				{ "Auto-Jointure", false, "", "", "", "" }, { "Thêta-Jointure", false, "", "", "", "" } };
 
 		model = new DefaultTableModel(data, columnNames)
@@ -46,6 +46,11 @@ public class Evaluation extends JFrame
 				// Rendre la colonne des cases à cocher éditable sauf pour la
 				// dernière ligne
 				if (row == getRowCount() - 1 && column == 1)
+				{
+					return false;
+				}
+				// Vérifier si la case à cocher de la ligne est cochée
+				if (column != 1 && !(Boolean) getValueAt(row, 1))
 				{
 					return false;
 				}
