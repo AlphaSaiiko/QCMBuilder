@@ -3,7 +3,6 @@ package modele;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-// import modele.Notion; // This import is unnecessary as it's in the same package
 
 public class Ressource
 {
@@ -25,12 +24,12 @@ public class Ressource
 	 *  +--------------+
 	 */ 
 	public Ressource(String nom)
-	{
-		this.nom = nom;
-		this.id = ++nbRessource;
-		this.ensNotions = new ArrayList<>();
-		this.creerFichierRessource();
-	}
+    {
+        this.nom = nom;
+        this.id = ++nbRessource;
+        this.ensNotions = new ArrayList<>();
+        this.creerFichierRessource();
+    }
 
 
 	/*
@@ -79,14 +78,13 @@ public class Ressource
 	 *  +----------+
 	 *  | METHODES |
 	 *  +----------+
-	 */ 
-
+	 */
 	public void creerFichierRessource()
-	{
-		Fichier tmp = new Fichier("lib/ressources/");
-		tmp.ajouterFichier(this.getNom());
-	}
-	
+    {
+        Fichier tmp = new Fichier("lib/ressources/");
+        tmp.ajouterFichier(this.getNom());
+    }
+
 	public void ajouterNotion(Notion notion)
 	{
 		if (notion != null && this.ensNotions != null)
