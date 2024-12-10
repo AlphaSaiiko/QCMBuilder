@@ -75,8 +75,7 @@ public class Fichier{
 		try
 		{
 			PrintWriter pw = new PrintWriter(new FileOutputStream (chemin));
-
-			pw.println("test");
+			pw.println(qst.getType() + "\t" + qst.getIntitule() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom());
 			pw.close();
 		}
 		catch (Exception e){e.printStackTrace();}
