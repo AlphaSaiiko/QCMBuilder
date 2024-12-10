@@ -106,7 +106,9 @@ public class Question
 		Fichier tmp = new Fichier("lib/ressources/"+notion.getRessource().getNom()+"/"+notion.getNom()+"/");
 		tmp.ajouterFichier("question"+notion.getNbQuestion());
 		tmp.ajouterRtf("question"+notion.getNbQuestion()+"/"+"question"+notion.getNbQuestion());
+		tmp.ecrireQuestion("question"+notion.getNbQuestion()+"/"+"question"+notion.getNbQuestion(), this);
 	}
+
 	public boolean ajouterOption(IOption opt)
 	{
 		ensOptions.add(opt);
