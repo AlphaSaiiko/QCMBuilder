@@ -69,7 +69,7 @@ public class CreerNotion extends JFrame
 
 		this.add(panelprincipal);
 		this.setSize(600, 100);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
