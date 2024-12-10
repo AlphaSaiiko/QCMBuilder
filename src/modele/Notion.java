@@ -67,11 +67,12 @@ public class Notion
 	 *  | METHODES |
 	 *  +----------+
 	 */
-
 	public void creerFichierNotion()
 	{
 		Fichier tmp = new Fichier("lib/ressources/"+ressource.getNom()+"/");
-		tmp.ajouterFichier(this.getNom());
+		if (!tmp.exists(this.getNom())) {
+			tmp.ajouterFichier(this.getNom());
+		}
 	}
 	
 	public void ajouterQuestion(Question question)

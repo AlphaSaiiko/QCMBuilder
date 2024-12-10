@@ -82,5 +82,12 @@ public class Fichier{
 		catch (Exception e){e.printStackTrace();}
 	}
 
+    
+	public boolean exists(String nom) {
+		nom = this.chemin + nom;
+		File fichier = new File(nom);
+		return fichier.exists();
+	}
+
 
 }
