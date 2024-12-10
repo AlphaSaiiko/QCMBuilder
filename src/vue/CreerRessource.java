@@ -43,12 +43,14 @@ public class CreerRessource extends JFrame
 		// Récupérer le contenu du JTextArea et créer une nouvelle ressource
 		ajouter.addActionListener(e -> {
 			String titreRessource = titre.getText();
-			if (!titreRessource.trim().isEmpty()) {
+			if (!titreRessource.trim().isEmpty())
+			{
 				Ressource.creerRessource(titreRessource);
-				Ressource ressource = Ressource.trouverRessourceParNom(titreRessource);
-				System.out.println("Nouvelle ressource créée avec le titre: " + titreRessource);
+				Ressource ressource = Ressource.creerRessource(titreRessource);
 				this.dispose();
-			} else {
+			}
+			else
+			{
 				JOptionPane.showMessageDialog(this, "Le titre de la ressource ne peut pas être vide.", "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
 		});

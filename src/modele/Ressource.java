@@ -24,15 +24,19 @@ public class Ressource
 		 *  +--------------+
 		 */
 	
-		public static boolean creerRessource(String nom)
+		public static Ressource creerRessource(String nom)
 		{
 			Ressource ressource = Ressource.trouverRessourceParNom(nom);
 			if (ressource == null)
 			{
-				new Ressource(nom);
-				return true;
+				ressource = new Ressource(nom);
+				System.out.println("Nouvelle ressource créée avec le titre: " + nom);
 			}
-			return false;
+			else
+			{
+				System.out.println("La ressource existe déjà.");
+			}
+			return ressource;
 		}
 	
 		private Ressource(String nom)
@@ -48,8 +52,7 @@ public class Ressource
 			Ressource.listRessource.add(this);
 			this.creerFichierRessource();
 			this.ensNotions = new ArrayList<>();
-    }
-
+		}
 
 	/*
 	 *  +----------+

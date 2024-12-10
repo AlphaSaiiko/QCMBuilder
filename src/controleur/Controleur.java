@@ -43,12 +43,12 @@ public class Controleur
                 // Si le répertoire parent est une ressource
                 else if (parent != null && parent.getParentFile() != null && parent.getParentFile().getName().equals("ressources"))
 				{
-                    Ressource ressource = Ressource.trouverRessourceParNom(parent.getName());
+                    Ressource ressource = Ressource.creerRessource(parent.getName());
                     if (ressource == null)
 					{
                         System.out.println("Ressource non trouvée pour la notion, création d'une nouvelle ressource : " + parent.getName());
                         Ressource.creerRessource(parent.getName());
-                        ressource = Ressource.trouverRessourceParNom(parent.getName());
+                        ressource = Ressource.creerRessource(parent.getName());
                     }
 
                     // Création de la notion
