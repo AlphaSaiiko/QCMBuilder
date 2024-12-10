@@ -32,28 +32,24 @@ public class Controleur
 		try (Stream<Path> paths = Files.walk(Paths.get(resourcesPath)))
 		{
 			paths.filter(Files::isDirectory)
-		 .forEach(path ->
-		 {
-			 File dir = path.toFile();
-			 File parent1 = dir.getParentFile();
-			 File parent2 = (parent1 != null) ? parent1.getParentFile() : null;
-			 File parent3 = (parent2 != null) ? parent2.getParentFile() : null;
-			 if (parent3 != null && parent3.getName().startsWith("ressource"))
-			 {
-				System.out.println("Question: " + dir.getName());
-			 }
-			 else if (parent2 != null && parent2.getName().startsWith("ressource"))
-			 {
-				System.out.println("Notion: " + dir.getName());
-				Notion notion = new Notion(dir.getName(), new Ressource(parent1.getName()));
-			 }
-			 else if (parent1 != null && parent1.getName().startsWith("ressource"))
-			 {
-				System.out.println("Ressource: " + dir.getName());
-				Ressource ressource = new Ressource(dir.getName());
-			 }
-		 });
-		} catch (IOException e)
+			.forEach(path ->
+			{
+				File dir = path.toFile();
+				File parent1 = dir.getParentFile();
+				File parent2 = (parent1 != null) ? parent1.getParentFile() : null;
+				if (parent2 != null && parent2.getName().startsWith("ressource"))
+				{
+					System.out.println("Notion: " + dir.getName());
+					Notion notion = new Notion(dir.getName(), new Ressource(parent1.getName()));
+				}
+				else if (parent1 != null && parent1.getName().startsWith("ressource"))
+				{
+					System.out.println("Ressource: " + dir.getName());
+					Ressource ressource = new Ressource(dir.getName());
+				}
+			});
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
