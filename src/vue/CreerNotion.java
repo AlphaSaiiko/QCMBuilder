@@ -2,6 +2,7 @@ package vue;
 
 import java.awt.*;
 import javax.swing.*;
+import modele.Notion;
 import modele.Ressource;
 
 public class CreerNotion extends JFrame
@@ -13,7 +14,7 @@ public class CreerNotion extends JFrame
 	 */
 	public CreerNotion() {
 
-		setTitle("Créer une notion");
+		setTitle("Créer une ressource");
 
 		JPanel panelprincipal = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -35,7 +36,7 @@ public class CreerNotion extends JFrame
 
 		// JTextArea pour le titre de la ressource
 		JTextArea titre = new JTextArea(1, 20); // Taille réduite
-		titre.setBorder(BorderFactory.createTitledBorder("Titre de la notion"));
+		titre.setBorder(BorderFactory.createTitledBorder("Titre de la ressource"));
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
@@ -52,9 +53,23 @@ public class CreerNotion extends JFrame
 		gbc.weightx = 0.2;
 		panelprincipal.add(ajouter, gbc);
 
+		// Récupérer le contenu du JTextArea et créer une nouvelle ressource
+		ajouter.addActionListener(e -> {
+			String titreNotion = titre.getText();
+			String nomRessource = (String) choixRessource.getSelectedItem();
+			Ressource ressource = Ressource.trouverRessourceParNom(nomRessource);
+			if (!titreNotion.trim().isEmpty()) {
+				Notion notion = new Notion(titreNotion, ressource);
+				System.out.println("Nouvelle notion créée avec le titre: " + titreNotion);
+				this.dispose();
+			} else {
+				JOptionPane.showMessageDialog(this, "Le titre de la notion ne peut pas être vide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
 		this.add(panelprincipal);
 		this.setSize(600, 100);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}

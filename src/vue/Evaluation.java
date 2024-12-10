@@ -1,6 +1,8 @@
 package vue;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -9,6 +11,7 @@ import java.awt.*;
 public class Evaluation extends JFrame
 {
 	private DefaultTableModel model;
+	private boolean isUpdating = false;
 
 	public Evaluation()
 	{
@@ -52,6 +55,19 @@ public class Evaluation extends JFrame
 
 		// Ajouter une ligne pour le résumé
 		model.addRow(new Object[] { "Total", false, "", "", "", "" });
+
+		// Ajouter un TableModelListener pour mettre à jour les sommes
+		model.addTableModelListener(new TableModelListener()
+		{
+			@Override
+			public void tableChanged(TableModelEvent e)
+			{
+				if (!isUpdating)
+				{
+					calculateSums();
+				}
+			}
+		});
 
 		// Tableau
 		JTable table = new JTable(model);
@@ -97,6 +113,7 @@ public class Evaluation extends JFrame
 
 	private void calculateSums()
 	{
+		isUpdating = true;
 		int rowCount = model.getRowCount();
 		int columnCount = model.getColumnCount();
 		int[] sums = new int[columnCount];
@@ -132,6 +149,7 @@ public class Evaluation extends JFrame
 			totalSum += sums[col];
 		}
 		model.setValueAt("Total: " + totalSum, rowCount - 1, 0);
+		isUpdating = false;
 	}
 
 	private void generateEvaluation()
