@@ -31,6 +31,8 @@ public class Notion
 		this.ressource = ressource;
 		this.id = ++nbNotion;
 		this.ensQuestions = new ArrayList<Question>();
+		this.creerFichierNotion();
+		ressource.ajouterNotion(this);
 	}
 
 
@@ -62,6 +64,12 @@ public class Notion
 	 *  | METHODES |
 	 *  +----------+
 	 */
+
+	public void creerFichierNotion()
+	{
+		Fichier tmp = new Fichier("lib/ressources/"+ressource.getNom()+"/");
+		tmp.ajouterFichier(this.getNom());
+	}
 	
 	public void ajouterQuestion(Question question)
 	{
