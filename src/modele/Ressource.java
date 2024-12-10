@@ -102,7 +102,7 @@ public class Ressource
 
 	public void ajouterNotion(Notion notion)
 	{
-		if (notion != null && this.ensNotions != null)
+		if (notion != null)
 		{
 			this.ensNotions.add(notion);
 		}

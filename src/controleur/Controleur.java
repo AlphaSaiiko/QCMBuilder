@@ -56,7 +56,6 @@ public class Controleur
                     System.out.println("Notion créée : " + notion.getNom() + " pour la ressource : " + ressource.getNom());
 
                     // Ajout de la notion à la ressource
-                    ressource.ajouterNotion(notion);
                     System.out.println("Notion ajoutée à la ressource : " + ressource.getNom());
                 }
             });
