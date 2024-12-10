@@ -29,6 +29,7 @@ public class Ressource
 		this.nom = nom;
 		this.id = ++nbRessource;
 		this.ensNotions = new ArrayList<>();
+		this.creerFichierRessource();
 	}
 
 
@@ -79,6 +80,12 @@ public class Ressource
 	 *  | METHODES |
 	 *  +----------+
 	 */ 
+
+	 public void creerFichierRessource()
+	 {
+		Fichier tmp = new Fichier("lib/ressources/");
+		tmp.ajouterFichier(this.getNom());
+	 }
 	public void ajouterNotion(Notion notion)
 	{
 		if (notion != null && this.ensNotions != null)

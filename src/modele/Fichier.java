@@ -16,10 +16,10 @@ public class Fichier{
 		this.chemin = chemin;
 	}
 
-	public void ajouterTxt(String nomFichier)
+	public void ajouterRtf(String nomFichier)
 	{
-		if (!nomFichier.endsWith(".txt")) {
-			nomFichier += ".txt";
+		if (!nomFichier.endsWith(".rtf")) {
+			nomFichier += ".rtf";
 		}
 		nomFichier = this.chemin + nomFichier;
 
@@ -42,6 +42,7 @@ public class Fichier{
 	{
 		nomFichier = this.chemin+nomFichier;
 		File fichier = new File(nomFichier);
+		System.out.println("rerere");
 
 		// Vérification et création du répertoire
 		if (!fichier.exists()) {
@@ -49,10 +50,10 @@ public class Fichier{
 		}
 	}
 
-	public void supprimerTxt(String nomFichier)
+	public void supprimerRtf(String nomFichier)
 	{
-		if (!nomFichier.endsWith(".txt")) {
-			nomFichier += ".txt";
+		if (!nomFichier.endsWith(".rtf")) {
+			nomFichier += ".rtf";
 		}
 		this.supprimerFichier(nomFichier);
 	}
@@ -71,8 +72,8 @@ public class Fichier{
 
 	public void ecrireQuestion(String chemin, Question qst)
 	{
-		if (!chemin.endsWith(".txt")) {
-			chemin += ".txt";
+		if (!chemin.endsWith(".rtf")) {
+			chemin += ".rtf";
 		}
 		chemin = this.chemin+chemin;
 		try

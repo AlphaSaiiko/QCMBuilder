@@ -50,29 +50,6 @@ public class TestRessource
 
 		}
 
-		CreerFichier fichier = new CreerFichier(lstRes);
-		fichier.creerRessource();
-
-		Fichier fich = new Fichier("lib/ressources/ressource1/notion1/");
-		fich.ajouterTxt("testFichier");
-		fich.ajouterFichier("repertoirTest");
-
-		for(Ressource ressource : lstRes){
-			for(Notion notion : ressource.getEnsNotions())
-			{
-				int i =1;
-				for (Question question : notion.getEnsQuestions())
-				{
-					Fichier tmp = new Fichier("lib/ressources/"+ressource.getNom()+"/"+notion.getNom()+"/question"+i +"/");
-					System.out.println(ressource.getNom()+"/"+notion.getNom()+"/question"+i +"/");
-					tmp.ajouterTxt("question");
-
-					tmp.ecrireQuestion("question", question);
-					i++;
-				}
-			}
-		}
-
 
 		
 	}
