@@ -25,6 +25,10 @@ public class CreerQuestion extends JFrame
 		panelQuestion.add(new JLabel("Intitulé de la question"), BorderLayout.NORTH);
 		panelQuestion.add(new JTextArea(), BorderLayout.CENTER);
 
+		//JComboBox pour le type de question
+		JComboBox<String> typeQuestion = new JComboBox<String>(new String[] { "question à choix multiple à réponse unique", "question à choix multiple à réponse multiple", "question à association d’éléments", "question avec élimination de propositions de réponses" });
+		panelQuestion.add(typeQuestion, BorderLayout.SOUTH);
+
 		JPanel niveauEtTps = new JPanel();
 		niveauEtTps.setLayout(new GridLayout(2, 1));
 
