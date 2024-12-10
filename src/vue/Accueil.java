@@ -24,7 +24,12 @@ public class Accueil extends JFrame
 		panelTitre.add(lblTitre, BorderLayout.CENTER);
 
 		JPanel panelBoutons = new JPanel();
-		panelBoutons.setLayout(new GridLayout(3, 1, 10, 10));
+		panelBoutons.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(10, 10, 10, 10);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 0;
+		gbc.gridy = GridBagConstraints.RELATIVE;
 
 		JButton btnCreerQCM = new JButton("Créer un QCM");
 		JButton btnCreerQuestion = new JButton("Créer une question");
@@ -48,11 +53,15 @@ public class Accueil extends JFrame
 			new CreerQuestion();
 			this.dispose();
 		});
-		btnParametres.addActionListener(e -> System.out.println("Paramètres"));
 
-		panelBoutons.add(btnCreerQCM);
-		panelBoutons.add(btnCreerQuestion);
-		panelBoutons.add(btnParametres);
+		btnParametres.addActionListener(e ->{
+			new Parametre();
+			this.dispose();
+		});
+
+		panelBoutons.add(btnCreerQCM, gbc);
+		panelBoutons.add(btnCreerQuestion, gbc);
+		panelBoutons.add(btnParametres, gbc);
 
 		panelPrincipal.add(panelTitre, BorderLayout.NORTH);
 		panelPrincipal.add(panelBoutons, BorderLayout.CENTER);

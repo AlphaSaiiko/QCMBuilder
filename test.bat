@@ -26,9 +26,6 @@ if not exist "%BIN_DIR%" (
 REM Compiler tous les fichiers Java en une seule commande
 echo Compilation des fichiers Java...
 
-REM Initialisation de la liste des fichiers source
-set SOURCES=
-
 REM Collecter tous les fichiers .java dans le répertoire src et ses sous-répertoires
 for /r "%SRC_DIR%" %%f in (*.java) do (
     set SOURCES=!SOURCES! "%%f"
@@ -43,8 +40,6 @@ if errorlevel 1 (
 
 REM Normaliser le nom de la classe a tester
 set CLASS_TO_TEST=%1
-set CLASS_TO_TEST=%CLASS_TO_TEST:Test=%
-set CLASS_TO_TEST=Test%CLASS_TO_TEST%
 
 REM Exécuter la classe de test
 echo Execution de la classe de test : %CLASS_TO_TEST%

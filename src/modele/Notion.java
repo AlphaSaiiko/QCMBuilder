@@ -12,6 +12,11 @@ public class Notion
 	 */ 
 	private String nom;
 
+	private Ressource ressource;
+
+	private final  int id;
+	private static int nbNotion = 0;
+
 	private List<Question> ensQuestions;
 
 	
@@ -20,24 +25,12 @@ public class Notion
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public Notion(String nom)
+	public Notion(String nom, Ressource ressource)
 	{
 		this.nom = nom;
+		this.ressource = ressource;
+		this.id = ++nbNotion;
 		this.ensQuestions = new ArrayList<Question>();
-	}
-
-
-	/*
-	 *  +----------+
-	 *  | METHODES |
-	 *  +----------+
-	 */
-	public void ajouterQuestion(Question question)
-	{
-		if (question != null && this.ensQuestions != null)
-		{
-			this.ensQuestions.add(question);
-		}
 	}
 
 
@@ -46,9 +39,14 @@ public class Notion
 	 *  | GETTEURS |
 	 *  +----------+
 	 */ 
+
 	public String getNom() { return nom; }
 
+	public int getId() { return this.id;}
+
 	public List<Question> getEnsQuestions() { return ensQuestions; }
+
+	public Question getQuestion (int indice) { return ensQuestions.get(indice);}
 
 
 	/*
@@ -57,4 +55,41 @@ public class Notion
 	 *  +----------+
 	 */ 
 	public void setNom(String nom) { this.nom = nom; }
+
+
+	/*
+	 *  +----------+
+	 *  | METHODES |
+	 *  +----------+
+	 */
+	
+	public void ajouterQuestion(Question question)
+	{
+		if (question != null && this.ensQuestions != null)
+		{
+			this.ensQuestions.add(question);
+		}
+	}
+
+	public void modifierQuestion(Question question)
+	{
+		for (Question qst : this.ensQuestions)
+		{
+			if (question.getId() == qst.getId())
+			{
+				qst = question;
+			}
+		}
+	}
+
+	public void supprimerQuestion(Question question)
+	{
+		for (Question qst : this.ensQuestions)
+		{
+			if (question.equals(qst))
+			{
+				this.ensQuestions.remove(qst);
+			}
+		}
+	}
 }
