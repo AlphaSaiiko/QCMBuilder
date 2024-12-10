@@ -19,6 +19,12 @@ public class CreerQuestion extends JFrame
 		JPanel panelprincipal = new JPanel();
 		panelprincipal.setLayout(new BorderLayout());
 
+		// Panel gérant l'intitulé de la question
+		JPanel panelQuestion = new JPanel();
+		panelQuestion.setLayout(new BorderLayout());		
+		panelQuestion.add(new JLabel("Intitulé de la question"), BorderLayout.NORTH);
+		panelQuestion.add(new JTextArea(), BorderLayout.CENTER);
+
 		JPanel niveauEtTps = new JPanel();
 		niveauEtTps.setLayout(new GridLayout(2, 1));
 
@@ -104,10 +110,10 @@ public class CreerQuestion extends JFrame
 		
 		//Creation JComboBox pour les ressources et matières
 		JComboBox<String> ressourcesList = new JComboBox<String>(Ressource.getNomsRessources());
-		ressourcesList.setPreferredSize(new Dimension(150, 25));
+		ressourcesList.setPreferredSize(new Dimension(150, 30));
 		
 		JComboBox<String> matieresList = new JComboBox<String>(new String[] { "Variable", "Intro_Php", "Fuction", "MVC" });
-		matieresList.setPreferredSize(new Dimension(150, 25));
+		matieresList.setPreferredSize(new Dimension(150, 30));
 		
 		// Panel pour les ressources
 		JPanel ressources = new JPanel();
@@ -158,9 +164,10 @@ public class CreerQuestion extends JFrame
 
 		//Création d'un panel gérant la création de question
 		JPanel panelCreation = new JPanel();
-		panelCreation.setLayout(new GridLayout(2, 1));
+		panelCreation.setLayout(new GridLayout(3, 1));
 		panelCreation.add(rassemble);
 		panelCreation.add(ressourceNotionLvl);
+		panelCreation.add(panelQuestion);
 
 		// Ajout des panels au panel principal
 		panelprincipal.add(panelRetour, BorderLayout.NORTH);
@@ -168,7 +175,7 @@ public class CreerQuestion extends JFrame
 		panelprincipal.add(panelBouton, BorderLayout.SOUTH);
 		
 		this.add(panelprincipal);
-		this.setSize(700, 250);
+		this.setSize(700, 300);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
