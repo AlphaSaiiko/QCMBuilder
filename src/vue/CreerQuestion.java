@@ -176,6 +176,19 @@ public class CreerQuestion extends JFrame
         JPanel panelBouton = new JPanel();
         panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
         panelBouton.add(creerQuestionButton);
+		creerQuestionButton.addActionListener(e -> {
+			String selectedType = (String) typeQuestion.getSelectedItem();
+			if ("question à choix multiple à réponse unique".equals(selectedType))
+			{
+				new QuestionReponseUnique();
+				dispose();
+			}
+			else if ("question à choix multiple à réponse multiple".equals(selectedType))
+			{
+				new QuestionReponseMultiple();
+				dispose();
+			}
+		});
 
 	
 
