@@ -5,12 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class QuestionReponseMultiple extends JFrame
+public class QuestionReponseUnique extends JFrame
 {
 	private JPanel questionPanel;
 	private ButtonGroup buttonGroup;
 
-	public QuestionReponseMultiple()
+	public QuestionReponseUnique()
 	{
 		// Initialiser le conteneur principal
 		JPanel mainPanel = new JPanel(new BorderLayout());
@@ -107,7 +107,7 @@ public class QuestionReponseMultiple extends JFrame
 		add(mainPanel, BorderLayout.CENTER);
 
 		// Afficher la fenêtre
-		setTitle("Question Réponse Multiple");
+		setTitle("Question Réponse Unique");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
@@ -115,6 +115,6 @@ public class QuestionReponseMultiple extends JFrame
 
 	public static void main(String[] args)
 	{
-		SwingUtilities.invokeLater(QuestionReponseMultiple::new);
+		SwingUtilities.invokeLater(QuestionReponseUnique::new);
 	}
 }
