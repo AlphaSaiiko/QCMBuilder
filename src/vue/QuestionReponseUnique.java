@@ -2,22 +2,25 @@ package vue;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class QuestionReponseUnique extends JFrame
 {
+	private JPanel questionPanel;
+	private ButtonGroup buttonGroup;
+
 	public QuestionReponseUnique()
 	{
-		// Créer le panel principal
+		// Initialiser le conteneur principal
 		JPanel mainPanel = new JPanel(new BorderLayout());
 
-		// Panel pour la question
-		JPanel questionPanel = new JPanel();
+		// Initialiser le panel des questions
+		questionPanel = new JPanel();
 		questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
 
-		// Ajouter le label "Question"
-		JLabel questionLabel = new JLabel("Question");
-		questionLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		questionPanel.add(questionLabel);
+		// Initialiser le groupe de boutons radio
+		buttonGroup = new ButtonGroup();
 
 		// Ajouter un champ de texte pour écrire la question
 		JTextArea questionArea = new JTextArea(10, 80);
@@ -27,72 +30,77 @@ public class QuestionReponseUnique extends JFrame
 		questionArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, questionArea.getPreferredSize().height));
 		questionPanel.add(questionArea);
 
-		// Ajouter un panel pour les images de poubelles, champ de texte et case
-		// à cocher
-		JPanel trashPanel1 = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc1 = new GridBagConstraints();
-		gbc1.insets = new Insets(5, 5, 5, 5);
-		gbc1.gridx = 0;
-		gbc1.gridy = 0;
-		gbc1.anchor = GridBagConstraints.WEST;
+		// Ajouter un bouton pour ajouter un nouveau panel trash
+		JButton addButton = new JButton("Ajouter");
+		questionPanel.add(addButton);
 
-		// Redimensionner l'icône de poubelle
-		ImageIcon trashIcon = new ImageIcon(new ImageIcon("QCMBuilder/lib/icones/delete.png").getImage()
-				.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-		JLabel trashLabel1 = new JLabel(trashIcon);
-		trashPanel1.add(trashLabel1, gbc1);
+		// Ajouter un ActionListener au bouton
+		addButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// Créer un nouveau panel trash
+				JPanel newTrashPanel = new JPanel(new GridBagLayout());
+				GridBagConstraints gbc = new GridBagConstraints();
+				gbc.insets = new Insets(5, 5, 5, 5);
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.anchor = GridBagConstraints.WEST;
 
-		gbc1.gridx = 1;
-		gbc1.fill = GridBagConstraints.HORIZONTAL;
-		gbc1.weightx = 1.0;
+				// Redimensionner l'icône de poubelle
+				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("QCMBuilder/lib/icones/delete.png").getImage()
+						.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+				JButton newTrashButton = new JButton(newTrashIcon);
+				newTrashButton.setPreferredSize(new Dimension(40, 40));
+				newTrashButton.setBorderPainted(false);
+				newTrashButton.setContentAreaFilled(false);
+				newTrashButton.setFocusPainted(false);
+				newTrashButton.setOpaque(false);
+				newTrashPanel.add(newTrashButton, gbc);
 
-		// Augmenter la taille du JTextField
-		JTextField textField1 = new JTextField(50);
-		textField1.setFont(new Font("Arial", Font.PLAIN, 18));
-		trashPanel1.add(textField1, gbc1);
+				// Ajouter un ActionListener au bouton de poubelle
+				newTrashButton.addActionListener(new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						// Supprimer le panel parent lorsque l'icône de poubelle
+						// est cliquée
+						questionPanel.remove(newTrashPanel);
+						questionPanel.revalidate();
+						questionPanel.repaint();
+					}
+				});
 
-		gbc1.gridx = 2;
-		gbc1.fill = GridBagConstraints.NONE;
-		gbc1.weightx = 0;
+				// Augmenter la taille du JTextField
+				JTextField newTextField = new JTextField();
+				newTextField.setFont(new Font("Arial", Font.PLAIN, 18));
+				newTextField.setPreferredSize(new Dimension(400, 30));
+				gbc.gridx = 1;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+				gbc.weightx = 1.0;
+				newTrashPanel.add(newTextField, gbc);
 
-		// Augmenter la taille de la case à cocher
-		JCheckBox checkBox1 = new JCheckBox();
-		checkBox1.setPreferredSize(new Dimension(30, 30));
-		trashPanel1.add(checkBox1, gbc1);
+				gbc.gridx = 2;
+				gbc.fill = GridBagConstraints.NONE;
+				gbc.weightx = 0;
 
-		questionPanel.add(trashPanel1);
+				// Ajouter un bouton radio
+				JRadioButton newRadioButton = new JRadioButton();
+				newRadioButton.setPreferredSize(new Dimension(30, 30));
+				buttonGroup.add(newRadioButton);
+				newTrashPanel.add(newRadioButton, gbc);
 
-		// Ajouter un deuxième panel pour les images de poubelles, champ de
-		// texte et case à cocher
-		JPanel trashPanel2 = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc2 = new GridBagConstraints();
-		gbc2.insets = new Insets(5, 5, 5, 5);
-		gbc2.gridx = 0;
-		gbc2.gridy = 0;
-		gbc2.anchor = GridBagConstraints.WEST;
+				// Ajouter le nouveau panel trash au conteneur principal
+				questionPanel.add(newTrashPanel, questionPanel.getComponentCount() - 1);
 
-		JLabel trashLabel2 = new JLabel(trashIcon);
-		trashPanel2.add(trashLabel2, gbc2);
+				// Rafraîchir l'interface utilisateur
+				questionPanel.revalidate();
+				questionPanel.repaint();
+			}
+		});
 
-		gbc2.gridx = 1;
-		gbc2.fill = GridBagConstraints.HORIZONTAL;
-		gbc2.weightx = 1.0;
-
-		JTextField textField2 = new JTextField(50);
-		textField2.setFont(new Font("Arial", Font.PLAIN, 18));
-		trashPanel2.add(textField2, gbc2);
-
-		gbc2.gridx = 2;
-		gbc2.fill = GridBagConstraints.NONE;
-		gbc2.weightx = 0;
-
-		JCheckBox checkBox2 = new JCheckBox();
-		checkBox2.setPreferredSize(new Dimension(30, 30));
-		trashPanel2.add(checkBox2, gbc2);
-
-		questionPanel.add(trashPanel2);
-
-		// Ajouter le panel de question au panel principal
 		mainPanel.add(questionPanel, BorderLayout.NORTH);
 
 		// Ajouter tout dans le conteneur principal
