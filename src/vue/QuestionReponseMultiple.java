@@ -1,22 +1,18 @@
 package vue;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-<<<<<<< HEAD
-import javax.swing.*;
-=======
 import java.io.FileWriter;
 import java.io.IOException;
->>>>>>> 848f7f2 (Mise a jour Panel Reponse Unique)
 
-public class QuestionReponseUnique extends JFrame
+public class QuestionReponseMultiple extends JFrame
 {
 	private JPanel questionPanel;
-	private ButtonGroup buttonGroup;
 	private JTextArea questionArea;
 
-	public QuestionReponseUnique()
+	public QuestionReponseMultiple()
 	{
 		// Initialiser le conteneur principal
 		JPanel mainPanel = new JPanel(new BorderLayout());
@@ -24,9 +20,6 @@ public class QuestionReponseUnique extends JFrame
 		// Initialiser le panel des questions
 		questionPanel = new JPanel();
 		questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
-
-		// Initialiser le groupe de boutons radio
-		buttonGroup = new ButtonGroup();
 
 		// Ajouter un champ de texte pour écrire la question
 		questionArea = new JTextArea(10, 80);
@@ -42,8 +35,8 @@ public class QuestionReponseUnique extends JFrame
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		// Ajouter un bouton pour ajouter un nouveau panel trash avec une icône
-		ImageIcon addIcon = new ImageIcon(
-				new ImageIcon("QCMBuilder/lib/icones/add.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+		ImageIcon addIcon = new ImageIcon(new ImageIcon("QCMBuilder/lib/icones/add.png").getImage()
+				.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 		JButton addButton = new JButton(addIcon);
 		addButton.setPreferredSize(new Dimension(40, 40));
 		addButton.setBorderPainted(false);
@@ -53,8 +46,8 @@ public class QuestionReponseUnique extends JFrame
 		buttonPanel.add(addButton);
 
 		// Ajouter un bouton "Explication" avec une icône
-		ImageIcon explicationIcon = new ImageIcon(
-				new ImageIcon("QCMBuilder/lib/icones/edit.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+		ImageIcon explicationIcon = new ImageIcon(new ImageIcon("QCMBuilder/lib/icones/edit.png").getImage()
+				.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 		JButton explicationButton = new JButton(explicationIcon);
 		explicationButton.setPreferredSize(new Dimension(40, 40));
 		explicationButton.setBorderPainted(false);
@@ -85,7 +78,7 @@ public class QuestionReponseUnique extends JFrame
 				gbc.anchor = GridBagConstraints.WEST;
 
 				// Redimensionner l'icône de poubelle
-				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("./lib/icones/delete.png").getImage()
+				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("QCMBuilder/lib/icones/delete.png").getImage()
 						.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 				JButton newTrashButton = new JButton(newTrashIcon);
 				newTrashButton.setPreferredSize(new Dimension(40, 40));
@@ -122,11 +115,10 @@ public class QuestionReponseUnique extends JFrame
 				gbc.fill = GridBagConstraints.NONE;
 				gbc.weightx = 0;
 
-				// Ajouter un bouton radio
-				JRadioButton newRadioButton = new JRadioButton();
-				newRadioButton.setPreferredSize(new Dimension(30, 30));
-				buttonGroup.add(newRadioButton);
-				newTrashPanel.add(newRadioButton, gbc);
+				// Ajouter une case à cocher
+				JCheckBox newCheckBox = new JCheckBox();
+				newCheckBox.setPreferredSize(new Dimension(30, 30));
+				newTrashPanel.add(newCheckBox, gbc);
 
 				// Ajouter le nouveau panel trash au conteneur principal
 				questionPanel.add(newTrashPanel, questionPanel.getComponentCount() - 1);
@@ -192,6 +184,6 @@ public class QuestionReponseUnique extends JFrame
 
 	public static void main(String[] args)
 	{
-		SwingUtilities.invokeLater(QuestionReponseUnique::new);
+		SwingUtilities.invokeLater(QuestionReponseMultiple::new);
 	}
 }
