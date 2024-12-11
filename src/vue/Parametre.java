@@ -48,7 +48,8 @@ public class Parametre extends JFrame
             creerRessource.addWindowListener(new WindowAdapter()
             {
                 public void windowClosed(WindowEvent e)
-                { // Actualiser la liste des ressources après la fermeture de la fenêtre
+                {
+                    // Actualiser la liste des ressources après la fermeture de la fenêtre
                     loadRessources();
                 }
             });
@@ -65,7 +66,8 @@ public class Parametre extends JFrame
             creerNotion.addWindowListener(new WindowAdapter()
             {
                 public void windowClosed(WindowEvent e)
-                { // Actualiser la liste des ressources après la fermeture de la fenêtre
+                {
+                    // Actualiser la liste des ressources après la fermeture de la fenêtre
                     loadRessources();
                 }
             });
