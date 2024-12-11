@@ -1,6 +1,8 @@
 package vue;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -14,6 +16,9 @@ public class Parametre extends JFrame
     private JList<String> notionList;
     private DefaultListModel<String> ressourceListModel;
     private DefaultListModel<String> notionListModel;
+
+	private CreerRessource creerRessource;
+	private CreerNotion    creerNotion;
 
     /*
      *  +--------------+
@@ -41,8 +46,19 @@ public class Parametre extends JFrame
         ajtRessource.addActionListener(e ->
         {
             // Code pour lancer la création d'une ressource
-            CreerRessource creerRessource = new CreerRessource();
-            creerRessource.setVisible(true);
+
+			// Pour avoir une fenêtre unique
+			if (this.creerRessource != null) { this.creerRessource.dispose(); this.creerRessource = null; }
+        	
+			this.creerRessource = new CreerRessource();
+            this.creerRessource.setVisible(true);
+			this.creerRessource.addWindowListener(new WindowAdapter()
+            {
+                public void windowClosed(WindowEvent e)
+                { // Actualiser la liste des ressources après la fermeture de la fenêtre
+                    loadRessources();
+                }
+            });
         });
 
         JButton ajtNotion = new JButton("Ajouter une notion");
@@ -51,8 +67,19 @@ public class Parametre extends JFrame
         ajtNotion.addActionListener(e ->
         {
             // Code pour lancer la création d'une notion
-            CreerNotion creerNotion = new CreerNotion();
-            creerNotion.setVisible(true);
+
+			// Pour avoir une fenêtre unique
+			if (this.creerNotion != null) { this.creerNotion.dispose(); this.creerNotion = null; }
+			
+			this.creerNotion = new CreerNotion();
+            this.creerNotion.setVisible(true);
+            this.creerNotion.addWindowListener(new WindowAdapter()
+            {
+                public void windowClosed(WindowEvent e)
+                { // Actualiser la liste des ressources après la fermeture de la fenêtre
+                    loadRessources();
+                }
+            });
         });
 
         // Ajout des composants au panel
@@ -98,7 +125,9 @@ public class Parametre extends JFrame
         JButton retourButton = new JButton(icon);
         retourButton.addActionListener(e ->
         {
-            Accueil accueil = new Accueil();
+            if (this.creerRessource != null) { this.creerRessource.dispose(); }
+            if (this.creerNotion    != null) { this.creerNotion   .dispose(); }
+			Accueil accueil = new Accueil();
             accueil.setVisible(true);
             dispose();
         });
@@ -124,7 +153,8 @@ public class Parametre extends JFrame
     // Méthode pour charger les ressources dans la JList
     private void loadRessources()
     {
-        for (Ressource ressource : Ressource.getListRessource())
+		ressourceListModel.clear();
+		for (Ressource ressource : Ressource.getListRessource())
         {
             ressourceListModel.addElement(ressource.getNom());
         }
