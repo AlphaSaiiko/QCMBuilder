@@ -174,6 +174,7 @@ public class QuestionReponseMultiple extends JFrame
 		// Afficher la fenêtre
 		setTitle("Question Réponse Unique");
 		setSize(800, 600);
+        setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
