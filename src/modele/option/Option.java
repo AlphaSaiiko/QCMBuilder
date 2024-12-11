@@ -1,5 +1,7 @@
 package modele.option;
 
+import modele.*;
+
 public class Option implements IOption
 {
 	/*
@@ -12,17 +14,22 @@ public class Option implements IOption
 
 	private boolean estReponse;
 
+	private Question question;
+
 
 	/*
 	 *  +--------------+
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public Option(String type, String intitule, boolean estReponse)
+	public Option(String type, String intitule, boolean estReponse, Question question)
 	{
 		this.type       = type      ;
 		this.intitule   = intitule  ;
 		this.estReponse = estReponse;
+		this.question   = 	question;
+
+		this.ecrireReponse();
 	}
 
 
@@ -46,4 +53,15 @@ public class Option implements IOption
 	public void setType    (String type    ) { this.type     = type    ; }
 
 	public void setEstReponse(boolean estRep) { this.estReponse = estRep; }
+
+	/*
+	 *  +----------+
+	 *  | METHODES |
+	 *  +----------+
+	 */
+
+	 public void ecrireReponse(){
+		Fichier tmp = new Fichier("lib/ressources/"+question.getNotion().getRessource().getNom()+"/"+question.getNotion().getNom()+"/question"+question.getNotion().getNbQuestion());
+		tmp.ecrireReponse("/question"+question.getNotion().getNbQuestion(), this);
+	 }
 }

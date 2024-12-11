@@ -3,8 +3,6 @@ package test;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.text.html.Option;
-
 import modele.*;
 import modele.option.*;
 
@@ -33,17 +31,17 @@ public class TestRessource
 		ArrayList<Ressource> lstRes = new ArrayList<>();
 
 		for (int i = 0; i <= 2; i++) {
-			Ressource ressource = new Ressource("ressource" + (i+1));
+			Ressource ressource = Ressource.creerRessource("ressource" + (i+1));
 			lstRes.add(ressource);
 
-			for (int j = 0; j <= 3; j++) {
-				ressource.ajouterNotion(new Notion("notion" + (i) + (j+1), ressource));
-				for (int k=0; k<=5 ;k++)
+			for (int j = 0; j < 3; j++) {
+				ressource.ajouterNotion(new Notion("notion" + (j), ressource));
+				for (int k=0; k<3 ;k++)
 				{
 					ressource.getNotion(j).ajouterQuestion(new Question("type", "intitulé", i, k, i, ressource.getNotion(j)));
-					for(int l=0; l<=5;l++)
+					for(int l=0; l<3;l++)
 					{
-						//ressource.getNotion(j).getQuestion(k).ajouterOption(new Option("Question", "çava?", true));
+						ressource.getNotion(j).getQuestion(k).ajouterOption(new Option("Question", "çava?", true,ressource.getNotion(j).getQuestion(k)));
 					}
 				}
 			}

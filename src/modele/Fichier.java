@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import modele.option.*;
 
 public class Fichier{
 
@@ -74,18 +75,46 @@ public class Fichier{
 		chemin = this.chemin+chemin;
 		try
 		{
-			PrintWriter pw = new PrintWriter(new FileOutputStream (chemin));
+			PrintWriter pw = new PrintWriter(new FileOutputStream (chemin, true));
 			pw.println(qst.getType() + "\t" + qst.getIntitule() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom());
 			pw.close();
 		}
 		catch (Exception e){e.printStackTrace();}
 	}
 
-    
+	
 	public boolean exists(String nom) {
 		nom = this.chemin + nom;
 		File fichier = new File(nom);
 		return fichier.exists();
+	}
+
+	public void ecrireReponse(String chemin, Option opt)
+	{
+		if (!chemin.endsWith(".rtf")) {
+			chemin += ".rtf";
+		}
+		chemin = this.chemin+chemin;
+
+
+		File fichier = new File(chemin);
+
+		// Vérifie si le fichier existe
+		if (!fichier.exists()) {
+			System.out.println("Le fichier n'existe pas.");
+			System.out.println(chemin);
+			return;
+		}
+
+		// Écrit les données de l'objet Option dans le fichier
+		try (PrintWriter writer = new PrintWriter(new FileOutputStream(fichier, true))) {
+			System.out.println("1");
+			writer.println(opt.getType() + "\t" + opt.getIntitule() + "\t" + opt.getEstReponse());
+			System.out.println("2");
+		} catch (IOException e) {
+			System.err.println("Une erreur s'est produite lors de l'écriture dans le fichier : " + e.getMessage());
+		}
+
 	}
 
 
