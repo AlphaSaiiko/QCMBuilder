@@ -67,7 +67,8 @@ public class CreerQuestion extends JFrame
 		JComboBox<String> ressourcesList = new JComboBox<String>(Ressource.getNomsRessources());
 		ressourcesList.setPreferredSize(new Dimension(150, 30));
 		
-		JComboBox<String> matieresList = new JComboBox<String>(new String[] { "Variable", "Intro_Php", "Fuction", "MVC" });
+		String nomRessource = String.valueOf(ressourcesList.getSelectedItem());
+		JComboBox<String> matieresList = new JComboBox<String>(Ressource.trouverRessourceParNom(nomRessource).getNomsNotions());
 		matieresList.setPreferredSize(new Dimension(150, 30));
 		
 		// Panel pour les ressources
