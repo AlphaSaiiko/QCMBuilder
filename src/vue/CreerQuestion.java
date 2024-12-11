@@ -176,15 +176,11 @@ public class CreerQuestion extends JFrame implements ActionListener
 		rassemble.add(temps);
 
 
-
-		// Panel gérant l'intitulé de la question
+		//Panel pour le type de question
 		JPanel panelQuestion = new JPanel();
-		panelQuestion.setLayout(new BorderLayout());		
-		panelQuestion.add(new JLabel("Intitulé de la question"), BorderLayout.NORTH);
-		panelQuestion.add(new JTextArea(), BorderLayout.CENTER);
 
 		//JComboBox pour le type de question
-		JComboBox<String> typeQuestion = new JComboBox<String>(new String[] { "question à choix multiple à réponse unique", "question à choix multiple à réponse multiple", "question à association d’éléments", "question avec élimination de propositions de réponses" });
+		JComboBox<String> typeQuestion = new JComboBox<String>(new String[] { "Question à choix multiple à réponse unique", "Question à choix multiple à réponse multiple", "Question à association d’éléments", "Question avec élimination de propositions de réponses" });
 		panelQuestion.add(typeQuestion, BorderLayout.SOUTH);
 
         // Bouton pour créer une nouvelle question
