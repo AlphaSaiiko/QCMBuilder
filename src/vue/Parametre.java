@@ -3,7 +3,6 @@ package vue;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.Iterator;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -144,58 +143,52 @@ public class Parametre extends JFrame
 
 		JButton supprNotion = new JButton(resizeIcon("./lib/icones/delete.png", 20, 20));
 		supprNotion.setPreferredSize(new Dimension(30, 30));
-		supprNotion.addActionListener(e ->
-		{
+		supprNotion.addActionListener(e -> {
 			String selectedRessource = ressourceList.getSelectedValue();
 			String selectedNotion = notionList.getSelectedValue();
-			if (selectedRessource != null && selectedNotion != null)
-			{
+			if (selectedRessource != null && selectedNotion != null) {
 				Ressource ressource = Ressource.trouverRessourceParNom(selectedRessource);
-				if (ressource != null)
-				{
-					Iterator<Notion> iterator = ressource.getEnsNotions().iterator();
-					while (iterator.hasNext())
-					{
-						Notion notion = iterator.next();
-						if (notion.getNom().equals(selectedNotion))
-						{
-							iterator.remove();
-							break;
+				if (ressource != null) {
+					Notion notion = ressource.getNotion(selectedNotion);
+					if (notion != null) {
+						// Supprimer le répertoire associé à la notion
+						File notionDir = new File("./lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom());
+						if (notionDir.exists()) {
+							deleteDirectory(notionDir);
 						}
+						// Supprimer la notion de la liste
+						ressource.getEnsNotions().remove(notion);
+						updateNotionList(selectedRessource);
 					}
-					updateNotionList(selectedRessource);
 				}
 			}
 		});
 
 		JButton modifNotion = new JButton(resizeIcon("./lib/icones/edit.png", 20, 20));
 		modifNotion.setPreferredSize(new Dimension(30, 30));
-		modifNotion.addActionListener(e ->
-		{
+		modifNotion.addActionListener(e -> {
 			String selectedRessource = ressourceList.getSelectedValue();
 			String selectedNotion = notionList.getSelectedValue();
-			if (selectedRessource != null && selectedNotion != null)
-			{
-				String newNotionName = JOptionPane.showInputDialog("Modifier la notion", selectedNotion);
-				if (newNotionName != null && !newNotionName.trim().isEmpty())
-				{
-					Ressource ressource = Ressource.trouverRessourceParNom(selectedRessource);
-					if (ressource != null)
-					{
-						// Trouver la notion dans la liste des notions de la ressource
-						for (Notion notion : ressource.getEnsNotions())
-						{
-							if (notion.getNom().equals(selectedNotion))
-							{
-								notion.setNom(newNotionName);
-								break;
-							}
+			if (selectedRessource != null && selectedNotion != null) {
+				Ressource ressource = Ressource.trouverRessourceParNom(selectedRessource);
+				if (ressource != null) {
+					for (Notion notion : ressource.getEnsNotions()) {
+						if (notion.getNom().equals(selectedNotion)) {
+							ModifierNotion modifierNotionFrame = new ModifierNotion(ressource, notion);
+							modifierNotionFrame.setVisible(true);
+							modifierNotionFrame.addWindowListener(new WindowAdapter() {
+								@Override
+								public void windowClosed(WindowEvent e) {
+									updateNotionList(selectedRessource);
+								}
+							});
+							break;
 						}
-						updateNotionList(selectedRessource);
 					}
 				}
 			}
 		});
+
 
 		// Ajout des boutons de notions au panelNotions
 		panelNotions.add(ajtNotion);
