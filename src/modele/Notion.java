@@ -3,6 +3,10 @@ package modele;
 import java.util.ArrayList;
 import java.util.List;
 
+import modele.Fichier;
+import modele.Question;
+import modele.Ressource;
+
 public class Notion
 {
 	/*
@@ -10,29 +14,41 @@ public class Notion
 	 *  | PARAMETRES |
 	 *  +------------+
 	 */ 
+
+	private List<Question> ensQuestions;
+
 	private String nom;
-	private int nbQuestion;
 
 	private Ressource ressource;
 
-	private final  int id;
-	private static int nbNotion = 0;
-
-	private List<Question> ensQuestions;
 	
 	/*
 	 *  +--------------+
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
+
+    public static Notion creerNotion(String nom, Ressource ressource)
+	{
+		Notion notion = Notion.trouverNotionParNom(nom, ressource);
+		if (notion == null)
+		{
+			notion = new Notion(nom, ressource);
+			System.out.println("Nouvelle notion créée avec le titre: " + nom + " pour la ressource: " + ressource.getNom());
+		}
+		else
+		{
+			System.out.println("La notion existe déjà dans la ressource: " + ressource.getNom());
+		}
+		return notion;
+	}
+
 	public Notion(String nom, Ressource ressource)
 	{
 		this.nom = nom;
 		this.ressource = ressource;
-		this.id = ++nbNotion;
-		this.nbQuestion = 0;
-		this.ensQuestions = new ArrayList<Question>();
 		this.creerFichierNotion();
+		this.ensQuestions = new ArrayList<Question>();
 		ressource.ajouterNotion(this);
 	}
 
@@ -44,14 +60,14 @@ public class Notion
 	 */ 
 
 	public String getNom() { return nom; }
-
-	public int getId() { return this.id;}
-
-	public List<Question> getEnsQuestions() { return ensQuestions; }
-
-	public Question getQuestion (int indice) { return ensQuestions.get(indice);}
-
+    
 	public Ressource getRessource() {return this.ressource;}
+
+    public int getNbQuestions() { return this.ensQuestions.size(); }
+
+	public List<Question> getEnsQuestions() { return this.ensQuestions; }
+
+	public Question getQuestion (int indice) { return this.ensQuestions.get(indice);}
 
 
 	/*
@@ -59,7 +75,10 @@ public class Notion
 	 *  | SETTEURS |
 	 *  +----------+
 	 */ 
+
 	public void setNom(String nom) { this.nom = nom; }
+
+    public void setRessource(Ressource ressource) { this.ressource = ressource; }
 
 
 	/*
@@ -76,23 +95,9 @@ public class Notion
 	
 	public void ajouterQuestion(Question question)
 	{
-		if (question != null && this.ensQuestions != null)
+		if (question != null)
 		{
 			this.ensQuestions.add(question);
-			this.nbQuestion++;
-		}
-	}
-
-	public int getNbQuestion(){return this.nbQuestion;}
-
-	public void modifierQuestion(Question question)
-	{
-		for (Question qst : this.ensQuestions)
-		{
-			if (question.getId() == qst.getId())
-			{
-				qst = question;
-			}
 		}
 	}
 
@@ -106,4 +111,16 @@ public class Notion
 			}
 		}
 	}
+
+    public static Notion trouverNotionParNom(String nom, Ressource ressource)
+    {
+        for (Notion notion : ressource.getEnsNotions())
+        {
+            if (notion.getNom().equals(nom))
+            {
+                return notion;
+            }
+        }
+        return null;
+    }
 }

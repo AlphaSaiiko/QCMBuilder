@@ -15,7 +15,7 @@ public class Ressource
 	
     private List<Notion> ensNotions = null;
 	
-		private String nom;
+	private String nom;
 	
 	
 		/*
@@ -41,13 +41,6 @@ public class Ressource
 	
 		private Ressource(String nom)
 		{
-			for (Ressource ressource : Ressource.listRessource) 
-			{
-				if (ressource.getNom().equalsIgnoreCase(nom))
-				{
-					return;
-				}
-			}
 			this.nom = nom;
 			Ressource.listRessource.add(this);
 			this.creerFichierRessource();
@@ -133,8 +126,7 @@ public class Ressource
 
 	public static Ressource trouverRessourceParNom(String nom) 
 	{
-        List<Ressource> ressources = Ressource.listRessource;
-		for (Ressource ressource : ressources)
+		for (Ressource ressource : Ressource.listRessource)
         {
 			if (ressource.getNom().equalsIgnoreCase(nom))
             {
