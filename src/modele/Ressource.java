@@ -59,7 +59,17 @@ public class Ressource
 
 	public List<Notion> getEnsNotions() { return this.ensNotions; }
 
-	public Notion getNotion(int ind) {return this.ensNotions.get(ind);}
+	public Notion getNotion(String nom)
+	{
+		for (Notion notion : this.ensNotions)
+		{
+			if (notion.getNom().equalsIgnoreCase(nom))
+			{
+				return notion;
+			}
+		}
+		return null;
+	}
     
 	public static List<Ressource> getListRessource() { return Ressource.listRessource; }
 	
