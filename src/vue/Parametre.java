@@ -89,23 +89,23 @@ public class Parametre extends JFrame
 
 		JButton modifRessource = new JButton(resizeIcon("./lib/icones/edit.png", 20, 20));
 		modifRessource.setPreferredSize(new Dimension(30, 30));
-		modifRessource.addActionListener(e ->
-		{
+		modifRessource.addActionListener(e -> {
 			String selectedRessource = ressourceList.getSelectedValue();
-			if (selectedRessource != null)
-			{
-				String newRessourceName = JOptionPane.showInputDialog("Modifier la ressource", selectedRessource);
-				if (newRessourceName != null && !newRessourceName.trim().isEmpty())
-				{
-					Ressource ressource = Ressource.trouverRessourceParNom(selectedRessource);
-					if (ressource != null)
-					{
-						ressource.setNom(newRessourceName);
-						loadRessources();
-					}
+			if (selectedRessource != null) {
+				Ressource ressource = Ressource.trouverRessourceParNom(selectedRessource);
+				if (ressource != null) {
+					ModifierRessource modifierRessourceFrame = new ModifierRessource(ressource);
+					modifierRessourceFrame.setVisible(true);
+					modifierRessourceFrame.addWindowListener(new WindowAdapter() {
+						public void windowClosed(WindowEvent e) {
+							loadRessources();
+						}
+					});
 				}
 			}
 		});
+
+
 
 		// Ajout des boutons de ressources au panelRessources
 		panelRessources.add(ajtRessource);
