@@ -54,7 +54,7 @@ public class Parametre extends JFrame {
         panelCreation.add(ajtNotion, gbc);
 
         // Bouton de retour
-        String imagePath = "./lib/icones/home.png";
+        String imagePath = "QCMBuilder/lib/icones/home.png";
         File imageFile = new File(imagePath);
         ImageIcon icon = new ImageIcon(imageFile.getAbsolutePath());
         Image img = icon.getImage();

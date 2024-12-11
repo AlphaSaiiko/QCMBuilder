@@ -20,6 +20,7 @@ public class Evaluation extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(600, 300);
 		setLayout(new BorderLayout());
+		setLocationRelativeTo(null);
 
 		// Modèle pour le tableau
 		String[] columnNames = { "Notion", "Sélectionner", "TF", "F", "M", "D" };

@@ -19,7 +19,7 @@ public class CreerEvaluation extends JFrame {
 		panelPrincipal.setLayout(new BorderLayout());
 
 		// Bouton de retour
-		String imageRet = "./lib/icones/home.png";
+		String imageRet = "QCMBuilder/lib/icones/home.png";
 		ImageIcon icon = new ImageIcon(imageRet);
 		Image img = icon.getImage();
 		Image newImg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
@@ -54,7 +54,7 @@ public class CreerEvaluation extends JFrame {
 		lineGbc.gridx = 2;
 		lineGbc.gridy = 0;
 		lineGbc.anchor = GridBagConstraints.CENTER;
-		String imagePath = "./lib/icones/timer.png";
+		String imagePath = "QCMBuilder/lib/icones/timer.png";
 		File imageFile = new File(imagePath);
 		if (imageFile.exists()) {
 			ImageIcon timerIcon = new ImageIcon(imagePath);
@@ -105,6 +105,13 @@ public class CreerEvaluation extends JFrame {
 		this.setSize(500, 300);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
+
+		// Ajouter un ActionListener au bouton pour ouvrir une nouvelle IHM
+		creerButton.addActionListener(e-> {
+			new Evaluation();
+			CreerEvaluation.this.dispose();
+		});
+
 		this.setVisible(true);
 	}
 

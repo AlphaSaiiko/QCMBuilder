@@ -151,7 +151,7 @@ public class CreerQuestion extends JFrame
         panelBouton.add(creerQuestionButton);
 
 		// Bouton de retour
-		String imagePath = "./lib/icones/home.png";
+		String imagePath = "/lib/icones/home.png";
 		File imageFile = new File(imagePath);
 		ImageIcon icon = new ImageIcon(imageFile.getAbsolutePath());
 		Image img = icon.getImage();

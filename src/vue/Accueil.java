@@ -14,9 +14,9 @@ public class Accueil extends JFrame
 	public Accueil() 
 	{
 		setTitle("Accueil");
-
+		
 		// Configuration du panel principal + espace de 25 au nord
-		JPanel panelPrincipal = new JPanel();        
+		JPanel panelPrincipal = new JPanel();		
 		panelPrincipal.setBorder(new EmptyBorder(25, 0, 0, 0));
 		panelPrincipal.setLayout(new BorderLayout());
 
