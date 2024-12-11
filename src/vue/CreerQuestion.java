@@ -16,8 +16,12 @@ public class CreerQuestion extends JFrame
 
 		setTitle("Créer une question");
 
+
+
 		JPanel panelprincipal = new JPanel();
 		panelprincipal.setLayout(new BorderLayout());
+
+
 
 		// Bouton de retour
 		String imagePath = "./lib/icones/home.png";
@@ -35,6 +39,8 @@ public class CreerQuestion extends JFrame
 		panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelRetour.add(retourButton);
 
+
+		
 		// Panel pour les niveaux et le temps
 		JPanel niveauEtTps = new JPanel();
 		niveauEtTps.setLayout(new GridLayout(2, 1));
@@ -54,6 +60,8 @@ public class CreerQuestion extends JFrame
 		// On ajoute points et temps à niveauEtTps
 		niveauEtTps.add(points);
 		niveauEtTps.add(temps);
+
+
 
 		//Creation JComboBox pour les ressources et matières
 		JComboBox<String> ressourcesList = new JComboBox<String>(Ressource.getNomsRessources());
@@ -151,6 +159,8 @@ public class CreerQuestion extends JFrame
 		rassemble.add(points);
 		rassemble.add(temps);
 
+
+
 		// Panel gérant l'intitulé de la question
 		JPanel panelQuestion = new JPanel();
 		panelQuestion.setLayout(new BorderLayout());		
@@ -167,7 +177,7 @@ public class CreerQuestion extends JFrame
         panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
         panelBouton.add(creerQuestionButton);
 
-		
+	
 
 		//Création d'un panel gérant la création de question
 		JPanel panelCreation = new JPanel();
