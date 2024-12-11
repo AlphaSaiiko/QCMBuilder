@@ -37,7 +37,7 @@ public class Parametre extends JFrame {
         // Création des boutons verts
         JButton ajtRessource = new JButton("Ajouter une ressource");
         ajtRessource.setBackground(Color.GREEN);
-        ajtRessource.setPreferredSize(new Dimension(150, 30));
+        ajtRessource.setPreferredSize(new Dimension(180, 30));
         ajtRessource.addActionListener(e -> {
             // Code pour lancer la création d'une ressource
 
