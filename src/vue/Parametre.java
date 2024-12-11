@@ -1,6 +1,8 @@
 package vue;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -43,6 +45,13 @@ public class Parametre extends JFrame
             // Code pour lancer la création d'une ressource
             CreerRessource creerRessource = new CreerRessource();
             creerRessource.setVisible(true);
+            creerRessource.addWindowListener(new WindowAdapter()
+            {
+                public void windowClosed(WindowEvent e)
+                { // Actualiser la liste des ressources après la fermeture de la fenêtre
+                    loadRessources();
+                }
+            });
         });
 
         JButton ajtNotion = new JButton("Ajouter une notion");
@@ -53,6 +62,13 @@ public class Parametre extends JFrame
             // Code pour lancer la création d'une notion
             CreerNotion creerNotion = new CreerNotion();
             creerNotion.setVisible(true);
+            creerNotion.addWindowListener(new WindowAdapter()
+            {
+                public void windowClosed(WindowEvent e)
+                { // Actualiser la liste des ressources après la fermeture de la fenêtre
+                    loadRessources();
+                }
+            });
         });
 
         // Ajout des composants au panel
@@ -124,11 +140,13 @@ public class Parametre extends JFrame
     // Méthode pour charger les ressources dans la JList
     private void loadRessources()
     {
+        ressourceListModel.clear();
         for (Ressource ressource : Ressource.getListRessource())
         {
             ressourceListModel.addElement(ressource.getNom());
         }
     }
+
 
     // Méthode pour mettre à jour la liste des notions en fonction de la ressource sélectionnée
     private void updateNotionList(String ressourceName)
