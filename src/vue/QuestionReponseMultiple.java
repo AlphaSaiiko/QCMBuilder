@@ -35,7 +35,7 @@ public class QuestionReponseMultiple extends JFrame
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		// Ajouter un bouton pour ajouter un nouveau panel trash avec une icône
-		ImageIcon addIcon = new ImageIcon(new ImageIcon("QCMBuilder/lib/icones/add.png").getImage()
+		ImageIcon addIcon = new ImageIcon(new ImageIcon("./lib/icones/add.png").getImage()
 				.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 		JButton addButton = new JButton(addIcon);
 		addButton.setPreferredSize(new Dimension(40, 40));
@@ -46,7 +46,7 @@ public class QuestionReponseMultiple extends JFrame
 		buttonPanel.add(addButton);
 
 		// Ajouter un bouton "Explication" avec une icône
-		ImageIcon explicationIcon = new ImageIcon(new ImageIcon("QCMBuilder/lib/icones/edit.png").getImage()
+		ImageIcon explicationIcon = new ImageIcon(new ImageIcon("./lib/icones/edit.png").getImage()
 				.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 		JButton explicationButton = new JButton(explicationIcon);
 		explicationButton.setPreferredSize(new Dimension(40, 40));
@@ -78,7 +78,7 @@ public class QuestionReponseMultiple extends JFrame
 				gbc.anchor = GridBagConstraints.WEST;
 
 				// Redimensionner l'icône de poubelle
-				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("QCMBuilder/lib/icones/delete.png").getImage()
+				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("./lib/icones/delete.png").getImage()
 						.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 				JButton newTrashButton = new JButton(newTrashIcon);
 				newTrashButton.setPreferredSize(new Dimension(40, 40));

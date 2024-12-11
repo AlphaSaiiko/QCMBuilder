@@ -3,12 +3,9 @@ package vue;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-<<<<<<< HEAD
-import javax.swing.*;
-=======
 import java.io.FileWriter;
 import java.io.IOException;
->>>>>>> 848f7f2 (Mise a jour Panel Reponse Unique)
+import javax.swing.*;
 
 public class QuestionReponseUnique extends JFrame
 {
@@ -43,7 +40,7 @@ public class QuestionReponseUnique extends JFrame
 
 		// Ajouter un bouton pour ajouter un nouveau panel trash avec une icône
 		ImageIcon addIcon = new ImageIcon(
-				new ImageIcon("QCMBuilder/lib/icones/add.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+				new ImageIcon("./lib/icones/add.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 		JButton addButton = new JButton(addIcon);
 		addButton.setPreferredSize(new Dimension(40, 40));
 		addButton.setBorderPainted(false);
@@ -54,7 +51,7 @@ public class QuestionReponseUnique extends JFrame
 
 		// Ajouter un bouton "Explication" avec une icône
 		ImageIcon explicationIcon = new ImageIcon(
-				new ImageIcon("QCMBuilder/lib/icones/edit.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+				new ImageIcon("./lib/icones/edit.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 		JButton explicationButton = new JButton(explicationIcon);
 		explicationButton.setPreferredSize(new Dimension(40, 40));
 		explicationButton.setBorderPainted(false);
