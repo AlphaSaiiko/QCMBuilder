@@ -69,19 +69,23 @@ public class Parametre extends JFrame
 
 		JButton supprRessource = new JButton(resizeIcon("./lib/icones/delete.png", 20, 20));
 		supprRessource.setPreferredSize(new Dimension(30, 30));
-		supprRessource.addActionListener(e ->
-		{
+		supprRessource.addActionListener(e -> {
 			String selectedRessource = ressourceList.getSelectedValue();
-			if (selectedRessource != null)
-			{
+			if (selectedRessource != null) {
 				Ressource ressource = Ressource.trouverRessourceParNom(selectedRessource);
-				if (ressource != null)
-				{
+				if (ressource != null) {
+					// Supprimer le répertoire associé à la ressource
+					File ressourceDir = new File("./lib/ressources/" + ressource.getNom());
+					if (ressourceDir.exists()) {
+						deleteDirectory(ressourceDir);
+					}
+					// Supprimer la ressource de la liste
 					Ressource.getListRessource().remove(ressource);
 					loadRessources();
 				}
 			}
 		});
+
 
 		JButton modifRessource = new JButton(resizeIcon("./lib/icones/edit.png", 20, 20));
 		modifRessource.setPreferredSize(new Dimension(30, 30));
@@ -274,6 +278,21 @@ public class Parametre extends JFrame
 		Image img = icon.getImage();
 		Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		return new ImageIcon(resizedImg);
+	}
+
+	// Méthode pour supprimer un répertoire et son contenu
+	private void deleteDirectory(File directory) {
+		File[] files = directory.listFiles();
+		if (files != null) { // Vérifier si le répertoire n'est pas vide
+			for (File file : files) {
+				if (file.isDirectory()) {
+					deleteDirectory(file);
+				} else {
+					file.delete();
+				}
+			}
+		}
+		directory.delete();
 	}
 
 	// Méthode pour charger les ressources dans la JList

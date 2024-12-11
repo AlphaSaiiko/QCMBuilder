@@ -61,8 +61,8 @@ public class QuestionReponseUnique extends JFrame
 		buttonPanel.add(explicationButton);
 
 		// Ajouter un bouton "Enregistrer"
-		JButton saveButton = new JButton("Enregistrer");
-		buttonPanel.add(saveButton);
+		JButton saveBtn = new JButton("Enregistrer");
+		buttonPanel.add(saveBtn);
 
 		// Ajouter le panel des boutons au panel des questions
 		questionPanel.add(buttonPanel);
@@ -73,7 +73,7 @@ public class QuestionReponseUnique extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				// Créer un nouveau panel trash
-				JPanel newTrashPanel = new JPanel(new GridBagLayout());
+				JPanel poubellePnl = new JPanel(new GridBagLayout());
 				GridBagConstraints gbc = new GridBagConstraints();
 				gbc.insets = new Insets(5, 5, 5, 5);
 				gbc.gridx = 0;
@@ -81,24 +81,24 @@ public class QuestionReponseUnique extends JFrame
 				gbc.anchor = GridBagConstraints.WEST;
 
 				// Redimensionner l'icône de poubelle
-				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("./lib/icones/delete.png").getImage()
+				ImageIcon poubelleIcon = new ImageIcon(new ImageIcon("./lib/icones/delete.png").getImage()
 						.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-				JButton newTrashButton = new JButton(newTrashIcon);
-				newTrashButton.setPreferredSize(new Dimension(40, 40));
-				newTrashButton.setBorderPainted(false);
-				newTrashButton.setContentAreaFilled(false);
-				newTrashButton.setFocusPainted(false);
-				newTrashButton.setOpaque(false);
-				newTrashPanel.add(newTrashButton, gbc);
+				JButton poubelleBtn = new JButton(poubelleIcon);
+				poubelleBtn.setPreferredSize(new Dimension(40, 40));
+				poubelleBtn.setBorderPainted(false);
+				poubelleBtn.setContentAreaFilled(false);
+				poubelleBtn.setFocusPainted(false);
+				poubelleBtn.setOpaque(false);
+				poubellePnl.add(poubelleBtn, gbc);
 
 				// Ajouter un ActionListener au bouton de poubelle
-				newTrashButton.addActionListener(new ActionListener()
+				poubelleBtn.addActionListener(new ActionListener()
 				{
 					public void actionPerformed(ActionEvent e)
 					{
 						// Supprimer le panel parent lorsque l'icône de poubelle
 						// est cliquée
-						questionPanel.remove(newTrashPanel);
+						questionPanel.remove(poubellePnl);
 						questionPanel.revalidate();
 						questionPanel.repaint();
 					}
@@ -111,7 +111,7 @@ public class QuestionReponseUnique extends JFrame
 				gbc.gridx = 1;
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 				gbc.weightx = 1.0;
-				newTrashPanel.add(newTextField, gbc);
+				poubellePnl.add(newTextField, gbc);
 
 				gbc.gridx = 2;
 				gbc.fill = GridBagConstraints.NONE;
@@ -121,10 +121,10 @@ public class QuestionReponseUnique extends JFrame
 				JRadioButton newRadioButton = new JRadioButton();
 				newRadioButton.setPreferredSize(new Dimension(30, 30));
 				buttonGroup.add(newRadioButton);
-				newTrashPanel.add(newRadioButton, gbc);
+				poubellePnl.add(newRadioButton, gbc);
 
 				// Ajouter le nouveau panel trash au conteneur principal
-				questionPanel.add(newTrashPanel, questionPanel.getComponentCount() - 1);
+				questionPanel.add(poubellePnl, questionPanel.getComponentCount() - 1);
 
 				// Rafraîchir l'interface utilisateur
 				questionPanel.revalidate();
@@ -154,7 +154,7 @@ public class QuestionReponseUnique extends JFrame
 		});
 
 		// Ajouter un ActionListener au bouton "Enregistrer"
-		saveButton.addActionListener(new ActionListener()
+		saveBtn.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
