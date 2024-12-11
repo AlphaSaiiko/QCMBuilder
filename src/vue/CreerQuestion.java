@@ -19,16 +19,23 @@ public class CreerQuestion extends JFrame
 		JPanel panelprincipal = new JPanel();
 		panelprincipal.setLayout(new BorderLayout());
 
-		// Panel gérant l'intitulé de la question
-		JPanel panelQuestion = new JPanel();
-		panelQuestion.setLayout(new BorderLayout());		
-		panelQuestion.add(new JLabel("Intitulé de la question"), BorderLayout.NORTH);
-		panelQuestion.add(new JTextArea(), BorderLayout.CENTER);
+		// Bouton de retour
+		String imagePath = "./lib/icones/home.png";
+		File imageFile = new File(imagePath);
+		ImageIcon icon = new ImageIcon(imageFile.getAbsolutePath());
+		Image img = icon.getImage();
+		Image newImg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+		icon = new ImageIcon(newImg);
+		JButton retourButton = new JButton(icon);
+		retourButton.addActionListener(e -> {
+			new Accueil();
+			dispose();
+		});
+		JPanel panelRetour = new JPanel();
+		panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelRetour.add(retourButton);
 
-		//JComboBox pour le type de question
-		JComboBox<String> typeQuestion = new JComboBox<String>(new String[] { "question à choix multiple à réponse unique", "question à choix multiple à réponse multiple", "question à association d’éléments", "question avec élimination de propositions de réponses" });
-		panelQuestion.add(typeQuestion, BorderLayout.SOUTH);
-
+		// Panel pour les niveaux et le temps
 		JPanel niveauEtTps = new JPanel();
 		niveauEtTps.setLayout(new GridLayout(2, 1));
 
@@ -47,6 +54,25 @@ public class CreerQuestion extends JFrame
 		// On ajoute points et temps à niveauEtTps
 		niveauEtTps.add(points);
 		niveauEtTps.add(temps);
+
+		//Creation JComboBox pour les ressources et matières
+		JComboBox<String> ressourcesList = new JComboBox<String>(Ressource.getNomsRessources());
+		ressourcesList.setPreferredSize(new Dimension(150, 30));
+		
+		JComboBox<String> matieresList = new JComboBox<String>(new String[] { "Variable", "Intro_Php", "Fuction", "MVC" });
+		matieresList.setPreferredSize(new Dimension(150, 30));
+		
+		// Panel pour les ressources
+		JPanel ressources = new JPanel();
+		ressources.setLayout(new BorderLayout());
+		ressources.add(new JLabel("Ressources"), BorderLayout.NORTH);
+		ressources.add(ressourcesList, BorderLayout.CENTER);
+		
+		// Panel pour les notions
+		JPanel notions = new JPanel();
+		notions.setLayout(new BorderLayout());
+		notions.add(new JLabel("Notions"), BorderLayout.NORTH);
+		notions.add(matieresList, BorderLayout.CENTER);
 		
 		// Panel pour bien placer les ronds de difficultés et mettre le titre
 		JPanel panelDifficulte = new JPanel();
@@ -112,25 +138,6 @@ public class CreerQuestion extends JFrame
 		
 		panelDifficulte.add(panelRond, BorderLayout.CENTER);
 		
-		//Creation JComboBox pour les ressources et matières
-		JComboBox<String> ressourcesList = new JComboBox<String>(Ressource.getNomsRessources());
-		ressourcesList.setPreferredSize(new Dimension(150, 30));
-		
-		JComboBox<String> matieresList = new JComboBox<String>(new String[] { "Variable", "Intro_Php", "Fuction", "MVC" });
-		matieresList.setPreferredSize(new Dimension(150, 30));
-		
-		// Panel pour les ressources
-		JPanel ressources = new JPanel();
-		ressources.setLayout(new BorderLayout());
-		ressources.add(new JLabel("Ressources"), BorderLayout.NORTH);
-		ressources.add(ressourcesList, BorderLayout.CENTER);
-		
-		// Panel pour les notions
-		JPanel notions = new JPanel();
-		notions.setLayout(new BorderLayout());
-		notions.add(new JLabel("Notions"), BorderLayout.NORTH);
-		notions.add(matieresList, BorderLayout.CENTER);
-		
 		// Panel pour les différents niveaux de difficultés
 		JPanel ressourceNotionLvl = new JPanel();
 		ressourceNotionLvl.setLayout(new GridLayout(1, 3));
@@ -144,27 +151,23 @@ public class CreerQuestion extends JFrame
 		rassemble.add(points);
 		rassemble.add(temps);
 
+		// Panel gérant l'intitulé de la question
+		JPanel panelQuestion = new JPanel();
+		panelQuestion.setLayout(new BorderLayout());		
+		panelQuestion.add(new JLabel("Intitulé de la question"), BorderLayout.NORTH);
+		panelQuestion.add(new JTextArea(), BorderLayout.CENTER);
+
+		//JComboBox pour le type de question
+		JComboBox<String> typeQuestion = new JComboBox<String>(new String[] { "question à choix multiple à réponse unique", "question à choix multiple à réponse multiple", "question à association d’éléments", "question avec élimination de propositions de réponses" });
+		panelQuestion.add(typeQuestion, BorderLayout.SOUTH);
+
         // Bouton pour créer une nouvelle question
         JButton creerQuestionButton = new JButton("Créer nouvelle question");
         JPanel panelBouton = new JPanel();
         panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
         panelBouton.add(creerQuestionButton);
 
-		// Bouton de retour
-		String imagePath = "./lib/icones/home.png";
-		File imageFile = new File(imagePath);
-		ImageIcon icon = new ImageIcon(imageFile.getAbsolutePath());
-		Image img = icon.getImage();
-		Image newImg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-		icon = new ImageIcon(newImg);
-		JButton retourButton = new JButton(icon);
-		retourButton.addActionListener(e -> {
-			new Accueil();
-			dispose();
-		});
-		JPanel panelRetour = new JPanel();
-		panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
-		panelRetour.add(retourButton);
+		
 
 		//Création d'un panel gérant la création de question
 		JPanel panelCreation = new JPanel();
