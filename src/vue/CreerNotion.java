@@ -61,7 +61,6 @@ public class CreerNotion extends JFrame
 			Ressource ressource = Ressource.trouverRessourceParNom(nomRessource);
 			if (!titreNotion.trim().isEmpty()) {
 				Notion notion = Notion.creerNotion(titreNotion, ressource);
-				System.out.println("Nouvelle notion créée avec le titre: " + titreNotion);
 				this.dispose();
 			} else {
 				JOptionPane.showMessageDialog(this, "Le titre de la notion ne peut pas être vide.", "Erreur", JOptionPane.ERROR_MESSAGE);
