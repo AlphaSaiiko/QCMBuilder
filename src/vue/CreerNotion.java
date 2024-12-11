@@ -60,7 +60,7 @@ public class CreerNotion extends JFrame
 			String nomRessource = (String) choixRessource.getSelectedItem();
 			Ressource ressource = Ressource.trouverRessourceParNom(nomRessource);
 			if (!titreNotion.trim().isEmpty()) {
-				Notion notion = new Notion(titreNotion, ressource);
+				Notion notion = Notion.creerNotion(titreNotion, ressource);
 				System.out.println("Nouvelle notion créée avec le titre: " + titreNotion);
 				this.dispose();
 			} else {
