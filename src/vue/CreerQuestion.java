@@ -1,12 +1,27 @@
 package vue;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.*;
 import modele.Ressource;
 
-public class CreerQuestion extends JFrame
+public class CreerQuestion extends JFrame implements ActionListener
 {
+	
+	
+	/*
+	 *  +-------------+
+	 *  |  ATTRIBUTS  |
+	 *  +-------------+
+	 */
+
+	private JComboBox<String> matieresList;
+	private String nomRessource;
+	private JComboBox<String> ressourcesList;
+	
+	
 	/*
 	 *  +--------------+
 	 *  | CONSTRUCTEUR |
@@ -64,10 +79,11 @@ public class CreerQuestion extends JFrame
 
 
 		//Creation JComboBox pour les ressources et matières
-		JComboBox<String> ressourcesList = new JComboBox<String>(Ressource.getNomsRessources());
-		ressourcesList.setPreferredSize(new Dimension(150, 30));
+		this.ressourcesList = new JComboBox<String>(Ressource.getNomsRessources());
+		this.ressourcesList.setPreferredSize(new Dimension(150, 30));
 		
-		JComboBox<String> matieresList = new JComboBox<String>(new String[] { "Variable", "Intro_Php", "Fuction", "MVC" });
+		this.nomRessource = String.valueOf(ressourcesList.getSelectedItem());
+		this.matieresList = new JComboBox<String>(Ressource.trouverRessourceParNom(nomRessource).getNomsNotions());
 		matieresList.setPreferredSize(new Dimension(150, 30));
 		
 		// Panel pour les ressources
@@ -209,6 +225,8 @@ public class CreerQuestion extends JFrame
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+
+		ressourcesList.addActionListener(this);
 	}
 
 	// Création des boutons ronds pour les niveaux de difficultés
@@ -222,10 +240,22 @@ public class CreerQuestion extends JFrame
 		return button;
 	}
 
+	public void actionPerformed(ActionEvent e) 
+	{
+		// Assumant que la seule source est la liste des ressources
+		this.matieresList.removeAllItems();
+
+		this.nomRessource = String.valueOf(this.ressourcesList.getSelectedItem());
+
+		for (String nomNotion : Ressource.trouverRessourceParNom(this.nomRessource).getNomsNotions())
+			this.matieresList.addItem(nomNotion);
+	}
+
 	public static void main(String[] args)
 	{
 		new CreerQuestion();
 	}
+
 }
 
 class RoundButton extends JButton
