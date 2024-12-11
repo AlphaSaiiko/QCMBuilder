@@ -43,7 +43,7 @@ public class Notion
 		return notion;
 	}
 
-	public Notion(String nom, Ressource ressource)
+	private Notion(String nom, Ressource ressource)
 	{
 		this.nom = nom;
 		this.ressource = ressource;
@@ -63,7 +63,7 @@ public class Notion
     
 	public Ressource getRessource() {return this.ressource;}
 
-    public int getNbQuestions() { return this.ensQuestions.size(); }
+    public int getNbQuestion() { return this.ensQuestions.size(); }
 
 	public List<Question> getEnsQuestions() { return this.ensQuestions; }
 
