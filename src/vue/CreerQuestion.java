@@ -190,12 +190,12 @@ public class CreerQuestion extends JFrame implements ActionListener
         panelBouton.add(creerQuestionButton);
 		creerQuestionButton.addActionListener(e -> {
 			String selectedType = (String) typeQuestion.getSelectedItem();
-			if ("question à choix multiple à réponse unique".equals(selectedType))
+			if ("Question à choix multiple à réponse unique".equals(selectedType))
 			{
 				new QuestionReponseUnique();
 				dispose();
 			}
-			else if ("question à choix multiple à réponse multiple".equals(selectedType))
+			else if ("Question à choix multiple à réponse multiple".equals(selectedType))
 			{
 				new QuestionReponseMultiple();
 				dispose();
