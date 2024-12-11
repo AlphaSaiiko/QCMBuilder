@@ -70,7 +70,6 @@ public class QuestionReponseUnique extends JFrame
 		// Ajouter un ActionListener au bouton "Ajouter"
 		addButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Créer un nouveau panel trash
@@ -95,7 +94,6 @@ public class QuestionReponseUnique extends JFrame
 				// Ajouter un ActionListener au bouton de poubelle
 				newTrashButton.addActionListener(new ActionListener()
 				{
-					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						// Supprimer le panel parent lorsque l'icône de poubelle
@@ -137,7 +135,6 @@ public class QuestionReponseUnique extends JFrame
 		// Ajouter un ActionListener au bouton "Explication"
 		explicationButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Créer et afficher une nouvelle fenêtre pour écrire
@@ -159,7 +156,6 @@ public class QuestionReponseUnique extends JFrame
 		// Ajouter un ActionListener au bouton "Enregistrer"
 		saveButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Enregistrer la question dans un fichier

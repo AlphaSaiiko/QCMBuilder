@@ -1,11 +1,11 @@
 package vue;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
+import javax.swing.*;
 
 public class QuestionAvecElimination extends JFrame
 {
@@ -66,7 +66,6 @@ public class QuestionAvecElimination extends JFrame
 		// Ajouter un ActionListener au bouton "Ajouter"
 		addButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Créer un nouveau panel trash
@@ -91,7 +90,6 @@ public class QuestionAvecElimination extends JFrame
 				// Ajouter un ActionListener au bouton de poubelle
 				newTrashButton.addActionListener(new ActionListener()
 				{
-					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						// Supprimer le panel parent lorsque l'icône de poubelle
@@ -115,48 +113,47 @@ public class QuestionAvecElimination extends JFrame
 				gbc.fill = GridBagConstraints.NONE;
 				gbc.weightx = 0;
 
-// Ajouter un panel pour contenir les deux JTextField pour les points
-JPanel pointsPanel = new JPanel(new GridBagLayout());
-GridBagConstraints pointsGbc = new GridBagConstraints();
-pointsGbc.gridx = 0;
-pointsGbc.gridy = 0;
-pointsGbc.fill = GridBagConstraints.HORIZONTAL;
+				// Ajouter un panel pour contenir les deux JTextField pour les points
+				JPanel pointsPanel = new JPanel(new GridBagLayout());
+				GridBagConstraints pointsGbc = new GridBagConstraints();
+				pointsGbc.gridx = 0;
+				pointsGbc.gridy = 0;
+				pointsGbc.fill = GridBagConstraints.HORIZONTAL;
 
-// Ajouter le premier JTextField pour les points
-JTextField newTextFieldPoints = new JTextField();
-newTextFieldPoints.setFont(new Font("Arial", Font.PLAIN, 18));
-newTextFieldPoints.setPreferredSize(new Dimension(50, 30));
-pointsPanel.add(newTextFieldPoints, pointsGbc);
+				// Ajouter le premier JTextField pour les points
+				JTextField newTextFieldPoints = new JTextField();
+				newTextFieldPoints.setFont(new Font("Arial", Font.PLAIN, 18));
+				newTextFieldPoints.setPreferredSize(new Dimension(50, 30));
+				pointsPanel.add(newTextFieldPoints, pointsGbc);
 
-// Ajouter le deuxième JTextField pour les points
-pointsGbc.gridy = 1;
-JTextField newTextFieldPoints2 = new JTextField();
-newTextFieldPoints2.setFont(new Font("Arial", Font.PLAIN, 18));
-newTextFieldPoints2.setPreferredSize(new Dimension(50, 30));
-pointsPanel.add(newTextFieldPoints2, pointsGbc);
+				// Ajouter le deuxième JTextField pour les points
+				pointsGbc.gridy = 1;
+				JTextField newTextFieldPoints2 = new JTextField();
+				newTextFieldPoints2.setFont(new Font("Arial", Font.PLAIN, 18));
+				newTextFieldPoints2.setPreferredSize(new Dimension(50, 30));
+				pointsPanel.add(newTextFieldPoints2, pointsGbc);
 
-// Ajouter le panel des points au newTrashPanel
-newTrashPanel.add(pointsPanel, gbc);
+				// Ajouter le panel des points au newTrashPanel
+				newTrashPanel.add(pointsPanel, gbc);
 
-// Ajouter un bouton radio
-JRadioButton newRadioButton = new JRadioButton();
-newRadioButton.setPreferredSize(new Dimension(30, 30));
-gbc.gridx = 3;
-newTrashPanel.add(newRadioButton, gbc);
+				// Ajouter un bouton radio
+				JRadioButton newRadioButton = new JRadioButton();
+				newRadioButton.setPreferredSize(new Dimension(30, 30));
+				gbc.gridx = 3;
+				newTrashPanel.add(newRadioButton, gbc);
 
-// Ajouter le nouveau panel trash au conteneur principal
-questionPanel.add(newTrashPanel, questionPanel.getComponentCount() - 1);
+				// Ajouter le nouveau panel trash au conteneur principal
+				questionPanel.add(newTrashPanel, questionPanel.getComponentCount() - 1);
 
-// Rafraîchir l'interface utilisateur
-questionPanel.revalidate();
-questionPanel.repaint();
+				// Rafraîchir l'interface utilisateur
+				questionPanel.revalidate();
+				questionPanel.repaint();
 			}
 		});
 
 		// Ajouter un ActionListener au bouton "Explication"
 		explicationButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Créer et afficher une nouvelle fenêtre pour écrire
@@ -178,7 +175,6 @@ questionPanel.repaint();
 		// Ajouter un ActionListener au bouton "Enregistrer"
 		saveButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Enregistrer la question dans un fichier

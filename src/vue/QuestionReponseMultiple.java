@@ -1,11 +1,11 @@
 package vue;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
+import javax.swing.*;
 
 public class QuestionReponseMultiple extends JFrame
 {
@@ -66,7 +66,6 @@ public class QuestionReponseMultiple extends JFrame
 		// Ajouter un ActionListener au bouton "Ajouter"
 		addButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Créer un nouveau panel trash
@@ -91,7 +90,6 @@ public class QuestionReponseMultiple extends JFrame
 				// Ajouter un ActionListener au bouton de poubelle
 				newTrashButton.addActionListener(new ActionListener()
 				{
-					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						// Supprimer le panel parent lorsque l'icône de poubelle
@@ -132,7 +130,6 @@ public class QuestionReponseMultiple extends JFrame
 		// Ajouter un ActionListener au bouton "Explication"
 		explicationButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Créer et afficher une nouvelle fenêtre pour écrire
@@ -154,7 +151,6 @@ public class QuestionReponseMultiple extends JFrame
 		// Ajouter un ActionListener au bouton "Enregistrer"
 		saveButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Enregistrer la question dans un fichier
