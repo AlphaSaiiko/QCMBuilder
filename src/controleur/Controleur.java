@@ -52,7 +52,7 @@ public class Controleur
                     }
 
                     // Création de la notion
-                    Notion notion = new Notion(dir.getName(), ressource);
+                    Notion notion = Notion.creerNotion(dir.getName(), ressource);
                     System.out.println("Notion créée : " + notion.getNom() + " pour la ressource : " + ressource.getNom());
 
                     // Ajout de la notion à la ressource
