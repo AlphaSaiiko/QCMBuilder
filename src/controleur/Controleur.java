@@ -1,15 +1,19 @@
 package controleur;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Stream;
 import modele.Evaluation;
 import modele.Notion;
+import modele.Question;
 import modele.Ressource;
 import vue.Accueil;
 
@@ -55,6 +59,8 @@ public class Controleur
                     Notion notion = Notion.creerNotion(dir.getName(), ressource);
                     System.out.println("Notion créée : " + notion.getNom() + " pour la ressource : " + ressource.getNom());
 
+					Controleur.chargerQuestion(notion, dir);
+
                     // Ajout de la notion à la ressource
                     System.out.println("Notion ajoutée à la ressource : " + ressource.getNom());
                 }
@@ -65,6 +71,53 @@ public class Controleur
             System.err.println("Erreur lors du chargement des ressources et des notions : " + e.getMessage());
         }
     }
+
+	public static void chargerQuestion(Notion notion, File dir)
+	{
+		//ArrayList<Question> tmplst = new ArrayList<Question>();
+		
+		int cpt = 0;
+		// Boucle pour chaque question
+		for (File dossier : dir.listFiles())
+		{
+			File fichierRTF;
+			if (dossier.listFiles() != null) { fichierRTF = new File(dossier, dossier.getName()+".rtf");	}
+			else return;
+
+			try {
+				
+				Scanner sc = new Scanner( new FileInputStream(fichierRTF));
+
+				String ligneQuestion = sc.nextLine();
+
+				Object[] ligne = ligneQuestion.split("\t");
+
+				String type     = String.valueOf(ligne[0]);
+				String intitule = String.valueOf(ligne[1]);
+				int nbPoints    = Integer.valueOf(String.valueOf(ligne[2]));
+				int temps       = Integer.valueOf(String.valueOf(ligne[3]));
+				int difficulte  = Integer.valueOf(String.valueOf(ligne[4]));
+				
+				Question tmp = new Question(type, intitule, nbPoints, temps, difficulte, notion); 
+				notion.ajouterQuestion(tmp);
+				
+				//tmplst.add(tmp);
+
+				sc.close();
+
+			} catch (FileNotFoundException e) {
+				
+				e.printStackTrace();
+			}
+			cpt++;
+		}
+
+//		for (Question question : tmplst)
+//		{
+//			System.out.println(question);
+//		}
+	}
+
 	public static void main(String[] args)
 	{
 		Controleur controleur = new Controleur();
