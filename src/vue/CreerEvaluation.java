@@ -19,7 +19,7 @@ public class CreerEvaluation extends JFrame {
 		panelPrincipal.setLayout(new BorderLayout());
 
 		// Bouton de retour
-		String imageRet = "QCMBuilder/lib/icones/home.png";
+		String imageRet = "./lib/icones/home.png";
 		ImageIcon icon = new ImageIcon(imageRet);
 		Image img = icon.getImage();
 		Image newImg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
@@ -54,7 +54,7 @@ public class CreerEvaluation extends JFrame {
 		lineGbc.gridx = 2;
 		lineGbc.gridy = 0;
 		lineGbc.anchor = GridBagConstraints.CENTER;
-		String imagePath = "QCMBuilder/lib/icones/timer.png";
+		String imagePath = "./lib/icones/timer.png";
 		File imageFile = new File(imagePath);
 		if (imageFile.exists()) {
 			ImageIcon timerIcon = new ImageIcon(imagePath);

@@ -1,9 +1,9 @@
 package vue;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class QuestionReponseUnique extends JFrame
 {
@@ -49,7 +49,7 @@ public class QuestionReponseUnique extends JFrame
 				gbc.anchor = GridBagConstraints.WEST;
 
 				// Redimensionner l'icône de poubelle
-				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("QCMBuilder/lib/icones/delete.png").getImage()
+				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("./lib/icones/delete.png").getImage()
 						.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 				JButton newTrashButton = new JButton(newTrashIcon);
 				newTrashButton.setPreferredSize(new Dimension(40, 40));
