@@ -17,6 +17,9 @@ public class Parametre extends JFrame
     private DefaultListModel<String> ressourceListModel;
     private DefaultListModel<String> notionListModel;
 
+	private CreerRessource creerRessource;
+	private CreerNotion    creerNotion;
+
     /*
      *  +--------------+
      *  | CONSTRUCTEUR |
@@ -43,13 +46,16 @@ public class Parametre extends JFrame
         ajtRessource.addActionListener(e ->
         {
             // Code pour lancer la création d'une ressource
-            CreerRessource creerRessource = new CreerRessource();
-            creerRessource.setVisible(true);
-            creerRessource.addWindowListener(new WindowAdapter()
+
+			// Pour avoir une fenêtre unique
+			if (this.creerRessource != null) { this.creerRessource.dispose(); this.creerRessource = null; }
+        	
+			this.creerRessource = new CreerRessource();
+            this.creerRessource.setVisible(true);
+			this.creerRessource.addWindowListener(new WindowAdapter()
             {
                 public void windowClosed(WindowEvent e)
-                {
-                    // Actualiser la liste des ressources après la fermeture de la fenêtre
+                { // Actualiser la liste des ressources après la fermeture de la fenêtre
                     loadRessources();
                 }
             });
@@ -61,13 +67,16 @@ public class Parametre extends JFrame
         ajtNotion.addActionListener(e ->
         {
             // Code pour lancer la création d'une notion
-            CreerNotion creerNotion = new CreerNotion();
-            creerNotion.setVisible(true);
-            creerNotion.addWindowListener(new WindowAdapter()
+
+			// Pour avoir une fenêtre unique
+			if (this.creerNotion != null) { this.creerNotion.dispose(); this.creerNotion = null; }
+			
+			this.creerNotion = new CreerNotion();
+            this.creerNotion.setVisible(true);
+            this.creerNotion.addWindowListener(new WindowAdapter()
             {
                 public void windowClosed(WindowEvent e)
-                {
-                    // Actualiser la liste des ressources après la fermeture de la fenêtre
+                { // Actualiser la liste des ressources après la fermeture de la fenêtre
                     loadRessources();
                 }
             });
@@ -116,7 +125,9 @@ public class Parametre extends JFrame
         JButton retourButton = new JButton(icon);
         retourButton.addActionListener(e ->
         {
-            Accueil accueil = new Accueil();
+            if (this.creerRessource != null) { this.creerRessource.dispose(); }
+            if (this.creerNotion    != null) { this.creerNotion   .dispose(); }
+			Accueil accueil = new Accueil();
             accueil.setVisible(true);
             dispose();
         });
@@ -142,13 +153,12 @@ public class Parametre extends JFrame
     // Méthode pour charger les ressources dans la JList
     private void loadRessources()
     {
-        ressourceListModel.clear();
-        for (Ressource ressource : Ressource.getListRessource())
+		ressourceListModel.clear();
+		for (Ressource ressource : Ressource.getListRessource())
         {
             ressourceListModel.addElement(ressource.getNom());
         }
     }
-
 
     // Méthode pour mettre à jour la liste des notions en fonction de la ressource sélectionnée
     private void updateNotionList(String ressourceName)
