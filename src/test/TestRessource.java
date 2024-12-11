@@ -38,7 +38,7 @@ public class TestRessource
 				ressource.ajouterNotion(Notion.creerNotion("notion" + (j), ressource));
 				for (int k=0; k<3 ;k++)
 				{
-					ressource.getNotion(j).ajouterQuestion(new Question("type", "intitulé", i, k, i, ressource.getNotion(j)));
+					ressource.getNotion("notion" + (j)).ajouterQuestion(new Question("type", "intitulé", i, k, i, ressource.getNotion("notion" + (j))));
 				}
 			}
 
@@ -58,7 +58,8 @@ public class TestRessource
 			}
 		}
 
-
+		lstRes.get(0).getNotion("notion0").getQuestion(0).setType("caca");
+		lstRes.get(0).getNotion("notion0").getQuestion(0).getOptions(0).setIntitule("Au revoir");
 		
 	}
 

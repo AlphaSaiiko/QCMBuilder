@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
+
 import modele.option.*;
 
 public class Fichier{
@@ -110,14 +115,76 @@ public class Fichier{
 
 		// Écrit les données de l'objet Option dans le fichier
 		try (PrintWriter writer = new PrintWriter(new FileOutputStream(fichier, true))) {
-			System.out.println("1");
-			writer.println(opt.getType() + "\t" + opt.getIntitule() + "\t" + opt.getEstReponse());
-			System.out.println("2");
+			writer.println(opt.getId()+"\t"+opt.getType() + "\t" + opt.getIntitule() + "\t" + opt.getEstReponse()+"\t");
 		} catch (IOException e) {
 			System.err.println("Une erreur s'est produite lors de l'écriture dans le fichier : " + e.getMessage());
 		}
 
 	}
 
+	public void modifierQuestion(String chemin, Question qst)
+	{
+		if (!chemin.endsWith(".rtf")) {
+			chemin += ".rtf";
+		}
+		chemin = this.chemin+chemin;
 
+		File fichier = new File(chemin);
+
+		// Vérifie si le fichier existe
+		if (!fichier.exists()) {
+			System.out.println("Le fichier n'existe pas.");
+			return;
+		}
+
+		String ligneEntiere = qst.getType() + "\t" + qst.getIntitule() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom();
+		try {
+			// Lire toutes les lignes du fichier
+			List<String> lignes = Files.readAllLines(Paths.get(chemin));
+
+			// Modifier la première ligne
+			if (!lignes.isEmpty()) {
+				lignes.set(0,ligneEntiere);
+			}
+
+			// Réécrire le contenu modifié dans le fichier
+			Files.write(Paths.get(chemin), lignes, StandardOpenOption.TRUNCATE_EXISTING);
+		} catch (IOException e) {
+			System.err.println("Une erreur s'est produite lors de la modification du fichier : " + e.getMessage());
+		}
+	}
+
+	public void modifierReponse(String chemin, Option opt)
+	{
+		if (!chemin.endsWith(".rtf")) {
+			chemin += ".rtf";
+		}
+		chemin = this.chemin+chemin;
+		File fichier = new File(chemin);
+
+        // Vérifie si le fichier existe
+        if (!fichier.exists()) {
+            System.out.println("Le fichier n'existe pas.");
+            return;
+        }
+
+        try {
+            // Lire toutes les lignes du fichier
+            List<String> lignes = Files.readAllLines(Paths.get(chemin));
+
+            // Identifier et modifier la ligne correspondante
+            for (int i = 0; i < lignes.size(); i++) {
+                String ligne = lignes.get(i);
+                if (ligne.startsWith(opt.getId() + "\t")) {
+                    lignes.set(i, opt.getId()+"\t"+opt.getType() + "\t" + opt.getIntitule() + "\t" + opt.getEstReponse());
+                    break;
+                }
+            }
+
+            // Réécrire le contenu modifié dans le fichier
+            Files.write(Paths.get(chemin), lignes, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            System.err.println("Une erreur s'est produite lors de la modification du fichier : " + e.getMessage());
+        }
+	}
 }

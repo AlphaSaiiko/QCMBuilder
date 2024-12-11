@@ -1,5 +1,7 @@
 package modele.option;
 
+import modele.*;
+
 public class OptionAssociation implements IOption
 {
 	/*
@@ -14,13 +16,15 @@ public class OptionAssociation implements IOption
 
 	private IOption optionAssocie;
 
+	private Question question;
+
 
 	/*
 	 *  +--------------+
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public OptionAssociation(String type, String intitule, boolean estReponse)
+	public OptionAssociation(String type, String intitule, boolean estReponse, Question question)
 	{
 		this.type       = type      ;
 		this.intitule   = intitule  ;

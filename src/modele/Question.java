@@ -86,16 +86,35 @@ public class Question
 	 *  | SETTEURS |
 	 *  +----------+
 	 */
-	public void setType    (String type    ) { this.type     = type    ; }
-	public void setIntitule(String intitule) { this.intitule = intitule; }
+	public void setType    (String type    ) {
+		this.type     = type    ;
+		this.modifierQuestion();
+	}
+	public void setIntitule(String intitule) { 
+		this.intitule = intitule;
+		this.modifierQuestion();
+	}
 
-	public void setNbPoints  (int nbPoints  ) { this.nbPoints   = nbPoints  ; }
-	public void setTemps     (int temps     ) { this.temps      = temps     ; }
-	public void setDifficulte(int difficulte) { this.difficulte = difficulte; }
+	public void setNbPoints  (int nbPoints  ) { 
+		this.nbPoints   = nbPoints  ; 
+	}
+	public void setTemps     (int temps     ) {
+		 this.temps      = temps     ;
+		 this.modifierQuestion(); 
+	}
+	public void setDifficulte(int difficulte) {
+		 this.difficulte = difficulte; 
+		 this.modifierQuestion();
+	}
 
-	public void setComplements(ArrayList<String> complements) { this.complements = complements; }
+	public void setComplements(ArrayList<String> complements) {
+		 this.complements = complements; 
+	}
 
-	public void setNotion(Notion notion) { this.notion = notion; }
+	public void setNotion(Notion notion) { 
+		this.notion = notion;
+		this.modifierQuestion();
+	}
 
 
 
@@ -126,5 +145,11 @@ public class Question
 	public boolean supprimerOption(IOption opt)
 	{
 		return true; // Temporaire
+	}
+
+	public void modifierQuestion()
+	{
+		Fichier tmp = new Fichier("lib/ressources/"+notion.getRessource().getNom()+"/"+notion.getNom()+"/" +"question"+this.numQuestion+"/");
+		tmp.modifierQuestion("question"+this.getNumQuestion(), this);
 	}
 }

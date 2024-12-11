@@ -16,6 +16,8 @@ public class Option implements IOption
 
 	private Question question;
 
+	private final int idReponse;
+	private static int compteurReponse = 0;
 
 	/*
 	 *  +--------------+
@@ -27,7 +29,8 @@ public class Option implements IOption
 		this.type       = type      ;
 		this.intitule   = intitule  ;
 		this.estReponse = estReponse;
-		this.question   = 	question;
+		this.question   = question  ;
+		this.idReponse  = ++Option.compteurReponse;
 
 		this.ecrireReponse();
 	}
@@ -42,6 +45,7 @@ public class Option implements IOption
 	public String getType()     { return this.type    ; }
 
 	public boolean getEstReponse() { return this.estReponse; }
+	public int getId(){return this.idReponse;}
 
 
 	/*
@@ -49,16 +53,31 @@ public class Option implements IOption
 	 *  | SETTEURS |
 	 *  +----------+
 	 */
-	public void setIntitule(String intitule) { this.intitule = intitule; }
-	public void setType    (String type    ) { this.type     = type    ; }
+	public void setIntitule(String intitule) { 
+		this.intitule = intitule;
+		this.modifierReponse();
+	}
+	public void setType    (String type    ) { 
+		this.type     = type    ;
+		this.modifierReponse();
+	}
 
-	public void setEstReponse(boolean estRep) { this.estReponse = estRep; }
+	public void setEstReponse(boolean estRep) { 
+		this.estReponse = estRep;
+		this.modifierReponse();
+	}
 
 	/*
 	 *  +----------+
 	 *  | METHODES |
 	 *  +----------+
 	 */
+
+	 public void modifierReponse()
+	 {
+		Fichier tmp = new Fichier("lib/ressources/"+question.getNotion().getRessource().getNom()+"/"+question.getNotion().getNom()+"/question"+question.getNumQuestion());
+		tmp.modifierReponse("/question"+question.getNumQuestion(), this);
+	 }
 
 	 public void ecrireReponse(){
 		Fichier tmp = new Fichier("lib/ressources/"+question.getNotion().getRessource().getNom()+"/"+question.getNotion().getNom()+"/question"+question.getNumQuestion());
