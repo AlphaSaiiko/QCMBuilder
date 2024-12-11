@@ -75,9 +75,11 @@ public class Fichier{
 		chemin = this.chemin+chemin;
 		try
 		{
-			PrintWriter pw = new PrintWriter(new FileOutputStream (chemin, true));
+			PrintWriter pw = new PrintWriter(new FileOutputStream (chemin, false));
 			pw.println(qst.getType() + "\t" + qst.getIntitule() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom());
 			pw.close();
+			System.out.println("creer rtf");
+			System.out.println(chemin);
 		}
 		catch (Exception e){e.printStackTrace();}
 	}

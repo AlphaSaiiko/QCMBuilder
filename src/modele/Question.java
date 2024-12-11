@@ -18,6 +18,7 @@ public class Question
 	private int nbPoints  ;
 	private int temps     ;
 	private int difficulte;
+	public int numQuestion;
 
 	private final  int id;
 	private static int nbQuestion = 0;
@@ -42,6 +43,7 @@ public class Question
 		this.temps       = temps      ;
 		this.difficulte  = difficulte ;
 		this.notion      = notion     ;
+		this.numQuestion = notion.getNbQuestion();
 
 		this.id = ++Question.nbQuestion;
 
@@ -76,6 +78,8 @@ public class Question
 
 	public List<IOption> getEnsOptions() { return ensOptions; }
 
+	public int getNumQuestion() {return this.numQuestion;}
+
 
 	/*
 	 *  +----------+
@@ -106,8 +110,8 @@ public class Question
 		Fichier tmp = new Fichier("lib/ressources/"+notion.getRessource().getNom()+"/"+notion.getNom()+"/");
 
 		tmp.ajouterFichier("question"+notion.getNbQuestion());
-		tmp.ajouterRtf("question"+notion.getNbQuestion()+"/"+"question"+notion.getNbQuestion());
-		tmp.ecrireQuestion("question"+notion.getNbQuestion()+"/"+"question"+notion.getNbQuestion(), this);
+		tmp.ajouterRtf("question"+notion.getNbQuestion()+"/"+"question"+this.getNumQuestion());
+		tmp.ecrireQuestion("question"+notion.getNbQuestion()+"/"+"question"+this.getNumQuestion(), this);
 	}
 
 	public boolean ajouterOption(IOption opt)

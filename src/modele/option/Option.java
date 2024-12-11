@@ -61,7 +61,7 @@ public class Option implements IOption
 	 */
 
 	 public void ecrireReponse(){
-		Fichier tmp = new Fichier("lib/ressources/"+question.getNotion().getRessource().getNom()+"/"+question.getNotion().getNom()+"/question"+question.getNotion().getNbQuestion());
-		tmp.ecrireReponse("/question"+question.getNotion().getNbQuestion(), this);
+		Fichier tmp = new Fichier("lib/ressources/"+question.getNotion().getRessource().getNom()+"/"+question.getNotion().getNom()+"/question"+question.getNumQuestion());
+		tmp.ecrireReponse("/question"+question.getNumQuestion(), this);
 	 }
 }

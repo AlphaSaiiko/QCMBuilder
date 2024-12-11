@@ -35,17 +35,27 @@ public class TestRessource
 			lstRes.add(ressource);
 
 			for (int j = 0; j < 3; j++) {
-				ressource.ajouterNotion(new Notion("notion" + (j), ressource));
+				ressource.ajouterNotion(Notion.creerNotion("notion" + (j), ressource));
 				for (int k=0; k<3 ;k++)
 				{
 					ressource.getNotion(j).ajouterQuestion(new Question("type", "intitulé", i, k, i, ressource.getNotion(j)));
-					for(int l=0; l<3;l++)
-					{
-						ressource.getNotion(j).getQuestion(k).ajouterOption(new Option("Question", "çava?", true,ressource.getNotion(j).getQuestion(k)));
-					}
 				}
 			}
 
+		}
+
+		for (Ressource ressource : lstRes)
+		{
+			for (Notion notion : ressource.getEnsNotions())
+			{
+				for (Question question : notion.getEnsQuestions())
+				{
+					for(int l=0; l<3;l++)
+					{
+						question.ajouterOption(new Option("Question", "çava?", true,question));
+					}
+				}
+			}
 		}
 
 
