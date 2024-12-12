@@ -217,7 +217,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 		panelprincipal.add(panelBouton, BorderLayout.SOUTH);
 		
 		this.add(panelprincipal);
-		this.setSize(700, 300);
+		this.setSize(700, 330);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
