@@ -145,6 +145,11 @@ public class Controleur
         new Accueil();
     }
 
+    public static void creerNotion(String titreNotion, Ressource ressource)
+    {
+        Notion.creerNotion(titreNotion, ressource);
+    }
+
     /*
      * +-------+
      * | MAIN  |
