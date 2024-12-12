@@ -29,6 +29,11 @@ public class QuestionLiaison extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				if (sujetTextArea.getText().isEmpty())
+				{
+					JOptionPane.showMessageDialog(null, "Veuillez remplir le sujet avant d'ajouter des questions.");
+					return;
+				}
 				if (ajoutCounter < 5)
 				{
 					ajoutCounter++;
@@ -56,9 +61,11 @@ public class QuestionLiaison extends JFrame
 					newElement.add(startIcon);
 
 					newElement.add(new JLabel("Question " + ajoutCounter + ":"));
-					newElement.add(new JTextField(10));
+					JTextField questionField = new JTextField(10);
+					newElement.add(questionField);
 					newElement.add(new JLabel("Réponse " + ajoutCounter + ":"));
-					newElement.add(new JTextField(10));
+					JTextField reponseField = new JTextField(10);
+					newElement.add(reponseField);
 
 					// Ajouter une icône à la fin
 					ImageIcon endIconImage = new ImageIcon(
@@ -97,10 +104,17 @@ public class QuestionLiaison extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				if (sujetTextArea.getText().isEmpty())
+				{
+					JOptionPane.showMessageDialog(null, "Veuillez remplir le sujet avant d'enregistrer.");
+					return;
+				}
 				// Logique pour enregistrer les questions et les réponses
 				String sujet = sujetTextArea.getText();
 				System.out.println("Sujet: " + sujet);
 
+				boolean hasValidData = true;
+				boolean hasQuestions = false;
 				for (Component component : questionPanel.getComponents())
 				{
 					if (component instanceof JPanel)
@@ -110,9 +124,40 @@ public class QuestionLiaison extends JFrame
 						JTextField reponseField = (JTextField) panel.getComponent(4);
 						String question = questionField.getText();
 						String reponse = reponseField.getText();
-						// Enregistrer la question et la réponse
-						System.out.println("Question: " + question + ", Réponse: " + reponse);
+						if (question.isEmpty() || reponse.isEmpty())
+						{
+							hasValidData = false;
+							break;
+						}
+						hasQuestions = true;
 					}
+				}
+				if (!hasQuestions)
+				{
+					JOptionPane.showMessageDialog(null,
+							"Veuillez ajouter au moins une question et une réponse avant d'enregistrer.");
+					return;
+				}
+				if (hasValidData)
+				{
+					for (Component component : questionPanel.getComponents())
+					{
+						if (component instanceof JPanel)
+						{
+							JPanel panel = (JPanel) component;
+							JTextField questionField = (JTextField) panel.getComponent(2);
+							JTextField reponseField = (JTextField) panel.getComponent(4);
+							String question = questionField.getText();
+							String reponse = reponseField.getText();
+							// Enregistrer la question et la réponse
+							System.out.println("Question: " + question + ", Réponse: " + reponse);
+						}
+					}
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null,
+							"Veuillez remplir toutes les questions et réponses avant d'enregistrer.");
 				}
 			}
 		});
