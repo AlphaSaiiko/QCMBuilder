@@ -88,10 +88,10 @@ public class Controleur
 				String type	 = String.valueOf(ligne[0]);
 				String intitule = String.valueOf(ligne[1]);
 				int nbPoints	= Integer.valueOf(String.valueOf(ligne[2]));
-				int temps	   = Integer.valueOf(String.valueOf(ligne[3]));
+				int temps	    = Integer.valueOf(String.valueOf(ligne[3]));
 				int difficulte  = Integer.valueOf(String.valueOf(ligne[4]));
 				
-				Question tmp = new Question(type, intitule, nbPoints, temps, difficulte, notion); 
+				Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type); 
 
 /*				// Chargement des réponses
 				while (sc.hasNextLine())
