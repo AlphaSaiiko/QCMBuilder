@@ -5,6 +5,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 import modele.*;
+import modele.Evaluation;
 import vue.*;
 
 public class Controleur
