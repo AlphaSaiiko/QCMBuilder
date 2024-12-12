@@ -34,4 +34,6 @@ public class Metier
 		Metier.listRessource = new ArrayList<Ressource>();
 	}
 
+    
+
 }
