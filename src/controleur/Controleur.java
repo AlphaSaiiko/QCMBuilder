@@ -95,7 +95,9 @@ public class Controleur
                 fichierRTF = new File(sousDossier, sousDossier.getName() + ".rtf");
             } 
             else 
+            {
                 return;
+            }
 
             try 
             {

@@ -67,8 +67,6 @@ public class Metier
         Metier.listRessource = listRessource;
     }
 
-    
-
     public static String[] getNomsRessources()
     {
         if (Metier.listRessource.isEmpty())
