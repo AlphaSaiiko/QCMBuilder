@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.*;
+
+import controleur.Controleur;
 import modele.Notion;
 import modele.Question;
 import modele.Ressource;
@@ -81,11 +83,11 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 
 		//Creation JComboBox pour les ressources et matières
-		this.ressourcesList = new JComboBox<String>(Ressource.getNomsRessources());
+		this.ressourcesList = new JComboBox<String>(Controleur.getNomsRessources());
 		this.ressourcesList.setPreferredSize(new Dimension(150, 30));
 		
 		this.nomRessource = String.valueOf(ressourcesList.getSelectedItem());
-		this.notionList = new JComboBox<String>(Ressource.trouverRessourceParNom(nomRessource).getNomsNotions());
+		this.notionList = new JComboBox<String>(Controleur.trouverRessourceParNom(nomRessource).getNomsNotions());
 		notionList.setPreferredSize(new Dimension(150, 30));
 		
 		// Panel pour les ressources
@@ -105,62 +107,62 @@ public class CreerQuestion extends JFrame implements ActionListener
 		panelDifficulte.setLayout(new BorderLayout());
 		panelDifficulte.add(new JLabel("niveau"), BorderLayout.NORTH);
 
-        // Création des boutons ronds pour les niveaux de difficultés avec les couleurs et texte correspondants
-        RoundButton tresfacile = creerButtonRond(Color.GREEN, "TF");
-        RoundButton facile = creerButtonRond(Color.CYAN, "F");
-        RoundButton moyen = creerButtonRond(Color.RED, "M");
-        RoundButton dur = creerButtonRond(Color.WHITE, "D");
+		// Création des boutons ronds pour les niveaux de difficultés avec les couleurs et texte correspondants
+		RoundButton tresfacile = creerButtonRond(Color.GREEN, "TF");
+		RoundButton facile = creerButtonRond(Color.CYAN, "F");
+		RoundButton moyen = creerButtonRond(Color.RED, "M");
+		RoundButton dur = creerButtonRond(Color.WHITE, "D");
 
-        // Définir la taille du texte
-        Font font = new Font("Arial", Font.BOLD, 8);
-        tresfacile.setFont(font);
-        facile.setFont(font);
-        moyen.setFont(font);
-        dur.setFont(font);
+		// Définir la taille du texte
+		Font font = new Font("Arial", Font.BOLD, 8);
+		tresfacile.setFont(font);
+		facile.setFont(font);
+		moyen.setFont(font);
+		dur.setFont(font);
 
-        // Grouper les boutons pour permettre une seule sélection à la fois
-        ButtonGroup group = new ButtonGroup();
-        group.add(tresfacile);
-        group.add(facile);
-        group.add(moyen);
-        group.add(dur);
+		// Grouper les boutons pour permettre une seule sélection à la fois
+		ButtonGroup group = new ButtonGroup();
+		group.add(tresfacile);
+		group.add(facile);
+		group.add(moyen);
+		group.add(dur);
 
-        // Ajouter des action listeners pour changer la couleur lorsqu'un bouton est sélectionné
-        tresfacile.addActionListener(e -> {
-            tresfacile.setBackground(Color.GREEN);
-            facile.setBackground(Color.GRAY);
-            moyen.setBackground(Color.GRAY);
-            dur.setBackground(Color.GRAY);
-        });
+		// Ajouter des action listeners pour changer la couleur lorsqu'un bouton est sélectionné
+		tresfacile.addActionListener(e -> {
+			tresfacile.setBackground(Color.GREEN);
+			facile.setBackground(Color.GRAY);
+			moyen.setBackground(Color.GRAY);
+			dur.setBackground(Color.GRAY);
+		});
 
-        facile.addActionListener(e -> {
-            tresfacile.setBackground(Color.GRAY);
-            facile.setBackground(Color.CYAN);
-            moyen.setBackground(Color.GRAY);
-            dur.setBackground(Color.GRAY);
-        });
+		facile.addActionListener(e -> {
+			tresfacile.setBackground(Color.GRAY);
+			facile.setBackground(Color.CYAN);
+			moyen.setBackground(Color.GRAY);
+			dur.setBackground(Color.GRAY);
+		});
 
-        moyen.addActionListener(e -> {
-            tresfacile.setBackground(Color.GRAY);
-            facile.setBackground(Color.GRAY);
-            moyen.setBackground(Color.RED);
-            dur.setBackground(Color.GRAY);
-        });
+		moyen.addActionListener(e -> {
+			tresfacile.setBackground(Color.GRAY);
+			facile.setBackground(Color.GRAY);
+			moyen.setBackground(Color.RED);
+			dur.setBackground(Color.GRAY);
+		});
 
-        dur.addActionListener(e -> {
-            tresfacile.setBackground(Color.GRAY);
-            facile.setBackground(Color.GRAY);
-            moyen.setBackground(Color.GRAY);
-            dur.setBackground(Color.WHITE);
-        });
+		dur.addActionListener(e -> {
+			tresfacile.setBackground(Color.GRAY);
+			facile.setBackground(Color.GRAY);
+			moyen.setBackground(Color.GRAY);
+			dur.setBackground(Color.WHITE);
+		});
 
-        // Panel pour les ronds de difficultés
-        JPanel panelRond = new JPanel();
-        panelRond.setLayout(new FlowLayout());
-        panelRond.add(tresfacile);
-        panelRond.add(facile);
-        panelRond.add(moyen);
-        panelRond.add(dur);
+		// Panel pour les ronds de difficultés
+		JPanel panelRond = new JPanel();
+		panelRond.setLayout(new FlowLayout());
+		panelRond.add(tresfacile);
+		panelRond.add(facile);
+		panelRond.add(moyen);
+		panelRond.add(dur);
 		
 		panelDifficulte.add(panelRond, BorderLayout.CENTER);
 		
@@ -185,20 +187,20 @@ public class CreerQuestion extends JFrame implements ActionListener
 		JComboBox<String> typeQuestion = new JComboBox<String>(new String[] { "Question à choix multiple à réponse unique", "Question à choix multiple à réponse multiple", "Question à association d’éléments", "Question avec élimination de propositions de réponses" });
 		panelQuestion.add(typeQuestion, BorderLayout.SOUTH);
 
-        // Bouton pour créer une nouvelle question
-        JButton creerQuestionButton = new JButton("Créer nouvelle question");
-        JPanel panelBouton = new JPanel();
-        panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
-        panelBouton.add(creerQuestionButton);
+		// Bouton pour créer une nouvelle question
+		JButton creerQuestionButton = new JButton("Créer nouvelle question");
+		JPanel panelBouton = new JPanel();
+		panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
+		panelBouton.add(creerQuestionButton);
 
 		// Action listener pour le bouton de création de question
 		creerQuestionButton.addActionListener(e -> {
 
 			//Récupération des informations pour la création de la question
-			int nbPoints     = Integer.parseInt(((JTextArea) points.getComponent(1)).getText());
+			int nbPoints	 = Integer.parseInt(((JTextArea) points.getComponent(1)).getText());
 			int tempsReponse = Integer.parseInt(((JTextArea) temps.getComponent(1)).getText());
 
-			Notion not = Notion.trouverNotionParNom((String) notionList.getSelectedItem(), Ressource.trouverRessourceParNom((String) ressourcesList.getSelectedItem()));
+			Notion not = Notion.trouverNotionParNom((String) notionList.getSelectedItem(), Controleur.trouverRessourceParNom((String) ressourcesList.getSelectedItem()));
 
 			int difficulte = 0;
 			if (tresfacile.getBackground() == Color.GREEN) { difficulte = 1; }
@@ -281,7 +283,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 		this.nomRessource = String.valueOf(this.ressourcesList.getSelectedItem());
 
-		for (String nomNotion : Ressource.trouverRessourceParNom(this.nomRessource).getNomsNotions())
+		for (String nomNotion : Controleur.trouverRessourceParNom(this.nomRessource).getNomsNotions())
 			this.notionList.addItem(nomNotion);
 	}
 

@@ -6,6 +6,8 @@ import java.io.File;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import controleur.Controleur;
 import modele.Notion;
 import modele.Ressource;
 
@@ -69,17 +71,22 @@ public class Parametre extends JFrame
 		JButton supprRessource = new JButton(resizeIcon("./lib/icones/delete.png", 20, 20));
 		supprRessource.setPreferredSize(new Dimension(30, 30));
 		supprRessource.addActionListener(e -> {
+			
 			String selectedRessource = ressourceList.getSelectedValue();
-			if (selectedRessource != null) {
-				Ressource ressource = Ressource.trouverRessourceParNom(selectedRessource);
-				if (ressource != null) {
+			if (selectedRessource != null) 
+			{
+				Ressource ressource = Controleur.trouverRessourceParNom(selectedRessource);
+				if (ressource != null) 
+				{
 					// Supprimer le répertoire associé à la ressource
 					File ressourceDir = new File("./lib/ressources/" + ressource.getNom());
-					if (ressourceDir.exists()) {
+					if (ressourceDir.exists()) 
+					{
 						deleteDirectory(ressourceDir);
 					}
+
 					// Supprimer la ressource de la liste
-					Ressource.getListRessource().remove(ressource);
+					Controleur.getListRessource().remove(ressource);
 					loadRessources();
 				}
 			}
@@ -89,14 +96,20 @@ public class Parametre extends JFrame
 		JButton modifRessource = new JButton(resizeIcon("./lib/icones/edit.png", 20, 20));
 		modifRessource.setPreferredSize(new Dimension(30, 30));
 		modifRessource.addActionListener(e -> {
+			
 			String selectedRessource = ressourceList.getSelectedValue();
-			if (selectedRessource != null) {
-				Ressource ressource = Ressource.trouverRessourceParNom(selectedRessource);
-				if (ressource != null) {
+			if (selectedRessource != null) 
+			{
+				Ressource ressource = Controleur.trouverRessourceParNom(selectedRessource);
+				if (ressource != null) 
+				{
 					ModifierRessource modifierRessourceFrame = new ModifierRessource(ressource);
 					modifierRessourceFrame.setVisible(true);
-					modifierRessourceFrame.addWindowListener(new WindowAdapter() {
-						public void windowClosed(WindowEvent e) {
+
+					modifierRessourceFrame.addWindowListener(new WindowAdapter() 
+					{
+						public void windowClosed(WindowEvent e) 
+						{
 							loadRessources();
 						}
 					});
@@ -144,18 +157,25 @@ public class Parametre extends JFrame
 		JButton supprNotion = new JButton(resizeIcon("./lib/icones/delete.png", 20, 20));
 		supprNotion.setPreferredSize(new Dimension(30, 30));
 		supprNotion.addActionListener(e -> {
+
 			String selectedRessource = ressourceList.getSelectedValue();
 			String selectedNotion = notionList.getSelectedValue();
-			if (selectedRessource != null && selectedNotion != null) {
-				Ressource ressource = Ressource.trouverRessourceParNom(selectedRessource);
-				if (ressource != null) {
+
+			if (selectedRessource != null && selectedNotion != null) 
+			{
+				Ressource ressource = Controleur.trouverRessourceParNom(selectedRessource);
+				if (ressource != null) 
+				{
 					Notion notion = ressource.getNotion(selectedNotion);
-					if (notion != null) {
+					if (notion != null) 
+					{
 						// Supprimer le répertoire associé à la notion
 						File notionDir = new File("./lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom());
-						if (notionDir.exists()) {
+						if (notionDir.exists()) 
+						{
 							deleteDirectory(notionDir);
 						}
+
 						// Supprimer la notion de la liste
 						ressource.getEnsNotions().remove(notion);
 						updateNotionList(selectedRessource);
@@ -167,17 +187,24 @@ public class Parametre extends JFrame
 		JButton modifNotion = new JButton(resizeIcon("./lib/icones/edit.png", 20, 20));
 		modifNotion.setPreferredSize(new Dimension(30, 30));
 		modifNotion.addActionListener(e -> {
+
 			String selectedRessource = ressourceList.getSelectedValue();
 			String selectedNotion = notionList.getSelectedValue();
-			if (selectedRessource != null && selectedNotion != null) {
-				Ressource ressource = Ressource.trouverRessourceParNom(selectedRessource);
-				if (ressource != null) {
-					for (Notion notion : ressource.getEnsNotions()) {
-						if (notion.getNom().equals(selectedNotion)) {
+			if (selectedRessource != null && selectedNotion != null) 
+			{
+				Ressource ressource = Controleur.trouverRessourceParNom(selectedRessource);
+				if (ressource != null) 
+				{
+					for (Notion notion : ressource.getEnsNotions()) 
+					{
+						if (notion.getNom().equals(selectedNotion)) 
+						{
 							ModifierNotion modifierNotionFrame = new ModifierNotion(ressource, notion);
 							modifierNotionFrame.setVisible(true);
-							modifierNotionFrame.addWindowListener(new WindowAdapter() {
-								public void windowClosed(WindowEvent e) {
+							modifierNotionFrame.addWindowListener(new WindowAdapter() 
+							{
+								public void windowClosed(WindowEvent e) 
+								{
 									updateNotionList(selectedRessource);
 								}
 							});
@@ -273,7 +300,8 @@ public class Parametre extends JFrame
 	}
 
 	// Méthode pour supprimer un répertoire et son contenu
-	private void deleteDirectory(File directory) {
+	private void deleteDirectory(File directory) 
+	{
 		File[] files = directory.listFiles();
 		if (files != null) { // Vérifier si le répertoire n'est pas vide
 			for (File file : files) {
@@ -291,7 +319,7 @@ public class Parametre extends JFrame
 	private void loadRessources()
 	{
 		ressourceListModel.clear();
-		for (Ressource ressource : Ressource.getListRessource())
+		for (Ressource ressource : Controleur.getListRessource())
 		{
 			ressourceListModel.addElement(ressource.getNom());
 		}
@@ -301,7 +329,8 @@ public class Parametre extends JFrame
 	private void updateNotionList(String ressourceName)
 	{
 		notionListModel.clear();
-		Ressource ressource = Ressource.trouverRessourceParNom(ressourceName);
+		Ressource ressource = Controleur.trouverRessourceParNom(ressourceName);
+		
 		if (ressource != null)
 		{
 			for (String notion : ressource.getNomsNotions())

@@ -6,147 +6,120 @@ import java.util.List;
 
 public class Ressource
 {
-    /*
-     * +------------+
-     * | PARAMETRES |
-     * +------------+
-     */
-    private static final List<Ressource> listRessource = new ArrayList<>();
-    private List<Notion> ensNotions = new ArrayList<>();
-    private String nom;
-    private ControleurFichier fichierControleur;
+	/*
+	 * +------------+
+	 * | PARAMETRES |
+	 * +------------+
+	 */
 
-    /*
-     * +--------------+
-     * | CONSTRUCTEUR |
-     * +--------------+
-     */
-    public static Ressource creerRessource(String nom)
-    {
-        Ressource ressource = Ressource.trouverRessourceParNom(nom);
-        if (ressource == null)
-        {
-            ressource = new Ressource(nom);
-            System.out.println("Nouvelle ressource créée avec le titre: " + nom);
-        }
-        else
-        {
-            System.out.println("La ressource existe déjà.");
-        }
-        return ressource;
-    }
+	
+	private static final List<Ressource> listRessource = new ArrayList<>();
+	private List<Notion> ensNotions = new ArrayList<>();
+	private String nom;
+	private ControleurFichier fichierControleur;
 
-    private Ressource(String nom)
-    {
-        this.nom = nom;
-        Ressource.listRessource.add(this);
-        this.fichierControleur = new ControleurFichier("lib/ressources/");
-        this.creerFichierRessource();
-    }
+	/*
+	 * +--------------+
+	 * | CONSTRUCTEUR |
+	 * +--------------+
+	 */
+	public static Ressource creerRessource(String nom)
+	{
+		Ressource ressource = Metier.trouverRessourceParNom(nom);
+		if (ressource == null)
+		{
+			ressource = new Ressource(nom);
+			System.out.println("Nouvelle ressource créée avec le titre: " + nom);
+		}
+		else
+		{
+			System.out.println("La ressource existe déjà.");
+		}
+		return ressource;
+	}
 
-    /*
-     * +---------+
-     * | GETTERS |
-     * +---------+
-     */
-    public String getNom()
-    {
-        return this.nom;
-    }
+	private Ressource(String nom)
+	{
+		this.nom = nom;
+		Ressource.listRessource.add(this);
+		this.fichierControleur = new ControleurFichier("lib/ressources/");
+		this.creerFichierRessource();
+	}
 
-    public int getNbNotion()
-    {
-        return this.ensNotions.size();
-    }
+	/*
+	 * +---------+
+	 * | GETTERS |
+	 * +---------+
+	 */
+	public String getNom()
+	{
+		return this.nom;
+	}
 
-    public List<Notion> getEnsNotions()
-    {
-        return this.ensNotions;
-    }
+	public int getNbNotion()
+	{
+		return this.ensNotions.size();
+	}
 
-    public Notion getNotion(String nom)
-    {
-        for (Notion notion : this.ensNotions)
-        {
-            if (notion.getNom().equalsIgnoreCase(nom))
-            {
-                return notion;
-            }
-        }
-        return null;
-    }
+	public List<Notion> getEnsNotions()
+	{
+		return this.ensNotions;
+	}
 
-	public static List<Ressource> getListRessource()
-    {
-        return Ressource.listRessource;
-    }
+	public Notion getNotion(String nom)
+	{
+		for (Notion notion : this.ensNotions)
+		{
+			if (notion.getNom().equalsIgnoreCase(nom))
+			{
+				return notion;
+			}
+		}
+		return null;
+	}
 
-    public String[] getNomsNotions()
-    {
-        String[] nomsNotions = new String[this.ensNotions.size()];
-        for (int i = 0; i < this.ensNotions.size(); i++)
-        {
-            nomsNotions[i] = this.ensNotions.get(i).getNom();
-        }
-        return nomsNotions;
-    }
 
-    /*
-     * +---------+
-     * | SETTERS |
-     * +---------+
-     */
-    public void setNom(String nom)
-    {
-        this.nom = nom;
-    }
+	public String[] getNomsNotions()
+	{
+		String[] nomsNotions = new String[this.ensNotions.size()];
+		for (int i = 0; i < this.ensNotions.size(); i++)
+		{
+			nomsNotions[i] = this.ensNotions.get(i).getNom();
+		}
+		return nomsNotions;
+	}
 
-    /*
-     * +----------+
-     * | METHODES |
-     * +----------+
-     */
-    public void creerFichierRessource()
-    {
-        this.fichierControleur.ajouterFichier(this.nom);
-    }
+	/*
+	 * +---------+
+	 * | SETTERS |
+	 * +---------+
+	 */
+	public void setNom(String nom)
+	{
+		this.nom = nom;
+	}
 
-    public void ajouterNotion(Notion notion)
-    {
-        if (notion != null)
-        {
-            this.ensNotions.add(notion);
-        }
-    }
+	/*
+	 * +----------+
+	 * | METHODES |
+	 * +----------+
+	 */
+	public void creerFichierRessource()
+	{
+		this.fichierControleur.ajouterFichier(this.nom);
+	}
 
-    public void supprimerNotion(Notion notion)
-    {
-        this.ensNotions.removeIf(not -> notion.equals(not));
-    }
+	public void ajouterNotion(Notion notion)
+	{
+		if (notion != null)
+		{
+			this.ensNotions.add(notion);
+		}
+	}
 
-    public static String[] getNomsRessources()
-    {
-        if (Ressource.listRessource.isEmpty())
-        {
-            return null;
-        }
-        String[] nomsRessources = new String[Ressource.listRessource.size()];
-        for (int i = 0; i < Ressource.listRessource.size(); i++)
-        {
-            nomsRessources[i] = Ressource.listRessource.get(i).getNom();
-        }
-        return nomsRessources;
-    }
+	public void supprimerNotion(Notion notion)
+	{
+		this.ensNotions.removeIf(not -> notion.equals(not));
+	}
 
-    public static Ressource trouverRessourceParNom(String nom)
-    {
-        for (Ressource ressource : Ressource.listRessource)
-        {
-            if (ressource.getNom().equalsIgnoreCase(nom))
-            {
-                return ressource;
-            }
-        }
-        return null;
-    }
 }
