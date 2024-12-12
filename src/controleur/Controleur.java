@@ -5,6 +5,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 import modele.*;
+import modele.Evaluation;
 import vue.*;
 
 public class Controleur
@@ -175,6 +176,64 @@ public class Controleur
         Ressource.creerRessource(titreRessource);
     }
 
+    public static void supprimerRessource(String ressourceName)
+    {
+        Ressource ressource = Ressource.trouverRessourceParNom(ressourceName);
+        if (ressource != null)
+        {
+            File ressourceDir = new File("./lib/ressources/" + ressource.getNom());
+            deleteDirectory(ressourceDir);
+            Ressource.getListRessource().remove(ressource);
+        }
+    }
+
+    public static void modifierRessource(String ressourceName)
+    {
+        Ressource ressource = Ressource.trouverRessourceParNom(ressourceName);
+        if (ressource != null)
+        {
+            new ModifierRessource(ressource).setVisible(true);
+        }
+    }
+
+    public static void supprimerNotion(String ressourceName, String notionName)
+    {
+        Ressource ressource = Ressource.trouverRessourceParNom(ressourceName);
+        if (ressource != null)
+        {
+            Notion notion = ressource.getNotion(notionName);
+            if (notion != null)
+            {
+                File notionDir = new File("./lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom());
+                deleteDirectory(notionDir);
+                ressource.getEnsNotions().remove(notion);
+            }
+        }
+    }
+
+    public static void modifierNotion(String ressourceName, String notionName)
+    {
+        Ressource ressource = Ressource.trouverRessourceParNom(ressourceName);
+        if (ressource != null)
+        {
+            Notion notion = ressource.getNotion(notionName);
+            if (notion != null)
+            {
+                new ModifierNotion(ressource, notion).setVisible(true);
+            }
+        }
+    }
+
+    public static List<Ressource> getListRessource()
+    {
+        return Ressource.getListRessource();
+    }
+
+    public static Ressource trouverRessourceParNom(String nom)
+    {
+        return Ressource.trouverRessourceParNom(nom);
+    }
+
     /*
      * +-------+
      * | MAIN  |
@@ -185,5 +244,26 @@ public class Controleur
         Controleur controleur = new Controleur();
         Controleur.acc = new Accueil();
         controleur.chargerRessourcesEtNotion();
+    }
+
+    // Méthode pour supprimer un répertoire et son contenu
+    private static void deleteDirectory(File directory)
+    {
+        File[] files = directory.listFiles();
+        if (files != null) // Vérifier si le répertoire n'est pas vide
+        {
+            for (File file : files)
+            {
+                if (file.isDirectory())
+                {
+                    deleteDirectory(file);
+                }
+                else
+                {
+                    file.delete();
+                }
+            }
+        }
+        directory.delete();
     }
 }
