@@ -41,7 +41,6 @@ public class QuestionLiaison extends JFrame
 		addButton = new JButton("Add");
 		addButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				addTrashPanels();
@@ -52,7 +51,6 @@ public class QuestionLiaison extends JFrame
 		explicationButton = new JButton("Explication");
 		explicationButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				JFrame explicationFrame = new JFrame("Explication");
@@ -73,7 +71,6 @@ public class QuestionLiaison extends JFrame
 		saveButton = new JButton("Enregistrer");
 		saveButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				String questionText = questionArea.getText();
@@ -145,7 +142,6 @@ public class QuestionLiaison extends JFrame
         // Ajouter un ActionListener au bouton de poubelle
         newTrashButton.addActionListener(new ActionListener()
         {
-            @Override
             public void actionPerformed(ActionEvent e)
             {
                 questionPanel.remove(rowPanel);
@@ -197,7 +193,6 @@ public class QuestionLiaison extends JFrame
 		// Ajouter un ActionListener au bouton de poubelle
 		newTrashButton2.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				questionPanel.remove(rowPanel);
