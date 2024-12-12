@@ -45,24 +45,28 @@ public class QuestionAvecElimination extends JFrame
 		addButton.setOpaque(false);
 		buttonPanel.add(addButton);
 
+		// Déclarer et initialiser le ButtonGroup
+		ButtonGroup buttonGroup = new ButtonGroup();
+		
+		
 		// Ajouter un bouton "Explication" avec une icône
 		ImageIcon explicationIcon = new ImageIcon(
-				new ImageIcon("./lib/icones/edit.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-		JButton explicationButton = new JButton(explicationIcon);
-		explicationButton.setPreferredSize(new Dimension(40, 40));
-		explicationButton.setBorderPainted(false);
-		explicationButton.setContentAreaFilled(false);
-		explicationButton.setFocusPainted(false);
-		explicationButton.setOpaque(false);
-		buttonPanel.add(explicationButton);
-
-		// Ajouter un bouton "Enregistrer"
+			new ImageIcon("./lib/icones/edit.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+			JButton explicationButton = new JButton(explicationIcon);
+			explicationButton.setPreferredSize(new Dimension(40, 40));
+			explicationButton.setBorderPainted(false);
+			explicationButton.setContentAreaFilled(false);
+			explicationButton.setFocusPainted(false);
+			explicationButton.setOpaque(false);
+			buttonPanel.add(explicationButton);
+			
+			// Ajouter un bouton "Enregistrer"
 		JButton saveButton = new JButton("Enregistrer");
 		buttonPanel.add(saveButton);
 
 		// Ajouter le panel des boutons au panel des questions
 		questionPanel.add(buttonPanel);
-
+		
 		// Ajouter un ActionListener au bouton "Ajouter"
 		addButton.addActionListener(new ActionListener()
 		{
@@ -75,10 +79,10 @@ public class QuestionAvecElimination extends JFrame
 				gbc.gridx = 0;
 				gbc.gridy = 0;
 				gbc.anchor = GridBagConstraints.WEST;
-
+				
 				// Redimensionner l'icône de poubelle
 				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("./lib/icones/delete.png").getImage()
-						.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+				.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
 				JButton newTrashButton = new JButton(newTrashIcon);
 				newTrashButton.setPreferredSize(new Dimension(40, 40));
 				newTrashButton.setBorderPainted(false);
@@ -86,7 +90,8 @@ public class QuestionAvecElimination extends JFrame
 				newTrashButton.setFocusPainted(false);
 				newTrashButton.setOpaque(false);
 				newTrashPanel.add(newTrashButton, gbc);
-
+				
+				
 				// Ajouter un ActionListener au bouton de poubelle
 				newTrashButton.addActionListener(new ActionListener()
 				{
@@ -100,7 +105,7 @@ public class QuestionAvecElimination extends JFrame
 						questionPanel.repaint();
 					}
 				});
-
+				
 				// Augmenter la taille du JTextField
 				JTextField newTextField = new JTextField();
 				newTextField.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -109,42 +114,44 @@ public class QuestionAvecElimination extends JFrame
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 				gbc.weightx = 1.0;
 				newTrashPanel.add(newTextField, gbc);
-
+				
 				gbc.gridx = 2;
 				gbc.fill = GridBagConstraints.NONE;
 				gbc.weightx = 0;
-
+				
 				// Ajouter un panel pour contenir les deux JTextField pour les points
-
+				
 				JPanel pointsPanel = new JPanel(new GridBagLayout());
 				GridBagConstraints pointsGbc = new GridBagConstraints();
 				pointsGbc.gridx = 0;
 				pointsGbc.gridy = 0;
 				pointsGbc.fill = GridBagConstraints.HORIZONTAL;
-
+				
 				// Ajouter le premier JTextField pour les points
 				JTextField newTextFieldPoints = new JTextField();
 				newTextFieldPoints.setFont(new Font("Arial", Font.PLAIN, 18));
 				newTextFieldPoints.setPreferredSize(new Dimension(50, 30));
 				pointsPanel.add(newTextFieldPoints, pointsGbc);
-
+				
 				// Ajouter le deuxième JTextField pour les points
 				pointsGbc.gridy = 1;
 				JTextField newTextFieldPoints2 = new JTextField();
 				newTextFieldPoints2.setFont(new Font("Arial", Font.PLAIN, 18));
 				newTextFieldPoints2.setPreferredSize(new Dimension(50, 30));
 				pointsPanel.add(newTextFieldPoints2, pointsGbc);
-
+				
 				// Ajouter le panel des points au newTrashPanel
 				newTrashPanel.add(pointsPanel, gbc);
-
+				
 				// Ajouter un bouton radio
 				JRadioButton newRadioButton = new JRadioButton();
 				newRadioButton.setPreferredSize(new Dimension(30, 30));
 				gbc.gridx = 3;
 				newTrashPanel.add(newRadioButton, gbc);
-
-
+				
+				
+				// Ajouter le bouton au ButtonGroup
+				buttonGroup.add(newRadioButton);
 
 				// Ajouter le nouveau panel trash au conteneur principal
 				questionPanel.add(newTrashPanel, questionPanel.getComponentCount() - 1);
@@ -202,7 +209,7 @@ public class QuestionAvecElimination extends JFrame
 		add(mainPanel, BorderLayout.CENTER);
 
 		// Afficher la fenêtre
-		setTitle("Question Réponse Unique");
+		setTitle("Question avec Elimination");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
