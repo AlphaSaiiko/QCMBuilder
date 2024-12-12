@@ -1,89 +1,69 @@
 package modele;
 
+import controleur.Controleur;
 import java.util.ArrayList;
 import java.util.List;
 
-import controleur.Controleur;
-
 public class Metier 
 {
-	
-	/*
-	 * +------------+
-	 * | Attributs  |
-	 * +------------+
-	 */
+    /*
+     * +------------+
+     * | ATTRIBUTS  |
+     * +------------+
+     */
+    private Controleur controleur;
+    private static List<Evaluation> listEval;
+    private static List<Ressource> listRessource;
 
-	private Controleur controleur;
+    /*
+     * +--------------+
+     * | CONSTRUCTEUR |
+     * +--------------+
+     */
+    public Metier(Controleur controleur)
+    {
+        this.controleur = controleur;
+        Metier.listEval = new ArrayList<>();
+        Metier.listRessource = new ArrayList<>();
+    }
 
-	private static List<Evaluation> listEval;
+    /*
+     * +---------+
+     * | GETTERS |
+     * +---------+
+     */
+    public Controleur getControleur() 
+    {
+        return this.controleur;
+    }
 
-	private static List<Ressource>  listRessource;
+    public static List<Evaluation> getListEval() 
+    {
+        return Metier.listEval;
+    }
 
+    public static List<Ressource> getListRessource() 
+    {
+        return Metier.listRessource;
+    }
 
-	/*
-	 * +--------------+
-	 * | Constructeur |
-	 * +--------------+
-	 */
+    /*
+     * +---------+
+     * | SETTERS |
+     * +---------+
+     */
+    public void setControleur(Controleur controleur) 
+    {
+        this.controleur = controleur;
+    }
 
-	public Metier(Controleur controleur)
-	{
-		this.controleur = controleur;
-		Metier.listEval	  = new ArrayList<Evaluation>();
-		Metier.listRessource = new ArrayList<Ressource>();
-	}
+    public static void setListEval(List<Evaluation> listEval) 
+    {
+        Metier.listEval = listEval;
+    }
 
-
-	/*
-	 * +---------+
-	 * | Getters |
-	 * +---------+
-	 */
-
-
-	public Controleur getControleur() 
-	{
-		return this.controleur;
-	}
-
-	public static List<Evaluation> getListEval() 
-	{
-		return Metier.listEval;
-	}
-
-	public static List<Ressource> getListRessource() 
-	{
-		return Metier.listRessource;
-	}
-
-
-
-
-	/*
-	 * +---------+
-	 * | Setters |
-	 * +---------+
-	 */
-	
-
-	public void setControleur(Controleur controleur) 
-	{
-		this.controleur = controleur;
-	}
-
-
-	public static void setListEval(List<Evaluation> listEval) 
-	{
-		Metier.listEval = listEval;
-	}
-
-
-	public static void setListRessource(List<Ressource> listRessource) 
-	{
-		Metier.listRessource = listRessource;
-	}
-
-
-
+    public static void setListRessource(List<Ressource> listRessource) 
+    {
+        Metier.listRessource = listRessource;
+    }
 }
