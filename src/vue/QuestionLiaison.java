@@ -151,15 +151,8 @@ public class QuestionLiaison extends JFrame
 		// Ajouter le panel principal au frame
 		add(mainPanel);
 
-<<<<<<< HEAD
-		// Afficher la fenêtre
-		setTitle("Question Réponse Liaison");
-		setSize(800, 600);
-        setLocationRelativeTo(null);
-=======
 		// Configurer le frame
 		setTitle("Question Liaison");
->>>>>>> 51624e3 ( Mise à jour des questions par liaison)
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(600, 400);
 		setLocationRelativeTo(null);
