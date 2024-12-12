@@ -6,15 +6,18 @@ import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.*;
+import modele.*;
 
 public class QuestionReponseUnique extends JFrame
 {
 	private JPanel questionPanel;
 	private ButtonGroup buttonGroup;
 	private JTextArea questionArea;
+	private Question question;
 
-	public QuestionReponseUnique()
+	public QuestionReponseUnique(Question question)
 	{
+		this.question = question;
 		// Initialiser le conteneur principal
 		JPanel mainPanel = new JPanel(new BorderLayout());
 
@@ -26,11 +29,11 @@ public class QuestionReponseUnique extends JFrame
 		buttonGroup = new ButtonGroup();
 
 		// Ajouter un champ de texte pour écrire la question
-		questionArea = new JTextArea(10, 80);
-		questionArea.setLineWrap(true);
-		questionArea.setWrapStyleWord(true);
-		questionArea.setFont(new Font("Arial", Font.PLAIN, 18));
-		questionArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, questionArea.getPreferredSize().height));
+		this.questionArea = new JTextArea(10, 80);
+		this.questionArea.setLineWrap(true);
+		this.questionArea.setWrapStyleWord(true);
+		this.questionArea.setFont(new Font("Arial", Font.PLAIN, 18));
+		this.questionArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, questionArea.getPreferredSize().height));
 		questionPanel.add(questionArea);
 
 		// Ajouter un panel pour les boutons "Ajouter", "Explication" et
@@ -159,7 +162,7 @@ public class QuestionReponseUnique extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				// Enregistrer la question dans un fichier
-				String questionText = questionArea.getText();
+				/*String questionText = questionArea.getText();
 				try (FileWriter writer = new FileWriter("question.txt"))
 				{
 					writer.write(questionText);
@@ -167,7 +170,8 @@ public class QuestionReponseUnique extends JFrame
 				} catch (IOException ex)
 				{
 					JOptionPane.showMessageDialog(null, "Erreur lors de l'enregistrement de la question.");
-				}
+				}*/
+				question.setIntitule(questionArea.getText());
 			}
 		});
 
@@ -184,8 +188,4 @@ public class QuestionReponseUnique extends JFrame
 		setVisible(true);
 	}
 
-	public static void main(String[] args)
-	{
-		SwingUtilities.invokeLater(QuestionReponseUnique::new);
-	}
 }
