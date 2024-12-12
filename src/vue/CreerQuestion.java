@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.*;
+import modele.Notion;
+import modele.Question;
 import modele.Ressource;
 
 public class CreerQuestion extends JFrame implements ActionListener
@@ -17,7 +19,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 	 *  +-------------+
 	 */
 
-	private JComboBox<String> matieresList;
+	private JComboBox<String> notionList;
 	private String nomRessource;
 	private JComboBox<String> ressourcesList;
 	
@@ -83,8 +85,8 @@ public class CreerQuestion extends JFrame implements ActionListener
 		this.ressourcesList.setPreferredSize(new Dimension(150, 30));
 		
 		this.nomRessource = String.valueOf(ressourcesList.getSelectedItem());
-		this.matieresList = new JComboBox<String>(Ressource.trouverRessourceParNom(nomRessource).getNomsNotions());
-		matieresList.setPreferredSize(new Dimension(150, 30));
+		this.notionList = new JComboBox<String>(Ressource.trouverRessourceParNom(nomRessource).getNomsNotions());
+		notionList.setPreferredSize(new Dimension(150, 30));
 		
 		// Panel pour les ressources
 		JPanel ressources = new JPanel();
@@ -96,7 +98,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 		JPanel notions = new JPanel();
 		notions.setLayout(new BorderLayout());
 		notions.add(new JLabel("Notions"), BorderLayout.NORTH);
-		notions.add(matieresList, BorderLayout.CENTER);
+		notions.add(notionList, BorderLayout.CENTER);
 		
 		// Panel pour bien placer les ronds de difficultés et mettre le titre
 		JPanel panelDifficulte = new JPanel();
@@ -188,27 +190,53 @@ public class CreerQuestion extends JFrame implements ActionListener
         JPanel panelBouton = new JPanel();
         panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
         panelBouton.add(creerQuestionButton);
+
+		// Action listener pour le bouton de création de question
 		creerQuestionButton.addActionListener(e -> {
+
+			//Récupération des informations pour la création de la question
+			int nbPoints     = Integer.parseInt(((JTextArea) points.getComponent(1)).getText());
+			int tempsReponse = Integer.parseInt(((JTextArea) temps.getComponent(1)).getText());
+
+			Notion not = Notion.trouverNotionParNom((String) notionList.getSelectedItem(), Ressource.trouverRessourceParNom((String) ressourcesList.getSelectedItem()));
+
+			int difficulte = 0;
+			if (tresfacile.getBackground() == Color.GREEN) { difficulte = 1; }
+			else if (facile.getBackground() == Color.CYAN) { difficulte = 2; }
+			else if (moyen.getBackground() == Color.RED) { difficulte = 3; }
+			else if (dur.getBackground() == Color.WHITE) { difficulte = 4; }
+
 			String selectedType = (String) typeQuestion.getSelectedItem();
-			if ("Question à choix multiple à réponse unique".equals(selectedType))
+			if (not != null && selectedType != null && difficulte != 0)
 			{
-				new QuestionReponseUnique();
-				dispose();
+				if ("Question à choix multiple à réponse unique".equals(selectedType))
+				{
+					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QCMRU");
+					new QuestionReponseUnique();
+					dispose();
+				}
+				else if ("Question à choix multiple à réponse multiple".equals(selectedType))
+				{
+					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QCMRM");
+					new QuestionReponseMultiple();
+					dispose();
+				}
+				else if ("Question à association d’éléments".equals(selectedType))
+				{
+					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAE");
+					new QuestionLiaison();
+					dispose();
+				}
+				else if ("Question avec élimination de propositions de réponses".equals(selectedType))
+				{
+					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAEPR");
+					new QuestionAvecElimination();
+					dispose();
+				}
 			}
-			else if ("Question à choix multiple à réponse multiple".equals(selectedType))
+			else
 			{
-				new QuestionReponseMultiple();
-				dispose();
-			}
-			else if ("Question à association d’éléments".equals(selectedType))
-			{
-				new QuestionLiaison();
-				dispose();
-			}
-			else if ("Question avec élimination de propositions de réponses".equals(selectedType))
-			{
-				new QuestionAvecElimination();
-				dispose();
+				JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
@@ -249,12 +277,12 @@ public class CreerQuestion extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent e) 
 	{
 		// Assumant que la seule source est la liste des ressources
-		this.matieresList.removeAllItems();
+		this.notionList.removeAllItems();
 
 		this.nomRessource = String.valueOf(this.ressourcesList.getSelectedItem());
 
 		for (String nomNotion : Ressource.trouverRessourceParNom(this.nomRessource).getNomsNotions())
-			this.matieresList.addItem(nomNotion);
+			this.notionList.addItem(nomNotion);
 	}
 
 	public static void main(String[] args)
