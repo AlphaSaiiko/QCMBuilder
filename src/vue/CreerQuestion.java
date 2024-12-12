@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.*;
+import modele.Metier;
 import modele.Notion;
 import modele.Question;
 import modele.Ressource;
@@ -81,11 +82,11 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 
 		//Creation JComboBox pour les ressources et matières
-		this.ressourcesList = new JComboBox<String>(Ressource.getNomsRessources());
+		this.ressourcesList = new JComboBox<String>(Metier.getNomsRessources());
 		this.ressourcesList.setPreferredSize(new Dimension(150, 30));
 		
 		this.nomRessource = String.valueOf(ressourcesList.getSelectedItem());
-		this.notionList = new JComboBox<String>(Ressource.trouverRessourceParNom(nomRessource).getNomsNotions());
+		this.notionList = new JComboBox<String>(Metier.trouverRessourceParNom(nomRessource).getNomsNotions());
 		notionList.setPreferredSize(new Dimension(150, 30));
 		
 		// Panel pour les ressources
@@ -198,7 +199,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 			int nbPoints     = Integer.parseInt(((JTextArea) points.getComponent(1)).getText());
 			int tempsReponse = Integer.parseInt(((JTextArea) temps.getComponent(1)).getText());
 
-			Notion not = Notion.trouverNotionParNom((String) notionList.getSelectedItem(), Ressource.trouverRessourceParNom((String) ressourcesList.getSelectedItem()));
+			Notion not = Notion.trouverNotionParNom((String) notionList.getSelectedItem(), Metier.trouverRessourceParNom((String) ressourcesList.getSelectedItem()));
 
 			int difficulte = 0;
 			if (tresfacile.getBackground() == Color.GREEN) { difficulte = 1; }
@@ -281,7 +282,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 		this.nomRessource = String.valueOf(this.ressourcesList.getSelectedItem());
 
-		for (String nomNotion : Ressource.trouverRessourceParNom(this.nomRessource).getNomsNotions())
+		for (String nomNotion : Metier.trouverRessourceParNom(this.nomRessource).getNomsNotions())
 			this.notionList.addItem(nomNotion);
 	}
 

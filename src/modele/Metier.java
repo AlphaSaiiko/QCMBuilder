@@ -66,4 +66,32 @@ public class Metier
     {
         Metier.listRessource = listRessource;
     }
+
+    
+
+    public static String[] getNomsRessources()
+    {
+        if (Metier.listRessource.isEmpty())
+        {
+            return null;
+        }
+        String[] nomsRessources = new String[Metier.listRessource.size()];
+        for (int i = 0; i < Metier.listRessource.size(); i++)
+        {
+            nomsRessources[i] = Metier.listRessource.get(i).getNom();
+        }
+        return nomsRessources;
+    }
+
+    public static Ressource trouverRessourceParNom(String nom)
+    {
+        for (Ressource ressource : Metier.listRessource)
+        {
+            if (ressource.getNom().equalsIgnoreCase(nom))
+            {
+                return ressource;
+            }
+        }
+        return null;
+    }
 }

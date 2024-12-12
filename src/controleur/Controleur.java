@@ -5,28 +5,28 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 import modele.*;
-import modele.Evaluation;
 import vue.*;
+import vue.Evaluation;
 
-public class Controleur
+public class Controleur 
 {
     /*
      * +------------+
-     * | PARAMETRES |
+     * | PARAMÈTRES |
      * +------------+
      */
-    private List<Ressource> listRessource = new ArrayList<>();
-    private static Accueil acc;
-    private static List<Evaluation> listEval;
+    private static List<Ressource> listeRessources = new ArrayList<>();
+    private static Accueil accueil;
+    private static List<Evaluation> listeEvaluations;
 
     /*
      * +--------------+
      * | CONSTRUCTEUR |
      * +--------------+
      */
-    public Controleur()
+    public Controleur() 
     {
-        Controleur.listEval = new ArrayList<>();
+        Controleur.listeEvaluations = new ArrayList<>();
     }
 
     /*
@@ -34,27 +34,27 @@ public class Controleur
      * | CHARGER RESSOURCES ET NOTIONS |
      * +-------------------------------+
      */
-    public static void chargerRessourcesEtNotion()
+    public static void chargerRessourcesEtNotions() 
     {
-        String resourcesPath = "lib/ressources";
-        try (Stream<Path> paths = Files.walk(Paths.get(resourcesPath)))
+        String cheminRessources = "lib/ressources";
+        try (Stream<Path> chemins = Files.walk(Paths.get(cheminRessources))) 
         {
-            paths.filter(Files::isDirectory).forEach(path ->
+            chemins.filter(Files::isDirectory).forEach(chemin -> 
             {
-                File dir = path.toFile();
-                File parent = dir.getParentFile();
+                File dossier = chemin.toFile();
+                File parent = dossier.getParentFile();
 
                 // Si le répertoire actuel est une ressource
-                if (parent != null && parent.getName().equals("ressources"))
+                if (parent != null && parent.getName().equals("ressources")) 
                 {
-                    System.out.println("Ressource trouvée : " + dir.getName());
-                    Ressource.creerRessource(dir.getName());
-                }
+                    System.out.println("Ressource trouvée : " + dossier.getName());
+                    Ressource.creerRessource(dossier.getName());
+                } 
                 // Si le répertoire parent est une ressource
-                else if (parent != null && parent.getParentFile() != null && parent.getParentFile().getName().equals("ressources"))
+                else if (parent != null && parent.getParentFile() != null && parent.getParentFile().getName().equals("ressources")) 
                 {
                     Ressource ressource = Ressource.creerRessource(parent.getName());
-                    if (ressource == null)
+                    if (ressource == null) 
                     {
                         System.out.println("Ressource non trouvée pour la notion, création d'une nouvelle ressource : " + parent.getName());
                         Ressource.creerRessource(parent.getName());
@@ -62,17 +62,17 @@ public class Controleur
                     }
 
                     // Création de la notion
-                    Notion notion = Notion.creerNotion(dir.getName(), ressource);
+                    Notion notion = Notion.creerNotion(dossier.getName(), ressource);
                     System.out.println("Notion créée : " + notion.getNom() + " pour la ressource : " + ressource.getNom());
 
-                    Controleur.chargerQuestion(notion, dir);
+                    Controleur.chargerQuestions(notion, dossier);
 
                     // Ajout de la notion à la ressource
                     System.out.println("Notion ajoutée à la ressource : " + ressource.getNom());
                 }
             });
-        }
-        catch (IOException e)
+        } 
+        catch (IOException e) 
         {
             System.err.println("Erreur lors du chargement des ressources et des notions : " + e.getMessage());
         }
@@ -83,23 +83,24 @@ public class Controleur
      * | CHARGER QUESTIONS  |
      * +--------------------+
      */
-    public static void chargerQuestion(Notion notion, File dir)
+    public static void chargerQuestions(Notion notion, File dossier) 
     {
-        int cpt = 0;
+        int compteur = 0;
         // Boucle pour chaque question
-        for (File dossier : dir.listFiles())
+        for (File sousDossier : dossier.listFiles()) 
         {
             File fichierRTF;
-            if (dossier.listFiles() != null)
+            if (sousDossier.listFiles() != null) 
             {
-                fichierRTF = new File(dossier, dossier.getName() + ".rtf");
-            }
-            else return;
+                fichierRTF = new File(sousDossier, sousDossier.getName() + ".rtf");
+            } 
+            else 
+                return;
 
-            try
+            try 
             {
-                Scanner sc = new Scanner(new FileInputStream(fichierRTF));
-                String ligneQuestion = sc.nextLine();
+                Scanner scanner = new Scanner(new FileInputStream(fichierRTF));
+                String ligneQuestion = scanner.nextLine();
                 Object[] ligne = ligneQuestion.split("\t");
 
                 String type = String.valueOf(ligne[0]);
@@ -108,53 +109,53 @@ public class Controleur
                 int temps = Integer.valueOf(String.valueOf(ligne[3]));
                 int difficulte = Integer.valueOf(String.valueOf(ligne[4]));
 
-                Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
+                Question question = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
 
-                notion.ajouterQuestion(tmp);
-                sc.close();
-            }
-            catch (FileNotFoundException e)
+                notion.ajouterQuestion(question);
+                scanner.close();
+            } 
+            catch (FileNotFoundException e) 
             {
                 e.printStackTrace();
             }
-            cpt++;
+            compteur++;
         }
     }
 
     /*
      * +-------------------+
-     * | METHODES D'ACTION |
+     * | MÉTHODES D'ACTION |
      * +-------------------+
      */
-    public static void creerEvaluation()
+    public static void creerEvaluation() 
     {
         new CreerEvaluation();
     }
 
-    public static void creerQuestion()
+    public static void creerQuestion() 
     {
         new CreerQuestion();
     }
 
-    public static void ouvrirParametres()
+    public static void ouvrirParametres() 
     {
         new Parametre();
     }
 
-    public static void ouvrirAccueil()
+    public static void ouvrirAccueil() 
     {
         new Accueil();
     }
 
-    public static void creerNotion(String titreNotion, Ressource ressource)
+    public static void creerNotion(String titreNotion, Ressource ressource) 
     {
         Notion.creerNotion(titreNotion, ressource);
     }
 
-    public static void creerQuestion(int nbPoints, int tempsReponse, Notion notion, int difficulte, String type)
+    public static void creerQuestion(int nbPoints, int tempsReponse, Notion notion, int difficulte, String type) 
     {
         Question question = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, type);
-        switch (type)
+        switch (type) 
         {
             case "QCMRU":
                 new QuestionReponseUnique(question);
@@ -171,99 +172,92 @@ public class Controleur
         }
     }
 
-    public static void creerRessource(String titreRessource)
+    public static void creerRessource(String titreRessource) 
     {
         Ressource.creerRessource(titreRessource);
     }
 
-    public static void supprimerRessource(String ressourceName)
+    public static void supprimerRessource(String nomRessource) 
     {
-        Ressource ressource = Ressource.trouverRessourceParNom(ressourceName);
-        if (ressource != null)
+        Ressource ressource = Metier.trouverRessourceParNom(nomRessource);
+        if (ressource != null) 
         {
-            File ressourceDir = new File("./lib/ressources/" + ressource.getNom());
-            deleteDirectory(ressourceDir);
-            Ressource.getListRessource().remove(ressource);
+            File dossierRessource = new File("./lib/ressources/" + ressource.getNom());
+            supprimerDossier(dossierRessource);
+            Metier.getListRessource().remove(ressource);
         }
     }
 
-    public static void modifierRessource(String ressourceName)
+    public static void modifierRessource(String nomRessource) 
     {
-        Ressource ressource = Ressource.trouverRessourceParNom(ressourceName);
-        if (ressource != null)
+        Ressource ressource = Metier.trouverRessourceParNom(nomRessource);
+        if (ressource != null) 
         {
             new ModifierRessource(ressource).setVisible(true);
         }
     }
 
-    public static void supprimerNotion(String ressourceName, String notionName)
+    public static void supprimerNotion(String nomRessource, String nomNotion) 
     {
-        Ressource ressource = Ressource.trouverRessourceParNom(ressourceName);
-        if (ressource != null)
+        Ressource ressource = Metier.trouverRessourceParNom(nomRessource);
+        if (ressource != null) 
         {
-            Notion notion = ressource.getNotion(notionName);
-            if (notion != null)
+            Notion notion = ressource.getNotion(nomNotion);
+            if (notion != null) 
             {
-                File notionDir = new File("./lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom());
-                deleteDirectory(notionDir);
+                File dossierNotion = new File("./lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom());
+                supprimerDossier(dossierNotion);
                 ressource.getEnsNotions().remove(notion);
             }
         }
     }
 
-    public static void modifierNotion(String ressourceName, String notionName)
+    public static void modifierNotion(String nomRessource, String nomNotion) 
     {
-        Ressource ressource = Ressource.trouverRessourceParNom(ressourceName);
-        if (ressource != null)
+        Ressource ressource = Metier.trouverRessourceParNom(nomRessource);
+        if (ressource != null) 
         {
-            Notion notion = ressource.getNotion(notionName);
-            if (notion != null)
+            Notion notion = ressource.getNotion(nomNotion);
+            if (notion != null) 
             {
                 new ModifierNotion(ressource, notion).setVisible(true);
             }
         }
     }
 
-    public static List<Ressource> getListRessource()
+    public static List<Ressource> getListeRessources() 
     {
-        return Ressource.getListRessource();
+        return Metier.getListRessource();
     }
 
-    public static Ressource trouverRessourceParNom(String nom)
+    public static Ressource trouverRessourceParNom(String nomRessource)
     {
-        return Ressource.trouverRessourceParNom(nom);
-    }
-
-    /*
-     * +-------+
-     * | MAIN  |
-     * +-------+
-     */
-    public static void main(String[] args)
-    {
-        Controleur controleur = new Controleur();
-        Controleur.acc = new Accueil();
-        controleur.chargerRessourcesEtNotion();
-    }
-
-    // Méthode pour supprimer un répertoire et son contenu
-    private static void deleteDirectory(File directory)
-    {
-        File[] files = directory.listFiles();
-        if (files != null) // Vérifier si le répertoire n'est pas vide
+        for (Ressource ressource : Metier.getListRessource())
         {
-            for (File file : files)
+            if (ressource.getNom().equalsIgnoreCase(nomRessource))
             {
-                if (file.isDirectory())
-                {
-                    deleteDirectory(file);
-                }
-                else
-                {
-                    file.delete();
-                }
+                return ressource;
             }
         }
-        directory.delete();
+        return null;
+    }
+
+    private static void supprimerDossier(File dossier) 
+    {
+        if (dossier.isDirectory()) 
+        {
+            for (File fichier : dossier.listFiles()) 
+            {
+                supprimerDossier(fichier);
+            }
+        }
+        dossier.delete();
+    }
+
+    public static void main(String[] args) 
+    {
+        new Controleur();
+        Controleur.chargerRessourcesEtNotions();
+        Controleur.ouvrirAccueil();
     }
 }
