@@ -58,7 +58,6 @@ public class QuestionLiaison extends JFrame
 		addButton = new JButton("Ajouter");
 		addButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				addTrashPanels();
@@ -70,7 +69,6 @@ public class QuestionLiaison extends JFrame
 		explicationButton = new JButton("Explication");
 		explicationButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				JFrame explicationFrame = new JFrame("Ajouter Explication");
@@ -81,7 +79,7 @@ public class QuestionLiaison extends JFrame
 				JButton saveExplicationButton = new JButton("Enregistrer Explication");
 				saveExplicationButton.addActionListener(new ActionListener()
 				{
-					@Override
+	
 					public void actionPerformed(ActionEvent e)
 					{
 						String explication = explicationArea.getText();
@@ -99,7 +97,6 @@ public class QuestionLiaison extends JFrame
 		saveButton = new JButton("Enregistrer");
 		saveButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				try (FileWriter writer = new FileWriter("questions_et_reponses.txt", true))
@@ -134,7 +131,6 @@ public class QuestionLiaison extends JFrame
 		lierButton = new JButton("Lier Q&R");
 		lierButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				String question = (String) questionComboBox.getSelectedItem();
@@ -206,7 +202,6 @@ public class QuestionLiaison extends JFrame
 		addButton.setFont(new Font("Arial", Font.PLAIN, 12));
 		addButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				String question = newTextField1.getText();
@@ -229,7 +224,6 @@ public class QuestionLiaison extends JFrame
 		// Ajouter un ActionListener au bouton de poubelle
 		newTrashButton.addActionListener(new ActionListener()
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				questionPanel.remove(rowPanel);

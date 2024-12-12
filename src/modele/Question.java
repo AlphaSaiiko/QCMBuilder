@@ -65,7 +65,7 @@ public class Question
         return type;
     }
 
-    public String getenonce()
+    public String getEnonce()
     {
         return enonce;
     }
@@ -121,7 +121,7 @@ public class Question
         this.modifierQuestion();
     }
 
-    public void setenonce(String enonce)
+    public void setEnonce(String enonce)
     {
         this.enonce = enonce;
         this.modifierQuestion();

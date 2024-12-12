@@ -224,7 +224,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 				else if ("Question à association d’éléments".equals(selectedType))
 				{
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAE");
-					new QuestionLiaison(tmp);
+					new QuestionLiaison();
 					dispose();
 				}
 				else if ("Question avec élimination de propositions de réponses".equals(selectedType))
