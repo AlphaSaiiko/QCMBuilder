@@ -12,12 +12,13 @@ import modele.Ressource;
 
 public class Parametre extends JFrame
 {
-    private JList<String> ressourceList;
-    private JList<String> notionList;
-    private DefaultListModel<String> ressourceListModel;
-    private DefaultListModel<String> notionListModel;
+    private JList<String> listeRessources;
+    private JList<String> listeNotions;
+    private DefaultListModel<String> modeleListeRessources;
+    private DefaultListModel<String> modeleListeNotions;
     private CreerRessource creerRessource;
     private CreerNotion creerNotion;
+    private JButton boutonAjouterNotion;
 
     /*
      * +--------------+
@@ -28,22 +29,22 @@ public class Parametre extends JFrame
     {
         setTitle("Paramètres");
 
-        JPanel panelPrincipal = new JPanel();
-        panelPrincipal.setLayout(new BorderLayout());
+        JPanel panneauPrincipal = new JPanel();
+        panneauPrincipal.setLayout(new BorderLayout());
 
-        // Création d'un panel gérant la création de question
-        JPanel panelCreation = new JPanel();
-        panelCreation.setLayout(new BorderLayout());
+        // Création d'un panneau gérant la création de ressource et notion
+        JPanel panneauCreation = new JPanel();
+        panneauCreation.setLayout(new BorderLayout());
 
-        // Panel pour les boutons de ressources
-        JPanel panelRessources = new JPanel();
-        panelRessources.setLayout(new FlowLayout());
+        // Panneau pour les boutons de ressources
+        JPanel panneauRessources = new JPanel();
+        panneauRessources.setLayout(new FlowLayout());
 
         // Création des boutons pour les ressources
-        JButton ajtRessource = new JButton("Ajouter une ressource");
-        ajtRessource.setBackground(Color.GREEN);
-        ajtRessource.setPreferredSize(new Dimension(180, 30));
-        ajtRessource.addActionListener(e -> {
+        JButton boutonAjouterRessource = new JButton("Ajouter une ressource");
+        boutonAjouterRessource.setBackground(Color.GREEN);
+        boutonAjouterRessource.setPreferredSize(new Dimension(180, 30));
+        boutonAjouterRessource.addActionListener(e -> {
             if (this.creerRessource != null)
             {
                 this.creerRessource.dispose();
@@ -56,47 +57,48 @@ public class Parametre extends JFrame
             {
                 public void windowClosed(WindowEvent e)
                 {
-                    loadRessources();
+                    chargerRessources();
                 }
             });
         });
 
-        JButton supprRessource = new JButton(resizeIcon("./lib/icones/delete.png", 20, 20));
-        supprRessource.setPreferredSize(new Dimension(30, 30));
-        supprRessource.addActionListener(e -> {
-            String selectedRessource = ressourceList.getSelectedValue();
-            if (selectedRessource != null)
+        JButton boutonSupprimerRessource = new JButton(redimensionnerIcone("./lib/icones/delete.png", 20, 20));
+        boutonSupprimerRessource.setPreferredSize(new Dimension(30, 30));
+        boutonSupprimerRessource.addActionListener(e -> {
+            String ressourceSelectionnee = listeRessources.getSelectedValue();
+            if (ressourceSelectionnee != null)
             {
-                Controleur.supprimerRessource(selectedRessource);
-                loadRessources();
+                Controleur.supprimerRessource(ressourceSelectionnee);
+                chargerRessources();
             }
         });
 
-        JButton modifRessource = new JButton(resizeIcon("./lib/icones/edit.png", 20, 20));
-        modifRessource.setPreferredSize(new Dimension(30, 30));
-        modifRessource.addActionListener(e -> {
-            String selectedRessource = ressourceList.getSelectedValue();
-            if (selectedRessource != null)
+        JButton boutonModifierRessource = new JButton(redimensionnerIcone("./lib/icones/edit.png", 20, 20));
+        boutonModifierRessource.setPreferredSize(new Dimension(30, 30));
+        boutonModifierRessource.addActionListener(e -> {
+            String ressourceSelectionnee = listeRessources.getSelectedValue();
+            if (ressourceSelectionnee != null)
             {
-                Controleur.modifierRessource(selectedRessource);
-                loadRessources();
+                Controleur.modifierRessource(ressourceSelectionnee);
+                chargerRessources();
             }
         });
 
-        // Ajout des boutons de ressources au panelRessources
-        panelRessources.add(ajtRessource);
-        panelRessources.add(supprRessource);
-        panelRessources.add(modifRessource);
+        // Ajout des boutons de ressources au panneauRessources
+        panneauRessources.add(boutonAjouterRessource);
+        panneauRessources.add(boutonSupprimerRessource);
+        panneauRessources.add(boutonModifierRessource);
 
-        // Panel pour les boutons de notions
-        JPanel panelNotions = new JPanel();
-        panelNotions.setLayout(new FlowLayout());
+        // Panneau pour les boutons de notions
+        JPanel panneauNotions = new JPanel();
+        panneauNotions.setLayout(new FlowLayout());
 
         // Création des boutons pour les notions
-        JButton ajtNotion = new JButton("Ajouter une notion");
-        ajtNotion.setBackground(Color.GREEN);
-        ajtNotion.setPreferredSize(new Dimension(150, 30));
-        ajtNotion.addActionListener(e -> {
+        boutonAjouterNotion = new JButton("Ajouter une notion");
+        boutonAjouterNotion.setBackground(Color.GREEN);
+        boutonAjouterNotion.setPreferredSize(new Dimension(150, 30));
+        boutonAjouterNotion.setEnabled(false); // Désactivé par défaut
+        boutonAjouterNotion.addActionListener(e -> {
             if (this.creerNotion != null)
             {
                 this.creerNotion.dispose();
@@ -109,77 +111,78 @@ public class Parametre extends JFrame
             {
                 public void windowClosed(WindowEvent e)
                 {
-                    updateNotionList(ressourceList.getSelectedValue());
+                    mettreAJourListeNotions(listeRessources.getSelectedValue());
                 }
             });
         });
 
-        JButton supprNotion = new JButton(resizeIcon("./lib/icones/delete.png", 20, 20));
-        supprNotion.setPreferredSize(new Dimension(30, 30));
-        supprNotion.addActionListener(e -> {
-            String selectedRessource = ressourceList.getSelectedValue();
-            String selectedNotion = notionList.getSelectedValue();
-            if (selectedRessource != null && selectedNotion != null)
+        JButton boutonSupprimerNotion = new JButton(redimensionnerIcone("./lib/icones/delete.png", 20, 20));
+        boutonSupprimerNotion.setPreferredSize(new Dimension(30, 30));
+        boutonSupprimerNotion.addActionListener(e -> {
+            String ressourceSelectionnee = listeRessources.getSelectedValue();
+            String notionSelectionnee = listeNotions.getSelectedValue();
+            if (ressourceSelectionnee != null && notionSelectionnee != null)
             {
-                Controleur.supprimerNotion(selectedRessource, selectedNotion);
-                updateNotionList(selectedRessource);
+                Controleur.supprimerNotion(ressourceSelectionnee, notionSelectionnee);
+                mettreAJourListeNotions(ressourceSelectionnee);
             }
         });
 
-        JButton modifNotion = new JButton(resizeIcon("./lib/icones/edit.png", 20, 20));
-        modifNotion.setPreferredSize(new Dimension(30, 30));
-        modifNotion.addActionListener(e -> {
-            String selectedRessource = ressourceList.getSelectedValue();
-            String selectedNotion = notionList.getSelectedValue();
-            if (selectedRessource != null && selectedNotion != null)
+        JButton boutonModifierNotion = new JButton(redimensionnerIcone("./lib/icones/edit.png", 20, 20));
+        boutonModifierNotion.setPreferredSize(new Dimension(30, 30));
+        boutonModifierNotion.addActionListener(e -> {
+            String ressourceSelectionnee = listeRessources.getSelectedValue();
+            String notionSelectionnee = listeNotions.getSelectedValue();
+            if (ressourceSelectionnee != null && notionSelectionnee != null)
             {
-                Controleur.modifierNotion(selectedRessource, selectedNotion);
-                updateNotionList(selectedRessource);
+                Controleur.modifierNotion(ressourceSelectionnee, notionSelectionnee);
+                mettreAJourListeNotions(ressourceSelectionnee);
             }
         });
 
-        // Ajout des boutons de notions au panelNotions
-        panelNotions.add(ajtNotion);
-        panelNotions.add(supprNotion);
-        panelNotions.add(modifNotion);
+        // Ajout des boutons de notions au panneauNotions
+        panneauNotions.add(boutonAjouterNotion);
+        panneauNotions.add(boutonSupprimerNotion);
+        panneauNotions.add(boutonModifierNotion);
 
-        // Ajout des deux panels au panelCreation
-        panelCreation.add(panelRessources, BorderLayout.WEST);
-        panelCreation.add(panelNotions, BorderLayout.EAST);
+        // Ajout des deux panneaux au panneauCreation
+        panneauCreation.add(panneauRessources, BorderLayout.WEST);
+        panneauCreation.add(panneauNotions, BorderLayout.EAST);
 
         // Liste des ressources
-        ressourceListModel = new DefaultListModel<>();
-        ressourceList = new JList<>(ressourceListModel);
-        ressourceList.addListSelectionListener(new ListSelectionListener()
+        modeleListeRessources = new DefaultListModel<>();
+        listeRessources = new JList<>(modeleListeRessources);
+        listeRessources.addListSelectionListener(new ListSelectionListener()
         {
             public void valueChanged(ListSelectionEvent e)
             {
                 if (!e.getValueIsAdjusting())
                 {
-                    String selectedRessource = ressourceList.getSelectedValue();
-                    updateNotionList(selectedRessource);
+                    String ressourceSelectionnee = listeRessources.getSelectedValue();
+                    mettreAJourListeNotions(ressourceSelectionnee);
+                    boutonAjouterNotion.setEnabled(ressourceSelectionnee != null); // Activer le bouton si une ressource est sélectionnée
                 }
             }
         });
 
         // Liste des notions
-        notionListModel = new DefaultListModel<>();
-        notionList = new JList<>(notionListModel);
+        modeleListeNotions = new DefaultListModel<>();
+        listeNotions = new JList<>(modeleListeNotions);
 
         // Ajout des listes au panneau principal
-        JPanel listPanel = new JPanel(new GridLayout(1, 2));
-        listPanel.add(new JScrollPane(ressourceList));
-        listPanel.add(new JScrollPane(notionList));
+        JPanel panneauListes = new JPanel(new GridLayout(1, 2));
+        panneauListes.add(new JScrollPane(listeRessources));
+        panneauListes.add(new JScrollPane(listeNotions));
 
         // Bouton de retour
-        String imagePath = "./lib/icones/home.png";
-        File imageFile = new File(imagePath);
-        ImageIcon icon = new ImageIcon(imageFile.getAbsolutePath());
-        Image img = icon.getImage();
-        Image newImg = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        icon = new ImageIcon(newImg);
-        JButton retourButton = new JButton(icon);
-        retourButton.addActionListener(e -> {
+        String cheminImage = "./lib/icones/home.png";
+        File fichierImage = new File(cheminImage);
+        ImageIcon icone = new ImageIcon(fichierImage.getAbsolutePath());
+        Image img = icone.getImage();
+        Image imgRedimensionnee = img.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        icone = new ImageIcon(imgRedimensionnee);
+        JButton boutonRetour = new JButton(icone);
+        boutonRetour.addActionListener(e -> {
             if (this.creerRessource != null)
             {
                 this.creerRessource.dispose();
@@ -191,60 +194,61 @@ public class Parametre extends JFrame
             Controleur.ouvrirAccueil();
             dispose();
         });
-        JPanel panelRetour = new JPanel();
-        panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panelRetour.add(retourButton);
+        JPanel panneauRetour = new JPanel();
+        panneauRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panneauRetour.add(boutonRetour);
 
-        // Ajout des panels au panel principal
-        panelPrincipal.add(panelRetour, BorderLayout.NORTH);
-        panelPrincipal.add(listPanel, BorderLayout.CENTER);
-        panelPrincipal.add(panelCreation, BorderLayout.SOUTH);
+        // Ajout des panneaux au panneau principal
+        panneauPrincipal.add(panneauRetour, BorderLayout.NORTH);
+        panneauPrincipal.add(panneauListes, BorderLayout.CENTER);
+        panneauPrincipal.add(panneauCreation, BorderLayout.SOUTH);
 
-        this.add(panelPrincipal);
+        this.add(panneauPrincipal);
         this.setSize(700, 400); // Augmenter la taille pour accueillir les listes
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
         // Remplir la liste des ressources au démarrage
-        loadRessources();
+        chargerRessources();
     }
 
     // Méthode utilitaire pour redimensionner les icônes
-    private ImageIcon resizeIcon(String path, int width, int height)
+    private ImageIcon redimensionnerIcone(String chemin, int largeur, int hauteur)
     {
-        ImageIcon icon = new ImageIcon(path);
-        Image img = icon.getImage();
-        Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return new ImageIcon(resizedImg);
+        ImageIcon icone = new ImageIcon(chemin);
+        Image img = icone.getImage();
+        Image imgRedimensionnee = img.getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
+        return new ImageIcon(imgRedimensionnee);
     }
 
     // Méthode pour charger les ressources dans la JList
-    private void loadRessources()
+    private void chargerRessources()
     {
-        ressourceListModel.clear();
-        for (Ressource ressource : Controleur.getListRessource())
+        modeleListeRessources.clear();
+        for (Ressource ressource : Controleur.getListeRessources())
         {
-            ressourceListModel.addElement(ressource.getNom());
+            modeleListeRessources.addElement(ressource.getNom());
         }
     }
 
     // Méthode pour mettre à jour la liste des notions en fonction de la ressource sélectionnée
-    private void updateNotionList(String ressourceName)
-    {
-        notionListModel.clear();
-        Ressource ressource = Controleur.trouverRessourceParNom(ressourceName);
-        if (ressource != null)
-        {
-            for (String notion : ressource.getNomsNotions())
-            {
-                notionListModel.addElement(notion);
-            }
-        }
-    }
-
-    public static void main(String[] args)
-    {
-        new Parametre();
-    }
+	private void mettreAJourListeNotions(String nomRessource)
+	{
+		modeleListeNotions.clear();
+		Ressource ressource = Controleur.trouverRessourceParNom(nomRessource);
+		if (ressource != null)
+		{
+			for (String notion : ressource.getNomsNotions())
+			{
+				modeleListeNotions.addElement(notion);
+			}
+		}
+	}
+	
+	public static void main(String[] args)
+	{
+		new Parametre();
+	}
 }
+	
