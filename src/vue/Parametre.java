@@ -1,13 +1,12 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import controleur.Controleur;
 import modele.Notion;
 import modele.Ressource;
 
@@ -130,7 +129,8 @@ public class Parametre extends JFrame
 
 		// Création des boutons pour les notions
 		JButton ajtNotion = new JButton("Ajouter une notion");
-		ajtNotion.setBackground(Color.GREEN);
+		ajtNotion.setBackground(Color.GRAY);  // Initialiser en gris
+		ajtNotion.setEnabled(false);  // Initialiser comme désactivé
 		ajtNotion.setPreferredSize(new Dimension(150, 30));
 		ajtNotion.addActionListener(e ->
 		{
@@ -153,6 +153,7 @@ public class Parametre extends JFrame
 				}
 			});
 		});
+
 
 		JButton supprNotion = new JButton(resizeIcon("./lib/icones/delete.png", 20, 20));
 		supprNotion.setPreferredSize(new Dimension(30, 30));
@@ -236,9 +237,23 @@ public class Parametre extends JFrame
 				{
 					String selectedRessource = ressourceList.getSelectedValue();
 					majListeNotion(selectedRessource);
+
+					// Activer et changer la couleur du bouton "Ajouter une notion" lorsque 
+					// une ressource est sélectionnée
+					if (selectedRessource != null)
+					{
+						ajtNotion.setBackground(Color.GREEN);
+						ajtNotion.setEnabled(true);
+					}
+					else
+					{
+						ajtNotion.setBackground(Color.GRAY);
+						ajtNotion.setEnabled(false);
+					}
 				}
 			}
 		});
+
 
 		// Liste des notions
 		notionListModel = new DefaultListModel<>();
