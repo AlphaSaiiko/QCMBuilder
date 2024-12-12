@@ -1,10 +1,10 @@
 package vue;
 
-import controleur.Controleur;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
-import modele.Metier;
+import controleur.Controleur;
+import modele.Ressource;
 
 public class CreerEvaluation extends JFrame
 {
@@ -49,7 +49,7 @@ public class CreerEvaluation extends JFrame
         lineGbc.gridx = 1;
         lineGbc.gridy = 0;
         lineGbc.anchor = GridBagConstraints.CENTER;
-        JComboBox<String> ressources = new JComboBox<>(Metier.getNomsRessources());
+        JComboBox<String> ressources = new JComboBox<>(Ressource.getNomsRessources());
         linePanel.add(ressources, lineGbc);
 
         // Ajout du chronomètre

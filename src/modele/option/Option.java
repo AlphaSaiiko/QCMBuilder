@@ -1,6 +1,5 @@
 package modele.option;
 
-import controleur.ControleurFichier;
 import modele.*;
 
 public class Option implements IOption
@@ -76,12 +75,12 @@ public class Option implements IOption
 
 	 public void modifierReponse()
 	 {
-		ControleurFichier tmp = new ControleurFichier("lib/ressources/"+question.getNotion().getRessource().getNom()+"/"+question.getNotion().getNom()+"/question"+question.getNumQuestion());
+		Fichier tmp = new Fichier("lib/ressources/"+question.getNotion().getRessource().getNom()+"/"+question.getNotion().getNom()+"/question"+question.getNumQuestion());
 		tmp.modifierReponse("/question"+question.getNumQuestion(), this);
 	 }
 
 	 public void ecrireReponse(){
-		ControleurFichier tmp = new ControleurFichier("lib/ressources/"+question.getNotion().getRessource().getNom()+"/"+question.getNotion().getNom()+"/question"+question.getNumQuestion());
+		Fichier tmp = new Fichier("lib/ressources/"+question.getNotion().getRessource().getNom()+"/"+question.getNotion().getNom()+"/question"+question.getNumQuestion());
 		tmp.ecrireReponse("/question"+question.getNumQuestion(), this);
 	 }
 }

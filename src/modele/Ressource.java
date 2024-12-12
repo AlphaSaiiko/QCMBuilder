@@ -23,7 +23,7 @@ public class Ressource
      */
     public static Ressource creerRessource(String nom)
     {
-        Ressource ressource = Metier.trouverRessourceParNom(nom);
+        Ressource ressource = Ressource.trouverRessourceParNom(nom);
         if (ressource == null)
         {
             ressource = new Ressource(nom);
@@ -76,7 +76,7 @@ public class Ressource
         return null;
     }
 
-    public static List<Ressource> getListRessource()
+	public static List<Ressource> getListRessource()
     {
         return Ressource.listRessource;
     }
@@ -122,5 +122,31 @@ public class Ressource
     public void supprimerNotion(Notion notion)
     {
         this.ensNotions.removeIf(not -> notion.equals(not));
+    }
+
+    public static String[] getNomsRessources()
+    {
+        if (Ressource.listRessource.isEmpty())
+        {
+            return null;
+        }
+        String[] nomsRessources = new String[Ressource.listRessource.size()];
+        for (int i = 0; i < Ressource.listRessource.size(); i++)
+        {
+            nomsRessources[i] = Ressource.listRessource.get(i).getNom();
+        }
+        return nomsRessources;
+    }
+
+    public static Ressource trouverRessourceParNom(String nom)
+    {
+        for (Ressource ressource : Ressource.listRessource)
+        {
+            if (ressource.getNom().equalsIgnoreCase(nom))
+            {
+                return ressource;
+            }
+        }
+        return null;
     }
 }

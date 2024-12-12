@@ -1,9 +1,9 @@
 package vue;
 
-import controleur.Controleur;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import controleur.Controleur;
 
 public class Accueil extends JFrame
 {
@@ -39,7 +39,7 @@ public class Accueil extends JFrame
         gbc.gridy = GridBagConstraints.RELATIVE;
 
         // Création des boutons
-        JButton btnCreerQCM = new JButton("Générer une évaluation");
+        JButton btnCreerQCM = new JButton("Créer un QCM");
         JButton btnCreerQuestion = new JButton("Créer une question");
         JButton btnParametres = new JButton("Paramètres");
 
@@ -71,9 +71,9 @@ public class Accueil extends JFrame
         });
 
         // Ajout des boutons au panel des boutons
-        panelBoutons.add(btnParametres, gbc);
-        panelBoutons.add(btnCreerQuestion, gbc);
         panelBoutons.add(btnCreerQCM, gbc);
+        panelBoutons.add(btnCreerQuestion, gbc);
+        panelBoutons.add(btnParametres, gbc);
 
         // Ajout des panels secondaires au panel principal
         panelPrincipal.add(panelTitre, BorderLayout.NORTH);

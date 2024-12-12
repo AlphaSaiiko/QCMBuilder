@@ -1,9 +1,9 @@
 package vue;
 
-import controleur.Controleur;
 import java.awt.*;
 import javax.swing.*;
-import modele.Metier;
+import controleur.Controleur;
+import modele.Notion;
 import modele.Ressource;
 
 public class CreerNotion extends JFrame
@@ -22,7 +22,7 @@ public class CreerNotion extends JFrame
         gbc.insets = new Insets(5, 5, 5, 5); // Marges entre les composants
 
         // JComboBox pour choisir le type de ressource
-        String[] allRessources = Metier.getNomsRessources();
+        String[] allRessources = Ressource.getNomsRessources();
         if (allRessources == null)
         {
             allRessources = new String[0];
@@ -59,7 +59,7 @@ public class CreerNotion extends JFrame
         ajouter.addActionListener(e -> {
             String titreNotion = titre.getText();
             String nomRessource = (String) choixRessource.getSelectedItem();
-            Ressource ressource = Controleur.trouverRessourceParNom(nomRessource);
+            Ressource ressource = Ressource.trouverRessourceParNom(nomRessource);
             if (!titreNotion.trim().isEmpty())
             {
                 Controleur.creerNotion(titreNotion, ressource);
