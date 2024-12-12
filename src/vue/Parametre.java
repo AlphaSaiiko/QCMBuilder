@@ -63,7 +63,7 @@ public class Parametre extends JFrame
 			{
 				public void windowClosed(WindowEvent e)
 				{ // Actualiser la liste des ressources après la fermeture de la fenêtre
-					loadRessources();
+					chargerRessources();
 				}
 			});
 		});
@@ -82,12 +82,12 @@ public class Parametre extends JFrame
 					File ressourceDir = new File("./lib/ressources/" + ressource.getNom());
 					if (ressourceDir.exists()) 
 					{
-						deleteDirectory(ressourceDir);
+						supprimerDossier(ressourceDir);
 					}
 
 					// Supprimer la ressource de la liste
 					Controleur.getListRessource().remove(ressource);
-					loadRessources();
+					chargerRessources();
 				}
 			}
 		});
@@ -110,7 +110,7 @@ public class Parametre extends JFrame
 					{
 						public void windowClosed(WindowEvent e) 
 						{
-							loadRessources();
+							chargerRessources();
 						}
 					});
 				}
@@ -149,7 +149,7 @@ public class Parametre extends JFrame
 			{
 				public void windowClosed(WindowEvent e)
 				{ // Actualiser la liste des ressources après la fermeture de la fenêtre
-					loadRessources();
+					chargerRessources();
 				}
 			});
 		});
@@ -173,12 +173,12 @@ public class Parametre extends JFrame
 						File notionDir = new File("./lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom());
 						if (notionDir.exists()) 
 						{
-							deleteDirectory(notionDir);
+							supprimerDossier(notionDir);
 						}
 
 						// Supprimer la notion de la liste
 						ressource.getEnsNotions().remove(notion);
-						updateNotionList(selectedRessource);
+						majListeNotion(selectedRessource);
 					}
 				}
 			}
@@ -205,7 +205,7 @@ public class Parametre extends JFrame
 							{
 								public void windowClosed(WindowEvent e) 
 								{
-									updateNotionList(selectedRessource);
+									majListeNotion(selectedRessource);
 								}
 							});
 							break;
@@ -235,7 +235,7 @@ public class Parametre extends JFrame
 				if (!e.getValueIsAdjusting())
 				{
 					String selectedRessource = ressourceList.getSelectedValue();
-					updateNotionList(selectedRessource);
+					majListeNotion(selectedRessource);
 				}
 			}
 		});
@@ -287,7 +287,7 @@ public class Parametre extends JFrame
 		this.setVisible(true);
 
 		// Remplir la liste des ressources au démarrage
-		loadRessources();
+		chargerRessources();
 	}
 
 	// Méthode utilitaire pour redimensionner les icônes
@@ -300,13 +300,13 @@ public class Parametre extends JFrame
 	}
 
 	// Méthode pour supprimer un répertoire et son contenu
-	private void deleteDirectory(File directory) 
+	private void supprimerDossier(File directory) 
 	{
 		File[] files = directory.listFiles();
 		if (files != null) { // Vérifier si le répertoire n'est pas vide
 			for (File file : files) {
 				if (file.isDirectory()) {
-					deleteDirectory(file);
+					supprimerDossier(file);
 				} else {
 					file.delete();
 				}
@@ -316,7 +316,7 @@ public class Parametre extends JFrame
 	}
 
 	// Méthode pour charger les ressources dans la JList
-	private void loadRessources()
+	private void chargerRessources()
 	{
 		ressourceListModel.clear();
 		for (Ressource ressource : Controleur.getListRessource())
@@ -326,7 +326,7 @@ public class Parametre extends JFrame
 	}
 
 	// Méthode pour mettre à jour la liste des notions en fonction de la ressource sélectionnée
-	private void updateNotionList(String ressourceName)
+	private void majListeNotion(String ressourceName)
 	{
 		notionListModel.clear();
 		Ressource ressource = Controleur.trouverRessourceParNom(ressourceName);

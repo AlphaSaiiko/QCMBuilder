@@ -1,9 +1,9 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import controleur.Controleur;
 
 public class Accueil extends JFrame
 {
@@ -39,23 +39,23 @@ public class Accueil extends JFrame
         gbc.gridy = GridBagConstraints.RELATIVE;
 
         // Création des boutons
-        JButton btnCreerQCM = new JButton("Créer un QCM");
+        JButton btnGenererEval = new JButton("Générer une Evaluation");
         JButton btnCreerQuestion = new JButton("Créer une question");
         JButton btnParametres = new JButton("Paramètres");
 
         // Configuration police des boutons
-        btnCreerQCM.setFont(new Font("Arial", Font.PLAIN, 18));
+        btnGenererEval.setFont(new Font("Arial", Font.PLAIN, 18));
         btnCreerQuestion.setFont(new Font("Arial", Font.PLAIN, 18));
         btnParametres.setFont(new Font("Arial", Font.PLAIN, 18));
 
         // Configuration de la taille des boutons
         Dimension buttonSize = new Dimension(300, 50);
-        btnCreerQCM.setPreferredSize(buttonSize);
+        btnGenererEval.setPreferredSize(buttonSize);
         btnCreerQuestion.setPreferredSize(buttonSize);
         btnParametres.setPreferredSize(buttonSize);
 
         // Ajout des interactions des boutons
-        btnCreerQCM.addActionListener(e -> {
+        btnGenererEval.addActionListener(e -> {
             Controleur.creerEvaluation();
             this.dispose();
         });
@@ -71,9 +71,9 @@ public class Accueil extends JFrame
         });
 
         // Ajout des boutons au panel des boutons
-        panelBoutons.add(btnCreerQCM, gbc);
-        panelBoutons.add(btnCreerQuestion, gbc);
         panelBoutons.add(btnParametres, gbc);
+        panelBoutons.add(btnCreerQuestion, gbc);
+        panelBoutons.add(btnGenererEval, gbc);
 
         // Ajout des panels secondaires au panel principal
         panelPrincipal.add(panelTitre, BorderLayout.NORTH);
