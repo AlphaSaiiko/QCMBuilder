@@ -14,19 +14,16 @@ public class Question
 	private String type    ;
 	private String intitule;
 
-	private int nbPoints  ;
-	private int temps     ;
-	private int difficulte;
-	public int numQuestion;
+	private int nbPoints   ;
+	private int temps      ;
+	private int difficulte ;
+	public  int numQuestion;
 
-	private final  int id;
-	private static int nbQuestion = 0;
+	private Notion notion;
 
 	private List<String> complements; // Les pièces jointes ou petites images
 
 	private List<IOption> ensOptions;
-
-	private Notion notion;
 
 	
 	/*
@@ -34,17 +31,25 @@ public class Question
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public Question(int nbPoints, int temps, Notion notion, int difficulte, String type)
+
+	
+	public static Question creerQuestion(int nbPoints, int temps, Notion notion, int difficulte, String type)
+	{
+		Question question = new Question(nbPoints, temps, notion, difficulte, type);
+		System.out.println("Nouvelle question créée avec le type: " + type + " pour la notion: " + notion.getNom());
+		return question;
+	}
+	
+	private Question(int nbPoints, int temps, Notion notion, int difficulte, String type)
 	{
 		this.nbPoints    = nbPoints   ;
 		this.temps       = temps      ;
 		this.notion      = notion     ;
 		this.difficulte  = difficulte ;
 		this.type        = type       ;
-		
+
 		this.numQuestion = notion.getNbQuestion();
 
-		this.id = ++Question.nbQuestion;
 		this.intitule = null;
 
 		this.complements = new ArrayList<String>();
@@ -52,6 +57,7 @@ public class Question
 
 		this.creerFichierQuestion();
 
+		notion.ajouterQuestion(this);
 	}
 
 
@@ -69,8 +75,6 @@ public class Question
 	public int getDifficulte() { return difficulte; }
 
 	public Notion getNotion() { return notion; }
-
-	public int getId       () { return this.id;} 
 
 	public List<String> getComplements() { return complements; }
 
