@@ -355,9 +355,6 @@ public class Parametre extends JFrame
 		}
 	}
 
-	public static void main(String[] args)
-	{
-		new Parametre();
-	}
+
 }
 

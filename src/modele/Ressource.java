@@ -1,5 +1,6 @@
 package modele;
 
+import controleur.Controleur;
 import controleur.ControleurFichier;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,6 @@ public class Ressource
 	 */
 
 	
-	private static final List<Ressource> listRessource = new ArrayList<>();
 	private List<Notion> ensNotions = new ArrayList<>();
 	private String nom;
 	private ControleurFichier fichierControleur;
@@ -41,7 +41,7 @@ public class Ressource
 	private Ressource(String nom)
 	{
 		this.nom = nom;
-		Ressource.listRessource.add(this);
+		Controleur.ajouterRessource(this);
 		this.fichierControleur = new ControleurFichier("lib/ressources/");
 		this.creerFichierRessource();
 	}

@@ -108,4 +108,9 @@ public class Metier
 		}
 		return null;
 	}
+
+	public static void ajouterRessource(Ressource ressource)
+	{
+		Metier.listRessource.add(ressource);
+	}
 }

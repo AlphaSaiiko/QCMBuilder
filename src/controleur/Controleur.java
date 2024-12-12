@@ -5,7 +5,6 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 import modele.*;
-import modele.Evaluation;
 import vue.*;
 
 public class Controleur
@@ -175,6 +174,11 @@ public class Controleur
 	{
 		return Metier.getListRessource();
 	}
+
+    public static void ajouterRessource(Ressource ressource)
+    {
+        Metier.ajouterRessource(ressource);
+    }
 
 	/*
 	 * +-------+
