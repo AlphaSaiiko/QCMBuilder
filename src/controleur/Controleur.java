@@ -5,10 +5,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 import modele.*;
-import vue.Accueil;
-import vue.CreerEvaluation;
-import vue.CreerQuestion;
-import vue.Parametre;
+import vue.*;
 
 public class Controleur
 {
@@ -124,18 +121,6 @@ public class Controleur
     }
 
     /*
-     * +-------+
-     * | MAIN  |
-     * +-------+
-     */
-    public static void main(String[] args)
-    {
-        Controleur controleur = new Controleur();
-        Controleur.acc = new Accueil();
-        controleur.chargerRessourcesEtNotion();
-    }
-
-    /*
      * +-------------------+
      * | METHODES D'ACTION |
      * +-------------------+
@@ -153,5 +138,22 @@ public class Controleur
     public static void ouvrirParametres()
     {
         new Parametre();
+    }
+
+    public static void ouvrirAccueil()
+    {
+        new Accueil();
+    }
+
+    /*
+     * +-------+
+     * | MAIN  |
+     * +-------+
+     */
+    public static void main(String[] args)
+    {
+        Controleur controleur = new Controleur();
+        Controleur.acc = new Accueil();
+        controleur.chargerRessourcesEtNotion();
     }
 }
