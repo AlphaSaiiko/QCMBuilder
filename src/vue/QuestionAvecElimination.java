@@ -1,11 +1,11 @@
 package vue;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
-import javax.swing.*;
 
 public class QuestionAvecElimination extends JFrame
 {
@@ -66,6 +66,7 @@ public class QuestionAvecElimination extends JFrame
 		// Ajouter un ActionListener au bouton "Ajouter"
 		addButton.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Créer un nouveau panel trash
@@ -90,6 +91,7 @@ public class QuestionAvecElimination extends JFrame
 				// Ajouter un ActionListener au bouton de poubelle
 				newTrashButton.addActionListener(new ActionListener()
 				{
+					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						// Supprimer le panel parent lorsque l'icône de poubelle
@@ -114,6 +116,7 @@ public class QuestionAvecElimination extends JFrame
 				gbc.weightx = 0;
 
 				// Ajouter un panel pour contenir les deux JTextField pour les points
+
 				JPanel pointsPanel = new JPanel(new GridBagLayout());
 				GridBagConstraints pointsGbc = new GridBagConstraints();
 				pointsGbc.gridx = 0;
@@ -142,18 +145,23 @@ public class QuestionAvecElimination extends JFrame
 				gbc.gridx = 3;
 				newTrashPanel.add(newRadioButton, gbc);
 
+
+
 				// Ajouter le nouveau panel trash au conteneur principal
 				questionPanel.add(newTrashPanel, questionPanel.getComponentCount() - 1);
 
 				// Rafraîchir l'interface utilisateur
 				questionPanel.revalidate();
 				questionPanel.repaint();
-			}
-		});
+		}
+	});
+	
+
 
 		// Ajouter un ActionListener au bouton "Explication"
 		explicationButton.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Créer et afficher une nouvelle fenêtre pour écrire
@@ -175,6 +183,7 @@ public class QuestionAvecElimination extends JFrame
 		// Ajouter un ActionListener au bouton "Enregistrer"
 		saveButton.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				// Enregistrer la question dans un fichier
@@ -198,7 +207,6 @@ public class QuestionAvecElimination extends JFrame
 		// Afficher la fenêtre
 		setTitle("Question Réponse Unique");
 		setSize(800, 600);
-        setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
