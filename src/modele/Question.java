@@ -162,10 +162,10 @@ public class Question
      */
     public void creerFichierQuestion()
     {
-        ControleurFichier tmp = new ControleurFichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
-        tmp.ajouterFichier("question" + notion.getNbQuestion());
-        tmp.ajouterRtf("question" + notion.getNbQuestion() + "/question" + this.getNumQuestion());
-        tmp.ecrireQuestion("question" + notion.getNbQuestion() + "/question" + this.getNumQuestion(), this);
+        ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
+        fichierControleur.ajouterFichier("question" + notion.getNbQuestion());
+        fichierControleur.ajouterRtf("question" + notion.getNbQuestion() + "/question" + this.getNumQuestion());
+        fichierControleur.ecrireQuestion("question" + notion.getNbQuestion() + "/question" + this.getNumQuestion(), this);
     }
 
     public boolean ajouterOption(IOption opt)
@@ -182,7 +182,7 @@ public class Question
 
     public void modifierQuestion()
     {
-        ControleurFichier tmp = new ControleurFichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/");
-        tmp.modifierQuestion("question" + this.getNumQuestion(), this);
+        ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/");
+        fichierControleur.modifierQuestion("question" + this.getNumQuestion(), this);
     }
 }

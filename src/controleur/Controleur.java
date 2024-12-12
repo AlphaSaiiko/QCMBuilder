@@ -6,6 +6,9 @@ import java.util.*;
 import java.util.stream.Stream;
 import modele.*;
 import vue.Accueil;
+import vue.CreerEvaluation;
+import vue.CreerQuestion;
+import vue.Parametre;
 
 public class Controleur
 {
@@ -130,5 +133,25 @@ public class Controleur
         Controleur controleur = new Controleur();
         Controleur.acc = new Accueil();
         controleur.chargerRessourcesEtNotion();
+    }
+
+    /*
+     * +-------------------+
+     * | METHODES D'ACTION |
+     * +-------------------+
+     */
+    public static void creerEvaluation()
+    {
+        new CreerEvaluation();
+    }
+
+    public static void creerQuestion()
+    {
+        new CreerQuestion();
+    }
+
+    public static void ouvrirParametres()
+    {
+        new Parametre();
     }
 }
