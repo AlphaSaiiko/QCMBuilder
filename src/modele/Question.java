@@ -2,6 +2,7 @@ package modele;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.lang.model.util.ElementScanner14;
 
 import modele.option.IOption;
 
@@ -35,9 +36,18 @@ public class Question
 
 	public static Question creerQuestion(int nbPoints, int temps, Notion notion, int difficulte, String type)
 	{
-		return new Question(nbPoints, temps, notion, difficulte, type);
+		Question question = new Question(nbPoints, temps, notion, difficulte, type);
+		if (question != null)
+		{
+			System.out.println("La question a été créée avec succès.");
+		}
+		else
+		{
+			System.out.println("La question n'a pas pu être créée.");
+		}
+		return question;
 	}
-
+	
 	private Question(int nbPoints, int temps, Notion notion, int difficulte, String type )
 	{
 		this.nbPoints    = nbPoints   ;
