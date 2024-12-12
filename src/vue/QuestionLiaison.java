@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import modele.Question;
 
 public class QuestionLiaison extends JFrame
 {
@@ -17,7 +18,7 @@ public class QuestionLiaison extends JFrame
 	private JTextArea sujetTextArea;
 	private int ajoutCounter = 0; // Compteur pour le nombre d'ajouts
 
-	public QuestionLiaison()
+	public QuestionLiaison(Question question)
 	{
 		mainPanel = new JPanel(new BorderLayout());
 		questionPanel = new JPanel();
@@ -125,17 +126,5 @@ public class QuestionLiaison extends JFrame
 		setSize(600, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
-	}
-
-	public static void main(String[] args)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				new QuestionLiaison().setVisible(true);
-			}
-		});
 	}
 }

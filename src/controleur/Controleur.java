@@ -5,7 +5,6 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 import modele.*;
-import modele.Evaluation;
 import vue.*;
 
 public class Controleur
@@ -149,6 +148,31 @@ public class Controleur
     public static void creerNotion(String titreNotion, Ressource ressource)
     {
         Notion.creerNotion(titreNotion, ressource);
+    }
+
+    public static void creerQuestion(int nbPoints, int tempsReponse, Notion notion, int difficulte, String type)
+    {
+        Question question = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, type);
+        switch (type)
+        {
+            case "QCMRU":
+                new QuestionReponseUnique(question);
+                break;
+            case "QCMRM":
+                new QuestionReponseMultiple(question);
+                break;
+            case "QAE":
+                new QuestionLiaison(question);
+                break;
+            case "QAEPR":
+                new QuestionAvecElimination(question);
+                break;
+        }
+    }
+
+    public static void creerRessource(String titreRessource)
+    {
+        Ressource.creerRessource(titreRessource);
     }
 
     /*
