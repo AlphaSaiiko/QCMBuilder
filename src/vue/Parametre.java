@@ -177,7 +177,6 @@ public class Parametre extends JFrame
 							ModifierNotion modifierNotionFrame = new ModifierNotion(ressource, notion);
 							modifierNotionFrame.setVisible(true);
 							modifierNotionFrame.addWindowListener(new WindowAdapter() {
-								@Override
 								public void windowClosed(WindowEvent e) {
 									updateNotionList(selectedRessource);
 								}

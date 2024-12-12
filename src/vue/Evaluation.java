@@ -30,7 +30,6 @@ public class Evaluation extends JFrame
 
 		model = new DefaultTableModel(data, columnNames)
 		{
-			@Override
 			public Class<?> getColumnClass(int columnIndex)
 			{
 				// Définir le type des colonnes
@@ -41,7 +40,6 @@ public class Evaluation extends JFrame
 				return String.class;
 			}
 
-			@Override
 			public boolean isCellEditable(int row, int column)
 			{
 				// Rendre la colonne des cases à cocher éditable sauf pour la
@@ -65,7 +63,6 @@ public class Evaluation extends JFrame
 		// Ajouter un TableModelListener pour mettre à jour les sommes
 		model.addTableModelListener(new TableModelListener()
 		{
-			@Override
 			public void tableChanged(TableModelEvent e)
 			{
 				if (!isUpdating)
@@ -178,18 +175,14 @@ class ColorCircleRenderer extends JLabel implements TableCellRenderer
 	{
 		setOpaque(false);
 		setHorizontalAlignment(CENTER);
-	}
-
-	@Override
+	
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column)
 	{
 		this.column = column;
 		setText(value != null ? value.toString() : "");
 		return this;
-	}
-
-	@Override
+	
 	protected void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -233,9 +226,7 @@ class CheckBoxRenderer extends JCheckBox implements TableCellRenderer
 	public CheckBoxRenderer()
 	{
 		setHorizontalAlignment(JLabel.CENTER);
-	}
-
-	@Override
+	
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column)
 	{
