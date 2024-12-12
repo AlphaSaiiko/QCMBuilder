@@ -1,5 +1,6 @@
 package modele;
 
+import controleur.ControleurFichier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class Notion
         this.nom = nom;
         this.ressource = ressource;
         this.creerFichierNotion();
-        this.ensQuestions = new ArrayList<Question>();
+        this.ensQuestions = new ArrayList<>();
         ressource.ajouterNotion(this);
     }
 
@@ -95,8 +96,8 @@ public class Notion
      */
     public void creerFichierNotion()
     {
-        Fichier tmp = new Fichier("lib/ressources/" + ressource.getNom() + "/");
-        tmp.ajouterFichier(this.getNom());
+        ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + ressource.getNom() + "/");
+        fichierControleur.ajouterFichier(this.getNom());
     }
     
     public void ajouterQuestion(Question question)

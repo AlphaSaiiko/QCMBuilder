@@ -1,5 +1,6 @@
 package modele;
 
+import controleur.ControleurFichier;
 import java.util.ArrayList;
 import java.util.List;
 import modele.option.IOption;
@@ -161,7 +162,7 @@ public class Question
      */
     public void creerFichierQuestion()
     {
-        Fichier tmp = new Fichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
+        ControleurFichier tmp = new ControleurFichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
         tmp.ajouterFichier("question" + notion.getNbQuestion());
         tmp.ajouterRtf("question" + notion.getNbQuestion() + "/question" + this.getNumQuestion());
         tmp.ecrireQuestion("question" + notion.getNbQuestion() + "/question" + this.getNumQuestion(), this);
@@ -181,7 +182,7 @@ public class Question
 
     public void modifierQuestion()
     {
-        Fichier tmp = new Fichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/");
+        ControleurFichier tmp = new ControleurFichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/");
         tmp.modifierQuestion("question" + this.getNumQuestion(), this);
     }
 }
