@@ -59,7 +59,7 @@ public class CreerNotion extends JFrame
         ajouter.addActionListener(e -> {
             String titreNotion = titre.getText();
             String nomRessource = (String) choixRessource.getSelectedItem();
-            Ressource ressource = Metier.trouverRessourceParNom(nomRessource);
+            Ressource ressource = Controleur.trouverRessourceParNom(nomRessource);
             if (!titreNotion.trim().isEmpty())
             {
                 Controleur.creerNotion(titreNotion, ressource);
