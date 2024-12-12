@@ -1,5 +1,6 @@
 package modele;
 
+import controleur.ControleurFichier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class Ressource
     private static final List<Ressource> listRessource = new ArrayList<>();
     private List<Notion> ensNotions = new ArrayList<>();
     private String nom;
+    private ControleurFichier fichierControleur;
 
     /*
      * +--------------+
@@ -38,6 +40,7 @@ public class Ressource
     {
         this.nom = nom;
         Ressource.listRessource.add(this);
+        this.fichierControleur = new ControleurFichier("lib/ressources/");
         this.creerFichierRessource();
     }
 
@@ -73,7 +76,7 @@ public class Ressource
         return null;
     }
 
-    public static List<Ressource> getListRessource()
+	public static List<Ressource> getListRessource()
     {
         return Ressource.listRessource;
     }
@@ -105,8 +108,7 @@ public class Ressource
      */
     public void creerFichierRessource()
     {
-        Fichier tmp = new Fichier("lib/ressources/");
-        tmp.ajouterFichier(this.getNom());
+        this.fichierControleur.ajouterFichier(this.nom);
     }
 
     public void ajouterNotion(Notion notion)
