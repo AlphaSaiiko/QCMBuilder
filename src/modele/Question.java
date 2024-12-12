@@ -2,7 +2,6 @@ package modele;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import modele.option.IOption;
 
 public class Question
@@ -35,17 +34,18 @@ public class Question
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public Question(String type, String intitule, int nbPoints, int temps, int difficulte, Notion notion)
+	public Question(int nbPoints, int temps, Notion notion, int difficulte, String type)
 	{
-		this.type        = type       ;
-		this.intitule    = intitule   ;
 		this.nbPoints    = nbPoints   ;
 		this.temps       = temps      ;
-		this.difficulte  = difficulte ;
 		this.notion      = notion     ;
+		this.difficulte  = difficulte ;
+		this.type        = type       ;
+		
 		this.numQuestion = notion.getNbQuestion();
 
 		this.id = ++Question.nbQuestion;
+		this.intitule = null;
 
 		this.complements = new ArrayList<String>();
 		this.ensOptions  = new ArrayList<IOption>();
