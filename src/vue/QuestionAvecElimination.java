@@ -209,7 +209,7 @@ public class QuestionAvecElimination extends JFrame
 		add(mainPanel, BorderLayout.CENTER);
 
 		// Afficher la fenêtre
-		setTitle("Question Réponse Unique");
+		setTitle("Question avec Elimination");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);

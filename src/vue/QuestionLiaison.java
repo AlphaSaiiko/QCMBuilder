@@ -61,7 +61,7 @@ public class QuestionLiaison extends JFrame
 		add(mainPanel, BorderLayout.CENTER);
 
 		// Afficher la fenêtre
-		setTitle("Question Réponse Unique");
+		setTitle("Question Réponse Liaison");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
