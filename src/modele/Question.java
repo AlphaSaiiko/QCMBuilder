@@ -2,6 +2,7 @@ package modele;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import modele.option.IOption;
 
 public class Question
@@ -14,16 +15,19 @@ public class Question
 	private String type    ;
 	private String intitule;
 
-	private int nbPoints   ;
-	private int temps      ;
-	private int difficulte ;
-	public  int numQuestion;
+	private int nbPoints  ;
+	private int temps     ;
+	private int difficulte;
+	public int numQuestion;
 
-	private Notion notion;
+	private final  int id;
+	private static int nbQuestion = 0;
 
 	private List<String> complements; // Les pièces jointes ou petites images
 
 	private List<IOption> ensOptions;
+
+	private Notion notion;
 
 	
 	/*
@@ -31,33 +35,23 @@ public class Question
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-
-	
-	public static Question creerQuestion(int nbPoints, int temps, Notion notion, int difficulte, String type)
+	public Question(String type, String intitule, int nbPoints, int temps, int difficulte, Notion notion)
 	{
-		Question question = new Question(nbPoints, temps, notion, difficulte, type);
-		System.out.println("Nouvelle question créée avec le type: " + type + " pour la notion: " + notion.getNom());
-		return question;
-	}
-	
-	private Question(int nbPoints, int temps, Notion notion, int difficulte, String type)
-	{
+		this.type        = type       ;
+		this.intitule    = intitule   ;
 		this.nbPoints    = nbPoints   ;
 		this.temps       = temps      ;
-		this.notion      = notion     ;
 		this.difficulte  = difficulte ;
-		this.type        = type       ;
-
+		this.notion      = notion     ;
 		this.numQuestion = notion.getNbQuestion();
 
-		this.intitule = null;
+		this.id = ++Question.nbQuestion;
 
 		this.complements = new ArrayList<String>();
 		this.ensOptions  = new ArrayList<IOption>();
 
 		this.creerFichierQuestion();
 
-		notion.ajouterQuestion(this);
 	}
 
 
@@ -75,6 +69,8 @@ public class Question
 	public int getDifficulte() { return difficulte; }
 
 	public Notion getNotion() { return notion; }
+
+	public int getId       () { return this.id;} 
 
 	public List<String> getComplements() { return complements; }
 

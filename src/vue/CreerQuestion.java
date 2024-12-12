@@ -207,36 +207,25 @@ public class CreerQuestion extends JFrame implements ActionListener
 			else if (dur.getBackground() == Color.WHITE) { difficulte = 4; }
 
 			String selectedType = (String) typeQuestion.getSelectedItem();
-			if (not != null && selectedType != null && difficulte != 0)
+			if ("Question à choix multiple à réponse unique".equals(selectedType))
 			{
-				if ("Question à choix multiple à réponse unique".equals(selectedType))
-				{
-					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QCMRU");
-					new QuestionReponseUnique();
-					dispose();
-				}
-				else if ("Question à choix multiple à réponse multiple".equals(selectedType))
-				{
-					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QCMRM");
-					new QuestionReponseMultiple();
-					dispose();
-				}
-				else if ("Question à association d’éléments".equals(selectedType))
-				{
-					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAE");
-					new QuestionLiaison();
-					dispose();
-				}
-				else if ("Question avec élimination de propositions de réponses".equals(selectedType))
-				{
-					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAEPR");
-					new QuestionAvecElimination();
-					dispose();
-				}
+				new QuestionReponseUnique();
+				dispose();
 			}
-			else
+			else if ("Question à choix multiple à réponse multiple".equals(selectedType))
 			{
-				JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
+				new QuestionReponseMultiple();
+				dispose();
+			}
+			else if ("Question à association d’éléments".equals(selectedType))
+			{
+				new QuestionLiaison();
+				dispose();
+			}
+			else if ("Question avec élimination de propositions de réponses".equals(selectedType))
+			{
+				new QuestionAvecElimination();
+				dispose();
 			}
 		});
 
@@ -255,7 +244,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 		panelprincipal.add(panelBouton, BorderLayout.SOUTH);
 		
 		this.add(panelprincipal);
-		this.setSize(700, 330);
+		this.setSize(700, 300);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
