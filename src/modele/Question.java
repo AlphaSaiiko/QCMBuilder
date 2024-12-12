@@ -20,9 +20,6 @@ public class Question
 	private int difficulte;
 	public int numQuestion;
 
-	private final  int id;
-	private static int nbQuestion = 0;
-
 	private List<String> complements; // Les pièces jointes ou petites images
 
 	private List<IOption> ensOptions;
@@ -35,22 +32,28 @@ public class Question
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public Question(String type, String intitule, int nbPoints, int temps, int difficulte, Notion notion)
+
+	public static Question creerQuestion(int nbPoints, int temps, Notion notion, int difficulte, String type)
 	{
-		this.type        = type       ;
-		this.intitule    = intitule   ;
+		return new Question(nbPoints, temps, notion, difficulte, type);
+	}
+
+	private Question(int nbPoints, int temps, Notion notion, int difficulte, String type )
+	{
 		this.nbPoints    = nbPoints   ;
 		this.temps       = temps      ;
-		this.difficulte  = difficulte ;
 		this.notion      = notion     ;
-		this.numQuestion = notion.getNbQuestion();
+		this.difficulte  = difficulte ;
+		this.type        = type       ;
 
-		this.id = ++Question.nbQuestion;
+		this.numQuestion = notion.getNbQuestion();
 
 		this.complements = new ArrayList<String>();
 		this.ensOptions  = new ArrayList<IOption>();
 
 		this.creerFichierQuestion();
+
+		notion.ajouterQuestion(this);
 
 	}
 
@@ -69,8 +72,6 @@ public class Question
 	public int getDifficulte() { return difficulte; }
 
 	public Notion getNotion() { return notion; }
-
-	public int getId       () { return this.id;} 
 
 	public List<String> getComplements() { return complements; }
 
