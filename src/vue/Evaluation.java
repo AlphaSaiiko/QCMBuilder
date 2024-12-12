@@ -175,14 +175,15 @@ class ColorCircleRenderer extends JLabel implements TableCellRenderer
 	{
 		setOpaque(false);
 		setHorizontalAlignment(CENTER);
+	}
 	
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column)
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 	{
 		this.column = column;
 		setText(value != null ? value.toString() : "");
 		return this;
-	
+	}
+
 	protected void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -226,9 +227,9 @@ class CheckBoxRenderer extends JCheckBox implements TableCellRenderer
 	public CheckBoxRenderer()
 	{
 		setHorizontalAlignment(JLabel.CENTER);
+	}
 	
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column)
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
 	{
 		if (row == table.getRowCount() - 1)
 		{
