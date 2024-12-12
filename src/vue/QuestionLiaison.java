@@ -15,149 +15,116 @@ public class QuestionLiaison extends JFrame
 	private JButton enregistrerButton;
 	private JButton ajouterButton;
 	private JTextArea sujetTextArea;
+	private int ajoutCounter = 0; // Compteur pour le nombre d'ajouts
 
 	public QuestionLiaison()
 	{
 		mainPanel = new JPanel(new BorderLayout());
 		questionPanel = new JPanel();
 		questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
-		buttonPanel = new JPanel();
-
-		// Ajouter le bouton "Enregistrer"
-		enregistrerButton = new JButton("Enregistrer");
-		buttonPanel.add(enregistrerButton);
-
-		// Ajouter le bouton "Ajouter Question/Réponse"
-		ajouterButton = new JButton("Ajouter Question/Réponse");
-		buttonPanel.add(ajouterButton);
-
-		// Ajouter le panel des boutons au panel principal
-		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-		mainPanel.add(new JScrollPane(questionPanel), BorderLayout.CENTER);
-
-		// Ajouter le panel principal au frame
-		add(mainPanel);
-
-		// Ajouter le label "Question" et le JTextArea pour la question du sujet
-		JPanel sujetPanel = new JPanel(new BorderLayout());
-		JLabel sujetLabel = new JLabel("Question");
-		sujetTextArea = new JTextArea(3, 50);
-		sujetTextArea.setLineWrap(true);
-		sujetTextArea.setWrapStyleWord(true);
-		JScrollPane scrollPane = new JScrollPane(sujetTextArea);
-		sujetPanel.add(sujetLabel, BorderLayout.NORTH);
-		sujetPanel.add(scrollPane, BorderLayout.CENTER);
-
-		// Ajouter le sujetPanel au-dessus du questionPanel
-		mainPanel.add(sujetPanel, BorderLayout.NORTH);
-
-		// Configurer le frame
-		setTitle("Question Liaison");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(600, 400);
-		setLocationRelativeTo(null);
-		setVisible(true);
-
-		// Ajouter le gestionnaire d'événements pour le bouton "Enregistrer"
-		enregistrerButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				enregistrerQuestionsEtReponses();
-			}
-		});
-
-		// Ajouter le gestionnaire d'événements pour le bouton "Ajouter
-		// Question/Réponse"
+		ajouterButton = new JButton("Ajouter");
 		ajouterButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				addTrashPanel();
+				if (ajoutCounter < 5)
+				{
+					ajoutCounter++;
+					// Code pour ajouter un nouvel élément
+					JPanel newElement = new JPanel();
+					newElement.setLayout(new FlowLayout());
+
+					// Ajouter une icône au début
+					ImageIcon startIconImage = new ImageIcon(
+							new ImageIcon("/home/saiiko/IUT/QCMBuilder3.0/QCMBuilder/lib/icones/delete.png").getImage()
+									.getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+					JLabel startIcon = new JLabel(startIconImage);
+					startIcon.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+					startIcon.addMouseListener(new MouseAdapter()
+					{
+						@Override
+						public void mouseClicked(MouseEvent e)
+						{
+							questionPanel.remove(newElement);
+							questionPanel.revalidate();
+							questionPanel.repaint();
+							ajoutCounter--;
+						}
+					});
+					newElement.add(startIcon);
+
+					newElement.add(new JLabel("Question " + ajoutCounter + ":"));
+					newElement.add(new JTextField(10));
+					newElement.add(new JLabel("Réponse " + ajoutCounter + ":"));
+					newElement.add(new JTextField(10));
+
+					// Ajouter une icône à la fin
+					ImageIcon endIconImage = new ImageIcon(
+							new ImageIcon("/home/saiiko/IUT/QCMBuilder3.0/QCMBuilder/lib/icones/delete.png").getImage()
+									.getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+					JLabel endIcon = new JLabel(endIconImage);
+					endIcon.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+					endIcon.addMouseListener(new MouseAdapter()
+					{
+						@Override
+						public void mouseClicked(MouseEvent e)
+						{
+							questionPanel.remove(newElement);
+							questionPanel.revalidate();
+							questionPanel.repaint();
+							ajoutCounter--;
+						}
+					});
+					newElement.add(endIcon);
+
+					questionPanel.add(newElement);
+					questionPanel.revalidate();
+					questionPanel.repaint();
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Vous ne pouvez pas ajouter plus de 5 éléments.");
+				}
 			}
 		});
-	}
-
-	private void addTrashPanel()
-	{
-		JPanel rowPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5);
-
-		// Redimensionner et ajouter une icône au début du panel
-		ImageIcon startIcon = new ImageIcon(new ImageIcon("/home/saiiko/IUT/test/QCMBuilder/lib/icones/delete.png")
-				.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-		JLabel startLabel = new JLabel(startIcon);
-		startLabel.addMouseListener(new MouseAdapter()
+		buttonPanel = new JPanel();
+		buttonPanel.add(ajouterButton);
+		enregistrerButton = new JButton("Enregistrer");
+		enregistrerButton.addActionListener(new ActionListener()
 		{
 			@Override
-			public void mouseClicked(MouseEvent e)
+			public void actionPerformed(ActionEvent e)
 			{
-				questionPanel.remove(rowPanel);
-				questionPanel.revalidate();
-				questionPanel.repaint();
+				// Logique pour enregistrer les questions et les réponses
+				String sujet = sujetTextArea.getText();
+				System.out.println("Sujet: " + sujet);
+
+				for (Component component : questionPanel.getComponents())
+				{
+					if (component instanceof JPanel)
+					{
+						JPanel panel = (JPanel) component;
+						JTextField questionField = (JTextField) panel.getComponent(2);
+						JTextField reponseField = (JTextField) panel.getComponent(4);
+						String question = questionField.getText();
+						String reponse = reponseField.getText();
+						// Enregistrer la question et la réponse
+						System.out.println("Question: " + question + ", Réponse: " + reponse);
+					}
+				}
 			}
 		});
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		rowPanel.add(startLabel, gbc);
-
-		// Champ de texte pour la question
-		JTextField questionField = new JTextField(20);
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		rowPanel.add(questionField, gbc);
-
-		// Champ de texte pour la réponse
-		JTextField reponseField = new JTextField(20);
-		gbc.gridx = 2;
-		gbc.gridy = 0;
-		rowPanel.add(reponseField, gbc);
-
-		// Redimensionner et ajouter une icône à la fin du panel
-		ImageIcon endIcon = new ImageIcon(new ImageIcon("/home/saiiko/IUT/test/QCMBuilder/lib/icones/delete.png")
-				.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
-		JLabel endLabel = new JLabel(endIcon);
-		endLabel.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				questionPanel.remove(rowPanel);
-				questionPanel.revalidate();
-				questionPanel.repaint();
-			}
-		});
-		gbc.gridx = 3;
-		gbc.gridy = 0;
-		rowPanel.add(endLabel, gbc);
-
-		questionPanel.add(rowPanel);
-		questionPanel.revalidate();
-		questionPanel.repaint();
-	}
-
-	private void enregistrerQuestionsEtReponses()
-	{
-		// Logique pour enregistrer les questions et les réponses
-		String sujet = sujetTextArea.getText();
-		System.out.println("Sujet: " + sujet);
-
-		for (Component component : questionPanel.getComponents())
-		{
-			if (component instanceof JPanel)
-			{
-				JPanel panel = (JPanel) component;
-				JTextField questionField = (JTextField) panel.getComponent(1);
-				JTextField reponseField = (JTextField) panel.getComponent(2);
-				String question = questionField.getText();
-				String reponse = reponseField.getText();
-				// Enregistrer la question et la réponse
-				System.out.println("Question: " + question + ", Réponse: " + reponse);
-			}
-		}
+		buttonPanel.add(enregistrerButton);
+		mainPanel.add(new JScrollPane(questionPanel), BorderLayout.CENTER);
+		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+		sujetTextArea = new JTextArea(5, 20);
+		mainPanel.add(new JScrollPane(sujetTextArea), BorderLayout.NORTH);
+		add(mainPanel);
+		setTitle("Question Liaison");
+		setSize(600, 600);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 	}
 
 	public static void main(String[] args)
@@ -167,7 +134,7 @@ public class QuestionLiaison extends JFrame
 			@Override
 			public void run()
 			{
-				new QuestionLiaison();
+				new QuestionLiaison().setVisible(true);
 			}
 		});
 	}
