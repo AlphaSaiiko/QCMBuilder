@@ -211,26 +211,26 @@ public class CreerQuestion extends JFrame implements ActionListener
 			{
 				if ("Question à choix multiple à réponse unique".equals(selectedType))
 				{
-					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QCMRU");
-					new QuestionReponseUnique();
+					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QCMRU");
+					new QuestionReponseUnique(tmp);
 					dispose();
 				}
 				else if ("Question à choix multiple à réponse multiple".equals(selectedType))
 				{
-					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QCMRM");
-					new QuestionReponseMultiple();
+					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QCMRM");
+					new QuestionReponseMultiple(tmp);
 					dispose();
 				}
 				else if ("Question à association d’éléments".equals(selectedType))
 				{
-					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAE");
-					new QuestionLiaison();
+					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAE");
+					new QuestionLiaison(tmp);
 					dispose();
 				}
 				else if ("Question avec élimination de propositions de réponses".equals(selectedType))
 				{
-					Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAEPR");
-					new QuestionAvecElimination();
+					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAEPR");
+					new QuestionAvecElimination(tmp);
 					dispose();
 				}
 			}

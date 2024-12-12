@@ -7,13 +7,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.*;
 
+import modele.Question;
+
 public class QuestionReponseMultiple extends JFrame
 {
 	private JPanel questionPanel;
 	private JTextArea questionArea;
+	private Question question;
 
-	public QuestionReponseMultiple()
+	public QuestionReponseMultiple(Question question)
 	{
+		this.question = question;
 		// Initialiser le conteneur principal
 		JPanel mainPanel = new JPanel(new BorderLayout());
 
@@ -154,7 +158,7 @@ public class QuestionReponseMultiple extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				// Enregistrer la question dans un fichier
-				String questionText = questionArea.getText();
+				/*String questionText = questionArea.getText();
 				try (FileWriter writer = new FileWriter("question.txt"))
 				{
 					writer.write(questionText);
@@ -162,7 +166,8 @@ public class QuestionReponseMultiple extends JFrame
 				} catch (IOException ex)
 				{
 					JOptionPane.showMessageDialog(null, "Erreur lors de l'enregistrement de la question.");
-				}
+				}*/
+				question.setIntitule(questionArea.getText());
 			}
 		});
 
@@ -177,10 +182,5 @@ public class QuestionReponseMultiple extends JFrame
         setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-	}
-
-	public static void main(String[] args)
-	{
-		SwingUtilities.invokeLater(QuestionReponseMultiple::new);
 	}
 }

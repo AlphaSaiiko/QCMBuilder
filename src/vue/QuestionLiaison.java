@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import modele.Question;
+
 public class QuestionLiaison extends JFrame
 {
 	private JPanel questionPanel;
@@ -14,9 +16,11 @@ public class QuestionLiaison extends JFrame
 	private JButton addButton;
 	private JButton explicationButton;
 	private JButton saveButton;
+	private Question question;
 
-	public QuestionLiaison()
+	public QuestionLiaison(Question question)
 	{
+		this.question = question;
 		// Initialiser le conteneur principal
 		JPanel mainPanel = new JPanel(new BorderLayout());
 
@@ -73,7 +77,7 @@ public class QuestionLiaison extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				String questionText = questionArea.getText();
+				/*String questionText = questionArea.getText();
 				try (FileWriter writer = new FileWriter("question.txt"))
 				{
 					writer.write(questionText);
@@ -81,7 +85,8 @@ public class QuestionLiaison extends JFrame
 				} catch (IOException ex)
 				{
 					JOptionPane.showMessageDialog(null, "Erreur lors de l'enregistrement de la question.");
-				}
+				}*/
+				question.setIntitule(questionArea.getText());
 			}
 		});
 
@@ -211,10 +216,5 @@ public class QuestionLiaison extends JFrame
 		questionPanel.add(rowPanel);
 		questionPanel.revalidate();
 		questionPanel.repaint();
-	}
-
-	public static void main(String[] args)
-	{
-		SwingUtilities.invokeLater(QuestionLiaison::new);
 	}
 }
