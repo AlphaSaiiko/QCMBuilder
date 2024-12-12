@@ -200,6 +200,16 @@ public class CreerQuestion extends JFrame implements ActionListener
 				new QuestionReponseMultiple();
 				dispose();
 			}
+			else if ("Question à association d’éléments".equals(selectedType))
+			{
+				new QuestionLiaison();
+				dispose();
+			}
+			else if ("Question avec élimination de propositions de réponses".equals(selectedType))
+			{
+				new QuestionAvecElimination();
+				dispose();
+			}
 		});
 
 	
