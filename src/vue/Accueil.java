@@ -56,13 +56,27 @@ public class Accueil extends JFrame
 
         // Ajout des interactions des boutons
         btnGenererEval.addActionListener(e -> {
-            Controleur.creerEvaluation();
-            this.dispose();
+            if (Controleur.getListRessource().isEmpty())
+            {
+                JOptionPane.showMessageDialog(this, "Aucune ressource n'existe. Veuillez ajouter une ressource.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {
+                Controleur.creerEvaluation();
+                this.dispose();
+            }
         });
 
         btnCreerQuestion.addActionListener(e -> {
-            Controleur.creerQuestion();
-            this.dispose();
+            if (Controleur.getListRessource().isEmpty())
+            {
+                JOptionPane.showMessageDialog(this, "Aucune ressource n'existe. Veuillez ajouter une ressource.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {
+                Controleur.creerQuestion();
+                this.dispose();
+            }
         });
 
         btnParametres.addActionListener(e -> {
@@ -85,10 +99,14 @@ public class Accueil extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-    }
 
-    public static void main(String[] args)
-    {
-        new Accueil();
+        // Vérifier la liste des ressources après l'initialisation de l'interface graphique
+        SwingUtilities.invokeLater(() -> {
+            if (Controleur.getListRessource().isEmpty())
+            {
+                btnGenererEval.setEnabled(false);
+                btnCreerQuestion.setEnabled(false);
+            }
+        });
     }
 }
