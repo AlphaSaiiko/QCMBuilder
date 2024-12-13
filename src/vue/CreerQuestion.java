@@ -3,185 +3,190 @@ package vue;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import javax.swing.*;
 
 import controleur.Controleur;
 import modele.Notion;
 import modele.Question;
-import modele.Ressource;
 
 public class CreerQuestion extends JFrame implements ActionListener
 {
-	
-	
-	/*
-	 *  +-------------+
-	 *  |  ATTRIBUTS  |
-	 *  +-------------+
+	/**
+	 * +-------------+
+	 * |  ATTRIBUTS  |
+	 * +-------------+
 	 */
 
-	private JComboBox<String> notionList;
-	private String nomRessource;
-	private JComboBox<String> ressourcesList;
-	
-	
-	/*
-	 *  +--------------+
-	 *  | CONSTRUCTEUR |
-	 *  +--------------+
-	 */
-	public CreerQuestion() {
+	private JComboBox<String> listeNotions   ;
+	private JComboBox<String> listeRessources;
+	private String            nomRessource   ;
 
+	
+
+	
+	/**
+	 * +--------------+
+	 * | CONSTRUCTEUR |
+	 * +--------------+
+	 */
+
+	public CreerQuestion()
+	{
 		setTitle("Créer une question");
 
 
-
+		//Panel principal
 		JPanel panelprincipal = new JPanel();
 		panelprincipal.setLayout(new BorderLayout());
 
 
-
-		// Bouton de retour
-		String imagePath = "./lib/icones/home.png";
-		File imageFile = new File(imagePath);
-		ImageIcon icon = new ImageIcon(imageFile.getAbsolutePath());
+		// Bouton "Menu principal"
+		String imageMenu = "./lib/icones/home.png";
+		ImageIcon icon = new ImageIcon(imageMenu);
 		Image img = icon.getImage();
 		Image newImg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newImg);
-		JButton retourButton = new JButton(icon);
-		retourButton.addActionListener(e -> {
-			new Accueil();
+
+		JButton btnMenu = new JButton(icon);
+		btnMenu.addActionListener(e -> {
+			Controleur.ouvrirAccueil();
 			dispose();
 		});
-		JPanel panelRetour = new JPanel();
-		panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
-		panelRetour.add(retourButton);
+
+		JPanel panelMenu = new JPanel();
+		panelMenu.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelMenu.add(btnMenu);
 
 
+		// Panel pour les points et le temps
+		JPanel panelPointsEtTemps = new JPanel();
+		panelPointsEtTemps.setLayout(new GridLayout(2, 1));
+
+		JPanel panelPoints = new JPanel();
+		panelPoints.setLayout(new BorderLayout());
+		panelPoints.add(new JLabel("Nombre de points"), BorderLayout.NORTH);
+		panelPoints.add(new JTextArea(), BorderLayout.CENTER);
+
+		JPanel panelTemps = new JPanel();
+		panelTemps.setLayout(new BorderLayout());
+		panelTemps.add(new JLabel("Temps de réponse (min : sec)"), BorderLayout.NORTH);
+		panelTemps.add(new JTextArea(), BorderLayout.CENTER);
+
+		panelPointsEtTemps.add(panelPoints);
+		panelPointsEtTemps.add(panelTemps);
+
+
+		//Creation d'une JComboBox pour les ressources et matières
+		this.listeRessources = new JComboBox<String>(Controleur.getNomsRessources());
+		this.listeRessources.setPreferredSize(new Dimension(150, 30));
 		
-		// Panel pour les niveaux et le temps
-		JPanel niveauEtTps = new JPanel();
-		niveauEtTps.setLayout(new GridLayout(2, 1));
-
-		// Panel de niveauEtTps gérant le nombre de points
-		JPanel points = new JPanel();
-		points.setLayout(new BorderLayout());
-		points.add(new JLabel("Nombre de points"), BorderLayout.NORTH);
-		points.add(new JTextArea(), BorderLayout.CENTER);
-
-		// Panel de niveauEtTps gérant le temps de la question
-		JPanel temps = new JPanel();
-		temps.setLayout(new BorderLayout());
-		temps.add(new JLabel("Temps de réponse (min : sec)"), BorderLayout.NORTH);
-		temps.add(new JTextArea(), BorderLayout.CENTER);
-
-		// On ajoute points et temps à niveauEtTps
-		niveauEtTps.add(points);
-		niveauEtTps.add(temps);
-
-
-
-		//Creation JComboBox pour les ressources et matières
-		this.ressourcesList = new JComboBox<String>(Controleur.getNomsRessources());
-		this.ressourcesList.setPreferredSize(new Dimension(150, 30));
+		this.nomRessource = String.valueOf(listeRessources.getSelectedItem());
+		this.listeNotions = new JComboBox<String>(Controleur.trouverRessourceParNom(nomRessource).getNomsNotions());
+		listeNotions.setPreferredSize(new Dimension(150, 30));
 		
-		this.nomRessource = String.valueOf(ressourcesList.getSelectedItem());
-		this.notionList = new JComboBox<String>(Controleur.trouverRessourceParNom(nomRessource).getNomsNotions());
-		notionList.setPreferredSize(new Dimension(150, 30));
-		
+
 		// Panel pour les ressources
-		JPanel ressources = new JPanel();
-		ressources.setLayout(new BorderLayout());
-		ressources.add(new JLabel("Ressources"), BorderLayout.NORTH);
-		ressources.add(ressourcesList, BorderLayout.CENTER);
+		JPanel panelRessources = new JPanel();
+		panelRessources.setLayout(new BorderLayout());
+		panelRessources.add(new JLabel("Ressources"), BorderLayout.NORTH);
+		panelRessources.add(listeRessources, BorderLayout.CENTER);
 		
+
 		// Panel pour les notions
-		JPanel notions = new JPanel();
-		notions.setLayout(new BorderLayout());
-		notions.add(new JLabel("Notions"), BorderLayout.NORTH);
-		notions.add(notionList, BorderLayout.CENTER);
+		JPanel panelNotions = new JPanel();
+		panelNotions.setLayout(new BorderLayout());
+		panelNotions.add(new JLabel("Notions"), BorderLayout.NORTH);
+		panelNotions.add(listeNotions, BorderLayout.CENTER);
 		
+
 		// Panel pour bien placer les ronds de difficultés et mettre le titre
 		JPanel panelDifficulte = new JPanel();
 		panelDifficulte.setLayout(new BorderLayout());
 		panelDifficulte.add(new JLabel("niveau"), BorderLayout.NORTH);
 
-		// Création des boutons ronds pour les niveaux de difficultés avec les couleurs et texte correspondants
-		RoundButton tresfacile = creerButtonRond(Color.GREEN, "TF");
-		RoundButton facile = creerButtonRond(Color.CYAN, "F");
-		RoundButton moyen = creerButtonRond(Color.RED, "M");
-		RoundButton dur = creerButtonRond(Color.WHITE, "D");
 
-		// Définir la taille du texte
-		Font font = new Font("Arial", Font.BOLD, 8);
-		tresfacile.setFont(font);
-		facile.setFont(font);
-		moyen.setFont(font);
-		dur.setFont(font);
+		// Création des boutons ronds pour les niveaux de difficultés avec les couleurs et texte correspondants
+		RoundButton tresFacile = creerBoutonRond(Color.GREEN, "TF");
+		RoundButton facile = creerBoutonRond(Color.CYAN, "F");
+		RoundButton moyen = creerBoutonRond(Color.RED, "M");
+		RoundButton dur = creerBoutonRond(Color.WHITE, "D");
+
+
+		// Définition de la taille du texte
+		Font police = new Font("Arial", Font.BOLD, 8);
+		tresFacile.setFont(police);
+		facile.setFont(police);
+		moyen.setFont(police);
+		dur.setFont(police);
+
 
 		// Grouper les boutons pour permettre une seule sélection à la fois
 		ButtonGroup group = new ButtonGroup();
-		group.add(tresfacile);
+		group.add(tresFacile);
 		group.add(facile);
 		group.add(moyen);
 		group.add(dur);
 
-		// Ajouter des action listeners pour changer la couleur lorsqu'un bouton est sélectionné
-		tresfacile.addActionListener(e -> {
-			tresfacile.setBackground(Color.GREEN);
+
+		// ActionListeners pour changer les couleurs lorsqu'un bouton est sélectionné
+		tresFacile.addActionListener(e -> {
+			tresFacile.setBackground(Color.GREEN);
 			facile.setBackground(Color.GRAY);
 			moyen.setBackground(Color.GRAY);
 			dur.setBackground(Color.GRAY);
 		});
 
 		facile.addActionListener(e -> {
-			tresfacile.setBackground(Color.GRAY);
+			tresFacile.setBackground(Color.GRAY);
 			facile.setBackground(Color.CYAN);
 			moyen.setBackground(Color.GRAY);
 			dur.setBackground(Color.GRAY);
 		});
 
 		moyen.addActionListener(e -> {
-			tresfacile.setBackground(Color.GRAY);
+			tresFacile.setBackground(Color.GRAY);
 			facile.setBackground(Color.GRAY);
 			moyen.setBackground(Color.RED);
 			dur.setBackground(Color.GRAY);
 		});
 
 		dur.addActionListener(e -> {
-			tresfacile.setBackground(Color.GRAY);
+			tresFacile.setBackground(Color.GRAY);
 			facile.setBackground(Color.GRAY);
 			moyen.setBackground(Color.GRAY);
 			dur.setBackground(Color.WHITE);
 		});
 
+
 		// Panel pour les ronds de difficultés
 		JPanel panelRond = new JPanel();
 		panelRond.setLayout(new FlowLayout());
-		panelRond.add(tresfacile);
+		panelRond.add(tresFacile);
 		panelRond.add(facile);
 		panelRond.add(moyen);
 		panelRond.add(dur);
 		
 		panelDifficulte.add(panelRond, BorderLayout.CENTER);
-		
+
+
 		// Panel pour les différents niveaux de difficultés
 		JPanel ressourceNotionLvl = new JPanel();
 		ressourceNotionLvl.setLayout(new GridLayout(1, 3));
-		ressourceNotionLvl.add(ressources);
-		ressourceNotionLvl.add(notions);
+		ressourceNotionLvl.add(panelRessources);
+		ressourceNotionLvl.add(panelNotions);
 		ressourceNotionLvl.add(panelDifficulte);
 		
+
 		//Panel rassemble les deux panel points et temps
 		JPanel rassemble = new JPanel();
 		rassemble.setLayout(new GridLayout(1, 2));
-		rassemble.add(points);
-		rassemble.add(temps);
+		rassemble.add(panelPoints);
+		rassemble.add(panelTemps);
 
 
 		//Panel pour le type de question
 		JPanel panelQuestion = new JPanel();
+
 
 		//JComboBox pour le type de question
 		JComboBox<String> typeQuestion = new JComboBox<String>(new String[] { "Question à choix multiple à réponse unique", "Question à choix multiple à réponse multiple", "Question à association d’éléments", "Question avec élimination de propositions de réponses" });
@@ -197,13 +202,13 @@ public class CreerQuestion extends JFrame implements ActionListener
 		creerQuestionButton.addActionListener(e -> {
 
 			//Récupération des informations pour la création de la question
-			int nbPoints	 = Integer.parseInt(((JTextArea) points.getComponent(1)).getText());
-			int tempsReponse = Integer.parseInt(((JTextArea) temps.getComponent(1)).getText());
+			int nbPoints	 = Integer.parseInt(((JTextArea) panelPoints.getComponent(1)).getText());
+			int tempsReponse = Integer.parseInt(((JTextArea) panelTemps.getComponent(1)).getText());
 
-			Notion not = Notion.trouverNotionParNom((String) notionList.getSelectedItem(), Controleur.trouverRessourceParNom((String) ressourcesList.getSelectedItem()));
+			Notion not = Notion.trouverNotionParNom((String) listeNotions.getSelectedItem(), Controleur.trouverRessourceParNom((String) listeRessources.getSelectedItem()));
 
 			int difficulte = 0;
-			if (tresfacile.getBackground() == Color.GREEN) { difficulte = 1; }
+			if (tresFacile.getBackground() == Color.GREEN) { difficulte = 1; }
 			else if (facile.getBackground() == Color.CYAN) { difficulte = 2; }
 			else if (moyen.getBackground() == Color.RED) { difficulte = 3; }
 			else if (dur.getBackground() == Color.WHITE) { difficulte = 4; }
@@ -252,7 +257,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 		panelCreation.add(panelQuestion);
 
 		// Ajout des panels au panel principal
-		panelprincipal.add(panelRetour, BorderLayout.NORTH);
+		panelprincipal.add(panelMenu, BorderLayout.NORTH);
 		panelprincipal.add(panelCreation, BorderLayout.CENTER);
 		panelprincipal.add(panelBouton, BorderLayout.SOUTH);
 		
@@ -262,29 +267,44 @@ public class CreerQuestion extends JFrame implements ActionListener
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 
-		ressourcesList.addActionListener(this);
+		listeRessources.addActionListener(this);
 	}
 
-	// Création des boutons ronds pour les niveaux de difficultés
-	public static RoundButton creerButtonRond(Color couleur, String texte)
+
+
+
+	/**
+	 * +----------+
+	 * | METHODES |
+	 * +----------+
+	 */
+
+	/**
+	 * Crée un bouton rond personnalisé avec une couleur et un texte spécifiques.
+	 *
+	 * @param couleur la couleur de fond du bouton
+	 * @param texte   le texte affiché sur le bouton
+	 * @return un objet {@link RoundButton} configuré avec les propriétés spécifiées
+	 */
+	public static RoundButton creerBoutonRond(Color couleur, String texte)
 	{
-		RoundButton button = new RoundButton(texte);
-		button.setPreferredSize(new Dimension(45, 45));
-		button.setBackground(couleur);
-		button.setOpaque(false);
-		button.setBorderPainted(false);
-		return button;
+		RoundButton btnRond = new RoundButton(texte);
+		btnRond.setPreferredSize(new Dimension(45, 45));
+		btnRond.setBackground(couleur);
+		btnRond.setOpaque(false);
+		btnRond.setBorderPainted(false);
+		return btnRond;
 	}
 
 	public void actionPerformed(ActionEvent e) 
 	{
 		// Assumant que la seule source est la liste des ressources
-		this.notionList.removeAllItems();
+		this.listeNotions.removeAllItems();
 
-		this.nomRessource = String.valueOf(this.ressourcesList.getSelectedItem());
+		this.nomRessource = String.valueOf(this.listeRessources.getSelectedItem());
 
 		for (String nomNotion : Controleur.trouverRessourceParNom(this.nomRessource).getNomsNotions())
-			this.notionList.addItem(nomNotion);
+			this.listeNotions.addItem(nomNotion);
 	}
 
 	public static void main(String[] args)

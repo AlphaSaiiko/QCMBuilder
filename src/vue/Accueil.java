@@ -61,7 +61,7 @@ public class Accueil extends JFrame
 		btnParametres.setPreferredSize(tailleBoutons);
 
 
-		// Ajout des ActionListener
+		// Ajout des ActionListeners
 		btnGenererEval.addActionListener(e -> {
 			if (Controleur.getListRessource().isEmpty())
 			{
