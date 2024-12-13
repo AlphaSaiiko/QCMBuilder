@@ -2,7 +2,6 @@ package modele;
 
 import controleur.Controleur;
 import controleur.ControleurFichier;
-import controleur.Ecrire;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -134,6 +133,6 @@ public class Notion
 	public static void mettreAJourNotions()
 	{
 		List<Notion> notions = Controleur.getListNotion();
-		Ecrire.ecrireNotions(notions);
+		ControleurFichier.ecrireNotions(notions);
 	}
 }

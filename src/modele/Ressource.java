@@ -2,7 +2,6 @@ package modele;
 
 import controleur.Controleur;
 import controleur.ControleurFichier;
-import controleur.Ecrire;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,7 +128,7 @@ public class Ressource
 	public static void mettreAJourRessources()
 	{
 		List<Ressource> ressources = Controleur.getListRessource();
-		Ecrire.ecrireRessources(ressources);
+		ControleurFichier.ecrireRessources(ressources);
 	}
 
 }
