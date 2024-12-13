@@ -200,21 +200,29 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 		// Action listener pour le bouton de création de question
 		creerQuestionButton.addActionListener(e -> {
+			String erreur = "";
+			
+			// Récupération des informations pour la création de la question
+			int nbPoints     = 1;
+			int tempsReponse = 60;
+			
+			try { nbPoints	 = Integer.parseInt(((JTextArea) panelPoints.getComponent(1)).getText());
+			} catch (Exception ex) { erreur = "Veuillez rajouter le nombre de points.  \n" ;}
 
-			//Récupération des informations pour la création de la question
-			int nbPoints	 = Integer.parseInt(((JTextArea) panelPoints.getComponent(1)).getText());
-			int tempsReponse = Integer.parseInt(((JTextArea) panelTemps.getComponent(1)).getText());
+			try { tempsReponse = Integer.parseInt(((JTextArea) panelTemps.getComponent(1)).getText());
+			} catch (Exception ex) { erreur += "Veuillez rajouter le temps de réponse en secondes.  \n" ;}
 
 			Notion not = Notion.trouverNotionParNom((String) listeNotions.getSelectedItem(), Controleur.trouverRessourceParNom((String) listeRessources.getSelectedItem()));
 
 			int difficulte = 0;
-			if (tresFacile.getBackground() == Color.GREEN) { difficulte = 1; }
-			else if (facile.getBackground() == Color.CYAN) { difficulte = 2; }
-			else if (moyen.getBackground() == Color.RED) { difficulte = 3; }
-			else if (dur.getBackground() == Color.WHITE) { difficulte = 4; }
+			if      (tresFacile.getBackground() == Color.GREEN && facile.getBackground() == Color.CYAN) { difficulte = 0; }
+			else if (tresFacile.getBackground() == Color.GREEN) { difficulte = 1; }
+			else if (facile.getBackground()     == Color.CYAN ) { difficulte = 2; }
+			else if (moyen.getBackground()      == Color.RED  ) { difficulte = 3; }
+			else if (dur.getBackground()        == Color.WHITE) { difficulte = 4; }
 
 			String selectedType = (String) typeQuestion.getSelectedItem();
-			if (not != null && selectedType != null && difficulte != 0)
+			if (not != null && selectedType != null && difficulte != 0 && erreur.isEmpty())
 			{
 				if ("Question à choix multiple à réponse unique".equals(selectedType))
 				{
@@ -241,10 +249,15 @@ public class CreerQuestion extends JFrame implements ActionListener
 					dispose();
 				}
 			}
-			else
+
+			if (difficulte == 0)
+				erreur += "Veuillez sélectionner la difficulté.";
+		
+			if (! erreur.isEmpty())
 			{
-				JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, erreur, "Erreur : paramètres manquants", JOptionPane.ERROR_MESSAGE);
 			}
+			
 		});
 
 	
