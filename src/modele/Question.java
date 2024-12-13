@@ -1,5 +1,6 @@
 package modele;
 
+import controleur.Controleur;
 import controleur.ControleurFichier;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class Question
 		this.difficulte = difficulte;
 		this.type = type;
 		this.numQuestion = notion.getNbQuestion();
+		Question.mettreAJourQuestions();
 		this.complements = new ArrayList<>();
 		this.ensOptions = new ArrayList<>();
 		this.creerFichierQuestion();
@@ -172,11 +174,13 @@ public class Question
 	{
 		if (opt == null || this.ensOptions == null) return false;
 		this.ensOptions.add(opt);
+		Question.mettreAJourQuestions();
 		return true;
 	}
 
 	public boolean supprimerOption(IOption opt)
 	{
+		Question.mettreAJourQuestions();
 		return true; // Temporaire
 	}
 
@@ -184,5 +188,12 @@ public class Question
 	{
 		ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/");
 		fichierControleur.modifierQuestion("question" + this.getNumQuestion(), this);
+		Question.mettreAJourQuestions();
+	}
+
+	public static void mettreAJourQuestions()
+	{
+		List<Question> questions = Controleur.getListQuestion();
+		ControleurFichier.ecrireQuestions(questions);
 	}
 }

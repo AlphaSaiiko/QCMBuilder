@@ -195,6 +195,11 @@ public class Controleur
 		return Metier.getListNotion();
 	}
 
+	public static List<Question> getListQuestion()
+	{
+		return Metier.getListQuestion();
+	}
+
     public static void ajouterRessource(Ressource ressource)
     {
         Metier.ajouterRessource(ressource);
@@ -203,6 +208,11 @@ public class Controleur
 	public static void ajouterNotion(Notion notion)
 	{
 		Metier.ajouterNotion(notion);
+	}
+
+	public static void ajouterQuestion(Question question)
+	{
+		Metier.ajouterQuestion(question);
 	}
 
 	/*

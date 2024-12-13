@@ -163,11 +163,6 @@ public class TabEvaluation extends JFrame
 		// Logique pour générer l'évaluation
 		JOptionPane.showMessageDialog(this, "Évaluation générée !");
 	}
-
-	public static void main(String[] args)
-	{
-		new TabEvaluation();
-	}
 }
 
 // Définir les classes ColorCircleRenderer et CheckBoxRenderer

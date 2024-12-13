@@ -266,45 +266,50 @@ public class ControleurFichier
 		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getIntitule() + "\t" +  opt.getOrdre()+ "\t" + opt.getNbPointsMoins()  + "\t" + opt.getEstReponse() + "\t" + opt.getQuestion();
 	}
 
-    // Méthode pour écrire toutes les ressources dans un fichier
+    // Méthode pour écrire toutes les ressources dans un fichie
     public static void ecrireRessources(List<Ressource> ressources)
     {
-        try (FileWriter writer = new FileWriter("Ressources.csv")) {
-            for (Ressource ressource : ressources) {
-                writer.write("nom:" + ressource.getNom() + "    notions:");
-                for (String notion : ressource.getNomsNotions())
-                {
-                    writer.write("," + notion);
-                }
-                writer.write("\n");
-                System.out.println("Ecriture de la ressource : " + ressource.getNom());
+        try (FileWriter writer = new FileWriter("Ressource.csv"))
+        {
+            for (Ressource ressource : ressources)
+            {
+                writer.write(ressource.getNom() + "\n");
             }
-        } catch (IOException e) {
+        }
+        catch(IOException e)
+        {
             System.out.println("Erreur lors de l'écriture des ressources : " + e.getMessage());
         }
     }
-
+    
     // Méthode pour écrire toutes les notions dans un fichier
     public static void ecrireNotions(List<Notion> notions)
     {
-        try (FileWriter writer = new FileWriter("Notions.csv")) {
-            for (Notion notion : notions) {
-                writer.write("nom:" + notion.getNom() + "   ressource:" + notion.getRessource().getNom() + "\n");
-                System.out.println("Ecriture de la notion : " + notion.getNom());
+        try (FileWriter writer = new FileWriter("Notion.csv"))
+        {
+            for (Notion notion : notions)
+            {
+                writer.write(notion.getNom() + "," + notion.getRessource().getNom() + "\n");
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             System.out.println("Erreur lors de l'écriture des notions : " + e.getMessage());
         }
     }
-
+    
     // Méthode pour écrire toutes les questions dans un fichier
     public static void ecrireQuestions(List<Question> questions)
     {
-        try (FileWriter writer = new FileWriter("Questions.csv")) {
-            for (Question question : questions) {
+        try (FileWriter writer = new FileWriter("Question.csv"))
+        {
+            for (Question question : questions)
+            {
                 writer.write(question.getEnonce() + "\n");
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             System.out.println("Erreur lors de l'écriture des questions : " + e.getMessage());
         }
     }

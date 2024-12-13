@@ -17,6 +17,7 @@ public class Metier
 	private static List<Evaluation> listEval;
 	private static List<Ressource> listRessource;
 	private static List<Notion> listNotion;
+	private static List<Question> listQuestion;
 
 
 	/*
@@ -31,6 +32,7 @@ public class Metier
 		Metier.listEval = new ArrayList<>();
 		Metier.listRessource = new ArrayList<>();
 		Metier.listNotion = new ArrayList<>();
+		Metier.listQuestion = new ArrayList<>();
 	}
 
 
@@ -60,6 +62,11 @@ public class Metier
 		return Metier.listNotion;
 	}
 
+	public static List<Question> getListQuestion() 
+	{
+		return Metier.listQuestion;
+	}
+
 
 	/*
 	 * +---------+
@@ -85,6 +92,11 @@ public class Metier
 	public static void setListNotion(List<Notion> listNotion) 
 	{
 		Metier.listNotion = listNotion;
+	}
+
+	public static void setListQuestion(List<Question> listQuestion) 
+	{
+		Metier.listQuestion = listQuestion;
 	}
 
 
@@ -155,5 +167,10 @@ public class Metier
 	public static void ajouterNotion(Notion notion)
 	{
 		Metier.listNotion.add(notion);
+	}
+
+	public static void ajouterQuestion(Question question)
+	{
+		Metier.listQuestion.add(question);
 	}
 }
