@@ -110,7 +110,6 @@ public class Controleur
 
 				Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
 
-				notion.ajouterQuestion(tmp);
 				sc.close();
 			}
 			catch (FileNotFoundException e)
@@ -223,7 +222,7 @@ public class Controleur
 	public static void main(String[] args)
 	{
 		Controleur controleur = new Controleur();
-		Controleur.acc = new Accueil();
 		controleur.chargerRessourcesEtNotion();
+		Controleur.acc = new Accueil();
 	}
 }
