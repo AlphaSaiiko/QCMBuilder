@@ -1,10 +1,9 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
-import controleur.Controleur;
-import modele.Ressource;
 
 public class CreerEvaluation extends JFrame
 {
@@ -103,6 +102,11 @@ public class CreerEvaluation extends JFrame
 		JPanel panelBouton = new JPanel();
 		panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
 		panelBouton.add(creerButton);
+
+		creerButton.addActionListener (e -> {
+			Controleur.ouvrirTabEvaluation();
+			dispose();
+		});
 
 		panelPrincipal.add(panelBouton, BorderLayout.SOUTH);
 

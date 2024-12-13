@@ -8,12 +8,12 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 
-public class Evaluation extends JFrame
+public class TabEvaluation extends JFrame
 {
 	private DefaultTableModel model;
 	private boolean isUpdating = false;
 
-	public Evaluation()
+	public TabEvaluation()
 	{
 		// Créer la fenêtre principale
 		setTitle("Évaluation");
@@ -101,7 +101,7 @@ public class Evaluation extends JFrame
 
 		// Bouton "Générer l'évaluation"
 		JButton generateButton = new JButton("Générer l'évaluation");
-		generateButton.addActionListener(e -> generateEvaluation());
+		generateButton.addActionListener(e -> generateTabEvaluation());
 
 		bottomPanel.add(generateButton, BorderLayout.CENTER);
 
@@ -155,7 +155,7 @@ public class Evaluation extends JFrame
 		isUpdating = false;
 	}
 
-	private void generateEvaluation()
+	private void generateTabEvaluation()
 	{
 		// Logique pour générer l'évaluation
 		JOptionPane.showMessageDialog(this, "Évaluation générée !");
@@ -163,7 +163,7 @@ public class Evaluation extends JFrame
 
 	public static void main(String[] args)
 	{
-		new Evaluation();
+		new TabEvaluation();
 	}
 }
 
