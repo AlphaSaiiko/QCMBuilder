@@ -1,12 +1,13 @@
 package vue;
-
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.util.List;
+import modele.Ressource;
+import modele.Notion;
+import controleur.Controleur;
 
 public class TabEvaluation extends JFrame
 {
@@ -24,11 +25,7 @@ public class TabEvaluation extends JFrame
 
 		// Modèle pour le tableau
 		String[] columnNames = { "Notion", "Sélectionner", "TF", "F", "M", "D" };
-		Object[][] data = { { "Projection", false, "", "", "", "" }, { "Restriction", false, "", "", "", "" },
-				{ "Tri", false, "", "", "", "" }, { "Jointure", false, "", "", "", "" },
-				{ "Auto-Jointure", false, "", "", "", "" }, { "Thêta-Jointure", false, "", "", "", "" } };
-
-		model = new DefaultTableModel(data, columnNames)
+		model = new DefaultTableModel(columnNames, 0)
 		{
 			public Class<?> getColumnClass(int columnIndex)
 			{
@@ -57,18 +54,24 @@ public class TabEvaluation extends JFrame
 			}
 		};
 
+		// Récupérer les ressources et les notions
+		List<Ressource> ressources = Controleur.getListRessource();
+		for (Ressource ressource : ressources)
+		{
+			for (Notion notion : ressource.getEnsNotions())
+			{
+				model.addRow(new Object[] { notion.getNom(), false, "", "", "", "" });
+			}
+		}
+
 		// Ajouter une ligne pour le résumé
 		model.addRow(new Object[] { "Total", false, "", "", "", "" });
 
 		// Ajouter un TableModelListener pour mettre à jour les sommes
-		model.addTableModelListener(new TableModelListener()
-		{
-			public void tableChanged(TableModelEvent e)
+		model.addTableModelListener(e -> {
+			if (!isUpdating)
 			{
-				if (!isUpdating)
-				{
-					calculateSums();
-				}
+				calculateSums();
 			}
 		});
 
@@ -167,79 +170,28 @@ public class TabEvaluation extends JFrame
 	}
 }
 
+// Définir les classes ColorCircleRenderer et CheckBoxRenderer
 class ColorCircleRenderer extends JLabel implements TableCellRenderer
 {
-	private int column;
-
-	public ColorCircleRenderer()
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column)
 	{
-		setOpaque(false);
-		setHorizontalAlignment(CENTER);
-	}
-	
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-	{
-		this.column = column;
-		setText(value != null ? value.toString() : "");
+		setText((String) value);
+		setOpaque(true);
+		setBackground(Color.WHITE);
 		return this;
-	}
-
-	protected void paintComponent(Graphics g)
-	{
-		super.paintComponent(g);
-		if (!getText().isEmpty())
-		{
-			Graphics2D g2d = (Graphics2D) g;
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2d.setColor(getColorForColumn(column)); // Couleur du cercle
-			int diameter = Math.min(getWidth(), getHeight()) - 5;
-			int x = (getWidth() - diameter) / 2;
-			int y = (getHeight() - diameter) / 2;
-			g2d.fillOval(x, y, diameter, diameter);
-			g2d.setColor(Color.BLACK);
-			FontMetrics fm = g2d.getFontMetrics();
-			int textWidth = fm.stringWidth(getText());
-			int textHeight = fm.getAscent();
-			g2d.drawString(getText(), (getWidth() - textWidth) / 2, (getHeight() + textHeight) / 2 - 3);
-		}
-	}
-
-	private Color getColorForColumn(int column)
-	{
-		switch (column)
-		{
-		case 2:
-			return Color.GREEN;
-		case 3:
-			return Color.CYAN;
-		case 4:
-			return Color.RED;
-		case 5:
-			return Color.GRAY;
-		default:
-			return Color.WHITE;
-		}
 	}
 }
 
 class CheckBoxRenderer extends JCheckBox implements TableCellRenderer
 {
-	public CheckBoxRenderer()
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column)
 	{
+		setSelected((Boolean) value);
 		setHorizontalAlignment(JLabel.CENTER);
-	}
-	
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-	{
-		if (row == table.getRowCount() - 1)
-		{
-			return new JLabel(""); // Afficher une cellule vide pour la dernière
-									// ligne
-		}
-		else
-		{
-			setSelected(value != null && (Boolean) value);
-			return this;
-		}
+		return this;
 	}
 }
