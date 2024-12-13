@@ -5,7 +5,6 @@ import controleur.ControleurFichier;
 import controleur.Ecrire;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class Notion
 {
@@ -117,6 +116,7 @@ public class Notion
     public void supprimerQuestion(Question question)
     {
         this.ensQuestions.removeIf(qst -> question.equals(qst));
+        Notion.mettreAJourNotions();
     }
 
     public static Notion trouverNotionParNom(String nom, Ressource ressource)

@@ -13,7 +13,7 @@ public class Ecrire
     // Méthode pour écrire toutes les ressources dans un fichier
     public static void ecrireRessources(List<Ressource> ressources)
     {
-        try (FileWriter writer = new FileWriter("Ressource.csv")) {
+        try (FileWriter writer = new FileWriter("Ressources.csv")) {
             for (Ressource ressource : ressources) {
                 writer.write("nom:" + ressource.getNom() + "    notions:");
                 for (String notion : ressource.getNomsNotions())
@@ -31,7 +31,7 @@ public class Ecrire
     // Méthode pour écrire toutes les notions dans un fichier
     public static void ecrireNotions(List<Notion> notions)
     {
-        try (FileWriter writer = new FileWriter("Notion.csv")) {
+        try (FileWriter writer = new FileWriter("Notions.csv")) {
             for (Notion notion : notions) {
                 writer.write("nom:" + notion.getNom() + "   ressource:" + notion.getRessource().getNom() + "\n");
                 System.out.println("Ecriture de la notion : " + notion.getNom());
@@ -44,7 +44,7 @@ public class Ecrire
     // Méthode pour écrire toutes les questions dans un fichier
     public static void ecrireQuestions(List<Question> questions)
     {
-        try (FileWriter writer = new FileWriter("Question.csv")) {
+        try (FileWriter writer = new FileWriter("Questions.csv")) {
             for (Question question : questions) {
                 writer.write(question.getEnonce() + "\n");
             }

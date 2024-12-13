@@ -123,6 +123,7 @@ public class Ressource
 	public void supprimerNotion(Notion notion)
 	{
 		this.ensNotions.removeIf(not -> notion.equals(not));
+		Ressource.mettreAJourRessources();
 	}
 
 	public static void mettreAJourRessources()
