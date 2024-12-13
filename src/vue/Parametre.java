@@ -47,21 +47,18 @@ public class Parametre extends JFrame
 		ajtRessource.setPreferredSize(new Dimension(180, 30));
 		ajtRessource.addActionListener(e ->
 		{
-			// Code pour lancer la création d'une ressource
-
-			// Pour avoir une fenêtre unique
 			if (this.creerRessource != null)
 			{
 				this.creerRessource.dispose();
 				this.creerRessource = null;
 			}
-
+			
 			this.creerRessource = new CreerRessource();
 			this.creerRessource.setVisible(true);
 			this.creerRessource.addWindowListener(new WindowAdapter()
 			{
 				public void windowClosed(WindowEvent e)
-				{ // Actualiser la liste des ressources après la fermeture de la fenêtre
+				{
 					chargerRessources();
 				}
 			});
@@ -132,27 +129,25 @@ public class Parametre extends JFrame
 		ajtNotion.setBackground(Color.GRAY);  // Initialiser en gris
 		ajtNotion.setEnabled(false);  // Initialiser comme désactivé
 		ajtNotion.setPreferredSize(new Dimension(150, 30));
+		
+
 		ajtNotion.addActionListener(e ->
 		{
-			// Code pour lancer la création d'une notion
-
-			// Pour avoir une fenêtre unique
 			if (this.creerNotion != null)
 			{
 				this.creerNotion.dispose();
 				this.creerNotion = null;
 			}
 
-			String selectedRessource = ressourceList.getSelectedValue(); // Récupérer la ressource sélectionnée
-			Ressource ressource = Controleur.trouverRessourceParNom(selectedRessource);
-
-			this.creerNotion = new CreerNotion(ressource); // Passer la ressource sélectionnée
+			Ressource selectedRessource = Controleur.trouverRessourceParNom(ressourceList.getSelectedValue());
+			this.creerNotion = new CreerNotion(selectedRessource);
 			this.creerNotion.setVisible(true);
 			this.creerNotion.addWindowListener(new WindowAdapter()
 			{
 				public void windowClosed(WindowEvent e)
-				{ // Actualiser la liste des ressources après la fermeture de la fenêtre
+				{
 					chargerRessources();
+					majListeNotion(selectedRessource.getNom());
 				}
 			});
 		});
@@ -337,16 +332,20 @@ public class Parametre extends JFrame
 	// Méthode pour charger les ressources dans la JList
 	private void chargerRessources()
 	{
+		String selectedRessource = ressourceList.getSelectedValue();
 		ressourceListModel.clear();
 		for (Ressource ressource : Controleur.getListRessource())
 		{
 			ressourceListModel.addElement(ressource.getNom());
 		}
+		ressourceList.setSelectedValue(selectedRessource, true);
 	}
+
 
 	// Méthode pour mettre à jour la liste des notions en fonction de la ressource sélectionnée
 	private void majListeNotion(String ressourceName)
 	{
+		String selectedNotion = notionList.getSelectedValue();
 		notionListModel.clear();
 		Ressource ressource = Controleur.trouverRessourceParNom(ressourceName);
 		
@@ -357,8 +356,7 @@ public class Parametre extends JFrame
 				notionListModel.addElement(notion);
 			}
 		}
+		notionList.setSelectedValue(selectedNotion, true);
 	}
-
-
 }
 
