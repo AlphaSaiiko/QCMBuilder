@@ -1,5 +1,7 @@
 package modele.option;
 
+import modele.*;
+
 public class OptionElimination implements IOption
 {
 	/*
@@ -16,19 +18,26 @@ public class OptionElimination implements IOption
 
 	private double nbPointsMoins;
 
+	private Question question;
+
+	private final int idReponse;
+	private static int compteurReponse = 0;
+
 
 	/*
 	 *  +--------------+
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public OptionElimination (String type, String intitule, boolean estReponse, int ordre, double nbPointsMoins)
+	public OptionElimination (String type, String intitule, boolean estReponse, int ordre, double nbPointsMoins, Question question)
 	{
 		this.type          = type         ;
 		this.intitule      = intitule     ;
 		this.estReponse    = estReponse   ;
 		this.ordre         = ordre        ;
 		this.nbPointsMoins = nbPointsMoins;
+		this.question = question;
+		this.idReponse  = ++OptionElimination.compteurReponse;
 	}
 
 
@@ -45,6 +54,9 @@ public class OptionElimination implements IOption
 	public int getOrdre() { return this.ordre; }
 
 	public double getNbPointsMoins() { return this.nbPointsMoins; }
+	public Question getQuestion() {return this.question;}
+
+	public int getId(){return this.idReponse;}
 
 
 	/*
@@ -59,5 +71,6 @@ public class OptionElimination implements IOption
 
 	public void setOrdre(int ordre) { this.ordre = ordre; }
 
-	public void setNbPointsMoins(double nbPoints) { this.nbPointsMoins = nbPoints; }	
+	public void setNbPointsMoins(double nbPoints) { this.nbPointsMoins = nbPoints; }
+	public void setQuestion(Question question)	{this.question = question;}
 }

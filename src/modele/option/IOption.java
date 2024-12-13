@@ -9,7 +9,7 @@ public interface IOption
 	 */ 
 	public String getIntitule   ();
 	public String getType       ();
-	public boolean getEstReponse();
+	public int getId();
 
 	
 	/*
@@ -19,5 +19,5 @@ public interface IOption
 	 */ 
 	public void setIntitule  (String intitule);
 	public void setType      (String type    );
-	public void setEstReponse(boolean estRep );
+
 }

@@ -10,6 +10,9 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 import modele.Question;
 import modele.option.Option;
+import modele.option.IOption;
+import modele.option.OptionAssociation;
+import modele.option.OptionElimination;
 
 public class ControleurFichier
 {
@@ -126,32 +129,38 @@ public class ControleurFichier
         return fichier.exists();
     }
 
-    public void ecrireReponse(String chemin, Option opt)
+    public void ecrireReponse(String chemin, IOption opt)
     {
         if (!chemin.endsWith(".rtf"))
-        {
-            chemin += ".rtf";
-        }
-        chemin = this.chemin + chemin;
+		{
+			chemin += ".rtf";
+		}
+		chemin = this.chemin + chemin;
 
-        File fichier = new File(chemin);
+		String texte ="";
 
-        // Vérifie si le fichier existe
-        if (!fichier.exists())
-        {
-            System.out.println("Le fichier n'existe pas : " + chemin);
-            return;
-        }
+		if(opt instanceof Option)			{texte = this.stringOption((Option)opt);}
+		if(opt instanceof OptionAssociation){texte = this.stringOptionAssociation((OptionAssociation)opt);}
+		if(opt instanceof OptionElimination){texte = this.stringOptionElimination((OptionElimination) opt);}
 
-        // Écrit les données de l'objet Option dans le fichier
-        try (PrintWriter writer = new PrintWriter(new FileOutputStream(fichier, true)))
-        {
-            writer.println(opt.getId() + "\t" + opt.getType() + "\t" + opt.getIntitule() + "\t" + opt.getEstReponse() + "\t");
-        }
-        catch (IOException e)
-        {
-            System.err.println("Une erreur s'est produite lors de l'écriture dans le fichier : " + e.getMessage());
-        }
+		File fichier = new File(chemin);
+
+		// Vérifie si le fichier existe
+		if (!fichier.exists())
+		{
+			System.out.println("Le fichier n'existe pas : " + chemin);
+			return;
+		}
+
+		// Écrit les données de l'objet Option dans le fichier
+		try (PrintWriter writer = new PrintWriter(new FileOutputStream(fichier, true)))
+		{
+			writer.println(texte);
+		}
+		catch (IOException e)
+		{
+			System.err.println("Une erreur s'est produite lors de l'écriture dans le fichier : " + e.getMessage());
+		}
     }
 
     public void modifierQuestion(String chemin, Question qst)
@@ -192,44 +201,65 @@ public class ControleurFichier
         }
     }
 
-    public void modifierReponse(String chemin, Option opt)
+    public void modifierReponse(String chemin, IOption opt)
     {
         if (!chemin.endsWith(".rtf"))
-        {
-            chemin += ".rtf";
-        }
-        chemin = this.chemin + chemin;
-        File fichier = new File(chemin);
+		{
+			chemin += ".rtf";
+		}
+		chemin = this.chemin + chemin;
+		File fichier = new File(chemin);
 
-        // Vérifie si le fichier existe
-        if (!fichier.exists())
-        {
-            System.out.println("Le fichier n'existe pas.");
-            return;
-        }
+		// Vérifie si le fichier existe
+		if (!fichier.exists())
+		{
+			System.out.println("Le fichier n'existe pas.");
+			return;
+		}
 
-        try
-        {
-            // Lire toutes les lignes du fichier
-            List<String> lignes = Files.readAllLines(Paths.get(chemin));
+		String texte ="";
 
-            // Identifier et modifier la ligne correspondante
-            for (int i = 0; i < lignes.size(); i++)
-            {
-                String ligne = lignes.get(i);
-                if (ligne.startsWith(opt.getId() + "\t"))
-                {
-                    lignes.set(i, opt.getId() + "\t" + opt.getType() + "\t" + opt.getIntitule() + "\t" + opt.getEstReponse());
-                    break;
-                }
-            }
+		if(opt instanceof Option){texte = this.stringOption((Option)opt);}
+		if(opt instanceof OptionAssociation){texte = this.stringOptionAssociation((OptionAssociation)opt);}
+		if(opt instanceof OptionElimination){texte = this.stringOptionElimination((OptionElimination) opt);}
 
-            // Réécrire le contenu modifié dans le fichier
-            Files.write(Paths.get(chemin), lignes, StandardOpenOption.TRUNCATE_EXISTING);
-        }
-        catch (IOException e)
-        {
-            System.err.println("Une erreur s'est produite lors de la modification du fichier : " + e.getMessage());
-        }
+		try
+		{
+			// Lire toutes les lignes du fichier
+			List<String> lignes = Files.readAllLines(Paths.get(chemin));
+
+			// Identifier et modifier la ligne correspondante
+			for (int i = 0; i < lignes.size(); i++)
+			{
+				String ligne = lignes.get(i);
+				if (ligne.startsWith(opt.getId() + "\t"))
+				{
+					lignes.set(i, texte);
+					break;
+				}
+			}
+
+			// Réécrire le contenu modifié dans le fichier
+			Files.write(Paths.get(chemin), lignes, StandardOpenOption.TRUNCATE_EXISTING);
+		}
+		catch (IOException e)
+		{
+			System.err.println("Une erreur s'est produite lors de la modification du fichier : " + e.getMessage());
+		}
     }
+
+    private String stringOption(Option opt)
+	{
+		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getIntitule() + "\t" + opt.getEstReponse();
+	}
+
+	private String stringOptionAssociation(OptionAssociation opt)
+	{
+		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getIntitule()  + "\t question" + opt.getQuestion().getNumQuestion();
+	}
+
+	private String stringOptionElimination(OptionElimination opt)
+	{
+		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getIntitule() + "\t" +  opt.getOrdre()+ "\t" + opt.getNbPointsMoins()  + "\t" + opt.getEstReponse() + "\t" + opt.getQuestion();
+	}
 }

@@ -12,11 +12,14 @@ public class OptionAssociation implements IOption
 	private String type    ;
 	private String intitule;
 
-	private boolean estReponse;
+	private OptionAssociation associe;
 
 	private IOption optionAssocie;
 
 	private Question question;
+
+	private final int idReponse;
+	private static int compteurReponse = 0;
 
 
 	/*
@@ -24,11 +27,13 @@ public class OptionAssociation implements IOption
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public OptionAssociation(String type, String intitule, boolean estReponse, Question question)
+	public OptionAssociation(String type, String intitule, Question question)
 	{
 		this.type       = type      ;
 		this.intitule   = intitule  ;
-		this.estReponse = estReponse;
+		this.idReponse  = ++OptionAssociation.compteurReponse;
+		this.associe = null;
+		this.question = question;
 	}
 
 
@@ -40,9 +45,13 @@ public class OptionAssociation implements IOption
 	public String getIntitule() { return this.intitule; }
 	public String getType    () { return this.type    ; }
 
-	public boolean getEstReponse() { return this.estReponse; }
+	public OptionAssociation getAssocie() { return this.associe; }
 
 	public IOption getOptionAssocie() { return this.optionAssocie; }
+
+	public int getId() {return this.idReponse;}
+
+	public Question  getQuestion() {return this.question;}
 
 
 	/*
@@ -53,7 +62,7 @@ public class OptionAssociation implements IOption
 	public void setIntitule(String intitule) { this.intitule = intitule; }
 	public void setType    (String type)     { this.type     = type    ; }
 
-	public void setEstReponse(boolean estRep) { this.estReponse = estRep; }
+	public void setAssocie(OptionAssociation associe) { this.associe = associe; }
 
 	public void setOptionAssocie(IOption opt) { this.optionAssocie = opt; }
 }
