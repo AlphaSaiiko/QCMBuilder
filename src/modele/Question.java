@@ -9,9 +9,9 @@ import modele.option.IOption;
 public class Question
 {
 	/*
-	 * +------------+
-	 * | PARAMETRES |
-	 * +------------+
+	 * +-----------+
+	 * | ATTRIBUTS |
+	 * +-----------+
 	 */
 	private String type;
 	private String enonce;

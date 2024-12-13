@@ -8,9 +8,9 @@ import java.util.List;
 public class Notion
 {
 	/*
-	 * +------------+
-	 * | PARAMETRES |
-	 * +------------+
+	 * +-----------+
+	 * | ATTRIBUTS |
+	 * +-----------+
 	 */ 
 	private List<Question> ensQuestions;
 	private String nom;

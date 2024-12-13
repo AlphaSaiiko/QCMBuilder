@@ -8,9 +8,9 @@ import java.util.List;
 public class Ressource
 {
 	/*
-	 * +------------+
-	 * | PARAMETRES |
-	 * +------------+
+	 * +-----------+
+	 * | ATTRIBUTS |
+	 * +-----------+
 	 */
 
 	
