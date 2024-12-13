@@ -1,8 +1,11 @@
 package modele;
 
+import controleur.Controleur;
 import controleur.ControleurFichier;
+import controleur.Ecrire;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class Notion
 {
@@ -39,9 +42,11 @@ public class Notion
     {
         this.nom = nom;
         this.ressource = ressource;
+        Controleur.ajouterNotion(this);
         this.creerFichierNotion();
         this.ensQuestions = new ArrayList<>();
         ressource.ajouterNotion(this);
+        Notion.mettreAJourNotions();
     }
 
     /*
@@ -105,6 +110,7 @@ public class Notion
         if (question != null)
         {
             this.ensQuestions.add(question);
+            Notion.mettreAJourNotions();
         }
     }
 
@@ -123,5 +129,11 @@ public class Notion
             }
         }
         return null;
+    }
+
+    public static void mettreAJourNotions()
+    {
+        List<Notion> notions = Controleur.getListNotion();
+        Ecrire.ecrireNotions(notions);
     }
 }

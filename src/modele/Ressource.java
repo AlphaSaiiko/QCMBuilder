@@ -2,6 +2,7 @@ package modele;
 
 import controleur.Controleur;
 import controleur.ControleurFichier;
+import controleur.Ecrire;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class Ressource
 		Controleur.ajouterRessource(this);
 		this.fichierControleur = new ControleurFichier("lib/ressources/");
 		this.creerFichierRessource();
+		Ressource.mettreAJourRessources();
 	}
 
 	/*
@@ -114,12 +116,19 @@ public class Ressource
 		if (notion != null)
 		{
 			this.ensNotions.add(notion);
+			Ressource.mettreAJourRessources();
 		}
 	}
 
 	public void supprimerNotion(Notion notion)
 	{
 		this.ensNotions.removeIf(not -> notion.equals(not));
+	}
+
+	public static void mettreAJourRessources()
+	{
+		List<Ressource> ressources = Controleur.getListRessource();
+		Ecrire.ecrireRessources(ressources);
 	}
 
 }

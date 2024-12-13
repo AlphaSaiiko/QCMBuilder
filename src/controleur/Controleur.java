@@ -170,9 +170,19 @@ public class Controleur
 		return Metier.trouverRessourceParNom(nom);
 	}
 
+	public static Notion trouverNotionParNom(String nom)
+	{
+		return Metier.trouverNotionParNom(nom);
+	}
+
 	public static String[] getNomsRessources()
 	{
 		return Metier.getNomsRessources();
+	}
+
+	public static String[] getNomsNotions()
+	{
+		return Metier.getNomsNotions();
 	}
 
 	public static List<Ressource> getListRessource()
@@ -180,10 +190,20 @@ public class Controleur
 		return Metier.getListRessource();
 	}
 
+	public static List<Notion> getListNotion()
+	{
+		return Metier.getListNotion();
+	}
+
     public static void ajouterRessource(Ressource ressource)
     {
         Metier.ajouterRessource(ressource);
     }
+
+	public static void ajouterNotion(Notion notion)
+	{
+		Metier.ajouterNotion(notion);
+	}
 
 	/*
 	 * +-------+
