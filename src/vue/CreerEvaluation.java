@@ -16,111 +16,123 @@ public class CreerEvaluation extends JFrame
 	{
 		setTitle("Génération d'évaluation");
 
+		//Panel principal
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new BorderLayout());
 
-		// Bouton de retour
-		String imageRet = "./lib/icones/home.png";
-		ImageIcon icon = new ImageIcon(imageRet);
+
+		// Bouton "Menu principal"
+		String imageMenu = "./lib/icones/home.png";
+		ImageIcon icon = new ImageIcon(imageMenu);
 		Image img = icon.getImage();
 		Image newImg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newImg);
-		JButton retourButton = new JButton(icon);
-		retourButton.addActionListener(e -> {
+
+		JButton btnMenu = new JButton(icon);
+		btnMenu.addActionListener(e -> {
 			Controleur.ouvrirAccueil();
 			dispose();
 		});
-		JPanel panelRetour = new JPanel();
-		panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
-		panelRetour.add(retourButton);
+
+		JPanel panelMenu = new JPanel();
+		panelMenu.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelMenu.add(btnMenu);
+
 
 		// Panel pour regrouper les composants sur une seule ligne
-		JPanel linePanel = new JPanel(new GridBagLayout());
-		GridBagConstraints lineGbc = new GridBagConstraints();
-		lineGbc.insets = new Insets(10, 10, 10, 10);
+		JPanel panelLigne = new JPanel(new GridBagLayout());
+		GridBagConstraints gbcLigne = new GridBagConstraints();
+		gbcLigne.insets = new Insets(10, 10, 10, 10);
+
 
 		// Champ de texte pour la ressource
-		lineGbc.gridx = 0;
-		lineGbc.gridy = 0;
-		lineGbc.anchor = GridBagConstraints.WEST;
-		linePanel.add(new JLabel("Ressource"), lineGbc);
+		gbcLigne.gridx = 0;
+		gbcLigne.gridy = 0;
+		gbcLigne.anchor = GridBagConstraints.WEST;
+		panelLigne.add(new JLabel("Ressource"), gbcLigne);
 
-		lineGbc.gridx = 1;
-		lineGbc.gridy = 0;
-		lineGbc.anchor = GridBagConstraints.CENTER;
+		gbcLigne.gridx = 1;
+		gbcLigne.gridy = 0;
+		gbcLigne.anchor = GridBagConstraints.CENTER;
 		JComboBox<String> ressources = new JComboBox<>(Controleur.getNomsRessources());
-		linePanel.add(ressources, lineGbc);
+		panelLigne.add(ressources, gbcLigne);
 
+		
 		// Ajout du chronomètre
-		lineGbc.gridx = 2;
-		lineGbc.gridy = 0;
-		lineGbc.anchor = GridBagConstraints.CENTER;
-		String imagePath = "./lib/icones/timer.png";
-		File imageFile = new File(imagePath);
-		if (imageFile.exists())
+		gbcLigne.gridx = 2;
+		gbcLigne.gridy = 0;
+		gbcLigne.anchor = GridBagConstraints.CENTER;
+		String cheminImage = "./lib/icones/timer.png";
+		File fichierImage = new File(cheminImage);
+		if (fichierImage.exists())
 		{
-			ImageIcon timerIcon = new ImageIcon(imagePath);
+			ImageIcon timerIcon = new ImageIcon(cheminImage);
 			JLabel timerLabel = new JLabel(timerIcon);
-			linePanel.add(timerLabel, lineGbc);
+			panelLigne.add(timerLabel, gbcLigne);
 		}
 		else
 		{
-			JLabel errorLabel = new JLabel("Image non trouvée : " + imagePath);
+			JLabel errorLabel = new JLabel("Image non trouvée : " + cheminImage);
 			errorLabel.setForeground(Color.RED);
-			linePanel.add(errorLabel, lineGbc);
+			panelLigne.add(errorLabel, gbcLigne);
 		}
 
+
 		// Ajout des boutons radio
-		lineGbc.gridx = 3;
-		lineGbc.gridy = 0;
-		lineGbc.anchor = GridBagConstraints.CENTER;
-		JRadioButton ouiButton = new JRadioButton("Oui");
-		JRadioButton nonButton = new JRadioButton("Non");
+		gbcLigne.gridx = 3;
+		gbcLigne.gridy = 0;
+		gbcLigne.anchor = GridBagConstraints.CENTER;
+		JRadioButton boutonOui = new JRadioButton("Oui");
+		JRadioButton boutonNon = new JRadioButton("Non");
 
-		ButtonGroup group = new ButtonGroup();
-		group.add(ouiButton);
-		group.add(nonButton);
+		ButtonGroup groupe = new ButtonGroup();
+		groupe.add(boutonOui);
+		groupe.add(boutonNon);
 
-		JPanel radioPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints radioGbc = new GridBagConstraints();
-		radioGbc.gridx = 0;
-		radioGbc.gridy = GridBagConstraints.RELATIVE;
-		radioGbc.insets = new Insets(5, 5, 5, 5);
-		radioGbc.anchor = GridBagConstraints.CENTER;
+		JPanel panelBoutons = new JPanel(new GridBagLayout());
+		GridBagConstraints gbcBoutons = new GridBagConstraints();
+		gbcBoutons.gridx = 0;
+		gbcBoutons.gridy = GridBagConstraints.RELATIVE;
+		gbcBoutons.insets = new Insets(5, 5, 5, 5);
+		gbcBoutons.anchor = GridBagConstraints.CENTER;
 
-		radioPanel.add(ouiButton, radioGbc);
-		radioPanel.add(nonButton, radioGbc);
+		panelBoutons.add(boutonOui, gbcBoutons);
+		panelBoutons.add(boutonNon, gbcBoutons);
 
-		linePanel.add(radioPanel, lineGbc);
+		panelLigne.add(panelBoutons, gbcLigne);
+
 
 		// Ajouter le panel regroupant les composants à la fenêtre principale
-		panelPrincipal.add(panelRetour, BorderLayout.NORTH);
-		panelPrincipal.add(linePanel, BorderLayout.CENTER);
+		panelPrincipal.add(panelMenu, BorderLayout.NORTH);
+		panelPrincipal.add(panelLigne, BorderLayout.CENTER);
 
-		// Ajouter un bouton en bas centré
-		JButton creerButton = new JButton("Créer une nouvelle évaluation");
-		JPanel panelBouton = new JPanel();
-		panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
-		panelBouton.add(creerButton);
 
-		creerButton.addActionListener (e -> {
+		// Ajouter un bouton "Créer une nouvelle évaluation"
+		JButton boutonCreer = new JButton("Créer une nouvelle évaluation");
+		JPanel panelCreer = new JPanel();
+		panelCreer.setLayout(new FlowLayout(FlowLayout.CENTER));
+		panelCreer.add(boutonCreer);
+
+		boutonCreer.addActionListener (e -> {
 			Controleur.ouvrirTabEvaluation();
 			dispose();
 		});
 
-		panelPrincipal.add(panelBouton, BorderLayout.SOUTH);
+		panelPrincipal.add(panelCreer, BorderLayout.SOUTH);
 
-		this.add(panelPrincipal);
-		this.setSize(500, 300);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
 
 		// Ajouter un ActionListener au bouton pour ouvrir une nouvelle IHM
-		creerButton.addActionListener(e -> {
+		boutonCreer.addActionListener(e -> {
 			Controleur.creerEvaluation();
 			dispose();
 		});
 
+		
+		// Ajout du panel principal à la frame et configuration de cette dernière
+		this.add(panelPrincipal);
+		this.setSize(500, 300);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 
