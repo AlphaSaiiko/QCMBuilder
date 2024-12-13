@@ -109,7 +109,7 @@ public class ControleurFichier
         try
         {
             PrintWriter pw = new PrintWriter(new FileOutputStream(chemin, false));
-            pw.println(qst.getType() + "\t" + qst.getIntitule() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom());
+            pw.println(qst.getType() + "\t" + qst.getEnonce() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom());
             pw.close();
             System.out.println("Fichier RTF créé : " + chemin);
         }
@@ -171,7 +171,7 @@ public class ControleurFichier
             return;
         }
 
-        String ligneEntiere = qst.getType() + "\t" + qst.getIntitule() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom();
+        String ligneEntiere = qst.getType() + "\t" + qst.getEnonce() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom();
         try
         {
             // Lire toutes les lignes du fichier

@@ -86,7 +86,7 @@ public class QuestionLiaison extends JFrame
 				{
 					JOptionPane.showMessageDialog(null, "Erreur lors de l'enregistrement de la question.");
 				}*/
-				question.setIntitule(questionArea.getText());
+				question.setEnonce(questionArea.getText());
 			}
 		});
 

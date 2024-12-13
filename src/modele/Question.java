@@ -13,7 +13,7 @@ public class Question
      * +------------+
      */
     private String type;
-    private String intitule;
+    private String enonce;
     private int nbPoints;
     private int temps;
     private int difficulte;
@@ -65,9 +65,9 @@ public class Question
         return type;
     }
 
-    public String getIntitule()
+    public String getEnonce()
     {
-        return intitule;
+        return enonce;
     }
 
     public int getNbPoints()
@@ -121,9 +121,9 @@ public class Question
         this.modifierQuestion();
     }
 
-    public void setIntitule(String intitule)
+    public void setEnonce(String enonce)
     {
-        this.intitule = intitule;
+        this.enonce = enonce;
         this.modifierQuestion();
     }
 

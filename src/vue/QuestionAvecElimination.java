@@ -3,10 +3,7 @@ package vue;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
 import javax.swing.*;
-
 import modele.Question;
 
 public class QuestionAvecElimination extends JFrame
@@ -192,7 +189,7 @@ public class QuestionAvecElimination extends JFrame
 					JOptionPane.showMessageDialog(null, "Erreur lors de l'enregistrement de la question.");
 				}*/
 
-				question.setIntitule(questionArea.getText());
+				question.setEnonce(questionArea.getText());
 			}
 		});
 
