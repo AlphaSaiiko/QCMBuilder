@@ -7,11 +7,12 @@ import javax.swing.border.EmptyBorder;
 
 public class Accueil extends JFrame
 {
-	/*
-		* +--------------+
-		* | CONSTRUCTEUR |
-		* +--------------+
-		*/
+	/**
+	 * +--------------+
+	 * | CONSTRUCTEUR |
+	 * +--------------+
+	 */
+
 	public Accueil()
 	{
 		setTitle("Accueil");

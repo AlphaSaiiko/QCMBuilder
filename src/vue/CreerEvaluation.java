@@ -7,15 +7,17 @@ import javax.swing.*;
 
 public class CreerEvaluation extends JFrame
 {
-	/*
+	/**
 	 * +--------------+
 	 * | CONSTRUCTEUR |
 	 * +--------------+
 	 */
+
 	public CreerEvaluation()
 	{
 		setTitle("Génération d'évaluation");
 
+		
 		//Panel principal
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new BorderLayout());

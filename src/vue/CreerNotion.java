@@ -7,68 +7,88 @@ import modele.Ressource;
 
 public class CreerNotion extends JFrame
 {
-    /*
-     * +--------------+
-     * | CONSTRUCTEUR |
-     * +--------------+
-     */
-    public CreerNotion(Ressource ressource)
-    {
-        setTitle("Créer une notion");
+	/**
+	 * +--------------+
+	 * | CONSTRUCTEUR |
+	 * +--------------+
+	 */
 
-        JPanel panelPrincipal = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Marges entre les composants
+	public CreerNotion(Ressource ressource)
+	{
+		setTitle("Créer une notion");
 
-        // JTextArea pour le titre de la ressource
-        JTextArea titre = new JTextArea(1, 20); // Taille réduite
-        titre.setBorder(BorderFactory.createTitledBorder("Titre de la notion"));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 0.8;
-        panelPrincipal.add(titre, gbc);
 
-        // JButton pour ajouter une ressource à côté du titre
-        JButton ajouter = new JButton("Ajouter");
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 0.2;
-        panelPrincipal.add(ajouter, gbc);
+		//Panel principal
+		JPanel panelPrincipal = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Récupérer le contenu du JTextArea et créer une nouvelle notion
-        ajouter.addActionListener(e -> {
-            String titreNotion = titre.getText();
-            if (!titreNotion.trim().isEmpty())
-            {
-                Controleur.creerNotion(titreNotion, ressource);
-                this.dispose();
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(this, "Le titre de la notion ne peut pas être vide.", "Erreur", JOptionPane.ERROR_MESSAGE);
-            }
-        });
 
-        // Paramètres de la Frame
-        this.add(panelPrincipal);
-        this.setSize(600, 100);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setVisible(true);
-    }
+		// JTextArea pour le titre de la ressource
+		JTextArea texteTitre = new JTextArea(1, 20);
+		texteTitre.setBorder(BorderFactory.createTitledBorder("Titre de la notion"));
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridwidth = 2;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 0.8;
+		panelPrincipal.add(texteTitre, gbc);
 
-    // Création des boutons ronds pour les niveaux de difficultés
-    public static RoundButton creerButtonRond(Color couleur, String texte)
-    {
-        RoundButton button = new RoundButton(texte);
-        button.setPreferredSize(new Dimension(45, 45));
-        button.setBackground(couleur);
-        button.setOpaque(false);
-        button.setBorderPainted(false);
-        return button;
-    }
+
+		// JButton pour ajouter une ressource à côté du titre
+		JButton boutonAjouter = new JButton("Ajouter");
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.gridwidth = 1;
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx = 0.2;
+		panelPrincipal.add(boutonAjouter, gbc);
+
+		
+		// Récupérer le contenu du JTextArea et créer une nouvelle notion
+		boutonAjouter.addActionListener(e -> {
+			String titreNotion = texteTitre.getText();
+			if (!titreNotion.trim().isEmpty())
+			{
+				Controleur.creerNotion(titreNotion, ressource);
+				this.dispose();
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(this, "Le titre de la notion ne peut pas être vide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
+
+		// Ajout du panel principal à la frame et configuration de cette dernière
+		this.add(panelPrincipal);
+		this.setSize(600, 100);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+	}
+
+
+	/**
+	 * +----------+
+	 * | METHODES |
+	 * +----------+
+	 */
+
+	/**
+	 * Crée un bouton rond personnalisé avec une couleur et un texte spécifiques.
+	 *
+	 * @param couleur la couleur de fond du bouton
+	 * @param texte   le texte affiché sur le bouton
+	 * @return un objet {@link RoundButton} configuré avec les propriétés spécifiées
+	 */
+	public static RoundButton creerBoutonRond(Color couleur, String texte)
+	{
+		RoundButton btnRond = new RoundButton(texte);
+		btnRond.setPreferredSize(new Dimension(45, 45));
+		btnRond.setBackground(couleur);
+		btnRond.setOpaque(false);
+		btnRond.setBorderPainted(false);
+		return btnRond;
+	}
 }
