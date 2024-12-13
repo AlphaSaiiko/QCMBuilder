@@ -16,12 +16,14 @@ public class Accueil extends JFrame
     {
         setTitle("Accueil");
 
-        // Configuration du panel principal + espace de 25 au nord
+
+		//Panel principal
         JPanel panelPrincipal = new JPanel();
         panelPrincipal.setBorder(new EmptyBorder(25, 0, 0, 0));
         panelPrincipal.setLayout(new BorderLayout());
 
-        // Configuration du titre
+
+		//Panel titre
         JPanel panelTitre = new JPanel();
         panelTitre.setLayout(new BorderLayout());
         JLabel lblTitre = new JLabel("Bienvenue dans l'Application QCM Builder");
@@ -29,7 +31,8 @@ public class Accueil extends JFrame
         lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
         panelTitre.add(lblTitre, BorderLayout.CENTER);
 
-        // Configuration du panel des boutons de l'accueil
+
+        // Panel contenant les boutons "Générer une Evaluation", "Créer une question" et "Paramètres"
         JPanel panelBoutons = new JPanel();
         panelBoutons.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -38,23 +41,26 @@ public class Accueil extends JFrame
         gbc.gridx = 0;
         gbc.gridy = GridBagConstraints.RELATIVE;
 
-        // Création des boutons
-        JButton btnGenererEval = new JButton("Générer une Evaluation");
-        JButton btnCreerQuestion = new JButton("Créer une question");
-        JButton btnParametres = new JButton("Paramètres");
 
-        // Configuration police des boutons
-        btnGenererEval.setFont(new Font("Arial", Font.PLAIN, 18));
-        btnCreerQuestion.setFont(new Font("Arial", Font.PLAIN, 18));
-        btnParametres.setFont(new Font("Arial", Font.PLAIN, 18));
+        // Création des boutons "Générer une Evaluation", "Créer une question" et "Paramètres"
+        JButton btnGenererEval = new JButton("Générer une Evaluation");
+		btnGenererEval.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        JButton btnCreerQuestion = new JButton("Créer une question");
+		btnCreerQuestion.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        JButton btnParametres = new JButton("Paramètres");
+		btnParametres.setFont(new Font("Arial", Font.PLAIN, 18));
+
 
         // Configuration de la taille des boutons
-        Dimension buttonSize = new Dimension(300, 50);
-        btnGenererEval.setPreferredSize(buttonSize);
-        btnCreerQuestion.setPreferredSize(buttonSize);
-        btnParametres.setPreferredSize(buttonSize);
+        Dimension tailleBoutons = new Dimension(300, 50);
+        btnGenererEval.setPreferredSize(tailleBoutons);
+        btnCreerQuestion.setPreferredSize(tailleBoutons);
+        btnParametres.setPreferredSize(tailleBoutons);
 
-        // Ajout des interactions des boutons
+
+        // Ajout des ActionListener
         btnGenererEval.addActionListener(e -> {
             if (Controleur.getListRessource().isEmpty())
             {
@@ -84,23 +90,27 @@ public class Accueil extends JFrame
             this.dispose();
         });
 
+
         // Ajout des boutons au panel des boutons
         panelBoutons.add(btnParametres, gbc);
         panelBoutons.add(btnCreerQuestion, gbc);
         panelBoutons.add(btnGenererEval, gbc);
 
+
         // Ajout des panels secondaires au panel principal
         panelPrincipal.add(panelTitre, BorderLayout.NORTH);
         panelPrincipal.add(panelBoutons, BorderLayout.CENTER);
 
-        // Ajout du panel principal et configuration de la frame
+
+        // Ajout du panel principal à la frame et configuration de cette dernière
         this.add(panelPrincipal);
         this.setSize(600, 400);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
-        // Vérifier la liste des ressources après l'initialisation de l'interface graphique
+
+        // Vérification de la liste des ressources après l'initialisation de l'interface graphique
         SwingUtilities.invokeLater(() -> {
             if (Controleur.getListRessource().isEmpty())
             {
