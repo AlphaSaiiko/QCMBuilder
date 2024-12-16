@@ -1,5 +1,6 @@
 package vue;
 
+import controleur.Controleur;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,14 +9,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import modele.Question;
+import modele.option.OptionAssociation;
 
 public class QuestionLiaison extends JFrame
 {
 	private JPanel questionPanel;
 	private JTextArea questionArea;
-	private JButton addButton;
-	private JButton explicationButton;
-	private JButton saveButton;
+	private JButton ajouterBouton;
+	private JButton explicationBouton;
+	private JButton enregistrerBouton;
 	private Question question;
 
 	public QuestionLiaison(Question question)
@@ -41,19 +43,19 @@ public class QuestionLiaison extends JFrame
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		// Initialiser le bouton "add"
-		addButton = new JButton("Add");
-		addButton.addActionListener(new ActionListener()
+		// Initialiser le bouton "ajouter"
+		ajouterBouton = new JButton("Ajouter");
+		ajouterBouton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				addTrashPanels();
+				ajouterReponses();
 			}
 		});
 
 		// Initialiser le bouton "Explication"
-		explicationButton = new JButton("Explication");
-		explicationButton.addActionListener(new ActionListener()
+		explicationBouton = new JButton("Explication");
+		explicationBouton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
@@ -72,28 +74,45 @@ public class QuestionLiaison extends JFrame
 		});
 
 		// Initialiser le bouton "Enregistrer"
-		saveButton = new JButton("Enregistrer");
-		saveButton.addActionListener(new ActionListener()
+		enregistrerBouton = new JButton("Enregistrer");
+		enregistrerBouton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				/*String questionText = questionArea.getText();
-				try (FileWriter writer = new FileWriter("question.txt"))
-				{
-					writer.write(questionText);
-					JOptionPane.showMessageDialog(null, "Question enregistrée avec succès !");
-				} catch (IOException ex)
-				{
-					JOptionPane.showMessageDialog(null, "Erreur lors de l'enregistrement de la question.");
-				}*/
+				// Sauvegarder la question
 				question.setEnonce(questionArea.getText());
+
+				// Sauvegarder les réponses
+				for (int i = 0; i < questionPanel.getComponentCount(); i++)
+				{
+					Component comp = questionPanel.getComponent(i);
+					if (comp instanceof JPanel) {
+						JPanel rowPanel = (JPanel) comp;
+						JTextField textField1 = (JTextField) ((JPanel) rowPanel.getComponent(0)).getComponent(1);
+						JTextField textField2 = (JTextField) ((JPanel) rowPanel.getComponent(1)).getComponent(0);
+
+						System.out.println("Réponse 1 : " + textField1.getText());
+						System.out.println("Réponse 2 : " + textField2.getText());
+
+						// Si les champs de texte sont vides, les remplir avec des valeurs par défaut
+						if (textField1.getText().isEmpty() || textField2.getText().isEmpty())
+						{
+							JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs de texte.", "Erreur", JOptionPane.ERROR_MESSAGE);
+						}
+
+						OptionAssociation o1 = Controleur.creerReponseAssociation(textField1.getText(), question);
+						OptionAssociation o2 = Controleur.creerReponseAssociation(textField2.getText(), question);
+
+						o1.setAssocie(o2);
+						o2.setAssocie(o1);
+					}
+				}
 			}
 		});
-
 		// Ajouter les boutons au panel des boutons
-		buttonPanel.add(addButton);
-		buttonPanel.add(explicationButton);
-		buttonPanel.add(saveButton);
+		buttonPanel.add(ajouterBouton);
+		buttonPanel.add(explicationBouton);
+		buttonPanel.add(enregistrerBouton);
 
 		// Ajouter le panel des boutons au conteneur principal
 		mainPanel.add(questionPanel, BorderLayout.CENTER);
@@ -110,59 +129,59 @@ public class QuestionLiaison extends JFrame
 	}
 
 	// Méthode pour ajouter deux TrashPanel en miroir sur la même ligne
-	private void addTrashPanels()
+	private void ajouterReponses()
 	{
- JPanel rowPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+		JPanel rowPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 5);
 
-        // TrashPanel
-        JPanel newTrashPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc1 = new GridBagConstraints();
-        gbc1.gridx = 0;
-        gbc1.gridy = 0;
-        gbc1.anchor = GridBagConstraints.WEST;
+		// TrashPanel
+		JPanel newTrashPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc1 = new GridBagConstraints();
+		gbc1.gridx = 0;
+		gbc1.gridy = 0;
+		gbc1.anchor = GridBagConstraints.WEST;
 
-        // Redimensionner l'icône de poubelle
-        ImageIcon newTrashIcon = new ImageIcon(
-                new ImageIcon("QCMBuilder/lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-        JButton newTrashButton = new JButton(newTrashIcon);
-        newTrashButton.setPreferredSize(new Dimension(40, 40));
-        newTrashButton.setBorderPainted(false);
-        newTrashButton.setContentAreaFilled(false);
-        newTrashButton.setFocusPainted(false);
-        newTrashButton.setOpaque(false);
-        gbc1.gridx = 0;
-        newTrashPanel.add(newTrashButton, gbc1);
+		// Redimensionner l'icône de poubelle
+		ImageIcon newTrashIcon = new ImageIcon(
+				new ImageIcon("QCMBuilder/lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
+		JButton newTrashButton = new JButton(newTrashIcon);
+		newTrashButton.setPreferredSize(new Dimension(40, 40));
+		newTrashButton.setBorderPainted(false);
+		newTrashButton.setContentAreaFilled(false);
+		newTrashButton.setFocusPainted(false);
+		newTrashButton.setOpaque(false);
+		gbc1.gridx = 0;
+		newTrashPanel.add(newTrashButton, gbc1);
 
-        // Ajouter un JTextField
-        JTextField newTextField = new JTextField();
-        newTextField.setFont(new Font("Arial", Font.PLAIN, 18));
-        newTextField.setPreferredSize(new Dimension(200, 30));
-        gbc1.gridx = 1;
-        gbc1.fill = GridBagConstraints.HORIZONTAL;
-        gbc1.weightx = 1.0;
-        newTrashPanel.add(newTextField, gbc1);
+		// Ajouter un JTextField
+		JTextField newTextField = new JTextField();
+		newTextField.setFont(new Font("Arial", Font.PLAIN, 18));
+		newTextField.setPreferredSize(new Dimension(200, 30));
+		gbc1.gridx = 1;
+		gbc1.fill = GridBagConstraints.HORIZONTAL;
+		gbc1.weightx = 1.0;
+		newTrashPanel.add(newTextField, gbc1);
 
-        // Ajouter un ActionListener au bouton de poubelle
-        newTrashButton.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                questionPanel.remove(rowPanel);
-                questionPanel.revalidate();
-                questionPanel.repaint();
-            }
-        });
+		// Ajouter un ActionListener au bouton de poubelle
+		newTrashButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				questionPanel.remove(rowPanel);
+				questionPanel.revalidate();
+				questionPanel.repaint();
+			}
+		});
 
-        // Ajouter le TrashPanel au rowPanel
-        gbc.gridx = 0;
-        rowPanel.add(newTrashPanel, gbc);
+		// Ajouter le TrashPanel au rowPanel
+		gbc.gridx = 0;
+		rowPanel.add(newTrashPanel, gbc);
 
-        // Ajouter le rowPanel au questionPanel
-        questionPanel.add(rowPanel);
-        questionPanel.revalidate();
-        questionPanel.repaint();
+		// Ajouter le rowPanel au questionPanel
+		questionPanel.add(rowPanel);
+		questionPanel.revalidate();
+		questionPanel.repaint();
 
 		// Deuxième TrashPanel (miroir)
 		JPanel newTrashPanel2 = new JPanel(new GridBagLayout());

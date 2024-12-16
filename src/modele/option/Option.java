@@ -11,7 +11,7 @@ public class Option implements IOption
 	 *  +------------+
 	 */
 	private String type    ;
-	private String intitule;
+	private String enonce;
 
 	private boolean estReponse;
 
@@ -25,13 +25,15 @@ public class Option implements IOption
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public Option(String type, String intitule, boolean estReponse, Question question)
+	public Option(String type, String enonce, boolean estReponse, Question question)
 	{
 		this.type       = type      ;
-		this.intitule   = intitule  ;
+		this.enonce   = enonce  ;
 		this.estReponse = estReponse;
 		this.question   = question  ;
 		this.idReponse  = ++Option.compteurReponse;
+
+		question.ajouterOption(this);
 
 		this.ecrireReponse();
 	}
@@ -42,7 +44,7 @@ public class Option implements IOption
 	 *  | GETTEURS |
 	 *  +----------+
 	 */
-	public String getIntitule() { return this.intitule; }
+	public String getEnonce() { return this.enonce; }
 	public String getType()     { return this.type    ; }
 
 	public boolean getEstReponse() { return this.estReponse; }
@@ -54,8 +56,8 @@ public class Option implements IOption
 	 *  | SETTEURS |
 	 *  +----------+
 	 */
-	public void setIntitule(String intitule) { 
-		this.intitule = intitule;
+	public void setEnonce(String enonce) { 
+		this.enonce = enonce;
 		this.modifierReponse();
 	}
 	public void setType    (String type    ) { 

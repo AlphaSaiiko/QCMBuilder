@@ -172,7 +172,7 @@ public class Question
 
 	public boolean ajouterOption(IOption opt)
 	{
-		if (opt == null || this.ensOptions == null) return false;
+		if (opt == null) return false;
 		this.ensOptions.add(opt);
 		Question.mettreAJourQuestions();
 		return true;

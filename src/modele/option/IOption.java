@@ -7,7 +7,7 @@ public interface IOption
 	 *  | GETTEURS |
 	 *  +----------+
 	 */ 
-	public String getIntitule   ();
+	public String getEnonce   ();
 	public String getType       ();
 	public int getId();
 
@@ -17,7 +17,7 @@ public interface IOption
 	 *  | SETTEURS |
 	 *  +----------+
 	 */ 
-	public void setIntitule  (String intitule);
+	public void setEnonce  (String Enonce);
 	public void setType      (String type    );
 
 }

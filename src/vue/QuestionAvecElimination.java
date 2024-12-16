@@ -200,16 +200,19 @@ public class QuestionAvecElimination extends JFrame
 					JTextField points = (JTextField) panel.getComponent(5);
 					JRadioButton radioButton = (JRadioButton) panel.getComponent(6);
 
+					
+					if (ordre.getText().isEmpty())
+					{
+						ordre.setText("-1");
+					}
+					
+					if (points.getText().isEmpty()) 
+					{
+						points.setText("-1");
+					}
+
 					Controleur.creerReponseElimination(textField.getText(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), radioButton.isSelected(), question);
-
-					/*
-					JTextField textField = (JTextField) panel.getComponent(1);
-					JTextField ordre = (JTextField) panel.getComponent(4);
-					JTextField points = (JTextField) panel.getComponent(6);
-					JRadioButton radioButton = (JRadioButton) panel.getComponent(7);
-
-					question.ajouterReponse(textField.getText(), Integer.parseInt(ordre.getText()), Integer.parseInt(points.getText()), radioButton.isSelected());
-				*/}
+				}
 			}
 		});
 

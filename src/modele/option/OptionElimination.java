@@ -10,7 +10,7 @@ public class OptionElimination implements IOption
 	 *  +------------+
 	 */
 	private String type    ;
-	private String intitule;
+	private String enonce;
 
 	private boolean estReponse;
 
@@ -29,15 +29,17 @@ public class OptionElimination implements IOption
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public OptionElimination (String type, String intitule, boolean estReponse, int ordre, double nbPointsMoins, Question question)
+	public OptionElimination (String type, String enonce, boolean estReponse, int ordre, double nbPointsMoins, Question question)
 	{
 		this.type          = type         ;
-		this.intitule      = intitule     ;
+		this.enonce        = enonce       ;
 		this.estReponse    = estReponse   ;
 		this.ordre         = ordre        ;
 		this.nbPointsMoins = nbPointsMoins;
 		this.question = question;
 		this.idReponse  = ++OptionElimination.compteurReponse;
+
+		question.ajouterOption(this);
 	}
 
 
@@ -46,7 +48,7 @@ public class OptionElimination implements IOption
 	 *  | GETTEURS |
 	 *  +----------+
 	 */
-	public String getIntitule() { return this.intitule; }
+	public String getEnonce() { return this.enonce; }
 	public String getType    () { return this.type    ; }
 
 	public boolean getEstReponse() { return this.estReponse; }
@@ -64,7 +66,7 @@ public class OptionElimination implements IOption
 	 *  | SETTEURS |
 	 *  +----------+
 	 */
-	public void setIntitule(String intitule) { this.intitule = intitule; }
+	public void setEnonce(String enonce) { this.enonce = enonce; }
 	public void setType    (String type)     { this.type     = type    ; }
 
 	public void setEstReponse(boolean estRep) { this.estReponse = estRep; }

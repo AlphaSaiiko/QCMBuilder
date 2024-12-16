@@ -10,7 +10,7 @@ public class OptionAssociation implements IOption
 	 *  +------------+
 	 */
 	private String type    ;
-	private String intitule;
+	private String enonce;
 
 	private OptionAssociation associe;
 
@@ -27,13 +27,15 @@ public class OptionAssociation implements IOption
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public OptionAssociation(String type, String intitule, Question question)
+	public OptionAssociation(String type, String enonce, Question question)
 	{
 		this.type       = type      ;
-		this.intitule   = intitule  ;
+		this.enonce   = enonce  ;
 		this.idReponse  = ++OptionAssociation.compteurReponse;
 		this.associe = null;
 		this.question = question;
+
+		question.ajouterOption(this);
 	}
 
 
@@ -42,7 +44,7 @@ public class OptionAssociation implements IOption
 	 *  | GETTEURS |
 	 *  +----------+
 	 */
-	public String getIntitule() { return this.intitule; }
+	public String getEnonce() { return this.enonce; }
 	public String getType    () { return this.type    ; }
 
 	public OptionAssociation getAssocie() { return this.associe; }
@@ -59,8 +61,8 @@ public class OptionAssociation implements IOption
 	 *  | SETTEURS |
 	 *  +----------+
 	 */
-	public void setIntitule(String intitule) { this.intitule = intitule; }
-	public void setType    (String type)     { this.type     = type    ; }
+	public void setEnonce(String enonce) { this.enonce = enonce; }
+	public void setType  (String type  ) { this.type   = type  ; }
 
 	public void setAssocie(OptionAssociation associe) { this.associe = associe; }
 

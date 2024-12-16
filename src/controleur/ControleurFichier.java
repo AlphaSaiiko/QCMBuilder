@@ -253,17 +253,17 @@ public class ControleurFichier
 
 	private String stringOption(Option opt)
 	{
-		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getIntitule() + "\t" + opt.getEstReponse();
+		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getEnonce() + "\t" + opt.getEstReponse();
 	}
 
 	private String stringOptionAssociation(OptionAssociation opt)
 	{
-		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getIntitule()  + "\t question" + opt.getQuestion().getNumQuestion();
+		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getEnonce()  + "\t question" + opt.getQuestion().getNumQuestion();
 	}
 
 	private String stringOptionElimination(OptionElimination opt)
 	{
-		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getIntitule() + "\t" +  opt.getOrdre()+ "\t" + opt.getNbPointsMoins()  + "\t" + opt.getEstReponse() + "\t" + opt.getQuestion();
+		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getEnonce() + "\t" +  opt.getOrdre()+ "\t" + opt.getNbPointsMoins()  + "\t" + opt.getEstReponse() + "\t" + opt.getQuestion();
 	}
 
 	// Méthode pour écrire toutes les ressources dans un fichie
@@ -310,7 +310,11 @@ public class ControleurFichier
 		{
 			for (Question question : questions)
 			{
-				writer.write(question.getEnonce() + "\n");
+				writer.write("enonce:" + question.getEnonce() + "	options:");
+				for (IOption option : question.getEnsOptions())
+				{
+					writer.write(option.getId() + ",");
+				}
 			}
 		}
 		catch (IOException e)
