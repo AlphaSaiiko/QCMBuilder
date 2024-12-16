@@ -6,6 +6,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.util.List;
 import modele.Ressource;
+import modele.Evaluation;
 import modele.Notion;
 import controleur.Controleur;
 
@@ -163,6 +164,8 @@ public class TabEvaluation extends JFrame
 
 	private void generateTabEvaluation()
 	{
+		// Créer un nouvel objet Evaluation
+		Evaluation evaluation = new Evaluation();
 		// Logique pour générer l'évaluation
 		JOptionPane.showMessageDialog(this, "Évaluation générée !");
 	}
@@ -257,4 +260,6 @@ public class TabEvaluation extends JFrame
 			return this;
 		}
 	}
+
+
 }

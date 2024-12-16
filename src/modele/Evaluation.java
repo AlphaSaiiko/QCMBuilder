@@ -24,7 +24,7 @@ public class Evaluation
 	{
 		this.ressource	  = ressource;
 		this.listeNotions   = new ArrayList<Notion>  ();
-		this.listeQuestions = new ArrayList<Question>();
+		this.listeQuestions = new ArrayList<Question>();caca
 	}
 
 	/*
