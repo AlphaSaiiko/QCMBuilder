@@ -53,14 +53,14 @@ public class CreerQuestion extends JFrame implements ActionListener
 			dispose();
 		});
 
-		JPanel panelMenu = new JPanel();
-		panelMenu.setLayout(new FlowLayout(FlowLayout.LEFT));
-		panelMenu.add(btnMenu);
+		JPanel panelBtnMenu = new JPanel();
+		panelBtnMenu.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelBtnMenu.add(btnMenu);
 
 
 		// Panel pour les points et le temps
 		JPanel panelPointsEtTemps = new JPanel();
-		panelPointsEtTemps.setLayout(new GridLayout(2, 1));
+		panelPointsEtTemps.setLayout(new GridLayout(1, 2));
 
 		JPanel panelPoints = new JPanel();
 		panelPoints.setLayout(new BorderLayout());
@@ -74,6 +74,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 		panelPointsEtTemps.add(panelPoints);
 		panelPointsEtTemps.add(panelTemps);
+		
 
 
 		//Creation d'une JComboBox pour les ressources et matières
@@ -102,14 +103,14 @@ public class CreerQuestion extends JFrame implements ActionListener
 		// Panel pour bien placer les ronds de difficultés et mettre le titre
 		JPanel panelDifficulte = new JPanel();
 		panelDifficulte.setLayout(new BorderLayout());
-		panelDifficulte.add(new JLabel("niveau"), BorderLayout.NORTH);
+		panelDifficulte.add(new JLabel("Difficulté"), BorderLayout.NORTH);
 
 
 		// Création des boutons ronds pour les niveaux de difficultés avec les couleurs et texte correspondants
-		RoundButton tresFacile = creerBoutonRond(Color.GREEN, "TF");
-		RoundButton facile = creerBoutonRond(Color.CYAN, "F");
-		RoundButton moyen = creerBoutonRond(Color.RED, "M");
-		RoundButton dur = creerBoutonRond(Color.WHITE, "D");
+		BoutonRond tresFacile = creerBoutonRond(Color.GREEN, "TF");
+		BoutonRond facile = creerBoutonRond(Color.CYAN, "F");
+		BoutonRond moyen = creerBoutonRond(Color.RED, "M");
+		BoutonRond dur = creerBoutonRond(Color.WHITE, "D");
 
 
 		// Définition de la taille du texte
@@ -159,128 +160,112 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 
 		// Panel pour les ronds de difficultés
-		JPanel panelRond = new JPanel();
-		panelRond.setLayout(new FlowLayout());
-		panelRond.add(tresFacile);
-		panelRond.add(facile);
-		panelRond.add(moyen);
-		panelRond.add(dur);
+		JPanel panelRondsDifficulte = new JPanel();
+		panelRondsDifficulte.setLayout(new FlowLayout());
+		panelRondsDifficulte.add(tresFacile);
+		panelRondsDifficulte.add(facile);
+		panelRondsDifficulte.add(moyen);
+		panelRondsDifficulte.add(dur);
 		
-		panelDifficulte.add(panelRond, BorderLayout.CENTER);
+		panelDifficulte.add(panelRondsDifficulte, BorderLayout.CENTER);
 
 
-		// Panel pour les différents niveaux de difficultés
-		JPanel ressourceNotionLvl = new JPanel();
-		ressourceNotionLvl.setLayout(new GridLayout(1, 3));
-		ressourceNotionLvl.add(panelRessources);
-		ressourceNotionLvl.add(panelNotions);
-		ressourceNotionLvl.add(panelDifficulte);
-		
-
-		//Panel rassemble les deux panel points et temps
-		JPanel rassemble = new JPanel();
-		rassemble.setLayout(new GridLayout(1, 2));
-		rassemble.add(panelPoints);
-		rassemble.add(panelTemps);
+		// Panel pour les choix de ressource, notion et difficulté
+		JPanel panelResNtnDif = new JPanel();
+		panelResNtnDif.setLayout(new GridLayout(1, 3));
+		panelResNtnDif.add(panelRessources);
+		panelResNtnDif.add(panelNotions);
+		panelResNtnDif.add(panelDifficulte);
 
 
 		//Panel pour le type de question
-		JPanel panelQuestion = new JPanel();
+		JPanel panelType = new JPanel();
 
 
 		//JComboBox pour le type de question
-		JComboBox<String> typeQuestion = new JComboBox<String>(new String[] { "Question à choix multiple à réponse unique", "Question à choix multiple à réponse multiple", "Question à association d’éléments", "Question avec élimination de propositions de réponses" });
-		panelQuestion.add(typeQuestion, BorderLayout.SOUTH);
+		JComboBox<String> listeTypes = new JComboBox<String>(new String[] { "Question à choix multiple à réponse unique", "Question à choix multiple à réponse multiple", "Question à association d’éléments", "Question avec élimination de propositions de réponses" });
+		panelType.add(listeTypes, BorderLayout.SOUTH);
+
 
 		// Bouton pour créer une nouvelle question
-		JButton creerQuestionButton = new JButton("Créer nouvelle question");
-		JPanel panelBouton = new JPanel();
-		panelBouton.setLayout(new FlowLayout(FlowLayout.CENTER));
-		panelBouton.add(creerQuestionButton);
+		JButton btnCreerQuestion = new JButton("Créer nouvelle question");
+		JPanel panelBtnCreerQuestion = new JPanel();
+		panelBtnCreerQuestion.setLayout(new FlowLayout(FlowLayout.CENTER));
+		panelBtnCreerQuestion.add(btnCreerQuestion);
+
 
 		// Action listener pour le bouton de création de question
-		creerQuestionButton.addActionListener(e -> {
-			String erreur = "";
+		btnCreerQuestion.addActionListener(e -> {
+			String erreurs = "";
 			
 			// Récupération des informations pour la création de la question
 			int nbPoints     = 1;
 			int tempsReponse = 60;
 			
-			try { nbPoints	 = Integer.parseInt(((JTextArea) panelPoints.getComponent(1)).getText());
-			} catch (Exception ex) { erreur = "Veuillez rajouter le nombre de points.  \n" ;}
+			try { nbPoints = Integer.parseInt(((JTextArea) panelPoints.getComponent(1)).getText()); }
+			catch (Exception ex) { erreurs = "Veuillez rajouter le nombre de points.\n"; }
 
-			try { 
-				String chaineTemps = ((JTextArea) panelTemps.getComponent(1)).getText();
-				int minute  = Integer.parseInt(chaineTemps.substring(0, chaineTemps.indexOf(":")-1));
-				int seconde = Integer.parseInt(chaineTemps.substring(chaineTemps.indexOf(":")+1, chaineTemps.length()));
-				
-				tempsReponse = minute * 60 + seconde;
-			} catch (Exception ex) { 
-				ex.printStackTrace();
-				erreur += "Veuillez rajouter le temps de réponse (format = XX:XX).  \n" ;
-			}
+			try { tempsReponse = Integer.parseInt(((JTextArea) panelTemps.getComponent(1)).getText()); }
+			catch (Exception ex) { erreurs += "Veuillez rajouter le temps de réponse en secondes.\n"; }
 
-			Notion not = Notion.trouverNotionParNom((String) listeNotions.getSelectedItem(), Controleur.trouverRessourceParNom((String) listeRessources.getSelectedItem()));
+			Notion notion = Notion.trouverNotionParNom((String) listeNotions.getSelectedItem(), Controleur.trouverRessourceParNom((String) listeRessources.getSelectedItem()));
 
 			int difficulte = 0;
 			if      (tresFacile.getBackground() == Color.GREEN && facile.getBackground() == Color.CYAN) { difficulte = 0; }
-			else if (tresFacile.getBackground() == Color.GREEN) { difficulte = 1; }
-			else if (facile.getBackground()     == Color.CYAN ) { difficulte = 2; }
-			else if (moyen.getBackground()      == Color.RED  ) { difficulte = 3; }
-			else if (dur.getBackground()        == Color.WHITE) { difficulte = 4; }
+			else if (tresFacile.getBackground() == Color.GREEN)                                         { difficulte = 1; }
+			else if (facile.getBackground()     == Color.CYAN )                                         { difficulte = 2; }
+			else if (moyen.getBackground()      == Color.RED  )                                         { difficulte = 3; }
+			else if (dur.getBackground()        == Color.WHITE)                                         { difficulte = 4; }
 
-			String selectedType = (String) typeQuestion.getSelectedItem();
-			if (not != null && selectedType != null && difficulte != 0 && erreur.isEmpty())
+			String typeSelectionne = (String) listeTypes.getSelectedItem();
+			if (notion != null && typeSelectionne != null && difficulte != 0 && erreurs.isEmpty())
 			{
-				if ("Question à choix multiple à réponse unique".equals(selectedType))
+				if ("Question à choix multiple à réponse unique".equals(typeSelectionne))
 				{
-					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QCMRU");
+					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRU");
 					new QuestionReponseUnique(tmp);
 					dispose();
 				}
-				else if ("Question à choix multiple à réponse multiple".equals(selectedType))
+				else if ("Question à choix multiple à réponse multiple".equals(typeSelectionne))
 				{
-					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QCMRM");
+					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRM");
 					new QuestionReponseMultiple(tmp);
 					dispose();
 				}
-				else if ("Question à association d’éléments".equals(selectedType))
+				else if ("Question à association d’éléments".equals(typeSelectionne))
 				{
-					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAE");
+					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAE");
 					new QuestionLiaison(tmp);
 					dispose();
 				}
-				else if ("Question avec élimination de propositions de réponses".equals(selectedType))
+				else if ("Question avec élimination de propositions de réponses".equals(typeSelectionne))
 				{
-					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, not, difficulte, "QAEPR");
+					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAEPR");
 					new QuestionAvecElimination(tmp);
 					dispose();
 				}
 			}
 
 			if (difficulte == 0)
-				erreur += "Veuillez sélectionner la difficulté.";
+				erreurs += "Veuillez sélectionner la difficulté.";
 		
-			if (! erreur.isEmpty())
-			{
-				JOptionPane.showMessageDialog(null, erreur, "Erreur : paramètres manquants", JOptionPane.ERROR_MESSAGE);
-			}
-			
+			if (! erreurs.isEmpty())
+				JOptionPane.showMessageDialog(null, erreurs, "Erreur : paramètres manquants", JOptionPane.ERROR_MESSAGE);
 		});
-
 	
 
-		//Création d'un panel gérant la création de question
-		JPanel panelCreation = new JPanel();
-		panelCreation.setLayout(new GridLayout(3, 1));
-		panelCreation.add(rassemble);
-		panelCreation.add(ressourceNotionLvl);
-		panelCreation.add(panelQuestion);
+		//Création d'un panel gérant la toute la configuration de la question
+		JPanel panelConfiguration = new JPanel();
+		panelConfiguration.setLayout(new GridLayout(3, 1));
+		panelConfiguration.add(panelPointsEtTemps);
+		panelConfiguration.add(panelResNtnDif);
+		panelConfiguration.add(panelType);
+
 
 		// Ajout des panels au panel principal
-		panelprincipal.add(panelMenu, BorderLayout.NORTH);
-		panelprincipal.add(panelCreation, BorderLayout.CENTER);
-		panelprincipal.add(panelBouton, BorderLayout.SOUTH);
+		panelprincipal.add(panelBtnMenu, BorderLayout.NORTH);
+		panelprincipal.add(panelConfiguration, BorderLayout.CENTER);
+		panelprincipal.add(panelBtnCreerQuestion, BorderLayout.SOUTH);
 		
 		this.add(panelprincipal);
 		this.setSize(700, 330);
@@ -307,9 +292,9 @@ public class CreerQuestion extends JFrame implements ActionListener
 	 * @param texte   le texte affiché sur le bouton
 	 * @return un objet {@link RoundButton} configuré avec les propriétés spécifiées
 	 */
-	public static RoundButton creerBoutonRond(Color couleur, String texte)
+	public static BoutonRond creerBoutonRond(Color couleur, String texte)
 	{
-		RoundButton btnRond = new RoundButton(texte);
+		BoutonRond btnRond = new BoutonRond(texte);
 		btnRond.setPreferredSize(new Dimension(45, 45));
 		btnRond.setBackground(couleur);
 		btnRond.setOpaque(false);
@@ -317,9 +302,19 @@ public class CreerQuestion extends JFrame implements ActionListener
 		return btnRond;
 	}
 
+
+
+	/**
+	 * Gère l'événement déclenché par une action de l'utilisateur.
+	 *
+	 * Cette méthode est appelée lorsqu'une action est effectuée (comme un clic ou une sélection). 
+	 * Elle met à jour la liste déroulante des notions (`listeNotions`) en fonction de la ressource
+	 * actuellement sélectionnée dans la liste déroulante des ressources (`listeRessources`).
+	 *
+	 * @param e l'événement déclenché par une action de l'utilisateur.
+	 */
 	public void actionPerformed(ActionEvent e) 
 	{
-		// Assumant que la seule source est la liste des ressources
 		this.listeNotions.removeAllItems();
 
 		this.nomRessource = String.valueOf(this.listeRessources.getSelectedItem());
@@ -328,36 +323,81 @@ public class CreerQuestion extends JFrame implements ActionListener
 			this.listeNotions.addItem(nomNotion);
 	}
 
+
+
+	// Main
 	public static void main(String[] args)
 	{
 		new CreerQuestion();
 	}
-
 }
 
-class RoundButton extends JButton
+
+
+
+/**
+ * +-------------------+
+ * | CLASSE BOUTONROND |
+ * +-------------------+
+ */
+
+class BoutonRond extends JButton
 {
-	/*
+	/**
 	 *  +--------------+
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public RoundButton(String label)
+
+	public BoutonRond(String label)
 	{
 		super(label);
 		setContentAreaFilled(false);
 	}
 
 
+
+
+	/**
+	 * +----------+
+	 * | METHODES |
+	 * +----------+
+	 */
+
+	/**
+	 * Dessine le composant graphique avec des modifications personnalisées.
+	 *
+	 * Cette méthode surcharge `paintComponent` pour personnaliser l'affichage du composant. 
+	 * Elle dessine un ovale rempli qui change de couleur en fonction de l'état du modèle 
+	 * (armé ou non). Ensuite, elle appelle la méthode `paintComponent` de la classe parente 
+	 * pour assurer le rendu standard.
+	 *
+	 * Comportement :
+	 * - Si le modèle est "armé", l'ovale est coloré en gris clair.
+	 * - Sinon, il est coloré avec la couleur d'arrière-plan du composant.
+	 *
+	 * @param g l'objet `Graphics` utilisé pour dessiner le composant.
+	 */
 	protected void paintComponent(Graphics g)
 	{
 		if (getModel().isArmed()) { g.setColor(Color.lightGray); }
 		else { g.setColor(getBackground()); }
+
 		g.fillOval(0, 0, getSize().width - 1, getSize().height - 1);
 		super.paintComponent(g);
 	}
 
 
+
+	/**
+	 * Dessine la bordure du composant graphique.
+	 *
+	 * Cette méthode surcharge `paintBorder` pour personnaliser l'affichage de la bordure 
+	 * du composant. Elle dessine un ovale en utilisant la couleur de premier plan du 
+	 * composant (`getForeground()`), correspondant à ses dimensions.
+	 *
+	 * @param g l'objet `Graphics` utilisé pour dessiner la bordure.
+	 */
 	protected void paintBorder(Graphics g)
 	{
 		g.setColor(getForeground());
@@ -365,6 +405,18 @@ class RoundButton extends JButton
 	}
 
 
+
+	/**
+	 * Vérifie si un point donné est contenu dans les limites circulaires du composant.
+	 *
+	 * Cette méthode détermine si un point, défini par ses coordonnées `(x, y)`, 
+	 * se trouve à l'intérieur du cercle dessiné dans le composant. Le cercle est centré 
+	 * dans le composant et son rayon est calculé à partir de la largeur du composant.
+	 *
+	 * @param x la coordonnée X du point à vérifier.
+	 * @param y la coordonnée Y du point à vérifier.
+	 * @return `true` si le point est à l'intérieur du cercle, sinon `false`.
+	 */
 	public boolean contains(int x, int y)
 	{
 		int radius = getSize().width / 2;
