@@ -67,6 +67,13 @@ public class Evaluation
 	 * +----------+
 	 */
 
+	/**
+	 * Ajoute une question à la liste des questions si elle n'est pas nulle.
+	 *
+	 * @param question La question à ajouter à la liste.
+	 *                 Elle ne doit pas être nulle.
+	 * @return true si la question a été ajoutée avec succès, false sinon.
+	 */
 	public boolean ajouterQuestion(Question question)
 	{
 		if (this.listeQuestions != null && question != null)
@@ -77,6 +84,14 @@ public class Evaluation
 		return false;
 	}
 
+
+
+	/**
+	 * Ajoute une notion à la liste des notions si elle n'est pas nulle.
+	 *
+	 * @param notion La notion à ajouter à la liste.
+	 *               Elle ne doit pas être nulle.
+	 */
 	public void ajouterNotion(Notion notion)
 	{
 		if (notion != null && this.listeNotions != null)
