@@ -88,7 +88,7 @@ public class Ressource
 			nomsNotions[i] = this.ensNotions.get(i).getNom();
 		}
 		return nomsNotions;
-	}
+	} 
 
 	/*
 	 * +---------+
