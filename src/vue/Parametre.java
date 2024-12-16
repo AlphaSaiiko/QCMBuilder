@@ -1,25 +1,34 @@
 package vue;
 
-import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import controleur.Controleur;
 import modele.Notion;
 import modele.Ressource;
 
 public class Parametre extends JFrame
 {
+	/**
+	 * +-------------+
+	 * |  ATTRIBUTS  |
+	 * +-------------+
+	 */
 
-	private JList<String> ressourceList;
-	private JList<String> notionList;
+	private JList<String>            ressourceList     ;
+	private JList<String>            notionList        ;
 	private DefaultListModel<String> ressourceListModel;
-	private DefaultListModel<String> notionListModel;
+	private DefaultListModel<String> notionListModel   ;
+	private CreerRessource           creerRessource    ;
+	private CreerNotion              creerNotion       ;
 
-	private CreerRessource creerRessource;
-	private CreerNotion creerNotion;
+
+
 
 	/*
 	 *  +--------------+
@@ -28,14 +37,15 @@ public class Parametre extends JFrame
 	 */
 	public Parametre()
 	{
-		setTitle("Paramètres");
+		//Panel principal
+		JPanel panelPrincipal = new JPanel();
+		panelPrincipal.setLayout(new BorderLayout());
 
-		JPanel panelprincipal = new JPanel();
-		panelprincipal.setLayout(new BorderLayout());
 
-		// Création d'un panel gérant la création de question
-		JPanel panelCreation = new JPanel();
-		panelCreation.setLayout(new BorderLayout());
+		// Création du panel qui contiens tous les boutons en bas de la fenètre
+		JPanel panelBoutons = new JPanel();
+		panelBoutons.setLayout(new BorderLayout());
+		panelBoutons.setBorder(new LineBorder(Color.RED, 3));
 
 		// Panel pour les boutons de ressources
 		JPanel panelRessources = new JPanel();
@@ -222,8 +232,8 @@ public class Parametre extends JFrame
 		panelNotions.add(modifNotion);
 
 		// Ajout des deux panels au panelCreation
-		panelCreation.add(panelRessources, BorderLayout.WEST);
-		panelCreation.add(panelNotions, BorderLayout.EAST);
+		panelBoutons.add(panelRessources, BorderLayout.WEST);
+		panelBoutons.add(panelNotions, BorderLayout.EAST);
 
 		// Liste des ressources
 		ressourceListModel = new DefaultListModel<>();
@@ -289,19 +299,24 @@ public class Parametre extends JFrame
 		panelRetour.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelRetour.add(retourButton);
 
-		// Ajout des panels au panel principal
-		panelprincipal.add(panelRetour, BorderLayout.NORTH);
-		panelprincipal.add(listPanel, BorderLayout.CENTER);
-		panelprincipal.add(panelCreation, BorderLayout.SOUTH);
 
-		this.add(panelprincipal);
-		this.setSize(700, 400); // Augmenter la taille pour accueillir les listes
+		// Ajout des composants au panel principal
+		panelPrincipal.add(panelRetour, BorderLayout.NORTH);
+		panelPrincipal.add(listPanel, BorderLayout.CENTER);
+		panelPrincipal.add(panelBoutons, BorderLayout.SOUTH);
+
+		
+		// Ajout du panel principal à la frame et configuration de cette dernière
+		this.add(panelPrincipal);
+		this.setTitle("Paramètres");
+		this.setSize(700, 400);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 
+
 		// Remplir la liste des ressources au démarrage
-		chargerRessources();
+		this.chargerRessources();
 	}
 
 	// Méthode utilitaire pour redimensionner les icônes

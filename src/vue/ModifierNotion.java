@@ -90,7 +90,7 @@ public class ModifierNotion extends JFrame
 		panelPrincipal.add(btnAnnuler, gbc);
 
 
-		// Ajout des composants à la frame et configuration de cette dernière
+		// Ajout du panel principal à la frame et configuration de cette dernière
 		this.add(panelPrincipal);
 		this.setTitle("Modifier une notion");
 		this.setSize(300, 150);
