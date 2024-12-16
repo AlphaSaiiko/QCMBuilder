@@ -5,6 +5,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 import modele.*;
+import modele.option.OptionElimination;
 import vue.*;
 
 public class Controleur
@@ -154,6 +155,11 @@ public class Controleur
 	public static void creerNotion(String titreNotion, Ressource ressource)
 	{
 		Notion.creerNotion(titreNotion, ressource);
+	}
+
+	public static void creerReponseElimination(String texte, int ordre, double points, boolean correct, Question question)
+	{
+		new OptionElimination("QAE", texte, correct, ordre, points, question);
 	}
 
 

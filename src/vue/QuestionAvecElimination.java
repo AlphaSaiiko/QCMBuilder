@@ -1,5 +1,6 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -199,10 +200,7 @@ public class QuestionAvecElimination extends JFrame
 					JTextField points = (JTextField) panel.getComponent(5);
 					JRadioButton radioButton = (JRadioButton) panel.getComponent(6);
 
-					System.out.println("Texte: " + textField.getText());
-					System.out.println("Ordre: " + ordre.getText());
-					System.out.println("Points: " + points.getText());
-					System.out.println("RadioButton: " + radioButton.isSelected());
+					Controleur.creerReponseElimination(textField.getText(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), radioButton.isSelected(), question);
 
 					/*
 					JTextField textField = (JTextField) panel.getComponent(1);
