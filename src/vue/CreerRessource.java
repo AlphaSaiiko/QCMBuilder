@@ -14,9 +14,6 @@ public class CreerRessource extends JFrame
 
 	public CreerRessource()
 	{
-		setTitle("Créer une ressource");
-
-
 		//Panel principal
 		JPanel panelPrincipal = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -56,7 +53,10 @@ public class CreerRessource extends JFrame
 			}
 		});
 
+
+		// Ajout du panel principal à la frame et configuration de cette dernière
 		this.add(panelPrincipal);
+		this.setTitle("Créer une ressource");
 		this.setSize(500, 150);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);

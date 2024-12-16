@@ -32,9 +32,6 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 	public CreerQuestion()
 	{
-		setTitle("Créer une question");
-
-
 		//Panel principal
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new BorderLayout());
@@ -267,7 +264,10 @@ public class CreerQuestion extends JFrame implements ActionListener
 		panelPrincipal.add(panelConfiguration, BorderLayout.CENTER);
 		panelPrincipal.add(panelBtnCreerQuestion, BorderLayout.SOUTH);
 		
+
+		// Ajout du panel principal à la frame et configuration de cette dernière
 		this.add(panelPrincipal);
+		this.setTitle("Créer une question");
 		this.setSize(700, 330);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
