@@ -81,7 +81,7 @@ public class Accueil extends JFrame
 			}
 			else
 			{
-				Controleur.creerQuestion();
+				Controleur.ouvrirCreerQuestion();
 				this.dispose();
 			}
 		});
