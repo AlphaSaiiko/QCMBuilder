@@ -310,11 +310,26 @@ public class ControleurFichier
 		{
 			for (Question question : questions)
 			{
-				writer.write("enonce:" + question.getEnonce() + "	options:");
+				writer.write("nom:" + question.getEnonce() + "\tnbPoints:" + question.getNbPoints() + "\ttemps:" + question.getTemps() + "\tdifficulte:" + question.getDifficulte() + "\ttype:" + question.getType() + "\tnotion :" + question.getNotion().getNom() + "\noptions :" );
+				
 				for (IOption option : question.getEnsOptions())
 				{
-					writer.write(option.getId() + ",");
+					writer.write(option.getType() + ";" + option.getEnonce() + ";" + option.getId());
+
+					if (option instanceof OptionAssociation){writer.write(";" + ((OptionAssociation)option).getAssocie().getId());}
+					if (option instanceof OptionElimination)
+					{
+						OptionElimination optionE = (OptionElimination) option;
+						writer.write(";" + optionE.getEstReponse() + ";" + optionE.getOrdre() + ";" + optionE.getNbPointsMoins());
+					}
+					if (option instanceof Option)
+					{
+						Option optionO = (Option) option;
+						writer.write(";" + optionO.getEstReponse());
+					}
+					writer.write(" | ");
 				}
+				writer.write("\n");
 			}
 		}
 		catch (IOException e)
