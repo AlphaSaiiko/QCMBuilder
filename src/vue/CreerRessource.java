@@ -59,9 +59,9 @@ public class CreerRessource extends JFrame
 	}
 
 	// Création des boutons ronds pour les niveaux de difficultés
-	public static RoundButton creerButtonRond(Color couleur, String texte)
+	public static BoutonRond creerButtonRond(Color couleur, String texte)
 	{
-		RoundButton button = new RoundButton(texte);
+		BoutonRond button = new BoutonRond(texte);
 		button.setPreferredSize(new Dimension(45, 45));
 		button.setBackground(couleur);
 		button.setOpaque(false);
