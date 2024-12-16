@@ -1,11 +1,11 @@
 package vue;
 
-import controleur.Controleur;
-import modele.Ressource;
-
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
+
+import controleur.Controleur;
+import modele.Ressource;
 
 public class CreerEvaluation extends JFrame
 {

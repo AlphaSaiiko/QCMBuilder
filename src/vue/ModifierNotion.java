@@ -3,6 +3,7 @@ package vue;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
+
 import modele.Notion;
 import modele.Ressource;
 
