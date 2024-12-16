@@ -5,85 +5,85 @@ import java.util.List;
 
 public class Evaluation
 {
-    /*
-     * +------------+
-     * | ATTRIBUTS  |
-     * +------------+
-     */
-    private Ressource ressource;
-    private Notion notion;
-    private List<Question> listeQuestions;
-    private String lienEval; // Lien de l'évaluation à mettre sur l'intranet
+	/*
+	 * +------------+
+	 * | ATTRIBUTS  |
+	 * +------------+
+	 */
+	private Ressource ressource;
+	private List<Notion> listeNotions;
+	private List<Question> listeQuestions;
+	private String lienEval; // Lien de l'évaluation à mettre sur l'intranet
 
-    /*
-     * +--------------+
-     * | CONSTRUCTEUR |
-     * +--------------+
-     */
-    public Evaluation(Ressource ressource, Notion notion)
-    {
-        this.ressource = ressource;
-        this.notion = notion;
-        this.listeQuestions = new ArrayList<>();
-    }
+	/*
+	 * +--------------+
+	 * | CONSTRUCTEUR |
+	 * +--------------+
+	 */
+	public Evaluation(Ressource ressource, Notion notion)
+	{
+		this.ressource	  = ressource;
+		this.listeNotions   = new ArrayList<Notion>  ();
+		this.listeQuestions = new ArrayList<Question>();
+	}
 
-    /*
-     * +---------+
-     * | GETTERS |
-     * +---------+
-     */
-    public Ressource getRessource()
-    {
-        return ressource;
-    }
+	/*
+	 * +---------+
+	 * | GETTERS |
+	 * +---------+
+	 */
+	public Ressource getRessource()
+	{
+		return ressource;
+	}
 
-    public Notion getNotion()
-    {
-        return notion;
-    }
+	public List<Notion> getListeNotions()
+	{
+		return listeNotions;
+	}
 
-    public List<Question> getListeQuestions()
-    {
-        return listeQuestions;
-    }
+	public List<Question> getListeQuestions()
+	{
+		return listeQuestions;
+	}
 
-    public String getLienEval()
-    {
-        return lienEval;
-    }
+	public String getLienEval()
+	{
+		return lienEval;
+	}
 
-    /*
-     * +---------+
-     * | SETTERS |
-     * +---------+
-     */
-    public void setRessource(Ressource ressource)
-    {
-        this.ressource = ressource;
-    }
+	/*
+	 * +---------+
+	 * | SETTERS |
+	 * +---------+
+	 */
+	public void setRessource(Ressource ressource)
+	{
+		this.ressource = ressource;
+	}
 
-    public void setNotion(Notion notion)
-    {
-        this.notion = notion;
-    }
+	public void setLienEval(String lienEval)
+	{
+		this.lienEval = lienEval;
+	}
 
-    public void setLienEval(String lienEval)
-    {
-        this.lienEval = lienEval;
-    }
+	/*
+	 * +----------+
+	 * | METHODES |
+	 * +----------+
+	 */
+	public boolean ajouterQuestion(Question qt)
+	{
+		if (this.listeQuestions != null && qt != null)
+		{
+			this.listeQuestions.add(qt);
+			return true;
+		}
+		return false;
+	}
 
-    /*
-     * +----------+
-     * | METHODES |
-     * +----------+
-     */
-    public boolean ajouterQuestion(Question qt)
-    {
-        if (this.listeQuestions != null && qt != null)
-        {
-            this.listeQuestions.add(qt);
-            return true;
-        }
-        return false;
-    }
+	public void ajouterNotion(Notion notion)
+	{
+		if (notion != null && this.listeNotions != null) this.listeNotions.add(notion);
+	}
 }
