@@ -151,6 +151,8 @@ public class QuestionAvecElimination extends JFrame
 				});
 
 				// Ajouter le nouveau panel trash au conteneur principal
+				System.out.println(panelQuestion.getComponentCount() - 1);
+				System.out.println(panelQuestion.getComponentCount());
 				panelQuestion.add(newTrashPanel, panelQuestion.getComponentCount() - 1);
 
 				// Rafraîchir l'interface utilisateur
@@ -186,6 +188,30 @@ public class QuestionAvecElimination extends JFrame
 			{
 				// Enregistrer la question dans un fichier		
 				question.setEnonce(textareaQuestion.getText());
+
+				//Enregistrer les réponses
+				for (int i = 1; i < panelQuestion.getComponentCount() - 1; i++)
+				{
+					JPanel panel = (JPanel) panelQuestion.getComponent(i);
+
+					JTextField textField = (JTextField) panel.getComponent(1);
+					JTextField ordre = (JTextField) panel.getComponent(3);
+					JTextField points = (JTextField) panel.getComponent(5);
+					JRadioButton radioButton = (JRadioButton) panel.getComponent(6);
+
+					System.out.println("Texte: " + textField.getText());
+					System.out.println("Ordre: " + ordre.getText());
+					System.out.println("Points: " + points.getText());
+					System.out.println("RadioButton: " + radioButton.isSelected());
+
+					/*
+					JTextField textField = (JTextField) panel.getComponent(1);
+					JTextField ordre = (JTextField) panel.getComponent(4);
+					JTextField points = (JTextField) panel.getComponent(6);
+					JRadioButton radioButton = (JRadioButton) panel.getComponent(7);
+
+					question.ajouterReponse(textField.getText(), Integer.parseInt(ordre.getText()), Integer.parseInt(points.getText()), radioButton.isSelected());
+				*/}
 			}
 		});
 
