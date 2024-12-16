@@ -170,7 +170,7 @@ public class TabEvaluation extends JFrame
 	// Renderer pour afficher un petit cercle coloré derrière les chiffres
 	class ColorCircleRenderer extends JLabel implements TableCellRenderer
 	{
-		private final Color[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE };
+		private final Color[] colors = { Color.GREEN, Color.CYAN, Color.RED, Color.GRAY };
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
@@ -189,7 +189,7 @@ public class TabEvaluation extends JFrame
 					Graphics2D g2d = (Graphics2D) g;
 
 					// Dessiner le cercle
-					int diameter = Math.min(getWidth(), getHeight()) / 2;
+					int diameter = Math.min(getWidth(), getHeight());
 					int x = (getWidth() - diameter) / 2;
 					int y = (getHeight() - diameter) / 2;
 
