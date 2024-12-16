@@ -1,12 +1,13 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
 
-import controleur.Controleur;
+import javax.swing.*;
 import modele.*;
+import modele.option.Option;
 
 public class QuestionReponseMultiple extends JFrame
 {
@@ -171,6 +172,16 @@ public class QuestionReponseMultiple extends JFrame
             public void actionPerformed(ActionEvent e) {
                 // Enregistrer la question dans un fichier
                 question.setEnonce(questionArea.getText());
+
+                // Enregistrer les réponses
+                for (int i = 1; i < questionPanel.getComponentCount() - 1; i++)
+                {
+                    JPanel panel = (JPanel) questionPanel.getComponent(i);
+                    JTextField textField = (JTextField) panel.getComponent(1);
+                    JCheckBox checkBox = (JCheckBox) panel.getComponent(2);
+                    Option o = Controleur.creerReponse(textField.getText(), checkBox.isSelected(), question);
+                    question.ajouterOption(o);
+                }
             }
         });
 

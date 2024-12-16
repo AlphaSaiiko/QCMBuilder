@@ -11,7 +11,7 @@ import java.io.IOException;
 import modele.Question;
 import modele.option.OptionAssociation;
 
-public class QuestionLiaison extends JFrame
+public class QuestionAssociation extends JFrame
 {
 	private JPanel questionPanel;
 	private JTextArea questionArea;
@@ -20,7 +20,7 @@ public class QuestionLiaison extends JFrame
 	private JButton enregistrerBouton;
 	private Question question;
 
-	public QuestionLiaison(Question question)
+	public QuestionAssociation(Question question)
 	{
 		this.question = question;
 		// Initialiser le conteneur principal
@@ -125,7 +125,7 @@ public class QuestionLiaison extends JFrame
 		add(mainPanel, BorderLayout.CENTER);
 
 		// Afficher la fenêtre
-		setTitle("Question Réponse Liaison");
+		setTitle("Question Réponse Association");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);

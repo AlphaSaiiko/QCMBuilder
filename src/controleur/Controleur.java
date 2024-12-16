@@ -5,6 +5,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 import modele.*;
+import modele.option.Option;
 import modele.option.OptionAssociation;
 import modele.option.OptionElimination;
 import vue.*;
@@ -160,12 +161,17 @@ public class Controleur
 
 	public static OptionElimination creerReponseElimination(String texte, int ordre, double points, boolean correct, Question question)
 	{
-		return new OptionElimination("QAE", texte, correct, ordre, points, question);
+		return new OptionElimination("QAEPR", texte, correct, ordre, points, question);
 	}
 
 	public static OptionAssociation creerReponseAssociation( String enonce, Question question)
 	{
-		return new OptionAssociation("QAA", enonce, question);
+		return new OptionAssociation("QAE", enonce, question);
+	}
+
+	public static Option creerReponse(String enonce, boolean validite, Question question)
+	{
+		return new Option("QCM", enonce, validite, question);
 	}
 
 
