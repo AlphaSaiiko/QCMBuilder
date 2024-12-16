@@ -13,17 +13,21 @@ public class ModifierRessource extends JFrame
 	 * |  ATTRIBUTS  |
 	 * +-------------+
 	 */
+
     private JTextField texteNom ;
     private Ressource  ressource;
 
+
+
+
+	/**
+	 * +--------------+
+	 * | CONSTRUCTEUR |
+	 * +--------------+
+	 */
+
     public ModifierRessource(Ressource ressource)
 	{
-		/**
-		 * +--------------+
-		 * | CONSTRUCTEUR |
-		 * +--------------+
-		 */
-
         this.ressource = ressource;
 
 
@@ -83,7 +87,7 @@ public class ModifierRessource extends JFrame
         panelPrincipal.add(btnAnnuler, gbc);
 
 
-		// Ajout des composants à la frame et configuration de cette dernière
+		// Ajout du panel principal à la frame et configuration de cette dernière
 		this.add(panelPrincipal);
 		this.setTitle("Modifier Ressource");
 		this.setSize(300, 150);
