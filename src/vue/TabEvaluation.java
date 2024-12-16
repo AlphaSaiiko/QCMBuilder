@@ -1,5 +1,4 @@
 package vue;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -16,11 +15,11 @@ public class TabEvaluation extends JFrame
 	private DefaultTableModel model;
 	private boolean isUpdating = false;
 
-	public TabEvaluation()
+	public TabEvaluation(Ressource ressource)
 	{
 		// Créer la fenêtre principale
 		setTitle("Évaluation");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(600, 300);
 		setLayout(new BorderLayout());
 		setLocationRelativeTo(null);
@@ -32,6 +31,7 @@ public class TabEvaluation extends JFrame
 			@Override
 			public Class<?> getColumnClass(int columnIndex)
 			{
+				// Définir le type des colonnes
 				if (columnIndex == 1)
 				{
 					return Boolean.class;
@@ -42,10 +42,13 @@ public class TabEvaluation extends JFrame
 			@Override
 			public boolean isCellEditable(int row, int column)
 			{
+				// Rendre la colonne des cases à cocher éditable sauf pour la
+				// dernière ligne
 				if (row == getRowCount() - 1 && column == 1)
 				{
 					return false;
 				}
+				// Vérifier si la case à cocher de la ligne est cochée
 				if (column != 1 && !(Boolean) getValueAt(row, 1))
 				{
 					return false;
@@ -54,15 +57,13 @@ public class TabEvaluation extends JFrame
 			}
 		};
 
-		// Récupérer les ressources et les notions
-		List<Ressource> ressources = Controleur.getListRessource();
-		for (Ressource ressource : ressources)
+		// Récupérer  les notions de la ressource
+		
+		for (Notion notion : ressource.getEnsNotions())
 		{
-			for (Notion notion : ressource.getEnsNotions())
-			{
-				model.addRow(new Object[] { notion.getNom(), false, "", "", "", "" });
-			}
+			model.addRow(new Object[] { notion.getNom(), false, "", "", "", "" });
 		}
+		
 
 		// Ajouter une ligne pour le résumé
 		model.addRow(new Object[] { "Total", false, "", "", "", "" });
@@ -79,8 +80,7 @@ public class TabEvaluation extends JFrame
 		JTable table = new JTable(model);
 		table.setRowHeight(25);
 
-		// Ajouter un éditeur personnalisé pour restreindre les colonnes à des
-		// chiffres
+		// Ajouter un éditeur personnalisé pour restreindre les colonnes à desTableCellEditor chiffres
 		TableColumn tfColumn = table.getColumnModel().getColumn(2);
 		tfColumn.setCellEditor(new NumericCellEditor());
 		table.getColumnModel().getColumn(3).setCellEditor(new NumericCellEditor());
@@ -164,13 +164,14 @@ public class TabEvaluation extends JFrame
 
 	private void generateTabEvaluation()
 	{
+		// Logique pour générer l'évaluation
 		JOptionPane.showMessageDialog(this, "Évaluation générée !");
 	}
-
+	
 	// Renderer pour afficher un petit cercle coloré derrière les chiffres
 	class ColorCircleRenderer extends JLabel implements TableCellRenderer
 	{
-		private final Color[] colors = { Color.GREEN, Color.CYAN, Color.RED, Color.GRAY };
+		private final Color[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE };
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
@@ -189,7 +190,7 @@ public class TabEvaluation extends JFrame
 					Graphics2D g2d = (Graphics2D) g;
 
 					// Dessiner le cercle
-					int diameter = Math.min(getWidth(), getHeight());
+					int diameter = Math.min(getWidth(), getHeight()) / 2;
 					int x = (getWidth() - diameter) / 2;
 					int y = (getHeight() - diameter) / 2;
 
@@ -246,7 +247,6 @@ public class TabEvaluation extends JFrame
 		}
 	}
 
-	// Renderer pour la colonne "Sélectionner"
 	class CheckBoxRenderer extends JCheckBox implements TableCellRenderer
 	{
 		@Override

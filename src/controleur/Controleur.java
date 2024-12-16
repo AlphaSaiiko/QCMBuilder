@@ -145,11 +145,6 @@ public class Controleur
 	{
 		new Accueil();
 	}
-    
-    public static void ouvrirTabEvaluation()
-    {
-        new TabEvaluation();
-    }
 
 	public static void creerNotion(String titreNotion, Ressource ressource)
 	{

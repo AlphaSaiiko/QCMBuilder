@@ -1,6 +1,8 @@
 package vue;
 
 import controleur.Controleur;
+import modele.Ressource;
+
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
@@ -116,18 +118,30 @@ public class CreerEvaluation extends JFrame
 		panelCreer.add(boutonCreer);
 
 		boutonCreer.addActionListener (e -> {
-			Controleur.ouvrirTabEvaluation();
-			dispose();
+			String nomRessource = String.valueOf(ressources.getSelectedItem());
+			Ressource ressource = Controleur.trouverRessourceParNom(nomRessource);
+
+			String erreur = "";
+
+			if (ressource.getEnsNotions().isEmpty())                erreur += "Cette ressource n'a pas de notions !\n";
+
+			if (! boutonOui.isSelected() && ! boutonNon.isSelected()) erreur += "Veuillez décider si vous souhaitez donner un temps limite à l'évaluation !\n";
+
+
+			if (erreur.isEmpty())
+			{
+				Controleur.creerEvaluation();
+				TabEvaluation tabEval = new TabEvaluation(ressource);
+				dispose();
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, erreur, "Erreur : ", JOptionPane.ERROR_MESSAGE);
+			}
+			
 		});
 
 		panelPrincipal.add(panelCreer, BorderLayout.SOUTH);
-
-
-		// Ajouter un ActionListener au bouton pour ouvrir une nouvelle IHM
-		boutonCreer.addActionListener(e -> {
-			Controleur.creerEvaluation();
-			dispose();
-		});
 
 		
 		// Ajout du panel principal à la frame et configuration de cette dernière
