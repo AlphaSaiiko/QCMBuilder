@@ -336,7 +336,7 @@ public class Parametre extends JFrame
 		ressourceListModel.clear();
 		for (Ressource ressource : Controleur.getListRessource())
 		{
-			ressourceListModel.addElement(ressource.getNom());
+			ressourceListModel.addElement(ressource.getId() + "_" + ressource.getNom());
 		}
 		ressourceList.setSelectedValue(selectedRessource, true);
 	}
