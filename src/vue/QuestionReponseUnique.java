@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+
+import controleur.Controleur;
 import modele.*;
 
 public class QuestionReponseUnique extends JFrame
@@ -12,27 +14,38 @@ public class QuestionReponseUnique extends JFrame
 	private ButtonGroup buttonGroup;
 	private JTextArea questionArea;
 	private Question question;
+	private int maxResponses = 6; // Limite du nombre de réponses
+	private int currentResponses = 0; // Compteur des réponses ajoutées
 
 	public QuestionReponseUnique(Question question)
 	{
 		this.question = question;
+
 		// Initialiser le conteneur principal
 		JPanel mainPanel = new JPanel(new BorderLayout());
+
+		// Ajouter le bouton "Retour" en haut à gauche
+		JButton btnRetour = new JButton("Retour");
+		btnRetour.addActionListener(e -> {
+			Controleur.ouvrirCreerQuestion();
+			dispose();
+		});
+		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		topPanel.add(btnRetour);
+		mainPanel.add(topPanel, BorderLayout.NORTH);
 
 		// Initialiser le panel des questions
 		questionPanel = new JPanel();
 		questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
 
-		// Initialiser le groupe de boutons radio
-		buttonGroup = new ButtonGroup();
-
-		// Ajouter un champ de texte pour écrire la question
+		// Ajouter un champ de texte pour écrire la question avec un JScrollPane
 		this.questionArea = new JTextArea(10, 80);
 		this.questionArea.setLineWrap(true);
 		this.questionArea.setWrapStyleWord(true);
 		this.questionArea.setFont(new Font("Arial", Font.PLAIN, 18));
-		this.questionArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, questionArea.getPreferredSize().height));
-		questionPanel.add(questionArea);
+		JScrollPane questionScrollPane = new JScrollPane(questionArea);
+		questionScrollPane.setPreferredSize(new Dimension(800, 200));
+		questionPanel.add(questionScrollPane);
 
 		// Ajouter un panel pour les boutons "Ajouter", "Explication" et
 		// "Enregistrer"
@@ -68,11 +81,22 @@ public class QuestionReponseUnique extends JFrame
 		// Ajouter le panel des boutons au panel des questions
 		questionPanel.add(buttonPanel);
 
+		// Initialiser le groupe de boutons radio
+		buttonGroup = new ButtonGroup();
+
 		// Ajouter un ActionListener au bouton "Ajouter"
 		addButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				if (currentResponses >= maxResponses)
+				{
+					JOptionPane.showMessageDialog(null,
+							"Le nombre maximum de réponses est atteint (" + maxResponses + ").", "Erreur",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
 				// Créer un nouveau panel trash
 				JPanel poubellePnl = new JPanel(new GridBagLayout());
 				GridBagConstraints gbc = new GridBagConstraints();
@@ -100,6 +124,7 @@ public class QuestionReponseUnique extends JFrame
 						// Supprimer le panel parent lorsque l'icône de poubelle
 						// est cliquée
 						questionPanel.remove(poubellePnl);
+						currentResponses--;
 						questionPanel.revalidate();
 						questionPanel.repaint();
 					}
@@ -126,6 +151,9 @@ public class QuestionReponseUnique extends JFrame
 
 				// Ajouter le nouveau panel trash au conteneur principal
 				questionPanel.add(poubellePnl, questionPanel.getComponentCount() - 1);
+
+				// Incrémenter le compteur de réponses
+				currentResponses++;
 
 				// Rafraîchir l'interface utilisateur
 				questionPanel.revalidate();
@@ -160,20 +188,11 @@ public class QuestionReponseUnique extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				// Enregistrer la question dans un fichier
-				/*String questionText = questionArea.getText();
-				try (FileWriter writer = new FileWriter("question.txt"))
-				{
-					writer.write(questionText);
-					JOptionPane.showMessageDialog(null, "Question enregistrée avec succès !");
-				} catch (IOException ex)
-				{
-					JOptionPane.showMessageDialog(null, "Erreur lors de l'enregistrement de la question.");
-				}*/
 				question.setEnonce(questionArea.getText());
 			}
 		});
 
-		mainPanel.add(questionPanel, BorderLayout.NORTH);
+		mainPanel.add(questionPanel, BorderLayout.CENTER);
 
 		// Ajouter tout dans le conteneur principal
 		add(mainPanel, BorderLayout.CENTER);
@@ -181,9 +200,8 @@ public class QuestionReponseUnique extends JFrame
 		// Afficher la fenêtre
 		setTitle("Question Réponse Unique");
 		setSize(800, 600);
-        setLocationRelativeTo(null);
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
-
 }

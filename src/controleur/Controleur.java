@@ -131,9 +131,14 @@ public class Controleur
 		new CreerEvaluation();
 	}
 
-	public static void creerQuestion()
+	public static void ouvrirCreerQuestion()
 	{
 		new CreerQuestion();
+	}
+
+	public static void ouvrirCreerEvaluation()
+	{
+		new CreerEvaluation();
 	}
 
 	public static void ouvrirParametres()
