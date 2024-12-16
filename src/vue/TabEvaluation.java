@@ -6,6 +6,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.util.List;
 import modele.Ressource;
+import modele.Evaluation;
 import modele.Notion;
 import controleur.Controleur;
 
@@ -27,7 +28,7 @@ public class TabEvaluation extends JFrame
 		String[] columnNames = { "Notion", "Sélectionner", "TF", "F", "M", "D" };
 		model = new DefaultTableModel(columnNames, 0)
 		{
-			@Override
+
 			public Class<?> getColumnClass(int columnIndex)
 			{
 				// Définir le type des colonnes
@@ -38,7 +39,7 @@ public class TabEvaluation extends JFrame
 				return String.class;
 			}
 
-			@Override
+
 			public boolean isCellEditable(int row, int column)
 			{
 				// Rendre la colonne des cases à cocher éditable sauf pour la
@@ -163,6 +164,8 @@ public class TabEvaluation extends JFrame
 
 	private void generateTabEvaluation()
 	{
+		// Créer un nouvel objet Evaluation
+		Evaluation evaluation = new Evaluation();
 		// Logique pour générer l'évaluation
 		JOptionPane.showMessageDialog(this, "Évaluation générée !");
 	}
@@ -170,9 +173,8 @@ public class TabEvaluation extends JFrame
 	// Renderer pour afficher un petit cercle coloré derrière les chiffres
 	class ColorCircleRenderer extends JLabel implements TableCellRenderer
 	{
-		private final Color[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE };
+		private final Color[] colors = { Color.GREEN, Color.CYAN, Color.RED, Color.GRAY };
 
-		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column)
 		{
@@ -182,14 +184,14 @@ public class TabEvaluation extends JFrame
 
 			return new JComponent()
 			{
-				@Override
+	
 				protected void paintComponent(Graphics g)
 				{
 					super.paintComponent(g);
 					Graphics2D g2d = (Graphics2D) g;
 
 					// Dessiner le cercle
-					int diameter = Math.min(getWidth(), getHeight()) / 2;
+					int diameter = Math.min(getWidth(), getHeight());
 					int x = (getWidth() - diameter) / 2;
 					int y = (getHeight() - diameter) / 2;
 
@@ -229,7 +231,6 @@ public class TabEvaluation extends JFrame
 			textField = (JTextField) getComponent();
 		}
 
-		@Override
 		public boolean stopCellEditing()
 		{
 			String value = textField.getText();
@@ -248,7 +249,6 @@ public class TabEvaluation extends JFrame
 
 	class CheckBoxRenderer extends JCheckBox implements TableCellRenderer
 	{
-		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column)
 		{
@@ -257,4 +257,6 @@ public class TabEvaluation extends JFrame
 			return this;
 		}
 	}
+
+
 }
