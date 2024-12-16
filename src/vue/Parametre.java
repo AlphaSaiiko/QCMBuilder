@@ -82,7 +82,7 @@ public class Parametre extends JFrame
 					}
 
 					// Supprimer la ressource de la liste
-					Controleur.getListRessource().remove(ressource);
+					Controleur.supprRessource(ressource);
 					chargerRessources();
 				}
 			}

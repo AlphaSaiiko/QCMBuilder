@@ -158,9 +158,9 @@ public class Controleur
 		Notion.creerNotion(titreNotion, ressource);
 	}
 
-	public static void creerReponseElimination(String texte, int ordre, double points, boolean correct, Question question)
+	public static OptionElimination creerReponseElimination(String texte, int ordre, double points, boolean correct, Question question)
 	{
-		new OptionElimination("QAE", texte, correct, ordre, points, question);
+		return new OptionElimination("QAE", texte, correct, ordre, points, question);
 	}
 
 	public static OptionAssociation creerReponseAssociation( String enonce, Question question)
@@ -224,6 +224,24 @@ public class Controleur
 	public static void ajouterQuestion(Question question)
 	{
 		Metier.ajouterQuestion(question);
+	}
+
+	public static void supprRessource(Ressource ressource)
+	{
+		Metier.supprRessource(ressource);
+		Ressource.mettreAJourRessources();
+	}
+
+	public void supprNotion(Notion notion)
+	{
+		Metier.supprNotion(notion);
+		Notion.mettreAJourNotions();
+	}
+
+	public void supprQuestion(Question question)
+	{
+		Metier.supprQuestion(question);
+		Question.mettreAJourQuestions();
 	}
 
 	/*

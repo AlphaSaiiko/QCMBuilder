@@ -105,6 +105,9 @@ public class QuestionLiaison extends JFrame
 
 						o1.setAssocie(o2);
 						o2.setAssocie(o1);
+
+						question.ajouterOption(o1);
+						question.ajouterOption(o2);
 					}
 				}
 			}

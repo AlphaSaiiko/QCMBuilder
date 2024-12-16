@@ -173,4 +173,19 @@ public class Metier
 	{
 		Metier.listQuestion.add(question);
 	}
+
+	public static void supprRessource(Ressource ressource)
+	{
+		Metier.listRessource.remove(ressource);
+	}
+
+	public static void supprNotion(Notion notion)
+	{
+		Metier.listNotion.remove(notion);
+	}
+
+	public static void supprQuestion(Question question)
+	{
+		Metier.listQuestion.remove(question);
+	}
 }

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import modele.Question;
+import modele.option.OptionElimination;
 
 public class QuestionAvecElimination extends JFrame
 {
@@ -211,7 +212,9 @@ public class QuestionAvecElimination extends JFrame
 						points.setText("-1");
 					}
 
-					Controleur.creerReponseElimination(textField.getText(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), radioButton.isSelected(), question);
+					OptionElimination rep = Controleur.creerReponseElimination(textField.getText(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), radioButton.isSelected(), question);
+
+					question.ajouterOption(rep);
 				}
 			}
 		});
