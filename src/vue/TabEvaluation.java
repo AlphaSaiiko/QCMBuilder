@@ -1,7 +1,9 @@
 package vue;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.util.List;
@@ -27,9 +29,9 @@ public class TabEvaluation extends JFrame
 		String[] columnNames = { "Notion", "Sélectionner", "TF", "F", "M", "D" };
 		model = new DefaultTableModel(columnNames, 0)
 		{
+			@Override
 			public Class<?> getColumnClass(int columnIndex)
 			{
-				// Définir le type des colonnes
 				if (columnIndex == 1)
 				{
 					return Boolean.class;
@@ -37,15 +39,13 @@ public class TabEvaluation extends JFrame
 				return String.class;
 			}
 
+			@Override
 			public boolean isCellEditable(int row, int column)
 			{
-				// Rendre la colonne des cases à cocher éditable sauf pour la
-				// dernière ligne
 				if (row == getRowCount() - 1 && column == 1)
 				{
 					return false;
 				}
-				// Vérifier si la case à cocher de la ligne est cochée
 				if (column != 1 && !(Boolean) getValueAt(row, 1))
 				{
 					return false;
@@ -79,9 +79,13 @@ public class TabEvaluation extends JFrame
 		JTable table = new JTable(model);
 		table.setRowHeight(25);
 
-		// Remplacer l'éditeur de cellule pour la colonne "TF" par un JTextField
+		// Ajouter un éditeur personnalisé pour restreindre les colonnes à des
+		// chiffres
 		TableColumn tfColumn = table.getColumnModel().getColumn(2);
-		tfColumn.setCellEditor(new DefaultCellEditor(new JTextField()));
+		tfColumn.setCellEditor(new NumericCellEditor());
+		table.getColumnModel().getColumn(3).setCellEditor(new NumericCellEditor());
+		table.getColumnModel().getColumn(4).setCellEditor(new NumericCellEditor());
+		table.getColumnModel().getColumn(5).setCellEditor(new NumericCellEditor());
 
 		// Ajouter le renderer personnalisé pour les colonnes "TF", "F", "M", et
 		// "D"
@@ -160,33 +164,98 @@ public class TabEvaluation extends JFrame
 
 	private void generateTabEvaluation()
 	{
-		// Logique pour générer l'évaluation
 		JOptionPane.showMessageDialog(this, "Évaluation générée !");
 	}
-}
 
-// Définir les classes ColorCircleRenderer et CheckBoxRenderer
-class ColorCircleRenderer extends JLabel implements TableCellRenderer
-{
-	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column)
+	// Renderer pour afficher un petit cercle coloré derrière les chiffres
+	class ColorCircleRenderer extends JLabel implements TableCellRenderer
 	{
-		setText((String) value);
-		setOpaque(true);
-		setBackground(Color.WHITE);
-		return this;
+		private final Color[] colors = { Color.RED, Color.BLUE, Color.GREEN, Color.ORANGE };
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column)
+		{
+			setText((String) value);
+			setOpaque(false);
+			setHorizontalAlignment(SwingConstants.CENTER);
+
+			return new JComponent()
+			{
+				@Override
+				protected void paintComponent(Graphics g)
+				{
+					super.paintComponent(g);
+					Graphics2D g2d = (Graphics2D) g;
+
+					// Dessiner le cercle
+					int diameter = Math.min(getWidth(), getHeight()) / 2;
+					int x = (getWidth() - diameter) / 2;
+					int y = (getHeight() - diameter) / 2;
+
+					if (value != null && !value.toString().isEmpty())
+					{
+						try
+						{
+							Integer.parseInt(value.toString());
+							g2d.setColor(colors[column - 2]); // Couleur selon
+																// la colonne
+							g2d.fillOval(x, y, diameter, diameter);
+						} catch (NumberFormatException ignored)
+						{
+						}
+					}
+
+					// Dessiner le texte
+					g2d.setColor(Color.BLACK);
+					FontMetrics fm = g2d.getFontMetrics();
+					String text = value != null ? value.toString() : "";
+					int textX = (getWidth() - fm.stringWidth(text)) / 2;
+					int textY = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
+					g2d.drawString(text, textX, textY);
+				}
+			};
+		}
 	}
-}
 
-class CheckBoxRenderer extends JCheckBox implements TableCellRenderer
-{
-	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column)
+	// Éditeur personnalisé pour restreindre les entrées à des chiffres
+	class NumericCellEditor extends DefaultCellEditor
 	{
-		setSelected((Boolean) value);
-		setHorizontalAlignment(JLabel.CENTER);
-		return this;
+		private final JTextField textField;
+
+		public NumericCellEditor()
+		{
+			super(new JTextField());
+			textField = (JTextField) getComponent();
+		}
+
+		@Override
+		public boolean stopCellEditing()
+		{
+			String value = textField.getText();
+			try
+			{
+				Integer.parseInt(value);
+			} catch (NumberFormatException e)
+			{
+				JOptionPane.showMessageDialog(null, "Veuillez entrer un nombre valide.", "Erreur",
+						JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+			return super.stopCellEditing();
+		}
+	}
+
+	// Renderer pour la colonne "Sélectionner"
+	class CheckBoxRenderer extends JCheckBox implements TableCellRenderer
+	{
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column)
+		{
+			setSelected((Boolean) value);
+			setHorizontalAlignment(JLabel.CENTER);
+			return this;
+		}
 	}
 }
