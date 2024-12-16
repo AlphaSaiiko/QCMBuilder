@@ -3,6 +3,7 @@ package vue;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
+
 import modele.Notion;
 import modele.Ressource;
 
@@ -14,9 +15,9 @@ public class ModifierNotion extends JFrame
 	 * +-------------+
 	 */
 
-	private JTextField texteNom;
-	private Notion notion;
-	private Ressource ressource;
+	private JTextField texteNom ;
+	private Notion     notion   ;
+	private Ressource  ressource;
 
 
 
@@ -59,18 +60,18 @@ public class ModifierNotion extends JFrame
 			{
 				File ancienChemin = new File("./lib/ressources/" + ressource.getNom() + "/" + notion.getNom());
 				File nouveauChemin = new File("./lib/ressources/" + ressource.getNom() + "/" + nouveauNom);
+
 				if (ancienChemin.exists() && !nouveauChemin.exists())
 				{
 					boolean succes = ancienChemin.renameTo(nouveauChemin);
+					
 					if (succes)
 					{
 						notion.setNom(nouveauNom);
 						this.dispose();
 					}
 					else
-					{
 						JOptionPane.showMessageDialog(this, "Impossible de renommer le répertoire", "Erreur", JOptionPane.ERROR_MESSAGE);
-					}
 				}
 			}
 		});

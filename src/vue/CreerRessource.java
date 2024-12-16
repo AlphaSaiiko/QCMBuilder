@@ -2,8 +2,6 @@ package vue;
 
 import java.awt.*;
 import javax.swing.*;
-
-import controleur.Controleur;
 import modele.Ressource;
 
 public class CreerRessource extends JFrame
