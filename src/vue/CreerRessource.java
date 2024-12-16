@@ -6,69 +6,92 @@ import modele.Ressource;
 
 public class CreerRessource extends JFrame
 {
-	/*
+	/**
 	 *  +--------------+
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
-	public CreerRessource() {
 
+	public CreerRessource()
+	{
 		setTitle("Créer une ressource");
 
-		JPanel panelprincipal = new JPanel(new GridBagLayout());
+
+		//Panel principal
+		JPanel panelPrincipal = new JPanel(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5); // Marges entre les composants
+		gbc.insets = new Insets(5, 5, 5, 5);
+
 
 		// JTextArea pour le titre de la ressource
-		JTextArea titre = new JTextArea(1, 20); // Taille réduite
-		titre.setBorder(BorderFactory.createTitledBorder("Titre de la ressource"));
+		JTextArea texteTitre = new JTextArea(1, 20);
+		texteTitre.setBorder(BorderFactory.createTitledBorder("Titre de la ressource"));
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 0.8;
 		gbc.weighty = 0;
-		panelprincipal.add(titre, gbc);
+		panelPrincipal.add(texteTitre, gbc);
+
 
 		// JButton pour ajouter une ressource à côté du titre
-		JButton ajouter = new JButton("Ajouter");
+		JButton btnAjouter = new JButton("Ajouter");
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.weightx = 0.2;
 		gbc.weighty = 0;
-		panelprincipal.add(ajouter, gbc);
+		panelPrincipal.add(btnAjouter, gbc);
 
 		// Récupérer le contenu du JTextArea et créer une nouvelle ressource
-		ajouter.addActionListener(e -> {
-			String titreRessource = titre.getText();
+		btnAjouter.addActionListener(e -> {
+			String titreRessource = texteTitre.getText();
 			if (!titreRessource.trim().isEmpty()) {
-				Ressource ressource = Ressource.creerRessource(titreRessource);
+				Ressource.creerRessource(titreRessource);
 				this.dispose();
 			} else {
 				JOptionPane.showMessageDialog(this, "Le titre de la ressource ne peut pas être vide.", "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
-		this.add(panelprincipal);
+		this.add(panelPrincipal);
 		this.setSize(500, 150);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 
-	// Création des boutons ronds pour les niveaux de difficultés
-	public static BoutonRond creerButtonRond(Color couleur, String texte)
+
+
+
+	/**
+	 * +----------+
+	 * | METHODES |
+	 * +----------+
+	 */
+
+	/**
+	 * Crée un bouton rond personnalisé avec une couleur et un texte spécifiques.
+	 *
+	 * @param couleur la couleur de fond du bouton
+	 * @param texte   le texte affiché sur le bouton
+	 * @return un objet {@link RoundButton} configuré avec les propriétés spécifiées
+	 */
+	public static BoutonRond creerBoutonRond(Color couleur, String texte)
 	{
-		BoutonRond button = new BoutonRond(texte);
-		button.setPreferredSize(new Dimension(45, 45));
-		button.setBackground(couleur);
-		button.setOpaque(false);
-		button.setBorderPainted(false);
-		return button;
+		BoutonRond btnRond = new BoutonRond(texte);
+		btnRond.setPreferredSize(new Dimension(45, 45));
+		btnRond.setBackground(couleur);
+		btnRond.setOpaque(false);
+		btnRond.setBorderPainted(false);
+		return btnRond;
 	}
 
+
+
+	// Main
 	public static void main(String[] args)
 	{
 		new CreerRessource();

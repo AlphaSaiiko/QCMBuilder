@@ -36,8 +36,8 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 
 		//Panel principal
-		JPanel panelprincipal = new JPanel();
-		panelprincipal.setLayout(new BorderLayout());
+		JPanel panelPrincipal = new JPanel();
+		panelPrincipal.setLayout(new BorderLayout());
 
 
 		// Bouton "Menu principal"
@@ -263,11 +263,11 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 
 		// Ajout des panels au panel principal
-		panelprincipal.add(panelBtnMenu, BorderLayout.NORTH);
-		panelprincipal.add(panelConfiguration, BorderLayout.CENTER);
-		panelprincipal.add(panelBtnCreerQuestion, BorderLayout.SOUTH);
+		panelPrincipal.add(panelBtnMenu, BorderLayout.NORTH);
+		panelPrincipal.add(panelConfiguration, BorderLayout.CENTER);
+		panelPrincipal.add(panelBtnCreerQuestion, BorderLayout.SOUTH);
 		
-		this.add(panelprincipal);
+		this.add(panelPrincipal);
 		this.setSize(700, 330);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
