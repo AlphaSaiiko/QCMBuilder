@@ -45,7 +45,7 @@ public class Parametre extends JFrame
 		// Création du panel qui contiens tous les boutons en bas de la fenètre
 		JPanel panelBoutons = new JPanel();
 		panelBoutons.setLayout(new BorderLayout());
-		panelBoutons.setBorder(new LineBorder(Color.RED, 3));
+		
 
 		// Panel pour les boutons de ressources
 		JPanel panelRessources = new JPanel();

@@ -1,34 +1,55 @@
 package vue;
 
-import controleur.Controleur;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
 
+import controleur.Controleur;
 import modele.Question;
 import modele.option.OptionAssociation;
 
 public class QuestionAssociation extends JFrame
 {
-	private JPanel questionPanel;
-	private JTextArea questionArea;
-	private JButton ajouterBouton;
-	private JButton explicationBouton;
-	private JButton enregistrerBouton;
-	private Question question;
+	/**
+	 * +-------------+
+	 * |  ATTRIBUTS  |
+	 * +-------------+
+	 */
+
+	private JPanel    questionPanel    ;
+	private JTextArea questionArea     ;
+	private JButton   ajouterBouton    ;
+	private JButton   explicationBouton;
+	private JButton   enregistrerBouton;
+	private Question  question         ;
+
+
+
+
+	/**
+	 * +--------------+
+	 * | CONSTRUCTEUR |
+	 * +--------------+
+	 */
 
 	public QuestionAssociation(Question question)
 	{
 		this.question = question;
-		// Initialiser le conteneur principal
-		JPanel mainPanel = new JPanel(new BorderLayout());
+
+
+		//Panel principal
+		JPanel panelPrincipal = new JPanel();
+		panelPrincipal.setLayout(new BorderLayout());
+
 
 		// Initialiser le panel des questions
 		questionPanel = new JPanel();
 		questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
+		questionPanel.setBorder(new LineBorder(Color.RED, 3));
+
 
 		// Ajouter un champ de texte pour écrire la question
 		questionArea = new JTextArea(10, 80);
@@ -118,11 +139,11 @@ public class QuestionAssociation extends JFrame
 		buttonPanel.add(enregistrerBouton);
 
 		// Ajouter le panel des boutons au conteneur principal
-		mainPanel.add(questionPanel, BorderLayout.CENTER);
-		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+		panelPrincipal.add(questionPanel, BorderLayout.CENTER);
+		panelPrincipal.add(buttonPanel, BorderLayout.SOUTH);
 
 		// Ajouter le conteneur principal au frame
-		add(mainPanel, BorderLayout.CENTER);
+		add(panelPrincipal, BorderLayout.CENTER);
 
 		// Afficher la fenêtre
 		setTitle("Question Réponse Association");
