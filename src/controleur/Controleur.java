@@ -50,29 +50,44 @@ public class Controleur
 				if (parent != null && parent.getName().equals("ressources"))
 				{
 					System.out.println("Ressource trouvée : " + dir.getName());
-					Ressource.creerRessource(dir.getName());
+					String[] parts = dir.getName().split("_", 2);
+					if (parts.length == 2) {
+						String nom = parts[0];
+						String id = parts[1];
+						Ressource.creerRessource(id, nom);
+					} else {
+						System.out.println("Nom de répertoire invalide, attendu (id_nom)");
+					}
 				}
-				
+								
 				// Si le répertoire parent est une ressource
 				else if (parent != null && parent.getParentFile() != null && parent.getParentFile().getName().equals("ressources"))
 				{
-					Ressource ressource = Ressource.creerRessource(parent.getName());
-					if (ressource == null)
-					{
-						System.out.println("Ressource non trouvée pour la notion, création d'une nouvelle ressource : " + parent.getName());
-						Ressource.creerRessource(parent.getName());
-						ressource = Ressource.creerRessource(parent.getName());
+					String[] parts = parent.getName().split("_", 2);
+					if (parts.length == 2) {
+						String id = parts[0];
+						String nom = parts[1];
+						Ressource ressource = Ressource.creerRessource(id, nom);
+						if (ressource == null)
+						{
+							System.out.println("Ressource non trouvée pour la notion, création d'une nouvelle ressource : " + parent.getName());
+							Ressource.creerRessource(id, nom);
+							ressource = Ressource.creerRessource(id, nom);
+						}
+
+						// Création de la notion
+						Notion notion = Notion.creerNotion(dir.getName(), ressource);
+						System.out.println("Notion créée : " + notion.getNom() + " pour la ressource : " + ressource.getNom());
+
+						Controleur.chargerQuestion(notion, dir);
+
+						// Ajout de la notion à la ressource
+						System.out.println("Notion ajoutée à la ressource : " + ressource.getNom());
+					} else {
+						System.out.println("Nom de répertoire parent invalide, attendu (id_nom)");
 					}
-
-					// Création de la notion
-					Notion notion = Notion.creerNotion(dir.getName(), ressource);
-					System.out.println("Notion créée : " + notion.getNom() + " pour la ressource : " + ressource.getNom());
-
-					Controleur.chargerQuestion(notion, dir);
-
-					// Ajout de la notion à la ressource
-					System.out.println("Notion ajoutée à la ressource : " + ressource.getNom());
 				}
+
 			});
 		}
 		catch (IOException e)
@@ -172,6 +187,11 @@ public class Controleur
 	public static Option creerReponse(String enonce, boolean validite, Question question)
 	{
 		return new Option("QCM", enonce, validite, question);
+	}
+
+	public static void creerRessource(String nom, String id)
+	{
+		Ressource.creerRessource(nom, id);
 	}
 
 

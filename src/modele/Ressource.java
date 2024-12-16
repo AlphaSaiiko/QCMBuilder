@@ -16,6 +16,7 @@ public class Ressource
 	
 	private List<Notion> ensNotions = new ArrayList<>();
 	private String nom;
+	private String id ;
 	private ControleurFichier fichierControleur;
 
 	/*
@@ -23,12 +24,12 @@ public class Ressource
 	 * | CONSTRUCTEUR |
 	 * +--------------+
 	 */
-	public static Ressource creerRessource(String nom)
+	public static Ressource creerRessource(String nom, String id)
 	{
 		Ressource ressource = Metier.trouverRessourceParNom(nom);
 		if (ressource == null)
 		{
-			ressource = new Ressource(nom);
+			ressource = new Ressource(nom, id);
 			System.out.println("Nouvelle ressource créée avec le titre: " + nom);
 		}
 		else
@@ -38,9 +39,10 @@ public class Ressource
 		return ressource;
 	}
 
-	private Ressource(String nom)
+	private Ressource(String nom, String id)
 	{
 		this.nom = nom;
+		this.id  = id ;
 		Controleur.ajouterRessource(this);
 		this.fichierControleur = new ControleurFichier("lib/ressources/");
 		this.creerFichierRessource();
@@ -55,6 +57,11 @@ public class Ressource
 	public String getNom()
 	{
 		return this.nom;
+	}
+
+	public String getId()
+	{
+		return this.id;
 	}
 
 	public int getNbNotion()
@@ -98,6 +105,13 @@ public class Ressource
 	public void setNom(String nom)
 	{
 		this.nom = nom;
+		Ressource.mettreAJourRessources();
+	}
+
+	public void setId(String id)
+	{
+		this.id = id;
+		Ressource.mettreAJourRessources();
 	}
 
 	/*
@@ -107,7 +121,7 @@ public class Ressource
 	 */
 	public void creerFichierRessource()
 	{
-		this.fichierControleur.ajouterFichier(this.nom);
+		this.fichierControleur.ajouterFichier(this.id + "_" + this.nom);
 	}
 
 	public void ajouterNotion(Notion notion)
