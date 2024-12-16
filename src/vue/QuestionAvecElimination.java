@@ -178,17 +178,7 @@ public class QuestionAvecElimination extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				// Enregistrer la question dans un fichier
-				/*String questionText = questionArea.getText();
-				try (FileWriter writer = new FileWriter("question.txt"))
-				{
-					writer.write(questionText);
-					JOptionPane.showMessageDialog(null, "Question enregistrée avec succès !");
-				} catch (IOException ex)
-				{
-					JOptionPane.showMessageDialog(null, "Erreur lors de l'enregistrement de la question.");
-				}*/
-
+				// Enregistrer la question dans un fichier		
 				question.setEnonce(questionArea.getText());
 			}
 		});
