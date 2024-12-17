@@ -30,7 +30,6 @@ public class Evaluation
 		this.ressource	    = ressource                ;
 		this.listeNotions   = new ArrayList<Notion>  ();
 		this.listeQuestions = new ArrayList<Question>();
-		this.lienEval = genererLienEval();
 	}
 
 
@@ -99,10 +98,6 @@ public class Evaluation
 			this.listeNotions.add(notion);
 	}
 
-	public String genererLienEval()
-	{
-		return "http://exemple.com/evaluation/" + ressource.getNom()  + ".html";
-	}
 
 	public String toString()
 	{
