@@ -189,6 +189,7 @@ public class QuestionReponseUnique extends JFrame
 			{
 				// Enregistrer la question dans un fichier
 				question.setEnonce(questionArea.getText());
+				System.out.println("Question: " + question.getEnonce());
 
 				// Enregistrer les réponses
 				for (int i = 1; i < questionPanel.getComponentCount() - 1; i++)

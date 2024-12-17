@@ -47,6 +47,7 @@ public class Question
 		this.listeOptions = new ArrayList<>();
 		this.creerFichierQuestion();
 		notion.ajouterQuestion(this);
+		Controleur.ajouterQuestion(this);
 	}
 
 
@@ -109,6 +110,7 @@ public class Question
 	public void setEnonce(String enonce)
 	{
 		this.enonce = enonce;
+		System.out.println("Enoncé: " + this.enonce);
 		this.modifierQuestion();
 	}
 
@@ -178,6 +180,10 @@ public class Question
 		if (opt == null)
 			return false;
 
+		//Vérification de la validité de l'option
+		if (this.listeOptions.contains(opt))
+			return false;
+	
 		this.listeOptions.add(opt);
 		Question.mettreAJourQuestions();
 		return true;
@@ -207,9 +213,10 @@ public class Question
 	 */
 	public void modifierQuestion()
 	{
-		ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/");
+		ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/");
 		fichierControleur.modifierQuestion("question" + this.getNumQuestion(), this);
 		Question.mettreAJourQuestions();
+		System.out.println("Question modifiée avec succès.");
 	}
 
 
@@ -223,6 +230,11 @@ public class Question
 	public static void mettreAJourQuestions()
 	{
 		List<Question> questions = Controleur.getListQuestion();
+		System.out.println("Mise à jour des questions...");
+		for (Question question : questions)
+		{
+			System.out.println(question.getEnonce());
+		}
 		ControleurFichier.ecrireQuestions(questions);
 	}
 }

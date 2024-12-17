@@ -115,7 +115,7 @@ public class ControleurFichier
 		try
 		{
 			PrintWriter pw = new PrintWriter(new FileOutputStream(chemin, false));
-			pw.println(qst.getType() + "\t" + qst.getEnonce() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom());
+			pw.println("type:" + qst.getType() + "\tenonce:" + qst.getEnonce() + "\tnbpoints:" + qst.getNbPoints() + "\ttemps:" + qst.getTemps() + "\tdifficulté:" + qst.getDifficulte() + "\tnotion:" + qst.getNotion().getNom());
 			pw.close();
 			System.out.println("Fichier RTF créé : " + chemin);
 		}
@@ -168,8 +168,7 @@ public class ControleurFichier
 
 	public void modifierQuestion(String chemin, Question qst)
 	{
-		if (!chemin.endsWith(".rtf"))
-		{
+		if (!chemin.endsWith(".rtf")) {
 			chemin += ".rtf";
 		}
 		chemin = this.chemin + chemin;
@@ -177,32 +176,28 @@ public class ControleurFichier
 		File fichier = new File(chemin);
 
 		// Vérifie si le fichier existe
-		if (!fichier.exists())
-		{
-			System.out.println("Le fichier n'existe pas.");
+		if (!fichier.exists()) {
 			return;
 		}
 
 		String ligneEntiere = qst.getType() + "\t" + qst.getEnonce() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom();
-		try
-		{
+		
+		try {
 			// Lire toutes les lignes du fichier
 			List<String> lignes = Files.readAllLines(Paths.get(chemin));
 
-			// Modifier la première ligne
-			if (!lignes.isEmpty())
-			{
+			if (!lignes.isEmpty()) {
 				lignes.set(0, ligneEntiere);
 			}
 
 			// Réécrire le contenu modifié dans le fichier
 			Files.write(Paths.get(chemin), lignes, StandardOpenOption.TRUNCATE_EXISTING);
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			System.err.println("Une erreur s'est produite lors de la modification du fichier : " + e.getMessage());
 		}
 	}
+
+
 
 	public void modifierReponse(String chemin, IOption opt)
 	{
@@ -322,13 +317,15 @@ public class ControleurFichier
 		{
 			for (Question question : questions)
 			{
-				writer.write("nom:" + question.getEnonce() + "\tnbPoints:" + question.getNbPoints() + "\ttemps:" + question.getTemps() + "\tdifficulte:" + question.getDifficulte() + "\ttype:" + question.getType() + "\tnotion :" + question.getNotion().getNom() + "\noptions :" );
-				
+				writer.write("nom:" + question.getEnonce() + "\tnbPoints:" + question.getNbPoints() + "\ttemps:" + question.getTemps() + "\tdifficulte:" + question.getDifficulte() + "\ttype:" + question.getType() + "\tnotion :" + question.getNotion().getNom() + "\toptions :" );
+
 				for (IOption option : question.getEnsOptions())
 				{
 					writer.write(option.getType() + ";" + option.getEnonce() + ";" + option.getId());
 
-					if (option instanceof OptionAssociation){writer.write(";" + ((OptionAssociation)option).getAssocie().getId());}
+					if (option instanceof OptionAssociation) {
+						writer.write(";" + ((OptionAssociation) option).getAssocie().getId());
+					}
 					if (option instanceof OptionElimination)
 					{
 						OptionElimination optionE = (OptionElimination) option;
@@ -349,4 +346,5 @@ public class ControleurFichier
 			System.out.println("Erreur lors de l'écriture des questions : " + e.getMessage());
 		}
 	}
+
 }
