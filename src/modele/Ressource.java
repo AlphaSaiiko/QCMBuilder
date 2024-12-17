@@ -32,7 +32,6 @@ public class Ressource
 	{
 		this.nom = nom;
 		this.id  = id ;
-		this.listeNotions = new ArrayList<>();
 
 		Controleur.ajouterRessource(this);
 		this.controleurFichier = new ControleurFichier("lib/ressources/");
