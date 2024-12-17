@@ -96,9 +96,17 @@ public class Metier
 		return nomsRessources;
 	}
 
-<<<<<<< HEAD
+
 	public static Ressource trouverRessourceParId(String id)
-=======
+	{
+		for (Ressource ressource : Metier.listeRessources)
+		{
+			if (ressource.getId().equalsIgnoreCase(id))
+				return ressource;
+		}
+
+		return null;
+	}
 
 
 	/**
@@ -108,17 +116,14 @@ public class Metier
 	 * @return La ressource correspondante si elle est trouvée, sinon null.
 	 */
 	public static Ressource trouverRessourceParNom(String nom)
->>>>>>> 7580f9520877e60e2cdf8b1fae16d02922aae1cd
 	{
 		for (Ressource ressource : Metier.listeRessources)
 		{
-<<<<<<< HEAD
-			if (ressource.getId().equalsIgnoreCase(id))
+			if (ressource.getId().equalsIgnoreCase(nom))
 			{
-=======
 			if (ressource.getNom().equalsIgnoreCase(nom))
->>>>>>> 7580f9520877e60e2cdf8b1fae16d02922aae1cd
 				return ressource;
+			}
 		}
 
 		return null;
