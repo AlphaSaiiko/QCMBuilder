@@ -13,9 +13,9 @@ public class Notion
 	 * | ATTRIBUTS |
 	 * +-----------+
 	 */ 
-	private List<Question> ensQuestions;
-	private String         nom         ;
-	private Ressource      ressource   ;
+	private List<Question> listeQuestions;
+	private String         nom           ;
+	private Ressource      ressource     ;
 
 
 
@@ -33,7 +33,7 @@ public class Notion
 
 		Controleur.ajouterNotion(this);
 		this.creerFichierNotion();
-		this.ensQuestions = new ArrayList<>();
+		this.listeQuestions = new ArrayList<>();
 		ressource.ajouterNotion(this);
 		Notion.mettreAJourNotions();
 	}
@@ -70,11 +70,11 @@ public class Notion
 	 * +----------+
 	 */
 
-	public String         getNom         ()           { return nom                          ; }
-	public Ressource      getRessource   ()           { return this.ressource               ; }
-	public int            getNbQuestion  ()           { return this.ensQuestions.size()     ; }
-	public List<Question> getEnsQuestions()           { return this.ensQuestions            ; }
-	public Question       getQuestion    (int indice) { return this.ensQuestions.get(indice); }
+	public String         getNom         ()           { return nom                            ; }
+	public Ressource      getRessource   ()           { return this.ressource                 ; }
+	public int            getNbQuestion  ()           { return this.listeQuestions.size()     ; }
+	public List<Question> getEnsQuestions()           { return this.listeQuestions            ; }
+	public Question       getQuestion    (int indice) { return this.listeQuestions.get(indice); }
 
 
 
@@ -119,7 +119,7 @@ public class Notion
 	{
 		if (question != null)
 		{
-			this.ensQuestions.add(question);
+			this.listeQuestions.add(question);
 			Notion.mettreAJourNotions();
 		}
 	}
@@ -134,7 +134,7 @@ public class Notion
 	 */
 	public void supprimerQuestion(Question question)
 	{
-		this.ensQuestions.removeIf(qst -> question.equals(qst));
+		this.listeQuestions.removeIf(qst -> question.equals(qst));
 		Notion.mettreAJourNotions();
 	}
 
