@@ -171,6 +171,5 @@ public class Notion
 	{
 		Ressource.mettreAJourRessources();
 		List<Notion> notions = Controleur.getListNotion();
-		ControleurFichier.ecrireNotions(notions);
 	}
 }
