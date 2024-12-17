@@ -192,14 +192,19 @@ public class QuestionReponseUnique extends JFrame
 
 				// Enregistrer les réponses
 				for (int i = 1; i < questionPanel.getComponentCount() - 1; i++)
-                {
-                    JPanel panel = (JPanel) questionPanel.getComponent(i);
-                    JTextField textField = (JTextField) panel.getComponent(1);
-                    JRadioButton radioButton = (JRadioButton) panel.getComponent(2);
-                    Option o = Controleur.creerReponse(textField.getText(), radioButton.isSelected(), question);
+				{
+					JPanel panel = (JPanel) questionPanel.getComponent(i);
+					JTextField textField = (JTextField) panel.getComponent(1);
+					JRadioButton radioButton = (JRadioButton) panel.getComponent(2);
+					Option o = Controleur.creerReponse(textField.getText(), radioButton.isSelected(), question);
 					question.ajouterOption(o);
-                }
+				}
+
+				// Ouvrir une nouvelle instance de la classe Accueil
+				QuestionReponseUnique.this.dispose();
+				new Accueil();
 			}
+
 		});
 
 		mainPanel.add(questionPanel, BorderLayout.CENTER);
