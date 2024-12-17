@@ -57,7 +57,7 @@ public class CreerEvaluation extends JFrame
 		gbcLigne.gridx = 1;
 		gbcLigne.gridy = 0;
 		gbcLigne.anchor = GridBagConstraints.CENTER;
-		JComboBox<String> ressources = new JComboBox<>(Controleur.getNomsRessources());
+		JComboBox<String> ressources = new JComboBox<>(Controleur.getIDsNomsRessources());
 		panelLigne.add(ressources, gbcLigne);
 
 		
@@ -116,37 +116,50 @@ public class CreerEvaluation extends JFrame
 		panelCreer.setLayout(new FlowLayout(FlowLayout.CENTER));
 		panelCreer.add(boutonCreer);
 
-		boutonCreer.addActionListener (e -> {
-			String[] nomRessource = String.valueOf(ressources.getSelectedItem()).split("_", 2);
-
-			String id = "", nom = "";
-			if (nomRessource.length == 2)
-			{
-				nom = nomRessource[0];
-				id  = nomRessource[1];
+		boutonCreer.addActionListener(e -> {
+			Object selectedItem = ressources.getSelectedItem();
+			if (selectedItem == null || String.valueOf(selectedItem).trim().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Veuillez sélectionner une ressource valide.", "Erreur : ", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
-			
+		
+			String[] nomRessource = String.valueOf(selectedItem).split("_", 2);
+			String id = "", nom = "";
+			if (nomRessource.length == 2) {
+				id = nomRessource[0];
+				nom = nomRessource[1];
+			} else {
+				JOptionPane.showMessageDialog(null, "Le format de la ressource sélectionnée est incorrect. Attendu : id_nom.", "Erreur : ", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		
 			Ressource ressource = Controleur.trouverRessourceParId(id);
-
+		
+			if (ressource == null) {
+				JOptionPane.showMessageDialog(null, "Ressource non trouvée pour l'ID : " + id, "Erreur : ", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		
 			String erreur = "";
-
-			if (ressource.getEnsNotions().isEmpty())                erreur += "Cette ressource n'a pas de notions !\n";
-
-			if (! boutonOui.isSelected() && ! boutonNon.isSelected()) erreur += "Veuillez décider si vous souhaitez donner un temps limite à l'évaluation !\n";
-
-
-			if (erreur.isEmpty())
-			{
-				Controleur.creerEvaluation();
+		
+			if (ressource.getEnsNotions().isEmpty()) {
+				erreur += "Cette ressource n'a pas de notions !\n";
+			}
+		
+			if (!boutonOui.isSelected() && !boutonNon.isSelected()) {
+				erreur += "Veuillez décider si vous souhaitez donner un temps limite à l'évaluation !\n";
+			}
+		
+			if (erreur.isEmpty()) {
 				TabEvaluation tabEval = new TabEvaluation(ressource);
 				dispose();
-			}
-			else
-			{
+			} else {
 				JOptionPane.showMessageDialog(null, erreur, "Erreur : ", JOptionPane.ERROR_MESSAGE);
 			}
-			
 		});
+		
+		
+		
 
 		panelPrincipal.add(panelCreer, BorderLayout.SOUTH);
 

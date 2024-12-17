@@ -1,16 +1,15 @@
 package vue;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
-import modele.Ressource;
 import modele.Evaluation;
 import modele.Notion;
+import modele.Ressource;
 
 public class TabEvaluation extends JFrame
 {
@@ -20,8 +19,6 @@ public class TabEvaluation extends JFrame
 
 	public TabEvaluation(Ressource ressource)
 	{
-		this.creerQuestion = new CreerQuestion();
-
 		// Créer la fenêtre principale
 		setTitle("Évaluation");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -33,7 +30,6 @@ public class TabEvaluation extends JFrame
 		String[] columnNames = { "Notion", "Sélectionner", "TF", "F", "M", "D" };
 		model = new DefaultTableModel(columnNames, 0)
 		{
-			@Override
 			public Class<?> getColumnClass(int columnIndex)
 			{
 				if (columnIndex == 1)
@@ -43,7 +39,6 @@ public class TabEvaluation extends JFrame
 				return String.class;
 			}
 
-			@Override
 			public boolean isCellEditable(int row, int column)
 			{
 				if (row == getRowCount() - 1 && column == 1)
