@@ -1,10 +1,9 @@
 package modele;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import controleur.Controleur;
 import controleur.ControleurFichier;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ressource
 {

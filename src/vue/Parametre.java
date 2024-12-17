@@ -203,14 +203,14 @@ public class Parametre extends JFrame
 					if (notion != null) 
 					{
 						// Supprimer le répertoire associé à la notion
-						File notionDir = new File("./lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom());
+						File notionDir = new File("./lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom());
 						if (notionDir.exists()) 
 						{
 							supprimerDossier(notionDir);
 						}
 
 						// Supprimer la notion de la liste
-						ressource.getEnsNotions().remove(notion);
+						Controleur.supprNotion(ressource, notion);
 						majListeNotion(selectedRessource);
 					}
 				}

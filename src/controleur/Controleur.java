@@ -385,9 +385,10 @@ public class Controleur
 		Ressource.mettreAJourRessources();
 	}
 
-	public void supprNotion(Notion notion)
+	public static void supprNotion(Ressource ressource, Notion notion)
 	{
 		Metier.supprimerNotion(notion);
+		Metier.retirerNotion(ressource, notion);
 		Notion.mettreAJourNotions();
 	}
 

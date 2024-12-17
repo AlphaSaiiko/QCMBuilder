@@ -189,4 +189,7 @@ public class Metier
 	public static void supprimerRessource(Ressource ressource) { Metier.listeRessources.remove(ressource); }
 	public static void supprimerNotion   (Notion    notion   ) { Metier.listeNotions.remove   (notion)   ; }
 	public static void supprimerQuestion (Question  question ) { Metier.listeQuestions.remove (question) ; }
+
+
+	public static void retirerNotion (Ressource ressource, Notion notion) { ressource.supprimerNotion(notion); }
 }
