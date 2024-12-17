@@ -1,3 +1,2 @@
-id:R1.01	nom:BD	notions:
-id:r3.11	nom:test	notions:
-id:r1.12	nom:fdg	notions:
+id:R1.01	nom:BD	notions:not1,no1,no2
+id:R3.01	nom:Dev web	notions:Formulaires,MVC

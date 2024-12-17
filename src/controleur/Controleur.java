@@ -89,37 +89,45 @@ public class Controleur
 			{
 				String ligne = scRes.nextLine();
 
-				idRessource = ligne.substring(3, ligne.indexOf("nom:")-1);
-				nomRessource = ligne.substring(ligne.indexOf("nom:")+4, ligne.indexOf("notions:")-1);
+				boolean aNotion = !(ligne.indexOf("notions:") == -1);
+
+				idRessource  = ligne.substring(3, ligne.indexOf("nom:")-1);
+				if (aNotion) nomRessource = ligne.substring(ligne.indexOf("nom:")+4, ligne.indexOf("notions:")-1);
+				else         nomRessource = ligne.substring(ligne.indexOf("nom:")+4);
+				
 
 
 				ressource = Ressource.creerRessource(nomRessource, idRessource);
 
 
-
-				Notion notion;
-
-				
-				ligne = ligne.substring(ligne.indexOf("notions:")+8);
-				String[] ligneQuestion = ligne.split(",");
-
-				for (int cpt = 0; cpt < ligneQuestion.length-2; cpt++)
+				if (aNotion)
 				{
-					notion = Notion.creerNotion(ligneQuestion[cpt], ressource);
-						
-					Controleur.chargerQuestion(notion);
+					Notion notion;
+
+					
+					ligne = ligne.substring(ligne.indexOf("notions:")+8);
+					String[] ligneQuestion = ligne.split(",");
+
+					for (int cpt = 0; cpt < ligneQuestion.length; cpt++)
+					{
+						notion = Notion.creerNotion(ligneQuestion[cpt], ressource);
+							
+						Controleur.chargerQuestion(notion);
 
 
-					// Ajout de la notion à la ressource
-					System.out.println("Notion ajoutée à la ressource : " + ressource.getId() + "_" + ressource.getNom());
+						// Ajout de la notion à la ressource
+						System.out.println("Notion ajoutée à la ressource : " + ressource.getId() + "_" + ressource.getNom());
+					}
 				}
+				
 				
 
 				
 			}
 
 		} catch (Exception e) {
-			System.err.println("Erreur lors du chargement des ressources et des notions : " + e.getMessage());
+			System.err.println("Erreur lors du chargement des ressources et des notions : " );
+			e.printStackTrace();
 		}
 		
 
@@ -329,11 +337,6 @@ public class Controleur
 	public static String[] getNomsRessources()
 	{
 		return Metier.getNomsRessources();
-	}
-
-	public static String[] getIDsNomsREssources()
-	{
-		return Metier.getIDsNomsRessources();
 	}
 
 	public static String[] getNomsNotions()

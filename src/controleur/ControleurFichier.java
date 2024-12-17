@@ -273,11 +273,23 @@ public class ControleurFichier
 		{
 			for (Ressource ressource : ressources)
 			{
-				writer.write("id:" + ressource.getId() + "\tnom:" + ressource.getNom() + "\tnotions:");
-				for (Notion notion : ressource.getEnsNotions())
+				boolean aNotion = (ressource.getNbNotion()>0);
+				
+				writer.write("id:" + ressource.getId() + "\tnom:" + ressource.getNom());
+
+				if (aNotion)
 				{
-					writer.write(notion.getNom() + ",");
+					writer.write("\tnotions:");
+					aNotion = false;
+					
+					for (Notion notion : ressource.getEnsNotions())
+					{
+						writer.write((aNotion?",":"") + notion.getNom());
+
+						aNotion = true;
+					}
 				}
+				
 				writer.write("\n");
 			}
 		}
