@@ -1,5 +1,6 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -7,8 +8,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import controleur.Controleur;
 import modele.Notion;
 import modele.Ressource;
 
@@ -26,9 +25,6 @@ public class Parametre extends JFrame
 	private DefaultListModel<String> notionListModel   ;
 	private CreerRessource           creerRessource    ;
 	private CreerNotion              creerNotion       ;
-
-
-
 
 	/*
 	 *  +--------------+
@@ -77,11 +73,18 @@ public class Parametre extends JFrame
 		JButton supprRessource = new JButton(resizeIcon("./lib/icones/delete.png", 20, 20));
 		supprRessource.setPreferredSize(new Dimension(30, 30));
 		supprRessource.addActionListener(e -> {
-			
-			String selectedRessource = ressourceList.getSelectedValue();
+			String nom = "", id = "";
+					
+			String[] selectedRessource = ressourceList.getSelectedValue().split("_", 2);
+			if (selectedRessource.length == 2)
+			{
+				nom = selectedRessource[0];
+				id  = selectedRessource[1];
+				Ressource.creerRessource(id, nom);
+			}
 			if (selectedRessource != null) 
 			{
-				Ressource ressource = Controleur.trouverRessourceParNom(selectedRessource);
+				Ressource ressource = Controleur.trouverRessourceParNom(nom);
 				if (ressource != null) 
 				{
 					// Supprimer le répertoire associé à la ressource
