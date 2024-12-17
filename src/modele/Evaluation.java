@@ -6,9 +6,9 @@ import java.util.List;
 public class Evaluation
 {
 	/**
-	 * +------------+
-	 * | ATTRIBUTS  |
-	 * +------------+
+	 * +-----------+
+	 * | ATTRIBUTS |
+	 * +-----------+
 	 */
 
 	private Ressource       ressource    ;
@@ -35,7 +35,7 @@ public class Evaluation
 
 
 
-	/*
+	/**
 	 * +----------+
 	 * | GETTEURS |
 	 * +----------+
@@ -49,7 +49,7 @@ public class Evaluation
 
 
 
-	/*
+	/**
 	 * +----------+
 	 * | SETTEURS |
 	 * +----------+
@@ -61,7 +61,7 @@ public class Evaluation
 
 
 
-	/*
+	/**
 	 * +----------+
 	 * | METHODES |
 	 * +----------+

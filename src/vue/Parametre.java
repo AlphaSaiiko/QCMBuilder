@@ -173,7 +173,7 @@ public class Parametre extends JFrame
 				public void windowClosed(WindowEvent e)
 				{
 					chargerRessources();
-					majListeNotion(selectedRessource.getNom());
+					majListeNotion(selectedRessource.getId() + "_" + selectedRessource.getNom());
 				}
 			});
 		});
@@ -193,10 +193,10 @@ public class Parametre extends JFrame
 				String id = "", nom = "";
 				if (nomRessource.length == 2)
 				{
-					nom = nomRessource[0];
-					id  = nomRessource[1];
+					nom = nomRessource[1];
+					id  = nomRessource[0];
 				}
-				Ressource ressource = Controleur.trouverRessourceParId(selectedRessource);
+				Ressource ressource = Controleur.trouverRessourceParId(id);
 				if (ressource != null) 
 				{
 					Notion notion = ressource.getNotion(selectedNotion);
@@ -268,30 +268,25 @@ public class Parametre extends JFrame
 		// Liste des ressources
 		ressourceListModel = new DefaultListModel<>();
 		ressourceList = new JList<>(ressourceListModel);
-		ressourceList.addListSelectionListener(new ListSelectionListener()
-		{
-			public void valueChanged(ListSelectionEvent e)
-			{
-				if (!e.getValueIsAdjusting())
-				{
+		ressourceList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if (!e.getValueIsAdjusting()) {
 					String selectedRessource = ressourceList.getSelectedValue();
 					majListeNotion(selectedRessource);
-
-					// Activer et changer la couleur du bouton "Ajouter une notion" lorsque 
-					// une ressource est sélectionnée
-					if (selectedRessource != null)
-					{
+		
+					if (selectedRessource != null) {
 						ajtNotion.setBackground(Color.GREEN);
 						ajtNotion.setEnabled(true);
-					}
-					else
-					{
+					} else {
 						ajtNotion.setBackground(Color.GRAY);
 						ajtNotion.setEnabled(false);
 					}
 				}
 			}
 		});
+		
+		
+
 
 
 		// Liste des notions
@@ -375,44 +370,42 @@ public class Parametre extends JFrame
 	}
 
 	// Méthode pour charger les ressources dans la JList
-	private void chargerRessources()
-	{
+	private void chargerRessources() {
 		String selectedRessource = ressourceList.getSelectedValue();
+		
 		ressourceListModel.clear();
-		for (Ressource ressource : Controleur.getListRessource())
-		{
+		for (Ressource ressource : Controleur.getListRessource()) {
 			ressourceListModel.addElement(ressource.getId() + "_" + ressource.getNom());
 		}
+		
 		ressourceList.setSelectedValue(selectedRessource, true);
 	}
+	
+	
 
 
 	// Méthode pour mettre à jour la liste des notions en fonction de la ressource sélectionnée
-	private void majListeNotion(String ressourceName)
-	{
+	private void majListeNotion(String ressourceName) {
 		String selectedNotion = notionList.getSelectedValue();
+		
 		notionListModel.clear();
 		Ressource ressource = null;
-		if (ressourceName != null)
-		{
+		if (ressourceName != null) {
 			String[] nomRessource = ressourceName.split("_", 2);
 			String id = "", nom = "";
-			if (nomRessource.length == 2)
-			{
-				nom = nomRessource[0];
-				id  = nomRessource[1];
-			
+			if (nomRessource.length == 2) {
+				id = nomRessource[0];
+				nom = nomRessource[1];
 			}
 			ressource = Controleur.trouverRessourceParId(id);
 		}
-		if (ressource != null)
-		{
-			for (String notion : ressource.getNomsNotions())
-			{
+		if (ressource != null) {
+			for (String notion : ressource.getNomsNotions()) {
 				notionListModel.addElement(notion);
 			}
 		}
 		notionList.setSelectedValue(selectedNotion, true);
 	}
+	
 }
-
+	
