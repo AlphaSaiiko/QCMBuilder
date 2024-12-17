@@ -294,22 +294,6 @@ public class ControleurFichier
 		}
 	}
 
-	// Méthode pour écrire toutes les notions dans un fichier
-	public static void ecrireNotions(List<Notion> notions)
-	{
-		try (FileWriter writer = new FileWriter("Notions.csv"))
-		{
-			for (Notion notion : notions)
-			{
-				writer.write("nom:" + notion.getNom() + "	ressource:" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "\n");
-			}
-		}
-		catch (IOException e)
-		{
-			System.out.println("Erreur lors de l'écriture des notions : " + e.getMessage());
-		}
-	}
-
 	// Méthode pour écrire toutes les questions dans un fichier
 	public static void ecrireQuestions(List<Question> questions)
 	{
