@@ -74,7 +74,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 
 		//Creation d'une JComboBox pour les ressources et matières
-		this.listeRessources = new JComboBox<String>(Controleur.getNomsRessources());
+		this.listeRessources = new JComboBox<String>(Controleur.getIDsNomsREssources());
 		this.listeRessources.setPreferredSize(new Dimension(150, 30));
 		
 		this.nomRessource = String.valueOf(listeRessources.getSelectedItem());
@@ -82,8 +82,8 @@ public class CreerQuestion extends JFrame implements ActionListener
 		String id = "", nom = "";
 		if (decRessource.length == 2)
 		{
-			nom = decRessource[0];
-			id  = decRessource[1];
+			nom = decRessource[1];
+			id  = decRessource[0];
 		}
 		
 		this.listeNotions = new JComboBox<String>(Controleur.trouverRessourceParId(id).getNomsNotions());
@@ -221,8 +221,8 @@ public class CreerQuestion extends JFrame implements ActionListener
 			String idRes = "", nomRes = "";
 			if (nomRessource.length == 2)
 			{
-				nomRes = nomRessource[0];
-				idRes  = nomRessource[1];
+				nomRes = nomRessource[1];
+				idRes  = nomRessource[0];
 			}
 			Notion notion = Notion.trouverNotionParNom((String) listeNotions.getSelectedItem(), Controleur.trouverRessourceParId(idRes));
 
@@ -342,20 +342,12 @@ public class CreerQuestion extends JFrame implements ActionListener
 		String id = "", nom = "";
 		if (decRessource.length == 2)
 		{
-			nom = decRessource[0];
-			id  = decRessource[1];
+			nom = decRessource[1];
+			id  = decRessource[0];
 		}
 
 		for (String nomNotion : Controleur.trouverRessourceParId(id).getNomsNotions())
 			this.listeNotions.addItem(nomNotion);
-	}
-
-
-
-	// Main
-	public static void main(String[] args)
-	{
-		new CreerQuestion();
 	}
 }
 

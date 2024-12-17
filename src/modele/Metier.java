@@ -95,6 +95,19 @@ public class Metier
 		return nomsRessources;
 	}
 
+	public static String[] getIDsNomsRessources()
+	{
+		if (Metier.listeRessources.isEmpty())
+			return null;
+
+		String[] idsNomsRessources = new String[Metier.listeRessources.size()];
+
+		for (int i = 0; i < Metier.listeRessources.size(); i++)
+			idsNomsRessources[i] = Metier.listeRessources.get(i).getId() + "_" + Metier.listeRessources.get(i).getNom();
+
+		return idsNomsRessources;
+	}
+
 	/**
 	 * Recherche une ressource par son nom dans la liste des ressources.
 	 *

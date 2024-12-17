@@ -331,6 +331,11 @@ public class Controleur
 		return Metier.getNomsRessources();
 	}
 
+	public static String[] getIDsNomsREssources()
+	{
+		return Metier.getIDsNomsRessources();
+	}
+
 	public static String[] getNomsNotions()
 	{
 		return Metier.getNomsNotions();
