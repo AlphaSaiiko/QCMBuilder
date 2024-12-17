@@ -102,7 +102,7 @@ public class Controleur
 		try {
 			Scanner scQst = new Scanner(new FileInputStream("./Questions.csv"));
 
-			String nomQuestion;
+			String enonce;
 			Question question;
 
 			while (scQst.hasNextLine())
@@ -111,11 +111,11 @@ public class Controleur
 
 				String[] ligneQuestion = ligne.split("\t");
 
-				nomQuestion = ligneQuestion[0].substring(4);
-				int nbPoints   = Integer.valueOf(ligneQuestion[1].substring(8));
-				int temps      = Integer.valueOf(ligneQuestion[2].substring(6));
-				int difficulte = Integer.valueOf(ligneQuestion[3].substring(10));
-				String type    =                 ligneQuestion[4].substring(5);
+				enonce         =                 ligneQuestion[0] ;
+				int nbPoints   = Integer.valueOf(ligneQuestion[1]);
+				int temps      = Integer.valueOf(ligneQuestion[2]);
+				int difficulte = Integer.valueOf(ligneQuestion[3]);
+				String type    =                 ligneQuestion[4] ;
 
 				question = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
 
