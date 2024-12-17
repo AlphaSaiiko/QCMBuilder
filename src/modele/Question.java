@@ -95,7 +95,7 @@ public class Question
 
 
 
-	/*
+	/**
 	 * +----------+
 	 * | SETTEURS |
 	 * +----------+
@@ -144,7 +144,7 @@ public class Question
 
 
 
-	/*
+	/**
 	 * +----------+
 	 * | METHODES |
 	 * +----------+
