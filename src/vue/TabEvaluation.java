@@ -193,6 +193,9 @@ public class TabEvaluation extends JFrame
 	private void sendEvaluation(Evaluation evaluation)
 	{
 		JOptionPane.showMessageDialog(this, "Évaluation générée et envoyée avec succès : " + evaluation.getLienEval());
+		System.out.println("Évaluation générée et envoyée avec succès : " + evaluation.getLienEval());
+		System.out.println("Évaluation générée et envoyée avec succès : " + evaluation.toString());
+
 	}
 
 	// Classes internes pour les renderers et éditeurs (identiques à votre code)
