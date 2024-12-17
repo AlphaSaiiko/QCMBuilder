@@ -4,7 +4,6 @@ import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 import modele.*;
 import modele.option.Option;
@@ -182,6 +181,10 @@ public class QuestionReponseMultiple extends JFrame
                     Option o = Controleur.creerReponse(textField.getText(), checkBox.isSelected(), question);
                     question.ajouterOption(o);
                 }
+
+                // Fermer la fenêtre
+                QuestionReponseMultiple.this.dispose();
+                new Accueil();
             }
         });
 

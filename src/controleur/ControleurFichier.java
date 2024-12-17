@@ -152,9 +152,6 @@ public class ControleurFichier
 			for (IOption option : qst.getEnsOptions())
 			{
 				ligneEntiere += ";" + option.getType() + ";" + option.getEnonce() + ";" + option.getId();
-				if (option instanceof OptionAssociation) {
-					ligneEntiere += ";" + ((OptionAssociation) option).getAssocie().getId();
-				}
 				if (option instanceof OptionElimination) {
 					OptionElimination optionE = (OptionElimination) option;
 					ligneEntiere += ";" + optionE.getEstReponse() + ";" + optionE.getOrdre() + ";" + optionE.getNbPointsMoins();

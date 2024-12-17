@@ -216,6 +216,10 @@ public class QuestionAvecElimination extends JFrame
 
 					question.ajouterOption(rep);
 				}
+
+				// Fermer la fenêtre
+				QuestionAvecElimination.this.dispose();
+				new Accueil();
 			}
 		});
 

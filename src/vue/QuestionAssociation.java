@@ -131,6 +131,10 @@ public class QuestionAssociation extends JFrame
 						question.ajouterOption(o2);
 					}
 				}
+
+				// Fermer la fenêtre
+				QuestionAssociation.this.dispose();
+				new Accueil();
 			}
 		});
 		// Ajouter les boutons au panel des boutons
