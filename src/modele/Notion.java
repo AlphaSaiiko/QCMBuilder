@@ -26,7 +26,7 @@ public class Notion
 	 * +--------------+
 	 */
 
-	private Notion(String nom, Ressource ressource)
+	public Notion(String nom, Ressource ressource)
 	{
 		this.nom       = nom      ;
 		this.ressource = ressource;

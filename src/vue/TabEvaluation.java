@@ -1,22 +1,27 @@
 package vue;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
+
 import modele.Ressource;
 import modele.Evaluation;
 import modele.Notion;
-import controleur.Controleur;
 
 public class TabEvaluation extends JFrame
 {
 	private DefaultTableModel model;
 	private boolean isUpdating = false;
+	private CreerQuestion creerQuestion;
 
 	public TabEvaluation(Ressource ressource)
 	{
+		this.creerQuestion = new CreerQuestion();
+
 		// Créer la fenêtre principale
 		setTitle("Évaluation");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -28,10 +33,9 @@ public class TabEvaluation extends JFrame
 		String[] columnNames = { "Notion", "Sélectionner", "TF", "F", "M", "D" };
 		model = new DefaultTableModel(columnNames, 0)
 		{
-
+			@Override
 			public Class<?> getColumnClass(int columnIndex)
 			{
-				// Définir le type des colonnes
 				if (columnIndex == 1)
 				{
 					return Boolean.class;
@@ -39,16 +43,13 @@ public class TabEvaluation extends JFrame
 				return String.class;
 			}
 
-
+			@Override
 			public boolean isCellEditable(int row, int column)
 			{
-				// Rendre la colonne des cases à cocher éditable sauf pour la
-				// dernière ligne
 				if (row == getRowCount() - 1 && column == 1)
 				{
 					return false;
 				}
-				// Vérifier si la case à cocher de la ligne est cochée
 				if (column != 1 && !(Boolean) getValueAt(row, 1))
 				{
 					return false;
@@ -57,13 +58,11 @@ public class TabEvaluation extends JFrame
 			}
 		};
 
-		// Récupérer  les notions de la ressource
-		
+		// Récupérer les notions de la ressource
 		for (Notion notion : ressource.getEnsNotions())
 		{
 			model.addRow(new Object[] { notion.getNom(), false, "", "", "", "" });
 		}
-		
 
 		// Ajouter une ligne pour le résumé
 		model.addRow(new Object[] { "Total", false, "", "", "", "" });
@@ -80,22 +79,20 @@ public class TabEvaluation extends JFrame
 		JTable table = new JTable(model);
 		table.setRowHeight(25);
 
-		// Ajouter un éditeur personnalisé pour restreindre les colonnes à desTableCellEditor chiffres
+		// Éditeurs personnalisés pour les colonnes
 		TableColumn tfColumn = table.getColumnModel().getColumn(2);
 		tfColumn.setCellEditor(new NumericCellEditor());
 		table.getColumnModel().getColumn(3).setCellEditor(new NumericCellEditor());
 		table.getColumnModel().getColumn(4).setCellEditor(new NumericCellEditor());
 		table.getColumnModel().getColumn(5).setCellEditor(new NumericCellEditor());
 
-		// Ajouter le renderer personnalisé pour les colonnes "TF", "F", "M", et
-		// "D"
+		// Ajouter des renderers personnalisés
 		TableCellRenderer colorRenderer = new ColorCircleRenderer();
 		table.getColumnModel().getColumn(2).setCellRenderer(colorRenderer);
 		table.getColumnModel().getColumn(3).setCellRenderer(colorRenderer);
 		table.getColumnModel().getColumn(4).setCellRenderer(colorRenderer);
 		table.getColumnModel().getColumn(5).setCellRenderer(colorRenderer);
 
-		// Ajouter le renderer personnalisé pour la colonne "Sélectionner"
 		TableCellRenderer checkBoxRenderer = new CheckBoxRenderer();
 		table.getColumnModel().getColumn(1).setCellRenderer(checkBoxRenderer);
 
@@ -108,7 +105,7 @@ public class TabEvaluation extends JFrame
 
 		// Bouton "Générer l'évaluation"
 		JButton generateButton = new JButton("Générer l'évaluation");
-		generateButton.addActionListener(e -> generateTabEvaluation());
+		generateButton.addActionListener(e -> generateTabEvaluation(ressource));
 
 		bottomPanel.add(generateButton, BorderLayout.CENTER);
 
@@ -162,19 +159,53 @@ public class TabEvaluation extends JFrame
 		isUpdating = false;
 	}
 
-	private void generateTabEvaluation()
+	private void generateTabEvaluation(Ressource ressource)
 	{
-		// Créer un nouvel objet Evaluation
-		Evaluation evaluation = new Evaluation();
-		// Logique pour générer l'évaluation
-		JOptionPane.showMessageDialog(this, "Évaluation générée !");
+		// Collecter les notions sélectionnées
+		List<Notion> selectedNotions = new ArrayList<>();
+		for (int row = 0; row < model.getRowCount() - 1; row++)
+		{
+			Boolean isSelected = (Boolean) model.getValueAt(row, 1);
+			if (isSelected)
+			{
+				String notionName = (String) model.getValueAt(row, 0);
+				selectedNotions.add(new Notion(notionName, ressource));
+			}
+		}
+
+		if (selectedNotions.isEmpty())
+		{
+			JOptionPane.showMessageDialog(this, "Veuillez sélectionner au moins une notion.", "Erreur",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		// Créer l'objet Evaluation
+		Evaluation evaluation = new Evaluation(ressource, selectedNotions.get(0)); // Exemple
+																					// :
+																					// la
+																					// première
+																					// notion
+		for (Notion notion : selectedNotions)
+		{
+			evaluation.ajouterNotion(notion);
+		}
+
+		// Envoyer l'évaluation
+		sendEvaluation(evaluation);
 	}
-	
-	// Renderer pour afficher un petit cercle coloré derrière les chiffres
+
+	private void sendEvaluation(Evaluation evaluation)
+	{
+		JOptionPane.showMessageDialog(this, "Évaluation générée et envoyée avec succès : " + evaluation.getLienEval());
+	}
+
+	// Classes internes pour les renderers et éditeurs (identiques à votre code)
 	class ColorCircleRenderer extends JLabel implements TableCellRenderer
 	{
 		private final Color[] colors = { Color.GREEN, Color.CYAN, Color.RED, Color.GRAY };
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column)
 		{
@@ -184,13 +215,12 @@ public class TabEvaluation extends JFrame
 
 			return new JComponent()
 			{
-	
+				@Override
 				protected void paintComponent(Graphics g)
 				{
 					super.paintComponent(g);
 					Graphics2D g2d = (Graphics2D) g;
 
-					// Dessiner le cercle
 					int diameter = Math.min(getWidth(), getHeight());
 					int x = (getWidth() - diameter) / 2;
 					int y = (getHeight() - diameter) / 2;
@@ -200,15 +230,13 @@ public class TabEvaluation extends JFrame
 						try
 						{
 							Integer.parseInt(value.toString());
-							g2d.setColor(colors[column - 2]); // Couleur selon
-																// la colonne
+							g2d.setColor(colors[column - 2]);
 							g2d.fillOval(x, y, diameter, diameter);
 						} catch (NumberFormatException ignored)
 						{
 						}
 					}
 
-					// Dessiner le texte
 					g2d.setColor(Color.BLACK);
 					FontMetrics fm = g2d.getFontMetrics();
 					String text = value != null ? value.toString() : "";
@@ -220,7 +248,6 @@ public class TabEvaluation extends JFrame
 		}
 	}
 
-	// Éditeur personnalisé pour restreindre les entrées à des chiffres
 	class NumericCellEditor extends DefaultCellEditor
 	{
 		private final JTextField textField;
@@ -231,6 +258,7 @@ public class TabEvaluation extends JFrame
 			textField = (JTextField) getComponent();
 		}
 
+		@Override
 		public boolean stopCellEditing()
 		{
 			String value = textField.getText();
@@ -249,6 +277,7 @@ public class TabEvaluation extends JFrame
 
 	class CheckBoxRenderer extends JCheckBox implements TableCellRenderer
 	{
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column)
 		{
@@ -257,6 +286,4 @@ public class TabEvaluation extends JFrame
 			return this;
 		}
 	}
-
-
 }
