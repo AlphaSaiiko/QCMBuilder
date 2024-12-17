@@ -74,7 +74,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 
 		//Creation d'une JComboBox pour les ressources et matières
-		this.listeRessources = new JComboBox<String>(Controleur.getIDsNomsREssources());
+		this.listeRessources = new JComboBox<String>(Controleur.getIDsNomsRessources());
 		this.listeRessources.setPreferredSize(new Dimension(150, 30));
 		
 		this.nomRessource = String.valueOf(listeRessources.getSelectedItem());
