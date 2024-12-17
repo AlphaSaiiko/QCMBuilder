@@ -195,8 +195,8 @@ public class QuestionReponseUnique extends JFrame
                 {
                     JPanel panel = (JPanel) questionPanel.getComponent(i);
                     JTextField textField = (JTextField) panel.getComponent(1);
-                    JCheckBox checkBox = (JCheckBox) panel.getComponent(2);
-                    Option o = Controleur.creerReponse(textField.getText(), checkBox.isSelected(), question);
+                    JRadioButton radioButton = (JRadioButton) panel.getComponent(2);
+                    Option o = Controleur.creerReponse(textField.getText(), radioButton.isSelected(), question);
                     question.ajouterOption(o);
                 }
 			}
