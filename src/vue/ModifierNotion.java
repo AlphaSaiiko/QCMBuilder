@@ -72,7 +72,11 @@ public class ModifierNotion extends JFrame
 					else
 						JOptionPane.showMessageDialog(this, "Impossible de renommer le répertoire", "Erreur", JOptionPane.ERROR_MESSAGE);
 				}
+				else
+					JOptionPane.showMessageDialog(this, "Notion déjà existante", "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
+			else
+				JOptionPane.showMessageDialog(this, "Remplissez bien le nom de la notion.", "Erreur", JOptionPane.ERROR_MESSAGE);
 		});
 
 		gbc.gridx = 0;

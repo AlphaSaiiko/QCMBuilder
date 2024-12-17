@@ -20,10 +20,16 @@ public class Parametre extends JFrame
 
 	private JList<String>            ressourceList     ;
 	private JList<String>            notionList        ;
+
 	private DefaultListModel<String> ressourceListModel;
 	private DefaultListModel<String> notionListModel   ;
+
 	private CreerRessource           creerRessource    ;
 	private CreerNotion              creerNotion       ;
+
+	private ModifierRessource        modifierRessourceFrame;
+	private ModifierNotion           modifierNotionFrame   ;
+	
 
 	/*
 	 *  +--------------+
@@ -74,15 +80,19 @@ public class Parametre extends JFrame
 		supprRessource.addActionListener(e -> {
 			String nom = "", id = "";
 					
-			String[] selectedRessource = ressourceList.getSelectedValue().split("_", 2);
-			if (selectedRessource.length == 2)
-			{
-				nom = selectedRessource[1];
-				id  = selectedRessource[0];
-				System.out.println("Nom: " + nom + " ID: " + id);
-			}
+			String selectedRessource = ressourceList.getSelectedValue();
 			if (selectedRessource != null) 
 			{
+				
+				String[] nomRessource = selectedRessource.split("_", 2);
+			
+				if (nomRessource.length == 2)
+				{
+					id  = nomRessource[0];
+					nom = nomRessource[1];
+					System.out.println("Nom: " + nom + " ID: " + id);
+				}
+				
 				Ressource ressource = Controleur.trouverRessourceParId(id);
 				if (ressource != null) 
 				{
@@ -98,6 +108,8 @@ public class Parametre extends JFrame
 					chargerRessources();
 				}
 			}
+			else
+				JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ressource", "Erreur", JOptionPane.ERROR_MESSAGE);
 		});
 
 
@@ -105,6 +117,12 @@ public class Parametre extends JFrame
 		modifRessource.setPreferredSize(new Dimension(30, 30));
 		modifRessource.addActionListener(e -> {
 			
+			if (this.modifierRessourceFrame != null)
+			{
+				this.modifierRessourceFrame.dispose();
+				this.modifierRessourceFrame = null;
+			}
+
 			String selectedRessource = ressourceList.getSelectedValue();
 			if (selectedRessource != null) 
 			{
@@ -118,10 +136,10 @@ public class Parametre extends JFrame
 				Ressource ressource = Controleur.trouverRessourceParId(id);
 				if (ressource != null) 
 				{
-					ModifierRessource modifierRessourceFrame = new ModifierRessource(ressource);
-					modifierRessourceFrame.setVisible(true);
+					this.modifierRessourceFrame = new ModifierRessource(ressource);
+					this.modifierRessourceFrame.setVisible(true);
 
-					modifierRessourceFrame.addWindowListener(new WindowAdapter() 
+					this.modifierRessourceFrame.addWindowListener(new WindowAdapter() 
 					{
 						public void windowClosed(WindowEvent e) 
 						{
@@ -130,6 +148,8 @@ public class Parametre extends JFrame
 					});
 				}
 			}
+			else
+				JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ressource", "Erreur", JOptionPane.ERROR_MESSAGE);
 		});
 
 
@@ -215,11 +235,20 @@ public class Parametre extends JFrame
 					}
 				}
 			}
+			else if (selectedRessource == null) JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ressource", "Erreur", JOptionPane.ERROR_MESSAGE);
+			else if (selectedNotion    == null) JOptionPane.showMessageDialog(this, "Veuillez sélectionner une notion   ", "Erreur", JOptionPane.ERROR_MESSAGE);
 		});
 
 		JButton modifNotion = new JButton(resizeIcon("./lib/icones/edit.png", 20, 20));
 		modifNotion.setPreferredSize(new Dimension(30, 30));
 		modifNotion.addActionListener(e -> {
+
+
+			if (this.modifierNotionFrame != null)
+			{
+				this.modifierNotionFrame.dispose();
+				this.modifierNotionFrame = null;
+			}
 
 			String selectedRessource = ressourceList.getSelectedValue();
 			String selectedNotion = notionList.getSelectedValue();
@@ -239,9 +268,9 @@ public class Parametre extends JFrame
 					{
 						if (notion.getNom().equals(selectedNotion)) 
 						{
-							ModifierNotion modifierNotionFrame = new ModifierNotion(ressource, notion);
-							modifierNotionFrame.setVisible(true);
-							modifierNotionFrame.addWindowListener(new WindowAdapter() 
+							this.modifierNotionFrame = new ModifierNotion(ressource, notion);
+							this.modifierNotionFrame.setVisible(true);
+							this.modifierNotionFrame.addWindowListener(new WindowAdapter() 
 							{
 								public void windowClosed(WindowEvent e) 
 								{
@@ -253,6 +282,8 @@ public class Parametre extends JFrame
 					}
 				}
 			}
+			else if (selectedRessource == null) JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ressource", "Erreur", JOptionPane.ERROR_MESSAGE);
+			else if (selectedNotion    == null) JOptionPane.showMessageDialog(this, "Veuillez sélectionner une notion   ", "Erreur", JOptionPane.ERROR_MESSAGE);
 		});
 
 
