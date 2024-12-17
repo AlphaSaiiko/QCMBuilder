@@ -5,6 +5,9 @@ import controleur.ControleurFichier;
 import java.util.ArrayList;
 import java.util.List;
 import modele.option.IOption;
+import modele.option.Option;
+import modele.option.OptionAssociation;
+import modele.option.OptionElimination;
 
 public class Question
 {
@@ -42,7 +45,7 @@ public class Question
 		this.type       = type      ;
 
 		this.numQuestion = notion.getNbQuestion();
-		Question.mettreAJourQuestions();
+		this.mettreAJourQuestions();
 		this.listeComplements = new ArrayList<>();
 		this.listeOptions = new ArrayList<>();
 		this.creerFichierQuestion();
@@ -104,14 +107,14 @@ public class Question
 	public void setType(String type)
 	{
 		this.type = type;
-		this.modifierQuestion();
+		this.mettreAJourQuestions();
 	}
 
 	public void setEnonce(String enonce)
 	{
 		this.enonce = enonce;
 		System.out.println("Enoncé: " + this.enonce);
-		this.modifierQuestion();
+		this.mettreAJourQuestions();
 	}
 
 	public void setNbPoints(int nbPoints)
@@ -122,13 +125,13 @@ public class Question
 	public void setTemps(int temps)
 	{
 		this.temps = temps;
-		this.modifierQuestion();
+		this.mettreAJourQuestions();
 	}
 
 	public void setDifficulte(int difficulte)
 	{
 		this.difficulte = difficulte;
-		this.modifierQuestion();
+		this.mettreAJourQuestions();
 	}
 
 	public void setComplements(ArrayList<String> complements)
@@ -139,7 +142,7 @@ public class Question
 	public void setNotion(Notion notion)
 	{
 		this.notion = notion;
-		this.modifierQuestion();
+		this.mettreAJourQuestions();
 	}
 
 
@@ -162,6 +165,7 @@ public class Question
 		ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
 		fichierControleur.ajouterFichier("question" + this.numQuestion);
 		fichierControleur.ajouterRtf("question" + this.numQuestion + "/question" + this.numQuestion);
+		fichierControleur.ecrireQuestion("question" + this.numQuestion + "/question" + this.numQuestion, this);
 	}
 
 
@@ -177,17 +181,46 @@ public class Question
 	 */
 	public boolean ajouterOption(IOption opt)
 	{
-		if (opt == null)
+		if (opt == null) {
 			return false;
+		}
 
-		//Vérification de la validité de l'option
-		if (this.listeOptions.contains(opt))
-			return false;
-	
+		// Vérification de la validité de l'option en comparant les attributs
+		for (IOption optionExistante : this.listeOptions) {
+			if (optionsSontEgales(optionExistante, opt)) {
+				return false;
+			}
+		}
+
 		this.listeOptions.add(opt);
-		Question.mettreAJourQuestions();
+		this.mettreAJourQuestions();
 		return true;
 	}
+
+	// Méthode pour comparer deux options en fonction de leurs attributs
+	private boolean optionsSontEgales(IOption opt1, IOption opt2) {
+		if (opt1.getType().equals(opt2.getType()) &&
+			opt1.getEnonce().equals(opt2.getEnonce()))
+			{
+
+			if (opt1 instanceof OptionAssociation && opt2 instanceof OptionAssociation) {
+				return ((OptionAssociation) opt1).getAssocie().getEnonce() == ((OptionAssociation) opt2).getAssocie().getEnonce();
+			} 
+			else if (opt1 instanceof OptionElimination && opt2 instanceof OptionElimination) {
+				OptionElimination optionE1 = (OptionElimination) opt1;
+				OptionElimination optionE2 = (OptionElimination) opt2;
+				return optionE1.getEstReponse() == optionE2.getEstReponse() &&
+					optionE1.getOrdre() == optionE2.getOrdre() &&
+					optionE1.getNbPointsMoins() == optionE2.getNbPointsMoins();
+			}
+			else if (opt1 instanceof Option && opt2 instanceof Option) {
+				return ((Option) opt1).getEstReponse() == ((Option) opt2).getEstReponse();
+			}
+			return true;
+		}
+		return false;
+	}
+
 
 
 
@@ -199,26 +232,10 @@ public class Question
 	 */
 	public boolean supprimerOption(IOption opt)
 	{
-		Question.mettreAJourQuestions();
+		this.listeOptions.remove(opt);
+		this.mettreAJourQuestions();
 		return true;
 	}
-
-
-
-	/**
-	 * Modifie les informations d'une question existante et met à jour le fichier correspondant.
-	 * 
-	 * Cette méthode modifie la question en utilisant le contrôleur de fichiers pour mettre à jour le fichier de la question
-	 * dans le répertoire correspondant. Après cela, la liste des questions est mise à jour.
-	 */
-	public void modifierQuestion()
-	{
-		ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/");
-		fichierControleur.modifierQuestion("question" + this.getNumQuestion(), this);
-		Question.mettreAJourQuestions();
-		System.out.println("Question modifiée avec succès.");
-	}
-
 
 
 	/**
@@ -227,14 +244,9 @@ public class Question
 	 * Cette méthode récupère la liste des questions à l'aide du contrôleur, puis les écrit dans le fichier de stockage
 	 * via le contrôleur de fichiers pour s'assurer que les modifications sont persistées.
 	 */
-	public static void mettreAJourQuestions()
+	public void mettreAJourQuestions()
 	{
-		List<Question> questions = Controleur.getListQuestion();
-		System.out.println("Mise à jour des questions...");
-		for (Question question : questions)
-		{
-			System.out.println(question.getEnonce());
-		}
-		ControleurFichier.ecrireQuestions(questions);
+		ControleurFichier controleurFichier = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
+		controleurFichier.modifierQuestion("question" + this.numQuestion + "/question" + this.numQuestion, this);
 	}
 }

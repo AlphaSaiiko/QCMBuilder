@@ -109,7 +109,9 @@ public class Controleur
 			{
 				String ligne = scQst.nextLine();
 
-				String[] ligneQuestion = ligne.split("\t");
+				System.out.println("Ligne : " + ligne);
+
+				String[] ligneQuestion = ligne.split(";");
 
 				enonce         =                 ligneQuestion[0] ;
 				int nbPoints   = Integer.valueOf(ligneQuestion[1]);
@@ -306,13 +308,13 @@ public class Controleur
 	{
 		Metier.supprimerNotion(notion);
 		Metier.retirerNotion(ressource, notion);
-		Notion.mettreAJourNotions();
+		Ressource.mettreAJourRessources();
 	}
 
 	public void supprQuestion(Question question)
 	{
 		Metier.supprimerQuestion(question);
-		Question.mettreAJourQuestions();
+		question.mettreAJourQuestions();
 	}
 
 	/*

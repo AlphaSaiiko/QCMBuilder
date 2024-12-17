@@ -115,7 +115,7 @@ public class ControleurFichier
 		try
 		{
 			PrintWriter pw = new PrintWriter(new FileOutputStream(chemin, false));
-			pw.println("type:" + qst.getType() + "\tenonce:" + qst.getEnonce() + "\tnbpoints:" + qst.getNbPoints() + "\ttemps:" + qst.getTemps() + "\tdifficulté:" + qst.getDifficulte() + "\tnotion:" + qst.getNotion().getNom());
+			pw.println(qst.getType() + ";" + qst.getEnonce() + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom());
 			pw.close();
 			System.out.println("Fichier RTF créé : " + chemin);
 		}
@@ -132,40 +132,6 @@ public class ControleurFichier
 		return fichier.exists();
 	}
 
-	public void ecrireReponse(String chemin, IOption opt)
-	{
-		if (!chemin.endsWith(".rtf"))
-		{
-			chemin += ".rtf";
-		}
-		chemin = this.chemin + chemin;
-
-		String texte ="";
-
-		if(opt instanceof Option)			{texte = this.stringOption((Option)opt);}
-		if(opt instanceof OptionAssociation){texte = this.stringOptionAssociation((OptionAssociation)opt);}
-		if(opt instanceof OptionElimination){texte = this.stringOptionElimination((OptionElimination) opt);}
-
-		File fichier = new File(chemin);
-
-		// Vérifie si le fichier existe
-		if (!fichier.exists())
-		{
-			System.out.println("Le fichier n'existe pas : " + chemin);
-			return;
-		}
-
-		// Écrit les données de l'objet Option dans le fichier
-		try (PrintWriter writer = new PrintWriter(new FileOutputStream(fichier, true)))
-		{
-			writer.println(texte);
-		}
-		catch (IOException e)
-		{
-			System.err.println("Une erreur s'est produite lors de l'écriture dans le fichier : " + e.getMessage());
-		}
-	}
-
 	public void modifierQuestion(String chemin, Question qst)
 	{
 		if (!chemin.endsWith(".rtf")) {
@@ -180,7 +146,27 @@ public class ControleurFichier
 			return;
 		}
 
-		String ligneEntiere = qst.getType() + "\t" + qst.getEnonce() + "\t" + qst.getNbPoints() + "\t" + qst.getTemps() + "\t" + qst.getDifficulte() + "\t" + qst.getNotion().getNom();
+		String ligneEntiere = qst.getType() + ";" + qst.getEnonce() + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom();
+		if (qst.getEnsOptions() != null)
+		{
+			for (IOption option : qst.getEnsOptions())
+			{
+				ligneEntiere += ";" + option.getType() + ";" + option.getEnonce() + ";" + option.getId();
+				if (option instanceof OptionAssociation) {
+					ligneEntiere += ";" + ((OptionAssociation) option).getAssocie().getId();
+				}
+				if (option instanceof OptionElimination) {
+					OptionElimination optionE = (OptionElimination) option;
+					ligneEntiere += ";" + optionE.getEstReponse() + ";" + optionE.getOrdre() + ";" + optionE.getNbPointsMoins();
+				}
+				if (option instanceof Option) {
+					Option optionO = (Option) option;
+					ligneEntiere += ";" + optionO.getEstReponse();
+				}
+				ligneEntiere += "|";
+			}
+			
+		}
 		
 		try {
 			// Lire toutes les lignes du fichier
@@ -230,7 +216,7 @@ public class ControleurFichier
 			for (int i = 0; i < lignes.size(); i++)
 			{
 				String ligne = lignes.get(i);
-				if (ligne.startsWith(opt.getId() + "\t"))
+				if (ligne.startsWith(opt.getId() + ";"))
 				{
 					lignes.set(i, texte);
 					break;
@@ -248,17 +234,17 @@ public class ControleurFichier
 
 	private String stringOption(Option opt)
 	{
-		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getEnonce() + "\t" + opt.getEstReponse();
+		return opt.getId() + ";" + opt.getType() + ";" + opt.getEnonce() + ";" + opt.getEstReponse();
 	}
 
 	private String stringOptionAssociation(OptionAssociation opt)
 	{
-		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getEnonce()  + "\t question" + opt.getQuestion().getNumQuestion();
+		return opt.getId() + ";" + opt.getType() + ";" + opt.getEnonce()  + "; question" + opt.getQuestion().getNumQuestion();
 	}
 
 	private String stringOptionElimination(OptionElimination opt)
 	{
-		return opt.getId() + "\t" + opt.getType() + "\t" + opt.getEnonce() + "\t" +  opt.getOrdre()+ "\t" + opt.getNbPointsMoins()  + "\t" + opt.getEstReponse() + "\t" + opt.getQuestion();
+		return opt.getId() + ";" + opt.getType() + ";" + opt.getEnonce() + ";" +  opt.getOrdre()+ ";" + opt.getNbPointsMoins()  + ";" + opt.getEstReponse() + ";" + opt.getQuestion();
 	}
 
 	// Méthode pour écrire toutes les ressources dans un fichie
@@ -270,11 +256,11 @@ public class ControleurFichier
 			{
 				boolean aNotion = (ressource.getNbNotion()>0);
 				
-				writer.write("id:" + ressource.getId() + "\tnom:" + ressource.getNom());
+				writer.write("id:" + ressource.getId() + ";nom:" + ressource.getNom());
 
 				if (aNotion)
 				{
-					writer.write("\tnotions:");
+					writer.write(";notions:");
 					aNotion = false;
 					
 					for (Notion notion : ressource.getEnsNotions())
@@ -301,7 +287,7 @@ public class ControleurFichier
 		{
 			for (Question question : questions)
 			{
-				writer.write("nom:" + question.getEnonce() + "\tnbPoints:" + question.getNbPoints() + "\ttemps:" + question.getTemps() + "\tdifficulte:" + question.getDifficulte() + "\ttype:" + question.getType() + "\tnotion :" + question.getNotion().getNom() + "\toptions :" );
+				writer.write("nom:" + question.getEnonce() + ";nbPoints:" + question.getNbPoints() + ";temps:" + question.getTemps() + ";difficulte:" + question.getDifficulte() + ";type:" + question.getType() + ";notion :" + question.getNotion().getNom() + ";options :" );
 
 				for (IOption option : question.getEnsOptions())
 				{

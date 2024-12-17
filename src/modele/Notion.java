@@ -84,7 +84,7 @@ public class Notion
 	 * +----------+
 	 */ 
 
-	public void setNom      (String    nom      )
+	public void setNom(String nom)
 	{
 		this.nom       = nom      ;
 		Ressource.mettreAJourRessources();

@@ -189,7 +189,6 @@ public class QuestionReponseUnique extends JFrame
 			{
 				// Enregistrer la question dans un fichier
 				question.setEnonce(questionArea.getText());
-				System.out.println("Question: " + question.getEnonce());
 
 				// Enregistrer les réponses
 				for (int i = 1; i < questionPanel.getComponentCount() - 1; i++)
@@ -198,7 +197,7 @@ public class QuestionReponseUnique extends JFrame
                     JTextField textField = (JTextField) panel.getComponent(1);
                     JRadioButton radioButton = (JRadioButton) panel.getComponent(2);
                     Option o = Controleur.creerReponse(textField.getText(), radioButton.isSelected(), question);
-                    question.ajouterOption(o);
+					question.ajouterOption(o);
                 }
 			}
 		});

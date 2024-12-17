@@ -35,7 +35,7 @@ public class Option implements IOption
 
 		question.ajouterOption(this);
 
-		this.ecrireReponse();
+		question.mettreAJourQuestions();
 	}
 
 
@@ -85,6 +85,6 @@ public class Option implements IOption
 	 public void ecrireReponse()
 	 {
 		ControleurFichier tmp = new ControleurFichier("lib/ressources/" + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + "/" + question.getNotion().getNom() + "/question" + question.getNumQuestion());
-		tmp.ecrireReponse("/question" + question.getNumQuestion(), this);
+		tmp.modifierQuestion("question" + this.question.getNumQuestion(), question);
 	 }
 }
