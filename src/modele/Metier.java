@@ -1,26 +1,29 @@
 package modele;
 
-import controleur.Controleur;
 import java.util.ArrayList;
 import java.util.List;
+
+import controleur.Controleur;
 
 public class Metier 
 {
 
-	/*
-	 * +------------+
-	 * | ATTRIBUTS  |
-	 * +------------+
+	/**
+	 * +-----------+
+	 * | ATTRIBUTS |
+	 * +-----------+
 	 */
 
-	private Controleur controleur;
-	private static List<Evaluation> listEval;
-	private static List<Ressource> listRessource;
-	private static List<Notion> listNotion;
-	private static List<Question> listQuestion;
+	private        Controleur       controleur      ;
+	private static List<Evaluation> listeEvaluations;
+	private static List<Ressource>  listeRessources ;
+	private static List<Notion>     listeNotions    ;
+	private static List<Question>   listeQuestions  ;
 
 
-	/*
+
+
+	/**
 	 * +--------------+
 	 * | CONSTRUCTEUR |
 	 * +--------------+
@@ -28,164 +31,160 @@ public class Metier
 
 	public Metier(Controleur controleur)
 	{
-		this.controleur = controleur;
-		Metier.listEval = new ArrayList<>();
-		Metier.listRessource = new ArrayList<>();
-		Metier.listNotion = new ArrayList<>();
-		Metier.listQuestion = new ArrayList<>();
+		this.controleur         = controleur       ;
+		Metier.listeEvaluations = new ArrayList<>();
+		Metier.listeRessources  = new ArrayList<>();
+		Metier.listeNotions     = new ArrayList<>();
+		Metier.listeQuestions   = new ArrayList<>();
 	}
 
 
-	/*
+
+
+	/**
+	 * +----------+
+	 * | GETTEURS |
+	 * +----------+
+	 */
+
+	public        Controleur       getControleur      () { return this.controleur        ; }
+	public static List<Evaluation> getListeEvaluations() { return Metier.listeEvaluations; }
+	public static List<Ressource>  getListeRessources () { return Metier.listeRessources ; }
+	public static List<Notion>     getListeNotions    () { return Metier.listeNotions    ; }
+	public static List<Question>   getListeQuestions  () { return Metier.listeQuestions  ; }
+
+
+
+
+	/**
 	 * +---------+
-	 * | GETTERS |
+	 * | SETTEURS |
 	 * +---------+
 	 */
 
-	public Controleur getControleur() 
-	{
-		return this.controleur;
-	}
-
-	public static List<Evaluation> getListEval() 
-	{
-		return Metier.listEval;
-	}
-
-	public static List<Ressource> getListRessource() 
-	{
-		return Metier.listRessource;
-	}
-
-	public static List<Notion> getListNotion() 
-	{
-		return Metier.listNotion;
-	}
-
-	public static List<Question> getListQuestion() 
-	{
-		return Metier.listQuestion;
-	}
+	public        void setControleur      (Controleur       controleur      ) { this.controleur         = controleur      ; }
+	public static void setListeEvaluations(List<Evaluation> listeEvaluations) { Metier.listeEvaluations = listeEvaluations; }
+	public static void setListeRessources (List<Ressource>  listeRessources ) { Metier.listeRessources  = listeRessources ; }
+	public static void setListeNotions    (List<Notion>     listeNotions    ) { Metier.listeNotions     = listeNotions    ; }
+	public static void setListeQuestions  (List<Question>   listeQuestions  ) { Metier.listeQuestions   = listeQuestions  ; }
 
 
-	/*
-	 * +---------+
-	 * | SETTERS |
-	 * +---------+
+
+
+	/**
+	 * +----------+
+	 * | METHODES |
+	 * +----------+
 	 */
 
-	public void setControleur(Controleur controleur) 
-	{
-		this.controleur = controleur;
-	}
-
-	public static void setListEval(List<Evaluation> listEval) 
-	{
-		Metier.listEval = listEval;
-	}
-
-	public static void setListRessource(List<Ressource> listRessource) 
-	{
-		Metier.listRessource = listRessource;
-	}
-
-	public static void setListNotion(List<Notion> listNotion) 
-	{
-		Metier.listNotion = listNotion;
-	}
-
-	public static void setListQuestion(List<Question> listQuestion) 
-	{
-		Metier.listQuestion = listQuestion;
-	}
-
-
-	/*
-	 * +------------+
-	 * | Méthodes   |
-	 * +------------+
+	/**
+	 * Retourne un tableau contenant les noms des ressources si la liste n'est pas vide.
+	 *
+	 * @return Un tableau de chaines de caractères contenant les noms des ressources,
+	 *         ou null si la liste des ressources est vide.
 	 */
-
-
 	public static String[] getNomsRessources()
 	{
-		if (Metier.listRessource.isEmpty())
-		{
+		if (Metier.listeRessources.isEmpty())
 			return null;
-		}
-		String[] nomsRessources = new String[Metier.listRessource.size()];
-		for (int i = 0; i < Metier.listRessource.size(); i++)
-		{
-			nomsRessources[i] = Metier.listRessource.get(i).getNom();
-		}
+
+		String[] nomsRessources = new String[Metier.listeRessources.size()];
+
+		for (int i = 0; i < Metier.listeRessources.size(); i++)
+			nomsRessources[i] = Metier.listeRessources.get(i).getNom();
+
 		return nomsRessources;
 	}
 
+<<<<<<< HEAD
 	public static Ressource trouverRessourceParId(String id)
+=======
+
+
+	/**
+	 * Recherche une ressource par son nom dans la liste des ressources.
+	 *
+	 * @param nom Le nom de la ressource à rechercher. La comparaison n'est pas sensible à la casse.
+	 * @return La ressource correspondante si elle est trouvée, sinon null.
+	 */
+	public static Ressource trouverRessourceParNom(String nom)
+>>>>>>> 7580f9520877e60e2cdf8b1fae16d02922aae1cd
 	{
-		for (Ressource ressource : Metier.listRessource)
+		for (Ressource ressource : Metier.listeRessources)
 		{
+<<<<<<< HEAD
 			if (ressource.getId().equalsIgnoreCase(id))
 			{
+=======
+			if (ressource.getNom().equalsIgnoreCase(nom))
+>>>>>>> 7580f9520877e60e2cdf8b1fae16d02922aae1cd
 				return ressource;
-			}
 		}
+
 		return null;
 	}
 
-	public static void ajouterRessource(Ressource ressource)
-	{
-		Metier.listRessource.add(ressource);
-	}
 
+
+	/**
+	 * Retourne un tableau contenant les noms des notions si la liste n'est pas vide.
+	 *
+	 * @return Un tableau de chaines de caractères contenant les noms des notions,
+	 *         ou null si la liste des notions est vide.
+	 */
 	public static String[] getNomsNotions()
 	{
-		if (Metier.listNotion.isEmpty())
-		{
+		if (Metier.listeNotions.isEmpty())
 			return null;
-		}
-		String[] nomsNotions = new String[Metier.listNotion.size()];
-		for (int i = 0; i < Metier.listNotion.size(); i++)
-		{
-			nomsNotions[i] = Metier.listNotion.get(i).getNom();
-		}
+
+		String[] nomsNotions = new String[Metier.listeNotions.size()];
+
+		for (int i = 0; i < Metier.listeNotions.size(); i++)
+			nomsNotions[i] = Metier.listeNotions.get(i).getNom();
+
 		return nomsNotions;
 	}
 
+
+
+	/**
+	 * Recherche une notion par son nom dans la liste des notions.
+	 *
+	 * @param nom Le nom de la notion à rechercher. La comparaison n'est pas sensible à la casse.
+	 * @return La notion correspondante si elle est trouvée, sinon null.
+	 */
 	public static Notion trouverNotionParNom(String nom)
 	{
-		for (Notion notion : Metier.listNotion)
+		for (Notion notion : Metier.listeNotions)
 		{
 			if (notion.getNom().equalsIgnoreCase(nom))
-			{
 				return notion;
-			}
 		}
+
 		return null;
 	}
 
-	public static void ajouterNotion(Notion notion)
-	{
-		Metier.listNotion.add(notion);
-	}
 
-	public static void ajouterQuestion(Question question)
-	{
-		Metier.listQuestion.add(question);
-	}
 
-	public static void supprRessource(Ressource ressource)
-	{
-		Metier.listRessource.remove(ressource);
-	}
+	/**
+	 * Ajoute un élément (ressource, notion ou question) à la liste correspondante.
+	 *
+	 * @param element L'élément à ajouter. Il doit être non nul.
+	 *                Exemple : une instance de Ressource, Notion ou Question.
+	 */
+	public static void ajouterRessource(Ressource ressource) { Metier.listeRessources.add(ressource); }
+	public static void ajouterNotion   (Notion    notion   ) { Metier.listeNotions.add   (notion)   ; }
+	public static void ajouterQuestion (Question  question ) { Metier.listeQuestions.add (question) ; }
 
-	public static void supprNotion(Notion notion)
-	{
-		Metier.listNotion.remove(notion);
-	}
 
-	public static void supprQuestion(Question question)
-	{
-		Metier.listQuestion.remove(question);
-	}
+
+	/**
+	 * Supprime un élément (ressource, notion ou question) de la liste correspondante.
+	 *
+	 * @param element L'élément à supprimer. Il doit être présent dans la liste.
+	 *                Exemple : une instance de Ressource, Notion ou Question.
+	 */
+	public static void supprimerRessource(Ressource ressource) { Metier.listeRessources.remove(ressource); }
+	public static void supprimerNotion   (Notion    notion   ) { Metier.listeNotions.remove   (notion)   ; }
+	public static void supprimerQuestion (Question  question ) { Metier.listeQuestions.remove (question) ; }
 }

@@ -338,17 +338,17 @@ public class Controleur
 
 	public static List<Ressource> getListRessource()
 	{
-		return Metier.getListRessource();
+		return Metier.getListeRessources();
 	}
 
 	public static List<Notion> getListNotion()
 	{
-		return Metier.getListNotion();
+		return Metier.getListeNotions();
 	}
 
 	public static List<Question> getListQuestion()
 	{
-		return Metier.getListQuestion();
+		return Metier.getListeQuestions();
 	}
 
     public static void ajouterRessource(Ressource ressource)
@@ -368,19 +368,19 @@ public class Controleur
 
 	public static void supprRessource(Ressource ressource)
 	{
-		Metier.supprRessource(ressource);
+		Metier.supprimerRessource(ressource);
 		Ressource.mettreAJourRessources();
 	}
 
 	public void supprNotion(Notion notion)
 	{
-		Metier.supprNotion(notion);
+		Metier.supprimerNotion(notion);
 		Notion.mettreAJourNotions();
 	}
 
 	public void supprQuestion(Question question)
 	{
-		Metier.supprQuestion(question);
+		Metier.supprimerQuestion(question);
 		Question.mettreAJourQuestions();
 	}
 
