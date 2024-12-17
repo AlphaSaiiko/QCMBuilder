@@ -1,10 +1,9 @@
 package modele;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import controleur.Controleur;
 import controleur.ControleurFichier;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Notion
 {
@@ -85,7 +84,12 @@ public class Notion
 	 * +----------+
 	 */ 
 
-	public void setNom      (String    nom      ) { this.nom       = nom      ; }
+	public void setNom      (String    nom      )
+	{
+		this.nom       = nom      ;
+		Notion.mettreAJourNotions();
+	}
+
 	public void setRessource(Ressource ressource) { this.ressource = ressource; }
 
 
@@ -165,6 +169,7 @@ public class Notion
 	 */
 	public static void mettreAJourNotions()
 	{
+		Ressource.mettreAJourRessources();
 		List<Notion> notions = Controleur.getListNotion();
 		ControleurFichier.ecrireNotions(notions);
 	}
