@@ -1,10 +1,9 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
-
-import controleur.Controleur;
 import modele.Ressource;
 
 public class CreerEvaluation extends JFrame
@@ -118,8 +117,16 @@ public class CreerEvaluation extends JFrame
 		panelCreer.add(boutonCreer);
 
 		boutonCreer.addActionListener (e -> {
-			String nomRessource = String.valueOf(ressources.getSelectedItem());
-			Ressource ressource = Controleur.trouverRessourceParNom(nomRessource);
+			String[] nomRessource = String.valueOf(ressources.getSelectedItem()).split("_", 2);
+
+			String id = "", nom = "";
+			if (nomRessource.length == 2)
+			{
+				nom = nomRessource[0];
+				id  = nomRessource[1];
+			}
+			
+			Ressource ressource = Controleur.trouverRessourceParId(id);
 
 			String erreur = "";
 

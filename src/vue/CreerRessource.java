@@ -19,28 +19,28 @@ public class CreerRessource extends JFrame
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // JTextArea pour le titre de la ressource
-        JTextArea texteTitre = new JTextArea(1, 20);
-        texteTitre.setBorder(BorderFactory.createTitledBorder("Titre de la ressource"));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 0.8;
-        gbc.weighty = 0;
-        panelPrincipal.add(texteTitre, gbc);
-
         // JTextArea pour la clé de la ressource
         JTextArea texteCle = new JTextArea(1, 20);
         texteCle.setBorder(BorderFactory.createTitledBorder("Clé de la ressource"));
         gbc.gridx = 0;
-        gbc.gridy = 1; // Position en dessous du texteTitre
+        gbc.gridy = 0; // Position en haut
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0.8;
+        gbc.weighty = 0;
         panelPrincipal.add(texteCle, gbc);
+
+        // JTextArea pour le titre de la ressource
+        JTextArea texteTitre = new JTextArea(1, 20);
+        texteTitre.setBorder(BorderFactory.createTitledBorder("Titre de la ressource"));
+        gbc.gridx = 0;
+        gbc.gridy = 1; // Position en dessous du texteCle
+        panelPrincipal.add(texteTitre, gbc);
 
         // JButton pour ajouter une ressource à côté du titre
         JButton btnAjouter = new JButton("Ajouter");
         gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.2;

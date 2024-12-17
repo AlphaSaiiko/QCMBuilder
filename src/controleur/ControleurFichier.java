@@ -273,7 +273,7 @@ public class ControleurFichier
 		{
 			for (Ressource ressource : ressources)
 			{
-				writer.write("nom:" + ressource.getNom() + "	notions:");
+				writer.write("id:" + ressource.getId() + "\tnom:" + ressource.getNom() + "\tnotions:");
 				for (Notion notion : ressource.getEnsNotions())
 				{
 					writer.write(notion.getNom() + ",");
@@ -294,7 +294,7 @@ public class ControleurFichier
 		{
 			for (Notion notion : notions)
 			{
-				writer.write("nom:" + notion.getNom() + "	ressource:" + notion.getRessource().getNom() + "\n");
+				writer.write("nom:" + notion.getNom() + "	ressource:" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "\n");
 			}
 		}
 		catch (IOException e)

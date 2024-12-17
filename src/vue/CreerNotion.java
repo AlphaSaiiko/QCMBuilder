@@ -1,9 +1,8 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import javax.swing.*;
-
-import controleur.Controleur;
 import modele.Ressource;
 
 public class CreerNotion extends JFrame

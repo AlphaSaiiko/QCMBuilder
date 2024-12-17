@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import modele.Notion;
@@ -78,17 +77,17 @@ public class Parametre extends JFrame
 			String[] selectedRessource = ressourceList.getSelectedValue().split("_", 2);
 			if (selectedRessource.length == 2)
 			{
-				nom = selectedRessource[0];
-				id  = selectedRessource[1];
-				Ressource.creerRessource(id, nom);
+				nom = selectedRessource[1];
+				id  = selectedRessource[0];
+				System.out.println("Nom: " + nom + " ID: " + id);
 			}
 			if (selectedRessource != null) 
 			{
-				Ressource ressource = Controleur.trouverRessourceParNom(nom);
+				Ressource ressource = Controleur.trouverRessourceParId(id);
 				if (ressource != null) 
 				{
 					// Supprimer le répertoire associé à la ressource
-					File ressourceDir = new File("./lib/ressources/" + ressource.getNom());
+					File ressourceDir = new File("./lib/ressources/" + ressource.getId() + "_"+ ressource.getNom());
 					if (ressourceDir.exists()) 
 					{
 						supprimerDossier(ressourceDir);
@@ -109,7 +108,14 @@ public class Parametre extends JFrame
 			String selectedRessource = ressourceList.getSelectedValue();
 			if (selectedRessource != null) 
 			{
-				Ressource ressource = Controleur.trouverRessourceParNom(selectedRessource);
+				String[] nomRessource = selectedRessource.split("_", 2);
+				String id = "", nom = "";
+				if (nomRessource.length == 2)
+				{
+					nom = nomRessource[1];
+					id  = nomRessource[0];
+				}
+				Ressource ressource = Controleur.trouverRessourceParId(id);
 				if (ressource != null) 
 				{
 					ModifierRessource modifierRessourceFrame = new ModifierRessource(ressource);
@@ -152,7 +158,14 @@ public class Parametre extends JFrame
 				this.creerNotion = null;
 			}
 
-			Ressource selectedRessource = Controleur.trouverRessourceParNom(ressourceList.getSelectedValue());
+			String[] nomRessource = ressourceList.getSelectedValue().split("_", 2);
+			String id = "", nom = "";
+			if (nomRessource.length == 2)
+			{
+				nom = nomRessource[1];
+				id  = nomRessource[0];
+			}
+			Ressource selectedRessource = Controleur.trouverRessourceParId(id);
 			this.creerNotion = new CreerNotion(selectedRessource);
 			this.creerNotion.setVisible(true);
 			this.creerNotion.addWindowListener(new WindowAdapter()
@@ -176,7 +189,14 @@ public class Parametre extends JFrame
 
 			if (selectedRessource != null && selectedNotion != null) 
 			{
-				Ressource ressource = Controleur.trouverRessourceParNom(selectedRessource);
+				String[] nomRessource = selectedRessource.split("_", 2);
+				String id = "", nom = "";
+				if (nomRessource.length == 2)
+				{
+					nom = nomRessource[0];
+					id  = nomRessource[1];
+				}
+				Ressource ressource = Controleur.trouverRessourceParId(selectedRessource);
 				if (ressource != null) 
 				{
 					Notion notion = ressource.getNotion(selectedNotion);
@@ -205,7 +225,14 @@ public class Parametre extends JFrame
 			String selectedNotion = notionList.getSelectedValue();
 			if (selectedRessource != null && selectedNotion != null) 
 			{
-				Ressource ressource = Controleur.trouverRessourceParNom(selectedRessource);
+				String[] nomRessource = selectedRessource.split("_", 2);
+				String id = "", nom = "";
+				if (nomRessource.length == 2)
+				{
+					nom = nomRessource[1];
+					id  = nomRessource[0];
+				}
+				Ressource ressource = Controleur.trouverRessourceParId(id);
 				if (ressource != null) 
 				{
 					for (Notion notion : ressource.getEnsNotions()) 
@@ -365,8 +392,19 @@ public class Parametre extends JFrame
 	{
 		String selectedNotion = notionList.getSelectedValue();
 		notionListModel.clear();
-		Ressource ressource = Controleur.trouverRessourceParNom(ressourceName);
-		
+		Ressource ressource = null;
+		if (ressourceName != null)
+		{
+			String[] nomRessource = ressourceName.split("_", 2);
+			String id = "", nom = "";
+			if (nomRessource.length == 2)
+			{
+				nom = nomRessource[0];
+				id  = nomRessource[1];
+			
+			}
+			ressource = Controleur.trouverRessourceParId(id);
+		}
 		if (ressource != null)
 		{
 			for (String notion : ressource.getNomsNotions())

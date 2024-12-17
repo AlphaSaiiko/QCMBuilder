@@ -121,11 +121,11 @@ public class Metier
 		return nomsRessources;
 	}
 
-	public static Ressource trouverRessourceParNom(String nom)
+	public static Ressource trouverRessourceParId(String id)
 	{
 		for (Ressource ressource : Metier.listRessource)
 		{
-			if (ressource.getNom().equalsIgnoreCase(nom))
+			if (ressource.getId().equalsIgnoreCase(id))
 			{
 				return ressource;
 			}

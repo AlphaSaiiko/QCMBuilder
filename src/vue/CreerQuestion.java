@@ -1,11 +1,10 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-
-import controleur.Controleur;
 import modele.Notion;
 import modele.Question;
 
@@ -79,7 +78,15 @@ public class CreerQuestion extends JFrame implements ActionListener
 		this.listeRessources.setPreferredSize(new Dimension(150, 30));
 		
 		this.nomRessource = String.valueOf(listeRessources.getSelectedItem());
-		this.listeNotions = new JComboBox<String>(Controleur.trouverRessourceParNom(nomRessource).getNomsNotions());
+		String[] decRessource = nomRessource.split("_", 2);
+		String id = "", nom = "";
+		if (decRessource.length == 2)
+		{
+			nom = decRessource[0];
+			id  = decRessource[1];
+		}
+		
+		this.listeNotions = new JComboBox<String>(Controleur.trouverRessourceParId(id).getNomsNotions());
 		listeNotions.setPreferredSize(new Dimension(150, 30));
 		
 
@@ -205,7 +212,14 @@ public class CreerQuestion extends JFrame implements ActionListener
 			try { tempsReponse = Integer.parseInt(((JTextArea) panelTemps.getComponent(1)).getText()); }
 			catch (Exception ex) { erreurs += "Veuillez rajouter le temps de réponse en secondes.\n"; }
 
-			Notion notion = Notion.trouverNotionParNom((String) listeNotions.getSelectedItem(), Controleur.trouverRessourceParNom((String) listeRessources.getSelectedItem()));
+			String[] nomRessource = ((String) listeRessources.getSelectedItem()).split("_", 2);
+			String idRes = "", nomRes = "";
+			if (nomRessource.length == 2)
+			{
+				nomRes = nomRessource[0];
+				idRes  = nomRessource[1];
+			}
+			Notion notion = Notion.trouverNotionParNom((String) listeNotions.getSelectedItem(), Controleur.trouverRessourceParId(idRes));
 
 			int difficulte = 0;
 			if      (tresFacile.getBackground() == Color.GREEN && facile.getBackground() == Color.CYAN) { difficulte = 0; }
@@ -319,7 +333,15 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 		this.nomRessource = String.valueOf(this.listeRessources.getSelectedItem());
 
-		for (String nomNotion : Controleur.trouverRessourceParNom(this.nomRessource).getNomsNotions())
+		String[] decRessource = this.nomRessource.split("_", 2);
+		String id = "", nom = "";
+		if (decRessource.length == 2)
+		{
+			nom = decRessource[0];
+			id  = decRessource[1];
+		}
+
+		for (String nomNotion : Controleur.trouverRessourceParId(id).getNomsNotions())
 			this.listeNotions.addItem(nomNotion);
 	}
 

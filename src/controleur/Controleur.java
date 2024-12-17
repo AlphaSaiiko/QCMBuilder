@@ -1,9 +1,7 @@
 package controleur;
 
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
-import java.util.stream.Stream;
 import modele.*;
 import modele.option.Option;
 import modele.option.OptionAssociation;
@@ -84,14 +82,18 @@ public class Controleur
 			Scanner scRes = new Scanner(new FileInputStream("./Ressources.csv"));
 
 			String nomRessource;
+			String idRessource;
 			Ressource ressource;
 
 			while (scRes.hasNextLine())
 			{
 				String ligne = scRes.nextLine();
 
-				nomRessource = ligne.substring(4, ligne.indexOf("notions:")-1);
-				ressource = Ressource.creerRessource(nomRessource);
+				idRessource = ligne.substring(3, ligne.indexOf("nom:")-1);
+				nomRessource = ligne.substring(ligne.indexOf("nom:")+4, ligne.indexOf("notions:")-1);
+
+
+				ressource = Ressource.creerRessource(nomRessource, idRessource);
 
 
 
@@ -109,7 +111,7 @@ public class Controleur
 
 
 					// Ajout de la notion à la ressource
-					System.out.println("Notion ajoutée à la ressource : " + ressource.getNom());
+					System.out.println("Notion ajoutée à la ressource : " + ressource.getId() + "_" + ressource.getNom());
 				}
 				
 
@@ -286,6 +288,11 @@ public class Controleur
 		Notion.creerNotion(titreNotion, ressource);
 	}
 
+	public static void creerRessource(String titreRessource, String idRessource)
+	{
+		Ressource.creerRessource(titreRessource, idRessource);
+	}
+
 	public static OptionElimination creerReponseElimination(String texte, int ordre, double points, boolean correct, Question question)
 	{
 		return new OptionElimination("QAEPR", texte, correct, ordre, points, question);
@@ -309,9 +316,9 @@ public class Controleur
 	 */
 	
 
-	public static Ressource trouverRessourceParNom(String nom)
+	public static Ressource trouverRessourceParId(String id)
 	{
-		return Metier.trouverRessourceParNom(nom);
+		return Metier.trouverRessourceParId(id);
 	}
 
 	public static Notion trouverNotionParNom(String nom)

@@ -26,7 +26,7 @@ public class Ressource
 	 */
 	public static Ressource creerRessource(String nom, String id)
 	{
-		Ressource ressource = Metier.trouverRessourceParNom(nom);
+		Ressource ressource = Metier.trouverRessourceParId(id);
 		if (ressource == null)
 		{
 			ressource = new Ressource(nom, id);
