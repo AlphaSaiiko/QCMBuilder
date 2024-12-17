@@ -157,10 +157,9 @@ public class Question
 	 */
 	public void creerFichierQuestion()
 	{
-		ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
-		fichierControleur.ajouterFichier("question" + notion.getNbQuestion());
-		fichierControleur.ajouterRtf("question" + notion.getNbQuestion() + "/question" + this.getNumQuestion());
-		fichierControleur.ecrireQuestion("question" + notion.getNbQuestion() + "/question" + this.getNumQuestion(), this);
+		ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
+		fichierControleur.ajouterFichier("question" + this.numQuestion);
+		fichierControleur.ajouterRtf("question" + this.numQuestion + "/question" + this.numQuestion);
 	}
 
 
