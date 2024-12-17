@@ -13,14 +13,16 @@ import javax.swing.table.TableColumn;
 import modele.Evaluation;
 import modele.Notion;
 import modele.Ressource;
+import modele.CreationHTML;
 
 public class TabEvaluation extends JFrame
 {
 	private DefaultTableModel model;
 	private boolean isUpdating = false;
 	private CreerQuestion creerQuestion;
+	private boolean bChrono;
 
-	public TabEvaluation(Ressource ressource)
+	public TabEvaluation(Ressource ressource, boolean bChrono)
 	{
 		// Créer la fenêtre principale
 		setTitle("Évaluation");
@@ -28,6 +30,8 @@ public class TabEvaluation extends JFrame
 		setSize(600, 300);
 		setLayout(new BorderLayout());
 		setLocationRelativeTo(null);
+
+		this.bChrono = bChrono;
 
 		// Modèle pour le tableau
 		String[] columnNames = { "Notion", "Sélectionner", "TF", "F", "M", "D" };
@@ -179,7 +183,7 @@ public class TabEvaluation extends JFrame
 		}
 
 		// Créer l'objet Evaluation
-		Evaluation evaluation = new Evaluation(ressource, selectedNotions.get(0)); // Exemple
+		Evaluation evaluation = new Evaluation(ressource, selectedNotions.get(0), this.bChrono); // Exemple
 																					// :
 																					// la
 																					// première
@@ -192,6 +196,8 @@ public class TabEvaluation extends JFrame
 		// Envoyer l'évaluation
 		sendEvaluation(evaluation);
 
+		//HTML
+		CreationHTML html = new CreationHTML(evaluation);
 		// Enregistrer l'évaluation dans un fichier
 		enregistrerEvaluation(evaluation);
 	}
