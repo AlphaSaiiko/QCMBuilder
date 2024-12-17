@@ -3,7 +3,6 @@ package vue;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
-
 import modele.Notion;
 import modele.Ressource;
 
@@ -58,8 +57,8 @@ public class ModifierNotion extends JFrame
 			String nouveauNom = texteNom.getText();
 			if (nouveauNom != null && !nouveauNom.trim().isEmpty())
 			{
-				File ancienChemin = new File("./lib/ressources/" + ressource.getNom() + "/" + notion.getNom());
-				File nouveauChemin = new File("./lib/ressources/" + ressource.getNom() + "/" + nouveauNom);
+				File ancienChemin = new File("./lib/ressources/" + ressource.getId() + "_" + ressource.getNom() + "/" + notion.getNom());
+				File nouveauChemin = new File("./lib/ressources/" + ressource.getId() + "_" + ressource.getNom() + "/" + nouveauNom);
 
 				if (ancienChemin.exists() && !nouveauChemin.exists())
 				{
