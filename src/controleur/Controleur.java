@@ -141,47 +141,6 @@ public class Controleur
 	 */
 	public static void chargerQuestion(Notion notion/* , File dir */)
 	{
-		
-		
-		// 1ère version
-		
-		
-		/*int cpt = 0;
-		// Boucle pour chaque question
-		for (File dossier : dir.listFiles())
-		{
-			File fichierRTF;
-			if (dossier.listFiles() != null)
-			{
-				fichierRTF = new File(dossier, dossier.getName() + ".rtf");
-			}
-			else return;
-
-			try
-			{
-				Scanner sc = new Scanner(new FileInputStream(fichierRTF));
-				String ligneQuestion = sc.nextLine();
-				Object[] ligne = ligneQuestion.split("\t");
-
-				String type = String.valueOf(ligne[0]);
-				String intitule = String.valueOf(ligne[1]);
-				int nbPoints = Integer.valueOf(String.valueOf(ligne[2]));
-				int temps = Integer.valueOf(String.valueOf(ligne[3]));
-				int difficulte = Integer.valueOf(String.valueOf(ligne[4]));
-
-				Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
-
-				sc.close();
-			}
-			catch (FileNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			cpt++;
-		}*/
-
-		// 2ème version
-
 		try {
 			Scanner scQst = new Scanner(new FileInputStream("./Questions.csv"));
 
