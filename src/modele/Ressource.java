@@ -1,25 +1,25 @@
 package modele;
 
-import controleur.Controleur;
-import controleur.ControleurFichier;
 import java.util.ArrayList;
 import java.util.List;
 
+import controleur.Controleur;
+import controleur.ControleurFichier;
+
 public class Ressource
 {
-	/*
+	/**
 	 * +-----------+
 	 * | ATTRIBUTS |
 	 * +-----------+
 	 */
 
-	
-	private List<Notion> ensNotions = new ArrayList<>();
+	private List<Notion> listeNotions = new ArrayList<>();
 	private String nom;
 	private String id ;
 	private ControleurFichier fichierControleur;
 
-	/*
+	/**
 	 * +--------------+
 	 * | CONSTRUCTEUR |
 	 * +--------------+
@@ -49,10 +49,10 @@ public class Ressource
 		Ressource.mettreAJourRessources();
 	}
 
-	/*
-	 * +---------+
-	 * | GETTERS |
-	 * +---------+
+	/**
+	 * +----------+
+	 * | GETTEURS |
+	 * +----------+
 	 */
 	public String getNom()
 	{
@@ -66,17 +66,17 @@ public class Ressource
 
 	public int getNbNotion()
 	{
-		return this.ensNotions.size();
+		return this.listeNotions.size();
 	}
 
 	public List<Notion> getEnsNotions()
 	{
-		return this.ensNotions;
+		return this.listeNotions;
 	}
 
 	public Notion getNotion(String nom)
 	{
-		for (Notion notion : this.ensNotions)
+		for (Notion notion : this.listeNotions)
 		{
 			if (notion.getNom().equalsIgnoreCase(nom))
 			{
@@ -89,18 +89,18 @@ public class Ressource
 
 	public String[] getNomsNotions()
 	{
-		String[] nomsNotions = new String[this.ensNotions.size()];
-		for (int i = 0; i < this.ensNotions.size(); i++)
+		String[] nomsNotions = new String[this.listeNotions.size()];
+		for (int i = 0; i < this.listeNotions.size(); i++)
 		{
-			nomsNotions[i] = this.ensNotions.get(i).getNom();
+			nomsNotions[i] = this.listeNotions.get(i).getNom();
 		}
 		return nomsNotions;
 	} 
 
-	/*
-	 * +---------+
-	 * | SETTERS |
-	 * +---------+
+	/**
+	 * +----------+
+	 * | SETTEURS |
+	 * +----------+
 	 */
 	public void setNom(String nom)
 	{
@@ -114,7 +114,7 @@ public class Ressource
 		Ressource.mettreAJourRessources();
 	}
 
-	/*
+	/**
 	 * +----------+
 	 * | METHODES |
 	 * +----------+
@@ -128,14 +128,14 @@ public class Ressource
 	{
 		if (notion != null)
 		{
-			this.ensNotions.add(notion);
+			this.listeNotions.add(notion);
 			Ressource.mettreAJourRessources();
 		}
 	}
 
 	public void supprimerNotion(Notion notion)
 	{
-		this.ensNotions.removeIf(not -> notion.equals(not));
+		this.listeNotions.removeIf(not -> notion.equals(not));
 		Ressource.mettreAJourRessources();
 	}
 

@@ -70,11 +70,11 @@ public class Notion
 	 * +----------+
 	 */
 
-	public String         getNom         ()           { return nom                            ; }
-	public Ressource      getRessource   ()           { return this.ressource                 ; }
-	public int            getNbQuestion  ()           { return this.listeQuestions.size()     ; }
-	public List<Question> getEnsQuestions()           { return this.listeQuestions            ; }
-	public Question       getQuestion    (int indice) { return this.listeQuestions.get(indice); }
+	public String         getNom           ()           { return nom                            ; }
+	public Ressource      getRessource     ()           { return this.ressource                 ; }
+	public int            getNbQuestion    ()           { return this.listeQuestions.size()     ; }
+	public List<Question> getListeQuestions()           { return this.listeQuestions            ; }
+	public Question       getQuestion      (int indice) { return this.listeQuestions.get(indice); }
 
 
 
