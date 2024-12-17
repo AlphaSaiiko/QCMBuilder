@@ -95,18 +95,44 @@ public class Metier
 		return nomsRessources;
 	}
 
+<<<<<<< HEAD
+=======
+
+	public static Ressource trouverRessourceParId(String id)
+	{
+		for (Ressource ressource : Metier.listeRessources)
+		{
+			if (ressource.getId().equalsIgnoreCase(id))
+				return ressource;
+		}
+
+		return null;
+	}
+
+
+>>>>>>> 817770d0d2e3fd57882cc5058adc25c5c81844ab
 	/**
 	 * Recherche une ressource par son nom dans la liste des ressources.
 	 *
 	 * @param nom Le nom de la ressource à rechercher. La comparaison n'est pas sensible à la casse.
 	 * @return La ressource correspondante si elle est trouvée, sinon null.
 	 */
+<<<<<<< HEAD
 	public static Ressource trouverRessourceParId(String id)
 	{
 		for (Ressource ressource : Metier.listeRessources)
 		{
 			if (ressource.getId().equalsIgnoreCase(id))
 			{
+=======
+	public static Ressource trouverRessourceParNom(String nom)
+	{
+		for (Ressource ressource : Metier.listeRessources)
+		{
+			if (ressource.getId().equalsIgnoreCase(nom))
+			{
+			if (ressource.getNom().equalsIgnoreCase(nom))
+>>>>>>> 817770d0d2e3fd57882cc5058adc25c5c81844ab
 				return ressource;
 			}
 		}
