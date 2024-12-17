@@ -34,7 +34,7 @@ public class Notion
 		this.creerFichierNotion();
 		this.listeQuestions = new ArrayList<>();
 		ressource.ajouterNotion(this);
-		Notion.mettreAJourNotions();
+		Ressource.mettreAJourRessources();
 	}
 
 
@@ -87,7 +87,7 @@ public class Notion
 	public void setNom      (String    nom      )
 	{
 		this.nom       = nom      ;
-		Notion.mettreAJourNotions();
+		Ressource.mettreAJourRessources();
 	}
 
 	public void setRessource(Ressource ressource) { this.ressource = ressource; }
@@ -124,7 +124,7 @@ public class Notion
 		if (question != null)
 		{
 			this.listeQuestions.add(question);
-			Notion.mettreAJourNotions();
+			Ressource.mettreAJourRessources();
 		}
 	}
 
@@ -139,7 +139,7 @@ public class Notion
 	public void supprimerQuestion(Question question)
 	{
 		this.listeQuestions.removeIf(qst -> question.equals(qst));
-		Notion.mettreAJourNotions();
+		Ressource.mettreAJourRessources();
 	}
 
 
@@ -160,16 +160,5 @@ public class Notion
 		}
 
 		return null;
-	}
-
-
-
-	/**
-	 * Met à jour les notions en les enregistrant dans le fichier de stockage.
-	 */
-	public static void mettreAJourNotions()
-	{
-		Ressource.mettreAJourRessources();
-		List<Notion> notions = Controleur.getListNotion();
 	}
 }
