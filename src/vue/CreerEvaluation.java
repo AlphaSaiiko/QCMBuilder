@@ -149,9 +149,12 @@ public class CreerEvaluation extends JFrame
 			if (!boutonOui.isSelected() && !boutonNon.isSelected()) {
 				erreur += "Veuillez décider si vous souhaitez donner un temps limite à l'évaluation !\n";
 			}
+			boolean bChrono = false;
+			if (boutonOui.isSelected()){bChrono = true;}
+			if (boutonNon.isSelected()){bChrono = false;}
 		
 			if (erreur.isEmpty()) {
-				TabEvaluation tabEval = new TabEvaluation(ressource);
+				TabEvaluation tabEval = new TabEvaluation(ressource, bChrono);
 				dispose();
 			} else {
 				JOptionPane.showMessageDialog(null, erreur, "Erreur : ", JOptionPane.ERROR_MESSAGE);

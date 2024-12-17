@@ -1,6 +1,5 @@
-package test;
+package modele;
 
-import modele.*;
 import modele.option.*;
 import controleur.*;
 
@@ -13,7 +12,10 @@ public class CreationHTML {
 	private StringBuilder htmlContent = new StringBuilder();
 	private ControleurFichier ctrl = new ControleurFichier("");
 
-	public CreationHTML(){
+
+	public CreationHTML(Evaluation evaluation){
+
+		System.out.println(evaluation.getChrono());
 
 		this.ctrl.ajouterFichier("html");
 

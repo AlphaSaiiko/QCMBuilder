@@ -1,6 +1,9 @@
 package vue;
 
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -10,14 +13,16 @@ import javax.swing.table.TableColumn;
 import modele.Evaluation;
 import modele.Notion;
 import modele.Ressource;
+import modele.CreationHTML;
 
 public class TabEvaluation extends JFrame
 {
 	private DefaultTableModel model;
 	private boolean isUpdating = false;
 	private CreerQuestion creerQuestion;
+	private boolean bChrono;
 
-	public TabEvaluation(Ressource ressource)
+	public TabEvaluation(Ressource ressource, boolean bChrono)
 	{
 		// Créer la fenêtre principale
 		setTitle("Évaluation");
@@ -25,6 +30,8 @@ public class TabEvaluation extends JFrame
 		setSize(600, 300);
 		setLayout(new BorderLayout());
 		setLocationRelativeTo(null);
+
+		this.bChrono = bChrono;
 
 		// Modèle pour le tableau
 		String[] columnNames = { "Notion", "Sélectionner", "TF", "F", "M", "D" };
@@ -176,7 +183,7 @@ public class TabEvaluation extends JFrame
 		}
 
 		// Créer l'objet Evaluation
-		Evaluation evaluation = new Evaluation(ressource, selectedNotions.get(0)); // Exemple
+		Evaluation evaluation = new Evaluation(ressource, selectedNotions.get(0), this.bChrono); // Exemple
 																					// :
 																					// la
 																					// première
@@ -188,15 +195,44 @@ public class TabEvaluation extends JFrame
 
 		// Envoyer l'évaluation
 		sendEvaluation(evaluation);
+
+		//HTML
+		CreationHTML html = new CreationHTML(evaluation);
+		// Enregistrer l'évaluation dans un fichier
+		enregistrerEvaluation(evaluation);
+	}
+
+
+	private void enregistrerEvaluation(Evaluation evaluation)
+	{
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Enregistrer l'évaluation");
+		int userSelection = fileChooser.showSaveDialog(this);
+
+		if (userSelection == JFileChooser.APPROVE_OPTION)
+		{
+			String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName)))
+			{
+				writer.write(evaluation.toString());
+				JOptionPane.showMessageDialog(this, "Évaluation enregistrée dans le fichier : " + fileName);
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(this, "Erreur lors de l'enregistrement de l'évaluation.", "Erreur",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 
 	private void sendEvaluation(Evaluation evaluation)
 	{
 		JOptionPane.showMessageDialog(this, "Évaluation générée et envoyée avec succès : " + evaluation.getLienEval());
 		System.out.println("Évaluation générée et envoyée avec succès : " + evaluation.getLienEval());
-		System.out.println("Évaluation générée et envoyée avec succès : " + evaluation.toString());
-
+		System.out.println("Détails de l'évaluation : " + evaluation.toString());
 	}
+
+	
 
 	// Classes internes pour les renderers et éditeurs (identiques à votre code)
 	class ColorCircleRenderer extends JLabel implements TableCellRenderer

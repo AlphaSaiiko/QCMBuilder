@@ -15,6 +15,7 @@ public class Evaluation
 	private List<Notion>   listeNotions  ;
 	private List<Question> listeQuestions;
 	private String         lienEval      ; // Lien de l'évaluation à mettre sur l'intranet
+	private boolean			bChrono;
 
 
 
@@ -25,12 +26,12 @@ public class Evaluation
 	 * +--------------+
 	 */
 
-	public Evaluation(Ressource ressource, Notion notion)
+	public Evaluation(Ressource ressource, Notion notion, boolean bChrono)
 	{
 		this.ressource	    = ressource                ;
 		this.listeNotions   = new ArrayList<Notion>  ();
 		this.listeQuestions = new ArrayList<Question>();
-		this.lienEval = genererLienEval();
+		this.bChrono = bChrono;
 	}
 
 
@@ -46,6 +47,7 @@ public class Evaluation
 	public List<Notion>   getListeNotions  () { return listeNotions  ; }
 	public List<Question> getListeQuestions() { return listeQuestions; }
 	public String         getLienEval      () { return lienEval      ; }
+	public boolean getChrono() { return this.bChrono;}
 
 
 
@@ -99,10 +101,6 @@ public class Evaluation
 			this.listeNotions.add(notion);
 	}
 
-	public String genererLienEval()
-	{
-		return "http://exemple.com/evaluation/" + ressource.getNom()  + ".html";
-	}
 
 	public String toString()
 	{
