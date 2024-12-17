@@ -30,6 +30,7 @@ public class Evaluation
 		this.ressource	    = ressource                ;
 		this.listeNotions   = new ArrayList<Notion>  ();
 		this.listeQuestions = new ArrayList<Question>();
+		this.lienEval = genererLienEval();
 	}
 
 
@@ -96,5 +97,26 @@ public class Evaluation
 	{
 		if (notion != null && this.listeNotions != null)
 			this.listeNotions.add(notion);
+	}
+
+	public String genererLienEval()
+	{
+		return "http://exemple.com/evaluation/" + ressource.getNom()  + ".html";
+	}
+
+	public String toString()
+	{
+		StringBuilder notionsStr = new StringBuilder();
+		for (Notion notion : listeNotions)
+		{
+			notionsStr.append(notion.getNom()).append(", ");
+		}
+		// Supprimer la dernière virgule et l'espace
+		if (notionsStr.length() > 0)
+		{
+			notionsStr.setLength(notionsStr.length() - 2);
+		}
+		return "Evaluation{" + "ressource=" + ressource.getNom() + ", notions=[" + notionsStr.toString() + "]"
+				+ ", lienEval='" + lienEval + '\'' + '}';
 	}
 }
