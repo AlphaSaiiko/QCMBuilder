@@ -6,32 +6,53 @@ import controleur.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import java.util.List;
 
 public class CreationHTML {
 
 	private StringBuilder htmlContent = new StringBuilder();
 	private ControleurFichier ctrl = new ControleurFichier("");
+	private Evaluation evaluation;
+	private CreationQuestionHTML questionHTML;
 
 
 	public CreationHTML(Evaluation evaluation){
 
-		System.out.println(evaluation.getChrono());
-
 		this.ctrl.ajouterFichier("html");
 
 		this.ecrireCSS();
+
+		this.questionHTML = new CreationQuestionHTML(evaluation);
+
+		this.evaluation = evaluation;
 
 		htmlContent.append("<!DOCTYPE html>\n");
 		htmlContent.append("<html lang=\"fr\">\n");
 		htmlContent.append("<head>\n");
 		htmlContent.append("<meta charset=\"UTF-8\">\n");
 		htmlContent.append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n");
-		htmlContent.append("<title>Liste des Titres</title>\n");
+		if (evaluation.getChrono()){htmlContent.append("<title>Evaluation Chronométrée</title>\n");}
+		else {htmlContent.append("<title>Evaluation</title>\n");}
 		htmlContent.append("<link rel=\"stylesheet\" href=\"style.css\">");
 		htmlContent.append("</head>\n");
 		htmlContent.append("<body>\n");
 
-		this.pageAccueil("ressource0", "notion0", 20, 45);
+		if(evaluation.getChrono())
+		{
+			int duree = 0;
+			for (Question question : evaluation.getListeQuestions())
+			{
+				duree += question.getTemps();
+			}
+			this.pageAccueil(evaluation.getRessource().getNom(), evaluation.getListeNotions(), evaluation.getListeQuestions().size(), duree);
+		}
+		else
+		{
+			this.pageAccueil(evaluation.getRessource().getNom(), evaluation.getListeNotions(), evaluation.getListeQuestions().size(), -1);
+		}
+
 
 		htmlContent.append("</body>\n");
 		htmlContent.append("</html>\n");
@@ -47,30 +68,7 @@ public class CreationHTML {
 
 
 		htmlContent = new StringBuilder();
-
-
-		htmlContent.append("<!DOCTYPE html>\n");
-		htmlContent.append("<html lang=\"fr\">\n");
-		htmlContent.append("<head>\n");
-		htmlContent.append("<meta charset=\"UTF-8\">\n");
-		htmlContent.append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n");
-		htmlContent.append("<title>Question 1</title>\n");
-		htmlContent.append("<link rel=\"stylesheet\" href=\"style.css\">");
-		htmlContent.append("</head>\n");
-		htmlContent.append("<body>\n");
-
-		this.pageQuestionElimination();
-
-		htmlContent.append("</body>\n");
-		htmlContent.append("</html>\n");
-
-		// Sauvegarde dans un fichier HTML
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page1.html"))) {
-			writer.write(htmlContent.toString());
-			System.out.println("Le fichier HTML a été généré avec succès !");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		questionHTML.pageQuestionElimination();
 	}
 
 	public void ecrireCSS()
@@ -277,13 +275,12 @@ public class CreationHTML {
 		}
 	}
 
-	public void pageAccueil(String ressource, String notion, int nbQuestion, int duree)
+	public void pageAccueil(String ressource, List<Notion> notion, int nbQuestion, int duree)
 	{
-		if (duree >=0)
+		if (this.evaluation.getChrono())
 		{
 			htmlContent.append("\t<div class=\"container\">");
 			htmlContent.append("\t\t<h1>Évaluation chronométrée</h1>");
-			this.ecrireTimer(duree);
 		}
 		else
 		{
@@ -291,7 +288,10 @@ public class CreationHTML {
 			htmlContent.append("\t\t<h1>Évaluation</h1>");
 		}
 		htmlContent.append("\t\t<p><strong>Ressource :</strong> "+ressource+"</p>");
-		htmlContent.append("\t\t<p><strong>Notion(s) :</strong> "+notion+"</p>");
+		for (Notion n : notion)
+		{
+			htmlContent.append("\t\t<p><strong>Notion(s) :</strong> "+n.getNom()+"</p>");
+		}
 		htmlContent.append("\t\t<p><strong>Nombre de questions :</strong> 21 dont 11 <b>F</b> et 10 <b>M</b></p>");
 		if (duree >= 0){
 			if (duree>60)
@@ -307,63 +307,5 @@ public class CreationHTML {
 		}
 		htmlContent.append("\t<button onclick=\"location.href='page1.html';\">Commencer l'évaluation</button>");
 		htmlContent.append("\t</div>");
-	}
-
-	public void pageQuestionElimination()
-	{
-
-		htmlContent.append("\t<h2>Question 1/21 <b>F</b> Bases de l'économie</h2>");
-		htmlContent.append("\t<p id=\"timer\"></p>");
-		htmlContent.append("\t<script src=\"timer.js\"></script>");
-		htmlContent.append("\t<p>Associez la bonne définition au mot :</p>");
-
-		htmlContent.append("\t<div class=\"propositon-qcm\">");
-		htmlContent.append("\t\t<div class=\"colonne\">");
-		htmlContent.append("\t\t\t<ul class=\"terms\">");
-		htmlContent.append("\t\t\t\t<li>Microéconomie</li>");
-		htmlContent.append("\t\t\t\t<li>Macroéconomie</li>");
-		htmlContent.append("\t\t\t</ul>");
-		htmlContent.append("\t\t</div>");
-		htmlContent.append("\t\t<div class=\"colonne\">");
-		htmlContent.append("\t\t\t<ul class=\"definitions\">");
-		htmlContent.append("\t\t\t\t<li>S'intéresse aux interactions entre vendeurs et acheteurs</li>");
-		htmlContent.append("\t\t\t\t<li>S'attache aux principaux indicateurs économiques</li>");
-		htmlContent.append("\t\t\t</ul>");
-		htmlContent.append("\t\t</div>");
-		htmlContent.append("\t</div>");
-
-		htmlContent.append("\t<div class=\"button-container\">");
-		htmlContent.append("\t\t<button>Précédent</button>");
-		htmlContent.append("\t\t<button>Feedback</button>");
-		htmlContent.append("\t\t<button>Valider</button>");
-		htmlContent.append("\t\t<button>Suivant</button>");
-		htmlContent.append("\t</div>");
-
-	}
-
-	public void ecrireTimer(int duree)
-	{
-		StringBuilder jsContent = new StringBuilder();
-		jsContent.append("let temps = "+duree+";");
-		jsContent.append("");
-		jsContent.append("const timerElement = document.getElementById(\"timer\");");
-		jsContent.append("");
-		jsContent.append("setInterval(() => {");
-		jsContent.append("  let minutes = parseInt(temps / 60, 10);");
-		jsContent.append("  let secondes = parseInt(temps % 60, 10);");
-		jsContent.append("");
-		jsContent.append("  minutes = minutes < 10 ? \"0\" + minutes : minutes;");
-		jsContent.append("  secondes = secondes < 10 ? \"0\" + secondes : secondes;");
-		jsContent.append("");
-		jsContent.append("  timerElement.innerText = `Compte à rebours : ${minutes}:${secondes}`;");
-		jsContent.append("  temps = temps <= 0 ? 0 : temps - 1;");
-		jsContent.append("}, 1000);");
-
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/timer.js"))) {
-			writer.write(jsContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
