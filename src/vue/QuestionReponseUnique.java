@@ -216,7 +216,6 @@ public class QuestionReponseUnique extends JFrame
 				
 					
 				String erreurs = "";
-				System.out.println("\n" + QuestionReponseUnique.this.questionArea.getText());
 
 				if (! aReponse)                                                         erreurs += "N'oubliez pas de sélectionner une réponse.\n";
 				if (! reponsesRemplies)                                                 erreurs += "N'oubliez pas de remplir toutes les réponses.\n";
