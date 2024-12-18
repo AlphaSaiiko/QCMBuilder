@@ -218,12 +218,18 @@ public class CreerQuestion extends JFrame implements ActionListener
 	
 			try {
 				String chaineTemps = ((JTextArea) panelTemps.getComponent(1)).getText();
+
+				if (chaineTemps.indexOf(":") == -1 && Integer.parseInt(chaineTemps) > 0)
+					chaineTemps += ":00";
+				
 				int minute = Integer.parseInt(chaineTemps.substring(0, chaineTemps.indexOf(":")));
 				int seconde = Integer.parseInt(chaineTemps.substring(chaineTemps.indexOf(":") + 1, chaineTemps.length()));
+
+				System.out.println(chaineTemps + " = " + minute+":"+seconde);
 	
 				tempsReponse = minute * 60 + seconde;
 			} catch (Exception ex) {
-				erreurs += "Veuillez rajouter le temps de réponse (format XX:XX).\n";
+				erreurs += "Veuillez rajouter le temps de réponse (format XX:XX ou X).\n";
 			}
 	
 			String[] nomRessource = ((String) listeRessources.getSelectedItem()).split("_", 2);
