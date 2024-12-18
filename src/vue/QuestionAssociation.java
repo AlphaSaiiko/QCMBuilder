@@ -1,11 +1,10 @@
 package vue;
 
-import javax.swing.*;
+import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import controleur.Controleur;
+import javax.swing.*;
 import modele.Question;
 import modele.option.OptionAssociation;
 
@@ -207,49 +206,53 @@ public class QuestionAssociation extends JFrame
 
 		// Bouton "Enregistrer"
 		JButton btnEnregistrer = new JButton("Enregistrer");
-		btnEnregistrer.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
+		btnEnregistrer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				// Sauvegarder la question
 				question.setEnonce(panelSaisie.getTexte());
-
-
+		
 				// Sauvegarder les réponses
 				for (int i = 0; i < panelOptions.getComponentCount(); i++) {
 					Component comp = panelOptions.getComponent(i);
-				
+		
 					// Vérifiez que le composant est bien un JPanel
 					if (comp instanceof JPanel) {
 						JPanel rowPanel = (JPanel) comp;
-				
+		
 						// Récupérez les sous-composants du JPanel
 						Component[] rowComponents = rowPanel.getComponents();
-				
+		
 						if (rowComponents.length >= 3) { // Assurez-vous que les composants attendus existent
-							JScrollPane scrollPane1 = (JScrollPane) rowComponents[1];
-							JScrollPane scrollPane2 = (JScrollPane) rowComponents[2];
-				
-							JTextArea textField1 = (JTextArea) scrollPane1.getViewport().getView();
-							JTextArea textField2 = (JTextArea) scrollPane2.getViewport().getView();
-				
-							System.out.println("Réponse 1 : " + textField1.getText());
-							System.out.println("Réponse 2 : " + textField2.getText());
-				
-							// Vérifiez les champs de texte vides
-							if (textField1.getText().isEmpty() || textField2.getText().isEmpty()) {
-								JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs de texte.", "Erreur", JOptionPane.ERROR_MESSAGE);
-								return;
+							try {
+								JScrollPane scrollPane1 = (JScrollPane) rowComponents[1];
+								JScrollPane scrollPane2 = (JScrollPane) rowComponents[2];
+		
+								JTextArea textField1 = (JTextArea) scrollPane1.getViewport().getView();
+								JTextArea textField2 = (JTextArea) scrollPane2.getViewport().getView();
+		
+								System.out.println("Réponse 1 : " + textField1.getText());
+								System.out.println("Réponse 2 : " + textField2.getText());
+		
+								// Vérifiez les champs de texte vides
+								if (textField1.getText().isEmpty() || textField2.getText().isEmpty()) {
+									JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs de texte.", "Erreur", JOptionPane.ERROR_MESSAGE);
+									return;
+								}
+		
+								OptionAssociation o1 = Controleur.creerReponseAssociation(textField1.getText(), question);
+								OptionAssociation o2 = Controleur.creerReponseAssociation(textField2.getText(), question);
+		
+								o1.setAssocie(o2);
+								o2.setAssocie(o1);
+		
+								question.ajouterOption(o1);
+								question.ajouterOption(o2);
+								
+								System.out.println("Options ajoutées avec succès.");
+		
+							} catch (ClassCastException | NullPointerException ex) {
+								System.err.println("Erreur lors de la récupération des composants: " + ex.getMessage());
 							}
-				
-							OptionAssociation o1 = Controleur.creerReponseAssociation(textField1.getText(), question);
-							OptionAssociation o2 = Controleur.creerReponseAssociation(textField2.getText(), question);
-				
-							o1.setAssocie(o2);
-							o2.setAssocie(o1);
-				
-							question.ajouterOption(o1);
-							question.ajouterOption(o2);
 						} else {
 							System.err.println("Structure inattendue dans rowPanel.");
 						}
@@ -257,13 +260,13 @@ public class QuestionAssociation extends JFrame
 						System.err.println("Composant inattendu dans panelOptions : " + comp.getClass().getName());
 					}
 				}
-
-
+		
 				// Fermer la fenêtre
 				QuestionAssociation.this.dispose();
 				new Accueil();
 			}
 		});
+		
 
 		
 		// Ajouter les boutons au panel des boutons

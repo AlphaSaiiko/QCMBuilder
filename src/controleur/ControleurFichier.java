@@ -146,19 +146,19 @@ public class ControleurFichier
 			return;
 		}
 
-		String ligneEntiere = qst.getType() + ";" + qst.getEnonce() + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom();
+		String ligneEntiere = qst.getType() + ";" + qst.getEnonce() + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";";
 		if (qst.getEnsOptions() != null)
 		{
 			for (IOption option : qst.getEnsOptions())
 			{
-				ligneEntiere += ";" + option.getType() + ";" + option.getEnonce() + ";" + option.getId();
+				ligneEntiere += option.getType() + "/" + option.getEnonce() + "/" + option.getId();
 				if (option instanceof OptionElimination) {
 					OptionElimination optionE = (OptionElimination) option;
-					ligneEntiere += ";" + optionE.getEstReponse() + ";" + optionE.getOrdre() + ";" + optionE.getNbPointsMoins();
+					ligneEntiere += "/" + optionE.getEstReponse() + "/" + optionE.getOrdre() + "/" + optionE.getNbPointsMoins();
 				}
 				if (option instanceof Option) {
 					Option optionO = (Option) option;
-					ligneEntiere += ";" + optionO.getEstReponse();
+					ligneEntiere += "/" + optionO.getEstReponse();
 				}
 				ligneEntiere += "|";
 			}

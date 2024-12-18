@@ -117,7 +117,6 @@ public class Question
 	public void setEnonce(String enonce)
 	{
 		this.enonce = enonce;
-		System.out.println("Enoncé: " + this.enonce);
 		this.mettreAJourQuestions();
 	}
 

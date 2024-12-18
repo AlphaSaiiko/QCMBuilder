@@ -125,11 +125,42 @@ public class Controleur
 				int nbPoints = Integer.valueOf(String.valueOf(ligne[2]));
 				int temps = Integer.valueOf(String.valueOf(ligne[3]));
 				int difficulte = Integer.valueOf(String.valueOf(ligne[4]));
+
 				
+				
+
 				
 				Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
 				tmp.setEnonce(intitule);
 				System.out.println("Question créée : " + tmp.getEnonce());
+
+				if (ligne.length > 6)
+				{
+					String reponses = String.valueOf(ligne[6]);
+					switch (tmp.getType()) {
+						case "QCMRU":
+						case "QCMRM":
+							String[] reponsesQCM = reponses.split("\\|");
+							for (int i = 0; i < reponsesQCM.length; i++) {
+								String[] reponse = reponsesQCM[i].split("/");
+								Option o = Controleur.creerReponse(reponse[1], Boolean.parseBoolean(reponse[3]), tmp);
+								tmp.ajouterOption(o);
+								System.out.println("Réponse créée : " + reponsesQCM[i]);
+							}
+							break;
+						
+						case "QAE":
+							
+							break;
+
+						case "QAEPR":
+							
+							break;
+						default:
+							break;
+					}
+				}
+				
 				sc.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -140,79 +171,7 @@ public class Controleur
 	
 
 
-		/*try {
-			Scanner scQst = new Scanner(new FileInputStream("./Questions.csv"));
-
-			String enonce;
-			Question question;
-
-			while (scQst.hasNextLine())
-			{
-				String ligne = scQst.nextLine();
-
-				System.out.println("Ligne : " + ligne);
-
-				String[] ligneQuestion = ligne.split(";");
-
-				enonce         =                 ligneQuestion[0] ;
-				int nbPoints   = Integer.valueOf(ligneQuestion[1]);
-				int temps      = Integer.valueOf(ligneQuestion[2]);
-				int difficulte = Integer.valueOf(ligneQuestion[3]);
-				String type    =                 ligneQuestion[4] ;
-
-				question = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
-
-				/*   Finir la méthode trouverOptionParId() dans question pour décommenter
-				// Si la question à des options
-				if (ligneQuestion[5].length() > 12)
-				{
-					ligne = ligne.substring(ligne.indexOf("options :")+9);
-
-					String[] tabReponse = ligne.split(" | ");
-					for (int cpt = 0; cpt < tabReponse.length-2; cpt++)
-					{
-						String[] attributsRep = tabReponse[cpt].split(";");
-
-						String typeO  = attributsRep[0];
-						String enonce = attributsRep[1];
-						int    id     = Integer.valueOf(attributsRep[2]);
-
-						int     idAssocie;
-						boolean estReponse;
-						int     ordre;
-						double  pointsMoins;
-						if (typeO == "QAE")
-						{
-							idAssocie = Integer.valueOf(attributsRep[3]);
-						}
-						else
-						{
-							estReponse = Boolean.valueOf(attributsRep[4]);
-
-							if (typeO == "QAEPR")
-							{
-								ordre       = Integer.valueOf(attributsRep[5]);
-								pointsMoins = Double.valueOf(attributsRep[6]);
-							}
-						}
-
-						switch (typeO)
-						{
-							case "QAE"  -> question.ajouterOption((new OptionAssociation(typeO, enonce, question)).setAssocie(question.trouverOptionParId(idAssocie)));
-							case "QAEP" -> question.ajouterOption(new OptionElimination(typeO, enonce, estReponse, ordre, pointsMoins, question));
-							default     -> question.ajouterOption(new Option(typeO, enonce, estReponse, question));
-						}
-					}
-				}
-
-				scQst.close();
-				
-			}
-
-		} catch (Exception e) {
-			System.err.println("Erreur lors du chargement des questions : " + e.getMessage());
-		}*/
-
+		
 	/*
 	 * +-------------------+
 	 * | METHODES D'ACTION |
