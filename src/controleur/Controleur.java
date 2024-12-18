@@ -126,7 +126,9 @@ public class Controleur
 				int temps = Integer.valueOf(String.valueOf(ligne[3]));
 				int difficulte = Integer.valueOf(String.valueOf(ligne[4]));
 				
+				
 				Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
+				tmp.setEnonce(intitule);
 				System.out.println("Question créée : " + tmp.getEnonce());
 				sc.close();
 			} catch (FileNotFoundException e) {
