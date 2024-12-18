@@ -4,6 +4,8 @@ import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+
 import javax.swing.*;
 import modele.*;
 import modele.option.Option;
@@ -11,11 +13,12 @@ import modele.option.Option;
 public class QuestionReponseUnique extends JFrame
 {
 	private JPanel questionPanel;
-	private ButtonGroup buttonGroup;
+	private ButtonGroup groupeBouton;
 	private JTextArea questionArea;
 	private Question question;
-	private int maxResponses = 6; // Limite du nombre de réponses
-	private int currentResponses = 0; // Compteur des réponses ajoutées
+
+	private int optionsMax     = 6; // Limite du nombre de réponses
+	private int optionsActuelles = 0; // Compteur des réponses ajoutées
 
 	public QuestionReponseUnique(Question question)
 	{
@@ -82,17 +85,17 @@ public class QuestionReponseUnique extends JFrame
 		questionPanel.add(buttonPanel);
 
 		// Initialiser le groupe de boutons radio
-		buttonGroup = new ButtonGroup();
+		groupeBouton = new ButtonGroup();
 
 		// Ajouter un ActionListener au bouton "Ajouter"
 		addButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if (currentResponses >= maxResponses)
+				if (optionsActuelles >= optionsMax)
 				{
 					JOptionPane.showMessageDialog(null,
-							"Le nombre maximum de réponses est atteint (" + maxResponses + ").", "Erreur",
+							"Le nombre maximum de réponses est atteint (" + optionsMax + ").", "Erreur",
 							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
@@ -124,7 +127,7 @@ public class QuestionReponseUnique extends JFrame
 						// Supprimer le panel parent lorsque l'icône de poubelle
 						// est cliquée
 						questionPanel.remove(poubellePnl);
-						currentResponses--;
+						optionsActuelles--;
 						questionPanel.revalidate();
 						questionPanel.repaint();
 					}
@@ -146,14 +149,14 @@ public class QuestionReponseUnique extends JFrame
 				// Ajouter un bouton radio
 				JRadioButton newRadioButton = new JRadioButton();
 				newRadioButton.setPreferredSize(new Dimension(30, 30));
-				buttonGroup.add(newRadioButton);
+				groupeBouton.add(newRadioButton);
 				poubellePnl.add(newRadioButton, gbc);
 
 				// Ajouter le nouveau panel trash au conteneur principal
 				questionPanel.add(poubellePnl, questionPanel.getComponentCount() - 1);
 
 				// Incrémenter le compteur de réponses
-				currentResponses++;
+				optionsActuelles++;
 
 				// Rafraîchir l'interface utilisateur
 				questionPanel.revalidate();
@@ -187,22 +190,60 @@ public class QuestionReponseUnique extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				// Enregistrer la question dans un fichier
-				question.setEnonce(questionArea.getText());
 
-				// Enregistrer les réponses
-				for (int i = 1; i < questionPanel.getComponentCount() - 1; i++)
+				// Vérification si la question à une réponse : AKA si une des options est valide
+				// Vérification si l'une des réponses n'est pas remplie
+				boolean aReponse = false;
+				boolean reponsesRemplies = true;
+				if (optionsActuelles < 1) reponsesRemplies = false;
+				if (groupeBouton != null && optionsActuelles > 0)
 				{
-					JPanel panel = (JPanel) questionPanel.getComponent(i);
-					JTextField textField = (JTextField) panel.getComponent(1);
-					JRadioButton radioButton = (JRadioButton) panel.getComponent(2);
-					Option o = Controleur.creerReponse(textField.getText(), radioButton.isSelected(), question);
-					question.ajouterOption(o);
+					for (int i = 1; i < questionPanel.getComponentCount() - 1; i++)
+					{
+						JPanel panel = (JPanel) questionPanel.getComponent(i);
+						JTextField textField = (JTextField) panel.getComponent(1);
+						JRadioButton radioButton = (JRadioButton) panel.getComponent(2);
+						
+						if (radioButton.isSelected())
+							aReponse = true;
+						if (textField.getText().trim().isEmpty())
+							reponsesRemplies = false;
+					}
+						
 				}
 
-				// Ouvrir une nouvelle instance de la classe Accueil
-				QuestionReponseUnique.this.dispose();
-				new Accueil();
+
+				
+					
+				String erreurs = "";
+				System.out.println("\n" + QuestionReponseUnique.this.questionArea.getText());
+
+				if (! aReponse)                                                         erreurs += "N'oubliez pas de sélectionner une réponse.\n";
+				if (! reponsesRemplies)                                                 erreurs += "N'oubliez pas de remplir toutes les réponses.\n";
+				if (optionsActuelles < 2)                                               erreurs += "Vous devez avoir au moins deux options. \n";
+				if (optionsActuelles > optionsMax)                                      erreurs += "Vous ne pouvez avoir que six options maximum. \n";
+				if (QuestionReponseUnique.this.questionArea.getText().trim().isEmpty()) erreurs += "Veuillez remplir la question. \n";
+
+				if (erreurs.trim().isEmpty())
+				{
+					// Enregistrer la question dans un fichier
+					question.setEnonce(questionArea.getText());
+
+					// Enregistrer les réponses
+					for (int i = 1; i < questionPanel.getComponentCount() - 1; i++)
+					{
+						JPanel panel = (JPanel) questionPanel.getComponent(i);
+						JTextField textField = (JTextField) panel.getComponent(1);
+						JRadioButton radioButton = (JRadioButton) panel.getComponent(2);
+						Option o = Controleur.creerReponse(textField.getText(), radioButton.isSelected(), question);
+						question.ajouterOption(o);
+					}
+
+					// Ouvrir une nouvelle instance de la classe Accueil
+					QuestionReponseUnique.this.dispose();
+					new Accueil();
+				}
+				else JOptionPane.showMessageDialog(QuestionReponseUnique.this, erreurs, "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
 
 		});
