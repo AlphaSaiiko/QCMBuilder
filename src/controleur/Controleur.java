@@ -37,7 +37,7 @@ public class Controleur
 	public static void chargerRessourcesEtNotion()
 	{
 		try {
-			Scanner scRes = new Scanner(new FileInputStream("./Ressources.csv"));
+			Scanner scRes = new Scanner(new FileInputStream("./RessourceEtNotion.csv"));
 
 			String nomRessource;
 			String idRessource;
@@ -97,9 +97,48 @@ public class Controleur
 	 * | CHARGER QUESTIONS  |
 	 * +--------------------+
 	 */
-	public static void chargerQuestion(Notion notion/* , File dir */)
-	{
-		try {
+	public static void chargerQuestion(Notion notion) {
+		int cpt = 0; // Boucle pour chaque question
+		File dir = new File("./lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
+		for (File dossier : dir.listFiles()) {
+			File fichierRTF;
+			if (dossier.listFiles() != null) {
+				System.out.println("Dossier : " + dossier.getName());
+				fichierRTF = new File(dossier, dossier.getName() + ".rtf");
+			} else {
+				return;
+			}
+			
+			try {
+				Scanner sc = new Scanner(new FileInputStream(fichierRTF));
+				String ligneQuestion = sc.nextLine();
+				Object[] ligne = ligneQuestion.split(";");
+				
+				if (ligne.length < 5) {
+					System.err.println("Erreur : la ligne ne contient pas assez d'éléments.");
+					sc.close();
+					return;
+				}
+	
+				String type = String.valueOf(ligne[0]);
+				String intitule = String.valueOf(ligne[1]);
+				int nbPoints = Integer.valueOf(String.valueOf(ligne[2]));
+				int temps = Integer.valueOf(String.valueOf(ligne[3]));
+				int difficulte = Integer.valueOf(String.valueOf(ligne[4]));
+				
+				Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
+				System.out.println("Question créée : " + tmp.getEnonce());
+				sc.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			cpt++;
+		}
+	}
+	
+
+
+		/*try {
 			Scanner scQst = new Scanner(new FileInputStream("./Questions.csv"));
 
 			String enonce;
@@ -165,19 +204,12 @@ public class Controleur
 				}
 
 				scQst.close();
-
-
-*/
-				
-
-
 				
 			}
 
 		} catch (Exception e) {
 			System.err.println("Erreur lors du chargement des questions : " + e.getMessage());
-		}
-	} 
+		}*/
 
 	/*
 	 * +-------------------+

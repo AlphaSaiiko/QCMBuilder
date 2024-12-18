@@ -211,7 +211,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 			try { 
 				String chaineTemps = ((JTextArea) panelTemps.getComponent(1)).getText();
-				int minute  = Integer.parseInt(chaineTemps.substring(0, chaineTemps.indexOf(":")-1));
+				int minute  = Integer.parseInt(chaineTemps.substring(0, chaineTemps.indexOf(":")));
 				int seconde = Integer.parseInt(chaineTemps.substring(chaineTemps.indexOf(":")+1, chaineTemps.length()));
 				
 				tempsReponse = minute * 60 + seconde;

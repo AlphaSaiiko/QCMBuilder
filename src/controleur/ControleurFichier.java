@@ -247,7 +247,7 @@ public class ControleurFichier
 	// Méthode pour écrire toutes les ressources dans un fichie
 	public static void ecrireRessources(List<Ressource> ressources)
 	{
-		try (FileWriter writer = new FileWriter("Ressources.csv"))
+		try (FileWriter writer = new FileWriter("RessourceEtNotion.csv"))
 		{
 			for (Ressource ressource : ressources)
 			{
@@ -276,42 +276,4 @@ public class ControleurFichier
 			System.out.println("Erreur lors de l'écriture des ressources : " + e.getMessage());
 		}
 	}
-
-	// Méthode pour écrire toutes les questions dans un fichier
-	public static void ecrireQuestions(List<Question> questions)
-	{
-		try (FileWriter writer = new FileWriter("Questions.csv"))
-		{
-			for (Question question : questions)
-			{
-				writer.write("nom:" + question.getEnonce() + ";nbPoints:" + question.getNbPoints() + ";temps:" + question.getTemps() + ";difficulte:" + question.getDifficulte() + ";type:" + question.getType() + ";notion :" + question.getNotion().getNom() + ";options :" );
-
-				for (IOption option : question.getEnsOptions())
-				{
-					writer.write(option.getType() + ";" + option.getEnonce() + ";" + option.getId());
-
-					if (option instanceof OptionAssociation) {
-						writer.write(";" + ((OptionAssociation) option).getAssocie().getId());
-					}
-					if (option instanceof OptionElimination)
-					{
-						OptionElimination optionE = (OptionElimination) option;
-						writer.write(";" + optionE.getEstReponse() + ";" + optionE.getOrdre() + ";" + optionE.getNbPointsMoins());
-					}
-					if (option instanceof Option)
-					{
-						Option optionO = (Option) option;
-						writer.write(";" + optionO.getEstReponse());
-					}
-					writer.write(" | ");
-				}
-				writer.write("\n");
-			}
-		}
-		catch (IOException e)
-		{
-			System.out.println("Erreur lors de l'écriture des questions : " + e.getMessage());
-		}
-	}
-
 }
