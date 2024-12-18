@@ -14,6 +14,7 @@ import modele.Evaluation;
 import modele.Notion;
 import modele.Ressource;
 import modele.CreationHTML;
+import controleur.*;
 
 public class TabEvaluation extends JFrame
 {
@@ -216,6 +217,7 @@ public class TabEvaluation extends JFrame
 			{
 				writer.write(evaluation.toString());
 				JOptionPane.showMessageDialog(this, "Évaluation enregistrée dans le fichier : " + fileName);
+				ControleurFichier fich = new ControleurFichier("");
 			} catch (IOException e)
 			{
 				e.printStackTrace();

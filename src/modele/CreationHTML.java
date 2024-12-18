@@ -28,6 +28,8 @@ public class CreationHTML {
 
 		this.evaluation = evaluation;
 
+		System.out.println("liste question : " + this.evaluation.getListeQuestions()) ;
+
 		htmlContent.append("<!DOCTYPE html>\n");
 		htmlContent.append("<html lang=\"fr\">\n");
 		htmlContent.append("<head>\n");
@@ -66,9 +68,11 @@ public class CreationHTML {
 		}
 
 
-
 		htmlContent = new StringBuilder();
-		questionHTML.pageQuestionElimination();
+		for (Question question : this.evaluation.getListeQuestions())
+		{
+			questionHTML.pageQuestionElimination(question);
+		}
 	}
 
 	public void ecrireCSS()

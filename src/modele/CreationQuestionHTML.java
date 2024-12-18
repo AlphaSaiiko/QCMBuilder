@@ -16,9 +16,8 @@ public class CreationQuestionHTML {
 
 	public CreationQuestionHTML(Evaluation evaluation){this.evaluation = evaluation;}
 
-	public void pageQuestionElimination()
+	public void pageQuestionElimination(Question question)
 	{
-
 		StringBuilder htmlContent = new StringBuilder();
 
 		htmlContent.append("<!DOCTYPE html>\n");
