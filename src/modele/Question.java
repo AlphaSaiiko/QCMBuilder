@@ -26,6 +26,8 @@ public class Question
 	private List<String>  listeComplements; // Les pièces jointes ou petites images
 	private List<IOption> listeOptions    ;
 	private Notion        notion          ;
+	private final int idQuestion;
+	private static int compteurQuestion = 0;
 
 
 
@@ -43,6 +45,8 @@ public class Question
 		this.notion     = notion    ;
 		this.difficulte = difficulte;
 		this.type       = type      ;
+
+		this.idQuestion  = ++Question.compteurQuestion;
 
 		this.numQuestion = notion.getNbQuestion();
 		this.mettreAJourQuestions();
@@ -93,7 +97,7 @@ public class Question
 	public List<String>  getComplements()        { return listeComplements     ; }
 	public IOption       getOptions    (int ind) { return listeOptions.get(ind); }
 	public List<IOption> getEnsOptions ()        { return listeOptions         ; }
-	public int           getNumQuestion()        { return this.numQuestion     ; }
+	public int           getNumQuestion()        { return this.idQuestion      ; }
 
 
 
