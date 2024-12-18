@@ -206,9 +206,9 @@ public class Question
 			opt1.getEnonce().equals(opt2.getEnonce()))
 			{
 
-			if (opt1 instanceof OptionAssociation && opt2 instanceof OptionAssociation) {
-				return ((OptionAssociation) opt1).getAssocie().getEnonce() == ((OptionAssociation) opt2).getAssocie().getEnonce();
-			} 
+			if (opt1 instanceof OptionAssociation && opt2 instanceof OptionAssociation && ((OptionAssociation) opt1).getAssocie() != null && ((OptionAssociation) opt2).getAssocie() != null) {
+				return ((OptionAssociation) opt1).getAssocie().equals(((OptionAssociation) opt2).getAssocie());
+			}
 			else if (opt1 instanceof OptionElimination && opt2 instanceof OptionElimination) {
 				OptionElimination optionE1 = (OptionElimination) opt1;
 				OptionElimination optionE2 = (OptionElimination) opt2;

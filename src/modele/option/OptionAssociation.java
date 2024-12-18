@@ -14,8 +14,6 @@ public class OptionAssociation implements IOption
 
 	private OptionAssociation associe;
 
-	private IOption optionAssocie;
-
 	private Question question;
 
 	private final int idReponse;
@@ -36,6 +34,7 @@ public class OptionAssociation implements IOption
 		this.question = question;
 
 		question.ajouterOption(this);
+		System.out.println("Option créée : " + this.enonce);
 	}
 
 
@@ -48,8 +47,6 @@ public class OptionAssociation implements IOption
 	public String getType    () { return this.type    ; }
 
 	public OptionAssociation getAssocie() { return this.associe; }
-
-	public IOption getOptionAssocie() { return this.optionAssocie; }
 
 	public int getId() {return this.idReponse;}
 
@@ -64,7 +61,8 @@ public class OptionAssociation implements IOption
 	public void setEnonce(String enonce) { this.enonce = enonce; }
 	public void setType  (String type  ) { this.type   = type  ; }
 
-	public void setAssocie(OptionAssociation associe) { this.associe = associe; }
-
-	public void setOptionAssocie(IOption opt) { this.optionAssocie = opt; }
+	public void setAssocie(OptionAssociation associe) {
+		this.associe = associe;
+		System.out.println("Association créée : " + this.associe.getEnonce());
+	}
 }

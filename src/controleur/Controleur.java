@@ -150,7 +150,13 @@ public class Controleur
 							break;
 						
 						case "QAE":
-							
+							String[] reponsesQAE = reponses.split("\\|");
+							for (int i = 0; i < reponsesQAE.length; i++) {
+								String[] reponse = reponsesQAE[i].split("/");
+								Option o = Controleur.creerReponse(reponse[1], Boolean.parseBoolean(reponse[3]), tmp);
+								tmp.ajouterOption(o);
+								System.out.println("Réponse créée : " + reponsesQAE[i]);
+							}
 							break;
 
 						case "QAEPR":
