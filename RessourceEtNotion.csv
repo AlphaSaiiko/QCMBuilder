@@ -1,1 +1,65 @@
-id:R1.01;nom:Test Analyse;notions:Test Question
+id:R1.01;nom:Initiation au développement;notions:Algorithmique,Programmation
+id:R1.02;nom:Développement interfaces Web;notions:HTML,CSS
+id:R1.03;nom:Introduction Architecture;notions:Modélisation,UML
+id:R1.04;nom:Introduction Système;notions:Systèmes d'exploitation,Réseaux
+id:R1.05;nom:Introduction Base de données;notions:SQL,NoSQL
+id:R1.06;nom:Mathématiques discrètes;notions:Théorie des graphes,Logique mathématique
+id:R1.07;nom:Outils mathématiques fondamentaux;notions:Calcul différentiel,Algèbre linéaire
+id:R1.08;nom:Gestion de projet et des organisations;notions:Planification,Coordination d'équipe
+id:R1.09;nom:Économie durable et numérique;notions:Économie circulaire,Technologies vertes
+id:R1.10;nom:Anglais Technique;notions:Terminologie technique,Rédaction de documents techniques
+id:R1.11;nom:Bases de la communication;notions:Communication verbale,Écoute active
+id:R1.12;nom:Projet Professionnel et Personnel;notions:Développement personnel,Objectifs de carrière
+id:R2.01;nom:Développement orienté objets;notions:Classes et objets,Polymorphisme
+id:R2.02;nom:Développement d'applications avec IHM;notions:Interfaces utilisateur,Événements et gestionnaires
+id:R2.03;nom:Qualité de développement;notions:Tests unitaires,Refactoring
+id:R2.04;nom:Communication et fonctionnement bas niveau;notions:Architecture des ordinateurs,Microprocesseurs
+id:R2.05;nom:Introduction aux services réseaux;notions:Protocole TCP/IP,Serveurs web
+id:R2.06;nom:Exploitation d'une base de données;notions:Requêtes SQL,Optimisation de bases de données
+id:R2.07;nom:Graphes;notions:Algorithmes de graphes,Théorie des graphes
+id:R2.08;nom:Outils numériques pour les statistiques;notions:Analyse de données,Visualisation de données
+id:R2.09;nom:Méthodes Numériques;notions:Algorithmes numériques,Analyse numérique
+id:R2.10;nom:Gestion de projet et des organisations;notions:Planification de projet,Suivi de projet
+id:R2.11;nom:Droit;notions:Droit des contrats,Propriété intellectuelle
+id:R2.12;nom:Anglais d'entreprise;notions:Communication professionnelle,Rédaction de rapports
+id:R2.13;nom:Communication Technique;notions:Documentation technique,Présentation de projets
+id:R3.01;nom:Développement WEB;notions:JavaScript,Node.js
+id:R3.02;nom:Développement Efficace;notions:Optimisation du code,Techniques de débogage
+id:R3.03;nom:Analyse;notions:Analyse fonctionnelle,Analyse des besoins
+id:R3.04;nom:Qualité de développement 3;notions:Tests fonctionnels,Automatisation des tests
+id:R3.05;nom:Programmation Système;notions:C,Shell scripting
+id:R3.06;nom:Architecture des réseaux;notions:Topologie de réseau,Protocole de communication
+id:R3.07;nom:SQL dans un langage de programmation;notions:SQL intégré,ORM (Object-Relational Mapping)
+id:R3.08;nom:Probabilités;notions:Statistiques descriptives,Théorie des probabilités
+id:R3.09;nom:Cryptographie et sécurité;notions:Chiffrement,Authentification
+id:R3.10;nom:Management des systèmes d'information;notions:Gouvernance informatique,Audit des systèmes
+id:R3.11;nom:Droits des contrats et du numérique;notions:Droit des affaires,Sécurité numérique
+id:R3.12;nom:Anglais 3;notions:Communication écrite,Expression orale
+id:R3.13;nom:Communication professionnelle;notions:Négociation,Résolution de conflits
+id:R3.14;nom:PPP 3;notions:Plan de carrière,Analyse SWOT
+id:R4.01;nom:Architecture logicielle;notions:Patrons de conception,Modèles architecturaux
+id:R4.02;nom:Qualité de développement 4;notions:Revue de code,Metrics de qualité
+id:R4.03;nom:Qualité et au delà du relationnel;notions:Gestion de la qualité,Relation client
+id:R4.04;nom:Méthodes d'optimisation;notions:Optimisation linéaire,Optimisation combinatoire
+id:R4.05;nom:Anglais 4;notions:Prise de parole en public,Écriture technique
+id:R4.06;nom:Communication interne;notions:Gestion des réunions,Communication non verbale
+id:R4.07;nom:PPP 4;notions:Formation continue,Développement de compétences
+id:R4.08;nom:Virtualisation;notions:Machines virtuelles,Conteneurisation
+id:R4.09;nom:Management avancé des Systèmes d'information;notions:Planification stratégique,Gestion du changement
+id:R4.10;nom:Complément web;notions:Web sémantique,Accessibilité web
+id:R4.11;nom:Développement mobile;notions:Développement Android,Développement iOS
+id:R4.12;nom:Automates;notions:Automates finis,Langages formels
+id:R5.01;nom:Initiation au management d’une équipe de projet informatique;notions:Leadership,Gestion de conflits
+id:R5.02;nom:Projet Personnel et Professionnel;notions:Établissement d'objectifs,Développement de compétences
+id:R5.03;nom:Politique de communication;notions:Stratégie de communication,Relations publiques
+id:R5.04;nom:Qualité algorithmique;notions:Complexité des algorithmes,Évaluation des performances
+id:R5.05;nom:Programmation avancée;notions:Programmation concurrente,Design patterns
+id:R5.06;nom:Programmation multimédia;notions:Traitement d'image,Développement de jeux vidéo
+id:R5.07;nom:Automatisation de la chaîne de production;notions:Automatisation industrielle,Robotique
+id:R5.08;nom:Qualité de développement;notions:Assurance qualité,Gestion des versions
+id:R5.09;nom:Virtualisation avancée;notions:Infrastructure cloud,Virtualisation de serveurs
+id:R5.10;nom:Nouveaux paradigmes de base de données;notions:Base de données orientée graphes,Base de données en mémoire
+id:R5.11;nom:Méthodes d’optimisation pour l’aide à la décision;notions:Analyse décisionnelle,Optimisation sous contraintes
+id:R5.12;nom:Modélisations mathématiques;notions:Modèles prédictifs,Simulation mathématique
+id:R5.13;nom:Économie durable et numérique;notions:Développement durable,Transformation numérique
+id:R5.14;nom:Anglais;notions:Anglais technique,Conversation professionnelle
