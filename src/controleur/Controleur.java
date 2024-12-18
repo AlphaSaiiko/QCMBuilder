@@ -151,16 +151,44 @@ public class Controleur
 						
 						case "QAE":
 							String[] reponsesQAE = reponses.split("\\|");
+							OptionAssociation previousOption = null;
 							for (int i = 0; i < reponsesQAE.length; i++) {
 								String[] reponse = reponsesQAE[i].split("/");
-								Option o = Controleur.creerReponse(reponse[1], Boolean.parseBoolean(reponse[3]), tmp);
-								tmp.ajouterOption(o);
-								System.out.println("Réponse créée : " + reponsesQAE[i]);
+								OptionAssociation currentOption = Controleur.creerReponseAssociation(reponse[1], tmp);
+								
+								// Si previousOption n'est pas null, associe les deux options
+								if (previousOption != null) {
+									previousOption.setAssocie(currentOption);
+									currentOption.setAssocie(previousOption);
+									
+									// Ajoute les options à la question
+									tmp.ajouterOption(previousOption);
+									tmp.ajouterOption(currentOption);
+
+									// Réinitialise previousOption pour la prochaine paire
+									previousOption = null;
+								} else {
+									// Stocke l'option actuelle pour la prochaine itération
+									previousOption = currentOption;
+								}
 							}
+
+							// Si il reste une option non associée
+							if (previousOption != null) {
+								System.err.println("Attention : une réponse reste non associée.");
+							}
+
 							break;
 
 						case "QAEPR":
-							
+							String[] reponsesQAEPR = reponses.split("\\|");
+							for (int i = 0; i < reponsesQAEPR.length; i++) {
+								String[] reponse = reponsesQAEPR[i].split("/");
+								OptionElimination o = Controleur.creerReponseElimination(reponse[1], Integer.parseInt(reponse[4]), Double.parseDouble(reponse[5]), Boolean.parseBoolean(reponse[3]), tmp);
+								tmp.ajouterOption(o);
+								System.out.println("Réponse créée : " + reponsesQAEPR[i]);
+							}
+								
 							break;
 						default:
 							break;
