@@ -29,110 +29,109 @@ public class CreerQuestion extends JFrame implements ActionListener
 	 * +--------------+
 	 */
 
-	public CreerQuestion()
-	{
-		//Panel principal
+	 public CreerQuestion() {
+		// Panel principal
 		JPanel panelPrincipal = new JPanel();
-		panelPrincipal.setLayout(new BorderLayout());
-
-
+		panelPrincipal.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+	
 		// Bouton "Menu principal"
 		String imageMenu = "./lib/icones/home.png";
 		ImageIcon icon = new ImageIcon(imageMenu);
 		Image img = icon.getImage();
 		Image newImg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newImg);
-
+	
 		JButton btnMenu = new JButton(icon);
 		btnMenu.addActionListener(e -> {
 			Controleur.ouvrirAccueil();
 			dispose();
 		});
-
+	
 		JPanel panelBtnMenu = new JPanel();
 		panelBtnMenu.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelBtnMenu.add(btnMenu);
-
-
+	
 		// Panel pour les points et le temps
 		JPanel panelPointsEtTemps = new JPanel();
-		panelPointsEtTemps.setLayout(new GridLayout(1, 2));
-
+		panelPointsEtTemps.setLayout(new GridBagLayout());
+	
 		JPanel panelPoints = new JPanel();
 		panelPoints.setLayout(new BorderLayout());
 		panelPoints.add(new JLabel("Nombre de points"), BorderLayout.NORTH);
 		panelPoints.add(new JTextArea(), BorderLayout.CENTER);
-
+		panelPoints.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 10)); // Espacement
+	
 		JPanel panelTemps = new JPanel();
 		panelTemps.setLayout(new BorderLayout());
 		panelTemps.add(new JLabel("Temps de réponse (min : sec)"), BorderLayout.NORTH);
 		panelTemps.add(new JTextArea(), BorderLayout.CENTER);
-
-		panelPointsEtTemps.add(panelPoints);
-		panelPointsEtTemps.add(panelTemps);
-		
-
-
-		//Creation d'une JComboBox pour les ressources et matières
+		panelTemps.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0)); // Espacement
+	
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridwidth = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		panelPointsEtTemps.add(panelPoints, gbc);
+	
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		panelPointsEtTemps.add(panelTemps, gbc);
+	
+		// Creation d'une JComboBox pour les ressources et matières
 		this.listeRessources = new JComboBox<String>(Controleur.getIDsNomsRessources());
 		this.listeRessources.setPreferredSize(new Dimension(150, 30));
-		
+		this.listeRessources.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 10)); // Espacement
+	
 		this.nomRessource = String.valueOf(listeRessources.getSelectedItem());
 		String[] decRessource = nomRessource.split("_", 2);
 		String id = "", nom = "";
-		if (decRessource.length == 2)
-		{
+		if (decRessource.length == 2) {
 			nom = decRessource[1];
-			id  = decRessource[0];
+			id = decRessource[0];
 		}
-		
+	
 		this.listeNotions = new JComboBox<String>(Controleur.trouverRessourceParId(id).getNomsNotions());
 		listeNotions.setPreferredSize(new Dimension(150, 30));
-		
-
+		listeNotions.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0)); // Espacement
+	
 		// Panel pour les ressources
 		JPanel panelRessources = new JPanel();
 		panelRessources.setLayout(new BorderLayout());
 		panelRessources.add(new JLabel("Ressources"), BorderLayout.NORTH);
 		panelRessources.add(listeRessources, BorderLayout.CENTER);
-		
-
+	
 		// Panel pour les notions
 		JPanel panelNotions = new JPanel();
 		panelNotions.setLayout(new BorderLayout());
 		panelNotions.add(new JLabel("Notions"), BorderLayout.NORTH);
 		panelNotions.add(listeNotions, BorderLayout.CENTER);
-		
-
+	
 		// Panel pour bien placer les ronds de difficultés et mettre le titre
 		JPanel panelDifficulte = new JPanel();
 		panelDifficulte.setLayout(new BorderLayout());
 		panelDifficulte.add(new JLabel("Difficulté"), BorderLayout.NORTH);
-
-
+	
 		// Création des boutons ronds pour les niveaux de difficultés avec les couleurs et texte correspondants
 		BoutonRond tresFacile = creerBoutonRond(Color.GREEN, "TF");
 		BoutonRond facile = creerBoutonRond(Color.CYAN, "F");
 		BoutonRond moyen = creerBoutonRond(Color.RED, "M");
 		BoutonRond dur = creerBoutonRond(Color.WHITE, "D");
-
-
+	
 		// Définition de la taille du texte
 		Font police = new Font("Arial", Font.BOLD, 8);
 		tresFacile.setFont(police);
 		facile.setFont(police);
 		moyen.setFont(police);
 		dur.setFont(police);
-
-
+	
 		// Grouper les boutons pour permettre une seule sélection à la fois
 		ButtonGroup group = new ButtonGroup();
 		group.add(tresFacile);
 		group.add(facile);
 		group.add(moyen);
 		group.add(dur);
-
-
+	
 		// ActionListeners pour changer les couleurs lorsqu'un bouton est sélectionné
 		tresFacile.addActionListener(e -> {
 			tresFacile.setBackground(Color.GREEN);
@@ -140,29 +139,28 @@ public class CreerQuestion extends JFrame implements ActionListener
 			moyen.setBackground(Color.GRAY);
 			dur.setBackground(Color.GRAY);
 		});
-
+	
 		facile.addActionListener(e -> {
 			tresFacile.setBackground(Color.GRAY);
 			facile.setBackground(Color.CYAN);
 			moyen.setBackground(Color.GRAY);
 			dur.setBackground(Color.GRAY);
 		});
-
+	
 		moyen.addActionListener(e -> {
 			tresFacile.setBackground(Color.GRAY);
 			facile.setBackground(Color.GRAY);
 			moyen.setBackground(Color.RED);
 			dur.setBackground(Color.GRAY);
 		});
-
+	
 		dur.addActionListener(e -> {
 			tresFacile.setBackground(Color.GRAY);
 			facile.setBackground(Color.GRAY);
 			moyen.setBackground(Color.GRAY);
 			dur.setBackground(Color.WHITE);
 		});
-
-
+	
 		// Panel pour les ronds de difficultés
 		JPanel panelRondsDifficulte = new JPanel();
 		panelRondsDifficulte.setLayout(new FlowLayout());
@@ -170,133 +168,158 @@ public class CreerQuestion extends JFrame implements ActionListener
 		panelRondsDifficulte.add(facile);
 		panelRondsDifficulte.add(moyen);
 		panelRondsDifficulte.add(dur);
-		
+	
 		panelDifficulte.add(panelRondsDifficulte, BorderLayout.CENTER);
-
-
+	
 		// Panel pour les choix de ressource, notion et difficulté
 		JPanel panelResNtnDif = new JPanel();
-		panelResNtnDif.setLayout(new GridLayout(1, 3));
-		panelResNtnDif.add(panelRessources);
-		panelResNtnDif.add(panelNotions);
-		panelResNtnDif.add(panelDifficulte);
-
-
-		//Panel pour le type de question
+		panelResNtnDif.setLayout(new GridBagLayout());
+	
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridwidth = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+		panelResNtnDif.add(panelRessources, gbc);
+	
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		panelResNtnDif.add(panelNotions, gbc);
+	
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		panelResNtnDif.add(panelDifficulte, gbc);
+	
+		// Panel pour le type de question
 		JPanel panelType = new JPanel();
-
-
-		//JComboBox pour le type de question
-		JComboBox<String> listeTypes = new JComboBox<String>(new String[] { "Question à choix multiple à réponse unique", "Question à choix multiple à réponse multiple", "Question à association d’éléments", "Question avec élimination de propositions de réponses" });
+	
+		// JComboBox pour le type de question
+		JComboBox<String> listeTypes = new JComboBox<String>(new String[]{"Question à choix multiple à réponse unique", "Question à choix multiple à réponse multiple", "Question à association d’éléments", "Question avec élimination de propositions de réponses"});
 		panelType.add(listeTypes, BorderLayout.SOUTH);
-
-
+	
 		// Bouton pour créer une nouvelle question
 		JButton btnCreerQuestion = new JButton("Créer nouvelle question");
 		JPanel panelBtnCreerQuestion = new JPanel();
 		panelBtnCreerQuestion.setLayout(new FlowLayout(FlowLayout.CENTER));
 		panelBtnCreerQuestion.add(btnCreerQuestion);
-
-
+	
 		// Action listener pour le bouton de création de question
 		btnCreerQuestion.addActionListener(e -> {
 			String erreurs = "";
-			
+	
 			// Récupération des informations pour la création de la question
-			int nbPoints     = 1;
+			int nbPoints = 1;
 			int tempsReponse = 60;
-			
-			try { nbPoints = Integer.parseInt(((JTextArea) panelPoints.getComponent(1)).getText()); }
-			catch (Exception ex) { erreurs = "Veuillez rajouter le nombre de points.\n"; }
-
-			try { 
+	
+			try {
+				nbPoints = Integer.parseInt(((JTextArea) panelPoints.getComponent(1)).getText());
+			} catch (Exception ex) {
+				erreurs = "Veuillez rajouter le nombre de points.\n";
+			}
+	
+			try {
 				String chaineTemps = ((JTextArea) panelTemps.getComponent(1)).getText();
-				int minute  = Integer.parseInt(chaineTemps.substring(0, chaineTemps.indexOf(":")));
-				int seconde = Integer.parseInt(chaineTemps.substring(chaineTemps.indexOf(":")+1, chaineTemps.length()));
-				
+				int minute = Integer.parseInt(chaineTemps.substring(0, chaineTemps.indexOf(":")));
+				int seconde = Integer.parseInt(chaineTemps.substring(chaineTemps.indexOf(":") + 1, chaineTemps.length()));
+	
 				tempsReponse = minute * 60 + seconde;
-			} catch (Exception ex) { erreurs += "Veuillez rajouter le temps de réponse (format XX:XX).\n"; }
-
+			} catch (Exception ex) {
+				erreurs += "Veuillez rajouter le temps de réponse (format XX:XX).\n";
+			}
+	
 			String[] nomRessource = ((String) listeRessources.getSelectedItem()).split("_", 2);
 			String idRes = "", nomRes = "";
-			if (nomRessource.length == 2)
-			{
+			if (nomRessource.length == 2) {
 				nomRes = nomRessource[1];
-				idRes  = nomRessource[0];
+				idRes = nomRessource[0];
 			}
 			Notion notion = Notion.trouverNotionParNom((String) listeNotions.getSelectedItem(), Controleur.trouverRessourceParId(idRes));
-
+	
 			int difficulte = 0;
-			if      (tresFacile.getBackground() == Color.GREEN && facile.getBackground() == Color.CYAN) { difficulte = 0; }
-			else if (tresFacile.getBackground() == Color.GREEN)                                         { difficulte = 1; }
-			else if (facile.getBackground()     == Color.CYAN )                                         { difficulte = 2; }
-			else if (moyen.getBackground()      == Color.RED  )                                         { difficulte = 3; }
-			else if (dur.getBackground()        == Color.WHITE)                                         { difficulte = 4; }
+			if (tresFacile.getBackground() == Color.GREEN && facile.getBackground() == Color.CYAN) {
+				difficulte = 0;
+			} else if (tresFacile.getBackground() == Color.GREEN) {
+				difficulte = 1;
+			} else if (facile.getBackground() == Color.CYAN) {
+				difficulte = 2;
+			} else if (moyen.getBackground() == Color.RED) {
+				difficulte = 3;
+			} else if (dur.getBackground() == Color.WHITE) {
+				difficulte = 4;
+			}
 
 			String typeSelectionne = (String) listeTypes.getSelectedItem();
-			if (notion != null && typeSelectionne != null && difficulte != 0 && erreurs.isEmpty())
-			{
-				if ("Question à choix multiple à réponse unique".equals(typeSelectionne))
-				{
+			if (notion != null && typeSelectionne != null && difficulte != 0 && erreurs.isEmpty()) {
+				if ("Question à choix multiple à réponse unique".equals(typeSelectionne)) {
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRU");
 					new QuestionReponseUnique(tmp);
 					dispose();
-				}
-				else if ("Question à choix multiple à réponse multiple".equals(typeSelectionne))
-				{
+				} else if ("Question à choix multiple à réponse multiple".equals(typeSelectionne)) {
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRM");
 					new QuestionReponseMultiple(tmp);
 					dispose();
-				}
-				else if ("Question à association d’éléments".equals(typeSelectionne))
-				{
+				} else if ("Question à association d’éléments".equals(typeSelectionne)) {
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAE");
 					new QuestionAssociation(tmp);
 					dispose();
-				}
-				else if ("Question avec élimination de propositions de réponses".equals(typeSelectionne))
-				{
+				} else if ("Question avec élimination de propositions de réponses".equals(typeSelectionne)) {
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAEPR");
 					new QuestionAvecElimination(tmp);
 					dispose();
 				}
 			}
 
-			if (difficulte == 0)
+			if (difficulte == 0) {
 				erreurs += "Veuillez sélectionner la difficulté.";
-		
-			if (! erreurs.isEmpty())
+			}
+
+			if (!erreurs.isEmpty()) {
 				JOptionPane.showMessageDialog(null, erreurs, "Erreur : paramètres manquants", JOptionPane.ERROR_MESSAGE);
-		});
-	
+			}
+			});
 
-		//Création d'un panel gérant la toute la configuration de la question
-		JPanel panelConfiguration = new JPanel();
-		panelConfiguration.setLayout(new GridLayout(3, 1));
-		panelConfiguration.add(panelPointsEtTemps);
-		panelConfiguration.add(panelResNtnDif);
-		panelConfiguration.add(panelType);
+			// Création d'un panel gérant toute la configuration de la question
+			JPanel panelConfiguration = new JPanel();
+			panelConfiguration.setLayout(new GridBagLayout());
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			panelConfiguration.add(panelPointsEtTemps, gbc);
 
+			gbc.gridy = 1;
+			panelConfiguration.add(panelResNtnDif, gbc);
 
-		// Ajout des panels au panel principal
-		panelPrincipal.add(panelBtnMenu, BorderLayout.NORTH);
-		panelPrincipal.add(panelConfiguration, BorderLayout.CENTER);
-		panelPrincipal.add(panelBtnCreerQuestion, BorderLayout.SOUTH);
-		
+			gbc.gridy = 2;
+			panelConfiguration.add(panelType, gbc);
 
-		// Ajout du panel principal à la frame et configuration de cette dernière
-		this.add(panelPrincipal);
-		this.setTitle("Créer une question");
-		this.setSize(700, 330);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
+			// Ajout des composants au panel principal
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			panelPrincipal.add(panelBtnMenu, gbc);
 
-		listeRessources.addActionListener(this);
-	}
+			gbc.gridy = 1;
+			gbc.fill = GridBagConstraints.BOTH;
+			gbc.weightx = 1.0;
+			gbc.weighty = 1.0;
+			panelPrincipal.add(panelConfiguration, gbc);
 
+			gbc.gridy = 2;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			gbc.weightx = 0.0;
+			gbc.weighty = 0.0;
+			panelPrincipal.add(panelBtnCreerQuestion, gbc);
 
+			// Configuration finale de la fenêtre
+			this.add(panelPrincipal);
+			this.setTitle("Créer une question");
+			this.setSize(700, 330);
+			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			this.setLocationRelativeTo(null);
+			this.setVisible(true);
 
+			listeRessources.addActionListener(this);
+		}
+
+	 
 
 	/**
 	 * +----------+
