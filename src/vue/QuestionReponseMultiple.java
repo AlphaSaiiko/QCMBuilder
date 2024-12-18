@@ -36,6 +36,11 @@ public class QuestionReponseMultiple extends JFrame
 		});
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		topPanel.add(btnRetour);
+
+		// Ajouter la ressource et la notion en haut à gauche
+		JLabel nomResEtNotion = new JLabel("Ressource : " + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + 
+		                              "  ;  Notion : " + question.getNotion().getNom());
+		topPanel.add(nomResEtNotion);
 		mainPanel.add(topPanel, BorderLayout.NORTH);
 
 		// Initialiser le panel des questions
@@ -52,40 +57,26 @@ public class QuestionReponseMultiple extends JFrame
 		questionPanel.add(questionScrollPane);
 
 		// Ajouter un panel pour les boutons "Ajouter", "Explication" et "Enregistrer"
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		JPanel panelBoutons = new JPanel();
+		panelBoutons.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		// Ajouter un bouton "Ajouter" 
+		JButton boutonAjouter = new JButton("Ajouter");
+		panelBoutons.add(boutonAjouter);
 
-		// Ajouter un bouton pour ajouter un nouveau panel trash avec une icône
-		ImageIcon addIcon = new ImageIcon(
-				new ImageIcon("./lib/icones/add.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-		JButton addButton = new JButton(addIcon);
-		addButton.setPreferredSize(new Dimension(40, 40));
-		addButton.setBorderPainted(false);
-		addButton.setContentAreaFilled(false);
-		addButton.setFocusPainted(false);
-		addButton.setOpaque(false);
-		buttonPanel.add(addButton);
-
-		// Ajouter un bouton "Explication" avec une icône
-		ImageIcon explicationIcon = new ImageIcon(
-				new ImageIcon("./lib/icones/edit.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-		JButton explicationButton = new JButton(explicationIcon);
-		explicationButton.setPreferredSize(new Dimension(40, 40));
-		explicationButton.setBorderPainted(false);
-		explicationButton.setContentAreaFilled(false);
-		explicationButton.setFocusPainted(false);
-		explicationButton.setOpaque(false);
-		buttonPanel.add(explicationButton);
+		// Ajouter un bouton "Explication" 
+		JButton boutonExplication = new JButton("Explication");
+		panelBoutons.add(boutonExplication);
 
 		// Ajouter un bouton "Enregistrer"
 		JButton saveBtn = new JButton("Enregistrer");
-		buttonPanel.add(saveBtn);
+		panelBoutons.add(saveBtn);
 
 		// Ajouter le panel des boutons au panel des questions
-		questionPanel.add(buttonPanel);
+		questionPanel.add(panelBoutons);
 
 		// Ajouter un ActionListener au bouton "Ajouter"
-		addButton.addActionListener(new ActionListener() {
+		boutonAjouter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (optionsActuelles >= optionsMax) {
 					JOptionPane.showMessageDialog(null, "Le nombre maximum de réponses est atteint (" + optionsMax + ").", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -156,7 +147,7 @@ public class QuestionReponseMultiple extends JFrame
 		});
 
 		// Ajouter un ActionListener au bouton "Explication"
-		explicationButton.addActionListener(new ActionListener() {
+		boutonExplication.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Créer et afficher une nouvelle fenêtre pour écrire
 				// l'explication

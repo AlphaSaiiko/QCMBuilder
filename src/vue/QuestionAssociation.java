@@ -1,10 +1,11 @@
 package vue;
 
-import controleur.Controleur;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+
+import controleur.Controleur;
 import modele.Question;
 import modele.option.OptionAssociation;
 
@@ -16,13 +17,13 @@ public class QuestionAssociation extends JFrame
 	 * +-------------+
 	 */
 
-	private JPanel      panelQuestion   ;
-	private PanelSaisie panelSaisie     ;
-	private PanelSaisie panelExplication;
-	private Question    question        ;
-	private int         nbMaxOptions = 6;
-	private int         nbOptions    = 0;
-	private JFrame      explicationFrame;
+	private JPanel      panelQuestion       ;
+	private PanelSaisie panelSaisie         ;
+	private PanelSaisie panelExplication    ;
+	private Question    question            ;
+	private int         optionsMax       = 6;
+	private int         optionsActuelles = 0;
+	private JFrame      explicationFrame    ;
 
 
 
@@ -38,6 +39,7 @@ public class QuestionAssociation extends JFrame
 		this.question = question;
 
 
+
 		// Dimensions de l'écran
 		Dimension dimensionsEcran = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -46,6 +48,21 @@ public class QuestionAssociation extends JFrame
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new BorderLayout());
 
+
+		// Ajouter le bouton "Retour" en haut à gauche
+		JButton btnRetour = new JButton("Retour");
+		btnRetour.addActionListener(e -> {
+			Controleur.ouvrirCreerQuestion();
+			dispose();
+		});
+		JPanel panelRetour = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panelRetour.add(btnRetour);
+
+		// Ajouter la ressource et la notion en haut à gauche
+		JLabel nomResEtNotion = new JLabel("Ressource : " + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + 
+		                              "  ;  Notion : " + question.getNotion().getNom());
+		
+		this.add(panelRetour, BorderLayout.NORTH);
 
 		// Panel de la question (texte et options)
 		panelQuestion = new JPanel(new GridLayout(2, 1));
@@ -78,11 +95,11 @@ public class QuestionAssociation extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				// Cas où il y a trop d'options
-				if (nbOptions >= nbMaxOptions)
+				if (optionsActuelles >= optionsMax)
 				{
 					JOptionPane.showMessageDialog(
 						null,
-						"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
+						"Le nombre maximum de réponses est atteint (" + optionsMax + ").",
 						"Erreur",
 						JOptionPane.ERROR_MESSAGE
 					);
@@ -161,7 +178,7 @@ public class QuestionAssociation extends JFrame
 					public void actionPerformed(ActionEvent e)
 					{
 						panelOptions.remove(panelLigne);
-						nbOptions--;
+						optionsActuelles--;
 						panelOptions.revalidate();
 						panelOptions.repaint();
 					}
@@ -170,7 +187,7 @@ public class QuestionAssociation extends JFrame
 
 				// Ajouter le panel ligne au panel de la question
 				panelOptions.add(panelLigne);
-				nbOptions++;
+				optionsActuelles++;
 				panelOptions.revalidate();
 				panelOptions.repaint();
 			}
@@ -206,67 +223,127 @@ public class QuestionAssociation extends JFrame
 
 		// Bouton "Enregistrer"
 		JButton btnEnregistrer = new JButton("Enregistrer");
-		btnEnregistrer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Sauvegarder la question
-				question.setEnonce(panelSaisie.getTexte());
-		
-				// Sauvegarder les réponses
-				for (int i = 0; i < panelOptions.getComponentCount(); i++) {
-					Component comp = panelOptions.getComponent(i);
-		
-					// Vérifiez que le composant est bien un JPanel
-					if (comp instanceof JPanel) {
-						JPanel rowPanel = (JPanel) comp;
-		
-						// Récupérez les sous-composants du JPanel
-						Component[] rowComponents = rowPanel.getComponents();
-		
-						if (rowComponents.length >= 3) { // Assurez-vous que les composants attendus existent
-							try {
+		btnEnregistrer.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				
+				// Vérification si l'une des réponses n'est pas remplie
+				boolean reponsesRemplies = true;
+				if (optionsActuelles < 1) reponsesRemplies = false;
+				if (optionsActuelles > 0)
+				{
+					for (int i = 0; i < panelOptions.getComponentCount(); i++) 
+					{
+
+
+						Component comp = panelOptions.getComponent(i);
+						
+						// Vérifiez que le composant est bien un JPanel
+						if (comp instanceof JPanel) 
+						{
+
+
+
+							JPanel rowPanel = (JPanel) comp;
+					
+							// Récupérez les sous-composants du JPanel
+							Component[] rowComponents = rowPanel.getComponents();
+					
+							if (rowComponents.length >= 3) 
+							{ // Assurez-vous que les composants attendus existent
+
+
+								
 								JScrollPane scrollPane1 = (JScrollPane) rowComponents[1];
 								JScrollPane scrollPane2 = (JScrollPane) rowComponents[2];
-		
+					
 								JTextArea textField1 = (JTextArea) scrollPane1.getViewport().getView();
 								JTextArea textField2 = (JTextArea) scrollPane2.getViewport().getView();
-		
-								System.out.println("Réponse 1 : " + textField1.getText());
-								System.out.println("Réponse 2 : " + textField2.getText());
-		
+					
 								// Vérifiez les champs de texte vides
-								if (textField1.getText().isEmpty() || textField2.getText().isEmpty()) {
-									JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs de texte.", "Erreur", JOptionPane.ERROR_MESSAGE);
-									return;
+								if (textField1.getText().isEmpty() || textField2.getText().isEmpty()) 
+								{
+									reponsesRemplies = false;
 								}
-		
-								OptionAssociation o1 = Controleur.creerReponseAssociation(textField1.getText(), question);
-								OptionAssociation o2 = Controleur.creerReponseAssociation(textField2.getText(), question);
-		
-								o1.setAssocie(o2);
-								o2.setAssocie(o1);
-		
-								question.ajouterOption(o1);
-								question.ajouterOption(o2);
-								
-								System.out.println("Options ajoutées avec succès.");
-		
-							} catch (ClassCastException | NullPointerException ex) {
-								System.err.println("Erreur lors de la récupération des composants: " + ex.getMessage());
 							}
-						} else {
-							System.err.println("Structure inattendue dans rowPanel.");
 						}
-					} else {
-						System.err.println("Composant inattendu dans panelOptions : " + comp.getClass().getName());
+
+
 					}
 				}
-		
-				// Fermer la fenêtre
-				QuestionAssociation.this.dispose();
-				new Accueil();
+						
+				
+					
+				String erreurs = "";
+
+				if (! reponsesRemplies)                                                 erreurs += "N'oubliez pas de remplir toutes les réponses.\n";
+				if (optionsActuelles < 2)                                               erreurs += "Vous devez avoir au moins deux lignes d'options. \n";
+				if (optionsActuelles > optionsMax)                                      erreurs += "Vous ne pouvez avoir que six lignes d'options maximum. \n";
+				if (QuestionAssociation.this.panelSaisie.getTexte().trim().isEmpty())   erreurs += "Veuillez remplir la question. \n";
+
+				if (erreurs.trim().isEmpty())
+				{
+
+					// Sauvegarder la question
+					question.setEnonce(panelSaisie.getTexte());
+
+
+					// Sauvegarder les réponses
+					for (int i = 0; i < panelOptions.getComponentCount(); i++) {
+						Component comp = panelOptions.getComponent(i);
+					
+						// Vérifiez que le composant est bien un JPanel
+						if (comp instanceof JPanel) {
+							JPanel rowPanel = (JPanel) comp;
+					
+							// Récupérez les sous-composants du JPanel
+							Component[] rowComponents = rowPanel.getComponents();
+					
+							if (rowComponents.length >= 3) 
+							{ // Assurez-vous que les composants attendus existent
+								try {
+										
+									JScrollPane scrollPane1 = (JScrollPane) rowComponents[1];
+									JScrollPane scrollPane2 = (JScrollPane) rowComponents[2];
+						
+									JTextArea textField1 = (JTextArea) scrollPane1.getViewport().getView();
+									JTextArea textField2 = (JTextArea) scrollPane2.getViewport().getView();
+						
+									System.out.println("Réponse 1 : " + textField1.getText());
+									System.out.println("Réponse 2 : " + textField2.getText());
+									
+						
+									OptionAssociation o1 = Controleur.creerReponseAssociation(textField1.getText(), question);
+									OptionAssociation o2 = Controleur.creerReponseAssociation(textField2.getText(), question);
+						
+									o1.setAssocie(o2);
+									o2.setAssocie(o1);
+						
+									question.ajouterOption(o1);
+									question.ajouterOption(o2);
+
+									System.out.println("Options ajoutées avec succès.");
+								} catch (Exception ex) {
+									System.err.println("Erreur lors de la récupération des composants: " + ex.getMessage());
+								}
+							} else {
+								System.err.println("Structure inattendue dans rowPanel.");
+							}
+						} else {
+							System.err.println("Composant inattendu dans panelOptions : " + comp.getClass().getName());
+						}
+					}
+
+
+					// Fermer la fenêtre
+					QuestionAssociation.this.dispose();
+					new Accueil();
+				}
+				else JOptionPane.showMessageDialog(QuestionAssociation.this, erreurs, "Erreur", JOptionPane.ERROR_MESSAGE);
+
 			}
 		});
-		
 
 		
 		// Ajouter les boutons au panel des boutons

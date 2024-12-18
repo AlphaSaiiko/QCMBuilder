@@ -12,13 +12,33 @@ public class QuestionAvecElimination extends JFrame
 {
 	private JPanel panelQuestion;
 	private JTextArea textareaQuestion;
+	private ButtonGroup groupeBouton;
 	private Question question;
+
+	private int optionsMax		 = 6;
+	private int optionsActuelles = 0;
 
 	public QuestionAvecElimination(Question question)
 	{
 		this.question = question;
+		this.groupeBouton = new ButtonGroup();
 		// Initialiser le conteneur principal
 		JPanel panelPrincipal = new JPanel(new BorderLayout());
+
+		// Ajouter le bouton "Retour" en haut à gauche
+		JButton btnRetour = new JButton("Retour");
+		btnRetour.addActionListener(e -> {
+			Controleur.ouvrirCreerQuestion();
+			dispose();
+		});
+		JPanel panelRetour = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panelRetour.add(btnRetour);
+
+		// Ajouter la ressource et la notion en haut à gauche
+		JLabel nomResEtNotion = new JLabel("Ressource : " + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + 
+		                              "  ;  Notion : " + question.getNotion().getNom());
+		panelRetour.add(nomResEtNotion);
+		this.add(panelRetour, BorderLayout.NORTH);
 
 		// Initialiser le panel des questions
 		panelQuestion = new JPanel();
@@ -36,26 +56,12 @@ public class QuestionAvecElimination extends JFrame
 		JPanel panelBoutons = new JPanel();
 		panelBoutons.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		// Ajouter un bouton pour ajouter un nouveau panel trash avec une icône
-		ImageIcon iconeAjouter = new ImageIcon(
-				new ImageIcon("./lib/icones/add.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-		JButton boutonAjouter = new JButton(iconeAjouter);
-		boutonAjouter.setPreferredSize(new Dimension(40, 40));
-		boutonAjouter.setBorderPainted(false);
-		boutonAjouter.setContentAreaFilled(false);
-		boutonAjouter.setFocusPainted(false);
-		boutonAjouter.setOpaque(false);
+		// Ajouter un bouton "Ajouter" 
+		JButton boutonAjouter = new JButton("Ajouter");
 		panelBoutons.add(boutonAjouter);
 
-		// Ajouter un bouton "Explication" avec une icône
-		ImageIcon iconeExplication = new ImageIcon(
-				new ImageIcon("./lib/icones/edit.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-		JButton boutonExplication = new JButton(iconeExplication);
-		boutonExplication.setPreferredSize(new Dimension(40, 40));
-		boutonExplication.setBorderPainted(false);
-		boutonExplication.setContentAreaFilled(false);
-		boutonExplication.setFocusPainted(false);
-		boutonExplication.setOpaque(false);
+		// Ajouter un bouton "Explication" 
+		JButton boutonExplication = new JButton("Explication");
 		panelBoutons.add(boutonExplication);
 
 		// Ajouter un bouton "Enregistrer"
@@ -70,6 +76,14 @@ public class QuestionAvecElimination extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				if (optionsActuelles >= optionsMax)
+				{
+					JOptionPane.showMessageDialog(null,
+							"Le nombre maximum de réponses est atteint (" + optionsMax + ").", "Erreur",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				
 				// Créer un nouveau panel trash
 				JPanel newTrashPanel = new JPanel(new GridBagLayout());
 				GridBagConstraints gbc = new GridBagConstraints();
@@ -109,6 +123,16 @@ public class QuestionAvecElimination extends JFrame
 				gbc.gridx = 4;
 				newTrashPanel.add(texteOrdre, gbc);
 
+
+				texteOrdre.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						majLegalite();
+					}
+				});
+
+
 				// Ajouter un label pour les points
 				JLabel labelPoints = new JLabel("Points:");
 				labelPoints.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -122,11 +146,34 @@ public class QuestionAvecElimination extends JFrame
 				gbc.gridx = 6;
 				newTrashPanel.add(textePoints, gbc);
 
+
+				textePoints.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						majLegalite();
+					}
+				});
+
+
 				// Ajouter un bouton radio
 				JRadioButton newRadioButton = new JRadioButton();
 				newRadioButton.setPreferredSize(new Dimension(30, 30));
+				groupeBouton.add(newRadioButton);
 				gbc.gridx = 7;
 				newTrashPanel.add(newRadioButton, gbc);
+
+				
+
+				newRadioButton.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						majLegalite();
+					}
+				});
+
+
 
 				// Redimensionner l'icône de poubelle
 				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("./lib/icones/delete.png").getImage()
@@ -156,6 +203,9 @@ public class QuestionAvecElimination extends JFrame
 				System.out.println(panelQuestion.getComponentCount() - 1);
 				System.out.println(panelQuestion.getComponentCount());
 				panelQuestion.add(newTrashPanel, panelQuestion.getComponentCount() - 1);
+
+				// Incrémenter le compteur de réponses
+				optionsActuelles++;
 
 				// Rafraîchir l'interface utilisateur
 				panelQuestion.revalidate();
@@ -188,40 +238,84 @@ public class QuestionAvecElimination extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				// Enregistrer la question dans un fichier		
-				question.setEnonce(textareaQuestion.getText());
-
-				//Enregistrer les réponses
-				for (int i = 1; i < panelQuestion.getComponentCount() - 1; i++)
+				
+				
+				// Vérification si la question à une réponse : AKA si une des options est valide
+				// Vérification si l'une des réponses n'est pas remplie
+//				// Vérification si l'une des réponse est illégale (Si une réponse valide à un ordre et un point en moins)
+				boolean aReponse = false;
+				boolean reponsesRemplies = true;
+//				boolean reponseIllegale  = false;
+				if (optionsActuelles < 1) reponsesRemplies = false;
+				if (groupeBouton != null && optionsActuelles > 0)
 				{
-					JPanel panel = (JPanel) panelQuestion.getComponent(i);
-
-					JTextField textField = (JTextField) panel.getComponent(1);
-					JTextField ordre = (JTextField) panel.getComponent(3);
-					JTextField points = (JTextField) panel.getComponent(5);
-					JRadioButton radioButton = (JRadioButton) panel.getComponent(6);
-
 					
-					if (ordre.getText().isEmpty())
+					for (int i = 1; i < panelQuestion.getComponentCount() - 1; i++)
 					{
-						ordre.setText("-1");
+						JPanel panel = (JPanel) panelQuestion.getComponent(i);
+						JTextField textField = (JTextField) panel.getComponent(1);
+						JRadioButton radioButton = (JRadioButton) panel.getComponent(6);
+						
+						if (radioButton.isSelected())
+							aReponse = true;
+						if (textField.getText().trim().isEmpty())
+							reponsesRemplies = false;
 					}
-					
-					if (points.getText().isEmpty()) 
-					{
-						points.setText("-1");
-					}
-
-					OptionElimination rep = Controleur.creerReponseElimination(textField.getText(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), radioButton.isSelected(), question);
-
-					question.ajouterOption(rep);
+						
 				}
 
-				// Fermer la fenêtre
-				QuestionAvecElimination.this.dispose();
-				new Accueil();
+
+				
+					
+				String erreurs = "";
+
+				if (! aReponse)																	erreurs += "N'oubliez pas de sélectionner une réponse.\n";
+				if (! reponsesRemplies)															erreurs += "N'oubliez pas de remplir toutes les réponses.\n";
+				if (optionsActuelles < 2)														erreurs += "Vous devez avoir au moins deux options. \n";
+				if (optionsActuelles > optionsMax)												erreurs += "Vous ne pouvez avoir que six options maximum. \n";
+				if (QuestionAvecElimination.this.textareaQuestion.getText().trim().isEmpty())	erreurs += "Veuillez remplir la question. \n";
+
+				if (erreurs.trim().isEmpty())
+				{
+					// Enregistrer la question dans un fichier		
+					question.setEnonce(textareaQuestion.getText());
+
+					//Enregistrer les réponses
+					for (int i = 1; i < panelQuestion.getComponentCount() - 1; i++)
+					{
+						JPanel panel = (JPanel) panelQuestion.getComponent(i);
+
+						JTextField textField = (JTextField) panel.getComponent(1);
+						JTextField ordre = (JTextField) panel.getComponent(3);
+						JTextField points = (JTextField) panel.getComponent(5);
+						JRadioButton radioButton = (JRadioButton) panel.getComponent(6);
+
+						
+						if (ordre.getText().isEmpty())
+						{
+							ordre.setText("-1");
+						}
+						
+						if (points.getText().isEmpty()) 
+						{
+							points.setText("-1");
+						}
+
+						OptionElimination rep = Controleur.creerReponseElimination(textField.getText(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), radioButton.isSelected(), question);
+
+						question.ajouterOption(rep);
+					}
+
+					// Fermer la fenêtre
+					QuestionAvecElimination.this.dispose();
+					new Accueil();
+				
+				}
+				else JOptionPane.showMessageDialog(QuestionAvecElimination.this, erreurs, "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
 		});
+
+
 
 		panelPrincipal.add(panelQuestion, BorderLayout.NORTH);
 
@@ -229,11 +323,52 @@ public class QuestionAvecElimination extends JFrame
 		add(panelPrincipal, BorderLayout.CENTER);
 
 		// Afficher la fenêtre
-		setTitle("Question Réponse Unique");
+		setTitle("Question Avec Elimination");
 		setSize(1000, 800);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+	}
+
+	public void majLegalite()
+	{
+		if (groupeBouton != null && optionsActuelles > 0)
+			{
+				
+				for (int i = 1; i < panelQuestion.getComponentCount() - 1; i++)
+				{
+					JPanel panel = (JPanel) panelQuestion.getComponent(i);
+					JTextField textField     = (JTextField) panel.getComponent(1);
+					JTextField ordre         = (JTextField) panel.getComponent(3);
+					JTextField points        = (JTextField) panel.getComponent(5);
+					JRadioButton radioButton = (JRadioButton) panel.getComponent(6);
+					
+					if (radioButton.isSelected())
+					{
+						ordre .setEnabled(false);
+						points.setEnabled(false);
+						ordre .setText("");
+						points.setText("");
+					}
+					else
+					{
+						ordre .setEnabled(true);
+						points.setEnabled(true);
+					}
+
+					if (ordre.getText().trim().length() > 0 || points.getText().trim().length() > 0)
+					{
+						radioButton.setEnabled(false);
+					}
+					else
+					{
+						radioButton.setEnabled(true);
+						ordre .setText("");
+						points.setText("");
+					}
+				}
+					
+			}
 	}
 
 }
