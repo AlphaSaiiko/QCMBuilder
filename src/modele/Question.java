@@ -50,7 +50,6 @@ public class Question
 		this.idQuestion  = ++Question.compteurQuestion;
 
 		this.numQuestion = notion.getNbQuestion();
-		this.mettreAJourQuestions();
 		this.listeComplements = new ArrayList<>();
 		this.listeOptions = new ArrayList<>();
 		this.creerFichierQuestion();
