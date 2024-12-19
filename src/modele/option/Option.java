@@ -34,8 +34,6 @@ public class Option implements IOption
 		this.idReponse  = ++Option.compteurReponse;
 
 		question.ajouterOption(this);
-
-		question.mettreAJourQuestions();
 	}
 
 
