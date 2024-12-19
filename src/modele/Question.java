@@ -172,8 +172,8 @@ public class Question
     if (!fichier.exists()) {
         ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion);
         fichierControleur.ajouterFichier("");
-        fichierControleur.ajouterRtf("question" + this.numQuestion + "/question" + this.numQuestion + ".rtf");
-        fichierControleur.ecrireQuestion("question" + this.numQuestion + "/question" + this.numQuestion + ".rtf", this);
+        fichierControleur.ajouterRtf("/question" + this.numQuestion + ".rtf");
+        fichierControleur.ecrireQuestion("/question" + this.numQuestion + ".rtf", this);
         System.out.println("Fichier créé : " + chemin);
     } else {
         System.out.println("Le fichier existe déjà : " + chemin);
