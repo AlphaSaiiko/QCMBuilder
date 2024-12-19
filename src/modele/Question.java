@@ -47,7 +47,8 @@ public class Question
 		this.difficulte = difficulte;
 		this.type       = type      ;
 
-		this.idQuestion  = ++Question.compteurQuestion;
+		this.idQuestion  = Question.compteurQuestion;
+		Question.compteurQuestion++;
 
 		this.numQuestion = notion.getNbQuestion();
 		this.mettreAJourQuestions();
