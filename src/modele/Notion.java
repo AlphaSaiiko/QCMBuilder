@@ -52,7 +52,6 @@ public class Notion
 		if (notion == null)
 		{
 			notion = new Notion(nom, ressource);
-			System.out.println("Nouvelle notion créée avec le titre: " + nom + " pour la ressource: " + ressource.getNom());
 		}
 		else
 			System.out.println("La notion existe déjà dans la ressource: " + ressource.getNom());

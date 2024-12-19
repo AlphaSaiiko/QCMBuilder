@@ -56,7 +56,6 @@ public class Ressource
 		if (ressource == null)
 		{
 			ressource = new Ressource(nom, id);
-			System.out.println("Nouvelle ressource créée avec le titre: " + nom);
 		}
 		else
 			System.out.println("La ressource existe déjà.");
