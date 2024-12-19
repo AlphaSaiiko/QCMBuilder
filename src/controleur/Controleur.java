@@ -96,104 +96,104 @@ public class Controleur
 	public static void chargerQuestion(Notion notion) {
 		int cpt = 0; // Boucle pour chaque question
 		File dir = new File("./lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
-		for (File dossier : dir.listFiles()) {
-			File fichierRTF;
-			if (dossier.listFiles() != null) {
-				System.out.println("Dossier : " + dossier.getName());
-				fichierRTF = new File(dossier, dossier.getName() + ".rtf");
-			} else {
-				return;
-			}
-			
-			try {
-				Scanner sc = new Scanner(new FileInputStream(fichierRTF));
-				String ligneQuestion = sc.nextLine();
-				Object[] ligne = ligneQuestion.split(";");
-				
-				if (ligne.length < 5) {
-					System.err.println("Erreur : la ligne ne contient pas assez d'éléments.");
-					sc.close();
-					return;
-				}
 	
-				String type = String.valueOf(ligne[0]);
-				String intitule = String.valueOf(ligne[1]);
-				int nbPoints = Integer.valueOf(String.valueOf(ligne[2]));
-				int temps = Integer.valueOf(String.valueOf(ligne[3]));
-				int difficulte = Integer.valueOf(String.valueOf(ligne[4]));
-				
-				Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
-				tmp.setEnonce(intitule);
-				System.out.println("Question créée : " + tmp.getEnonce());
-
-				if (ligne.length > 6)
-				{
-					String reponses = String.valueOf(ligne[6]);
-					switch (tmp.getType()) {
-						case "QCMRU":
-						case "QCMRM":
-							String[] reponsesQCM = reponses.split("\\|");
-							for (int i = 0; i < reponsesQCM.length; i++) {
-								String[] reponse = reponsesQCM[i].split("/");
-								Option o = Controleur.creerReponse(reponse[1], Boolean.parseBoolean(reponse[3]), tmp);
-								tmp.ajouterOption(o);
-								System.out.println("Réponse créée : " + reponsesQCM[i]);
+		if (!dir.exists() || !dir.isDirectory()) {
+			System.err.println("Erreur : Le répertoire spécifié n'existe pas ou n'est pas un répertoire.");
+			return;
+		}
+	
+		for (File dossier : dir.listFiles()) {
+			if (dossier.listFiles() != null) {
+				File fichierRTF = new File(dossier, dossier.getName() + ".rtf");
+				System.out.println("Dossier : " + dossier.getName());
+	
+				try (Scanner sc = new Scanner(new FileInputStream(fichierRTF))) {
+					if (sc.hasNextLine()) {
+						String ligneQuestion = sc.nextLine();
+						Object[] ligne = ligneQuestion.split(";");
+	
+						if (ligne.length < 5) {
+							System.err.println("Erreur : la ligne ne contient pas assez d'éléments.");
+							continue;
+						}
+	
+						String type = String.valueOf(ligne[0]);
+						String intitule = String.valueOf(ligne[1]);
+						int nbPoints = Integer.parseInt(String.valueOf(ligne[2]));
+						int temps = Integer.parseInt(String.valueOf(ligne[3]));
+						int difficulte = Integer.parseInt(String.valueOf(ligne[4]));
+	
+						Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
+						tmp.setEnonce(intitule);
+						System.out.println("Question créée : " + tmp.getEnonce());
+	
+						if (ligne.length > 6) {
+							String reponses = String.valueOf(ligne[6]);
+							switch (tmp.getType()) {
+								case "QCMRU":
+								case "QCMRM":
+									String[] reponsesQCM = reponses.split("\\|");
+									for (String reponseQCM : reponsesQCM) {
+										String[] reponse = reponseQCM.split("/");
+										Option o = Controleur.creerReponse(reponse[1], Boolean.parseBoolean(reponse[3]), tmp);
+										tmp.ajouterOption(o);
+										System.out.println("Réponse créée : " + reponseQCM);
+									}
+									break;
+	
+								case "QAE":
+									String[] reponsesQAE = reponses.split("\\|");
+									OptionAssociation previousOption = null;
+									for (String reponseQAE : reponsesQAE) {
+										String[] reponse = reponseQAE.split("/");
+										OptionAssociation currentOption = Controleur.creerReponseAssociation(reponse[1], tmp);
+	
+										if (previousOption != null) {
+											previousOption.setAssocie(currentOption);
+											currentOption.setAssocie(previousOption);
+	
+											tmp.ajouterOption(previousOption);
+											tmp.ajouterOption(currentOption);
+	
+											previousOption = null;
+										} else {
+											previousOption = currentOption;
+										}
+									}
+	
+									if (previousOption != null) {
+										System.err.println("Attention : une réponse reste non associée.");
+									}
+									break;
+	
+								case "QAEPR":
+									String[] reponsesQAEPR = reponses.split("\\|");
+									for (String reponseQAEPR : reponsesQAEPR) {
+										String[] reponse = reponseQAEPR.split("/");
+										OptionElimination o = Controleur.creerReponseElimination(reponse[1], Integer.parseInt(reponse[4]), Double.parseDouble(reponse[5]), Boolean.parseBoolean(reponse[3]), tmp);
+										tmp.ajouterOption(o);
+										System.out.println("Réponse créée : " + reponseQAEPR);
+									}
+									break;
+	
+								default:
+									System.err.println("Erreur : Type de question inconnu.");
+									break;
 							}
-							break;
-						
-						case "QAE":
-							String[] reponsesQAE = reponses.split("\\|");
-							OptionAssociation previousOption = null;
-							for (int i = 0; i < reponsesQAE.length; i++) {
-								String[] reponse = reponsesQAE[i].split("/");
-								OptionAssociation currentOption = Controleur.creerReponseAssociation(reponse[1], tmp);
-								
-								// Si previousOption n'est pas null, associe les deux options
-								if (previousOption != null) {
-									previousOption.setAssocie(currentOption);
-									currentOption.setAssocie(previousOption);
-									
-									// Ajoute les options à la question
-									tmp.ajouterOption(previousOption);
-									tmp.ajouterOption(currentOption);
-
-									// Réinitialise previousOption pour la prochaine paire
-									previousOption = null;
-								} else {
-									// Stocke l'option actuelle pour la prochaine itération
-									previousOption = currentOption;
-								}
-							}
-
-							// Si il reste une option non associée
-							if (previousOption != null) {
-								System.err.println("Attention : une réponse reste non associée.");
-							}
-
-							break;
-
-						case "QAEPR":
-							String[] reponsesQAEPR = reponses.split("\\|");
-							for (int i = 0; i < reponsesQAEPR.length; i++) {
-								String[] reponse = reponsesQAEPR[i].split("/");
-								OptionElimination o = Controleur.creerReponseElimination(reponse[1], Integer.parseInt(reponse[4]), Double.parseDouble(reponse[5]), Boolean.parseBoolean(reponse[3]), tmp);
-								tmp.ajouterOption(o);
-								System.out.println("Réponse créée : " + reponsesQAEPR[i]);
-							}
-								
-							break;
-						default:
-							break;
+						}
 					}
+				} catch (FileNotFoundException e) {
+					System.err.println("Erreur : Fichier non trouvé - " + fichierRTF.getPath());
+					e.printStackTrace();
+				} catch (Exception e) {
+					System.err.println("Erreur lors du chargement des questions.");
+					e.printStackTrace();
 				}
-				
-				sc.close();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
 			}
 			cpt++;
 		}
 	}
+	
 	
 
 
