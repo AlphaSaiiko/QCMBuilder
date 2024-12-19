@@ -165,15 +165,15 @@ public class Question
 	 * un fichier pour la question en cours. Elle crée également un fichier RTF et enregistre les informations de la question.
 	 */
 	public void creerFichierQuestion() {
-    String chemin = "./lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/question" + this.numQuestion + ".rtf";
+    String chemin = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion;
     File fichier = new File(chemin);
 
     // Vérifiez si le fichier existe déjà
     if (!fichier.exists()) {
-        ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
-        fichierControleur.ajouterFichier("question" + this.numQuestion);
-        fichierControleur.ajouterRtf("question" + this.numQuestion + "/question" + this.numQuestion);
-        fichierControleur.ecrireQuestion("question" + this.numQuestion + "/question" + this.numQuestion, this);
+        ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion);
+        fichierControleur.ajouterFichier("question" + this.numQuestion + ".rtf");
+        fichierControleur.ajouterRtf("question" + this.numQuestion + "/question" + this.numQuestion + ".rtf");
+        fichierControleur.ecrireQuestion("question" + this.numQuestion + "/question" + this.numQuestion + ".rtf", this);
         System.out.println("Fichier créé : " + chemin);
     } else {
         System.out.println("Le fichier existe déjà : " + chemin);
