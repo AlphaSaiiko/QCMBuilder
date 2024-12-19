@@ -102,7 +102,16 @@ public class Controleur
 			return;
 		}
 	
-		for (File dossier : dir.listFiles()) {
+		File[] dossiers = dir.listFiles();
+		if (dossiers == null) {
+			System.err.println("Erreur : Le répertoire est vide ou inaccessible.");
+			return;
+		}
+	
+		// Trier les dossiers par nom pour assurer un ordre cohérent
+		Arrays.sort(dossiers);
+	
+		for (File dossier : dossiers) {
 			if (dossier.listFiles() != null) {
 				File fichierRTF = new File(dossier, dossier.getName() + ".rtf");
 				System.out.println("Dossier : " + dossier.getName());
@@ -193,6 +202,7 @@ public class Controleur
 			cpt++;
 		}
 	}
+	
 	
 	
 
