@@ -92,7 +92,7 @@ public class QuestionAssociation extends JFrame
 
 
 		// Bouton "Ajouter"
-        JButton btnAjouter = new JButton("Ajouter");
+        JButton btnAjouter = new JButton("Ajouter une option");
 
         btnAjouter.addActionListener(new ActionListener()
         {
@@ -131,7 +131,7 @@ public class QuestionAssociation extends JFrame
                 panelLigne.add(btnSupprimer, gbc);
 
                 PanelSaisie element1 = new PanelSaisie(false);
-                element1.setHauteur(HAUTEUR_OPTIONS);(HAUTEUR_OPTIONS);
+                element1.setHauteur(HAUTEUR_OPTIONS);
 
                 gbc.gridx = 1;
                 gbc.gridy = 0;
