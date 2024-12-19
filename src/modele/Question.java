@@ -28,7 +28,7 @@ public class Question
 	private List<IOption> listeOptions    ;
 	private Notion        notion          ;
 	private final int idQuestion;
-	private static int compteurQuestion = 0;
+	private static int compteurQuestion = 1;
 
 
 
