@@ -47,8 +47,7 @@ public class Question
 		this.difficulte = difficulte;
 		this.type       = type      ;
 
-		this.idQuestion  = Question.compteurQuestion;
-		Question.compteurQuestion++;
+		this.idQuestion  = ++Question.compteurQuestion;
 
 		this.numQuestion = notion.getNbQuestion();
 		this.mettreAJourQuestions();
@@ -166,7 +165,7 @@ public class Question
 	 * un fichier pour la question en cours. Elle crée également un fichier RTF et enregistre les informations de la question.
 	 */
 	public void creerFichierQuestion() {
-    String chemin = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + ".rtf";
+    String chemin = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/question" + this.numQuestion + ".rtf";
     File fichier = new File(chemin);
 
     // Vérifiez si le fichier existe déjà
