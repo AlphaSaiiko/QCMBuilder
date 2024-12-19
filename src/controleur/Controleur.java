@@ -229,6 +229,11 @@ public class Controleur
 		new CreerEvaluation();
 	}
 
+	public static void ouvrirListeQuestion()
+	{
+		new ListeQuestion();
+	}
+
 	public static void ouvrirParametres()
 	{
 		new Parametre();

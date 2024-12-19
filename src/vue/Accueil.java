@@ -53,12 +53,15 @@ public class Accueil extends JFrame
 		JButton btnParametres = new JButton("Paramètres");
 		btnParametres.setFont(new Font("Arial", Font.PLAIN, 18));
 
+		JButton btnVoirQuestions = new JButton("Liste des questions");
+		btnVoirQuestions.setFont(new Font("Arial", Font.PLAIN, 18));
 
 		// Configuration de la taille des boutons
 		Dimension tailleBoutons = new Dimension(300, 50);
 		btnGenererEval.setPreferredSize(tailleBoutons);
 		btnCreerQuestion.setPreferredSize(tailleBoutons);
 		btnParametres.setPreferredSize(tailleBoutons);
+		btnVoirQuestions.setPreferredSize(tailleBoutons);
 
 
 		// Ajout des ActionListeners
@@ -91,10 +94,16 @@ public class Accueil extends JFrame
 			this.dispose();
 		});
 
+		btnVoirQuestions.addActionListener(e -> {
+			Controleur.ouvrirListeQuestion();
+			this.dispose();
+		});
+
 
 		// Ajout des boutons au panel des boutons
 		panelBoutons.add(btnParametres, gbcBoutons);
 		panelBoutons.add(btnCreerQuestion, gbcBoutons);
+		panelBoutons.add(btnVoirQuestions, gbcBoutons);
 		panelBoutons.add(btnGenererEval, gbcBoutons);
 
 
