@@ -28,7 +28,7 @@ public class Question
 	private List<IOption> listeOptions    ;
 	private Notion        notion          ;
 	private final int idQuestion;
-	private static int compteurQuestion = 1;
+	private static int compteurQuestion = 0;
 
 
 
@@ -49,7 +49,7 @@ public class Question
 
 		this.idQuestion  = ++Question.compteurQuestion;
 
-		this.numQuestion = notion.getNbQuestion();
+		this.numQuestion = notion.getNbQuestion() - 1;
 		this.listeComplements = new ArrayList<>();
 		this.listeOptions = new ArrayList<>();
 		this.creerFichierQuestion();
