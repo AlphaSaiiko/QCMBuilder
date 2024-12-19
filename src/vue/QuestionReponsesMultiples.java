@@ -10,7 +10,7 @@ import javax.swing.*;
 import modele.*;
 import modele.option.Option;
 
-public class QuestionReponseMultiple extends JFrame
+public class QuestionReponsesMultiples extends JFrame
 {
 	private JPanel questionPanel;
 	private JTextArea questionArea;
@@ -20,7 +20,7 @@ public class QuestionReponseMultiple extends JFrame
 	private int optionsMax       = 6; // Limite du nombre de réponses
 	private int optionsActuelles = 0; // Compteur des réponses ajoutées
 
-	public QuestionReponseMultiple(Question question) 
+	public QuestionReponsesMultiples(Question question) 
 	{
 		this.question     = question;
 		this.groupeBouton = new ArrayList<JCheckBox>();
@@ -199,7 +199,7 @@ public class QuestionReponseMultiple extends JFrame
 				if (! reponsesRemplies)													erreurs += "N'oubliez pas de remplir toutes les réponses.\n";
 				if (optionsActuelles < 2)											    erreurs += "Vous devez avoir au moins deux options. \n";
 				if (optionsActuelles > optionsMax)										erreurs += "Vous ne pouvez avoir que six options maximum. \n";
-				if (QuestionReponseMultiple.this.questionArea.getText().trim().isEmpty()) erreurs += "Veuillez remplir la question. \n";
+				if (QuestionReponsesMultiples.this.questionArea.getText().trim().isEmpty()) erreurs += "Veuillez remplir la question. \n";
 
 				if (erreurs.trim().isEmpty())
 				{
@@ -217,11 +217,11 @@ public class QuestionReponseMultiple extends JFrame
 					}
 
 					// Fermer la fenêtre
-					QuestionReponseMultiple.this.dispose();
+					QuestionReponsesMultiples.this.dispose();
 					new Accueil();
 				
 				}
-				else JOptionPane.showMessageDialog(QuestionReponseMultiple.this, erreurs, "Erreur", JOptionPane.ERROR_MESSAGE);
+				else JOptionPane.showMessageDialog(QuestionReponsesMultiples.this, erreurs, "Erreur", JOptionPane.ERROR_MESSAGE);
 				
 			}
 		});
