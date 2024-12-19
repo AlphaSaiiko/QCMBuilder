@@ -71,10 +71,6 @@ public class Controleur
 						notion = Notion.creerNotion(ligneQuestion[cpt], ressource);
 							
 						Controleur.chargerQuestion(notion);
-
-
-						// Ajout de la notion à la ressource
-						System.out.println("Notion ajoutée à la ressource : " + ressource.getId() + "_" + ressource.getNom());
 					}
 				}
 				
