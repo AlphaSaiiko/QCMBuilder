@@ -125,10 +125,6 @@ public class Controleur
 				int nbPoints = Integer.valueOf(String.valueOf(ligne[2]));
 				int temps = Integer.valueOf(String.valueOf(ligne[3]));
 				int difficulte = Integer.valueOf(String.valueOf(ligne[4]));
-
-				
-				
-
 				
 				Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
 				tmp.setEnonce(intitule);
@@ -237,9 +233,9 @@ public class Controleur
 		new Accueil();
 	}
 
-	public static void recupererQuestion(Evaluation eval, Notion notion, int tfValue, int fValue, int mValue, int dValue)
+	public static void recupererQuestion(Evaluation eval, Notion notion, int tf, int f, int m, int d)
 	{
-		eval.recupererQuestion(notion, tfValue, fValue, mValue, dValue);
+		eval.recupererQuestion(notion, tf, f, m, d);
 	}
 
 	public static void creerNotion(String titreNotion, Ressource ressource)

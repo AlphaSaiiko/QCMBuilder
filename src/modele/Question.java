@@ -2,6 +2,7 @@ package modele;
 
 import controleur.Controleur;
 import controleur.ControleurFichier;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import modele.option.IOption;
@@ -163,13 +164,21 @@ public class Question
 	 * Cette méthode utilise le contrôleur de fichiers pour générer un répertoire spécifique à la notion et y ajouter
 	 * un fichier pour la question en cours. Elle crée également un fichier RTF et enregistre les informations de la question.
 	 */
-	public void creerFichierQuestion()
-	{
-		ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
-		fichierControleur.ajouterFichier("question" + this.numQuestion);
-		fichierControleur.ajouterRtf("question" + this.numQuestion + "/question" + this.numQuestion);
-		fichierControleur.ecrireQuestion("question" + this.numQuestion + "/question" + this.numQuestion, this);
-	}
+	public void creerFichierQuestion() {
+    String chemin = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + ".rtf";
+    File fichier = new File(chemin);
+
+    // Vérifiez si le fichier existe déjà
+    if (!fichier.exists()) {
+        ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
+        fichierControleur.ajouterFichier("question" + this.numQuestion);
+        fichierControleur.ajouterRtf("question" + this.numQuestion + "/question" + this.numQuestion);
+        fichierControleur.ecrireQuestion("question" + this.numQuestion + "/question" + this.numQuestion, this);
+        System.out.println("Fichier créé : " + chemin);
+    } else {
+        System.out.println("Le fichier existe déjà : " + chemin);
+    }
+}
 
 
 
