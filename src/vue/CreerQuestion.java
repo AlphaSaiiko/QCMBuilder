@@ -261,7 +261,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 					dispose();
 				} else if ("Question à choix multiple à réponse multiple".equals(typeSelectionne)) {
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRM");
-					new QuestionReponseMultiple(tmp);
+					new QuestionReponsesMultiples(tmp);
 					dispose();
 				} else if ("Question à association d’éléments".equals(typeSelectionne)) {
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAE");
@@ -269,7 +269,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 					dispose();
 				} else if ("Question avec élimination de propositions de réponses".equals(typeSelectionne)) {
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAEPR");
-					new QuestionAvecElimination(tmp);
+					new QuestionElimination(tmp);
 					dispose();
 				}
 			}

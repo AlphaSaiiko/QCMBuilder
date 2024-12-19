@@ -9,7 +9,7 @@ import javax.swing.*;
 import modele.Question;
 import modele.option.OptionElimination;
 
-public class QuestionAvecElimination extends JFrame
+public class QuestionElimination extends JFrame
 {
 	/**
 	 * +-------------+
@@ -38,7 +38,7 @@ public class QuestionAvecElimination extends JFrame
 	 * +--------------+
 	 */
 
-	public QuestionAvecElimination(Question question)
+	public QuestionElimination(Question question)
 	{
 		this.question = question;
 
@@ -335,7 +335,7 @@ public class QuestionAvecElimination extends JFrame
 				if (! reponsesRemplies)                                                   { erreurs += "N'oubliez pas de remplir toutes les réponses.\n" ; }
 				if (nbOptions < 2)                                                        { erreurs += "Vous devez avoir au moins deux options. \n"      ; }
 				if (nbOptions > nbMaxOptions)                                             { erreurs += "Vous ne pouvez avoir que six options maximum. \n"; }
-				if (QuestionAvecElimination.this.panelEnonce.getTexte().trim().isEmpty()) { erreurs += "Veuillez remplir la question. \n"                ; }
+				if (QuestionElimination.this.panelEnonce.getTexte().trim().isEmpty()) { erreurs += "Veuillez remplir la question. \n"                ; }
 
 				if (erreurs.trim().isEmpty())
 				{
@@ -375,11 +375,11 @@ public class QuestionAvecElimination extends JFrame
 
 
 						// Fermer la fenêtre
-						QuestionAvecElimination.this.dispose();
+						QuestionElimination.this.dispose();
 						new Accueil();
 					}
 				}
-				else JOptionPane.showMessageDialog(QuestionAvecElimination.this, erreurs, "Erreur", JOptionPane.ERROR_MESSAGE);
+				else JOptionPane.showMessageDialog(QuestionElimination.this, erreurs, "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
