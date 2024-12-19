@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>QCM Elimination</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1>Quel mot-clé en Java permet de hériter d'une classe parent ?</h1>
+		<p class="qcm-type">une seul réponse possible</p>
+		<div class="question">
+			<div class="rectangle" onclick="changeCouleur(this)">Implements</div>
+			<div class="rectangle" onclick="changeCouleur(this)">Extends</div>
+			<div class="rectangle" onclick="changeCouleur(this)">Inherits</div>
+			<div class="rectangle" onclick="changeCouleur(this)">Super</div>
+		</div>
+		<div class="buttons-container">
+			<button onclick="precedent()">Précédent</button>
+			<button onclick="feedback()">Feedback</button>
+			<button onclick="valider()">Valider</button>
+			<button onclick="window.location.href = 'fin.html';">Suivant</button>
+			<button onclick="Eliminer()">Eliminer</button>
+		</div>
+	</div>
+	<script src="script.js"></script>
+	<script>
+		setDifficulte('facile');
+	</script>
+</body>
+
+</html>

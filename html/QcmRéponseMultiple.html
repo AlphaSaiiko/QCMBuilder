@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>QCMBuilder : Question à choix multiple : Réponse multiple</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1>En Java, quelles sont les caractéristiques d'une interface ?</h1>
+		<p class="qcm-type">plusieurs réponses possibles</p>
+		<div class="rectangles-container">
+			<div class="rectangle" onclick="changeCouleurMultiple(this)">Une interface peut contenir des méthodes abstraites.</div>
+			<div class="rectangle" onclick="changeCouleurMultiple(this)">Une interface peut contenir des méthodes statiques.</div>
+			<div class="rectangle" onclick="changeCouleurMultiple(this)">Une interface peut contenir des variables d'instance.</div>
+			<div class="rectangle" onclick="changeCouleurMultiple(this)">Une interface peut être implémentée par plusieurs classes.</div>
+			<div class="rectangle" onclick="changeCouleurMultiple(this)">Une interface peut être instanciée directement.</div>
+			<div class="rectangle" onclick="changeCouleurMultiple(this)">Une interface peut contenir des méthodes par défaut.</div>
+		</div>
+		<div class="buttons-container">
+			<button onclick="precedent()">Précédent</button>
+			<button onclick="feedback()">Feedback</button>
+			<button onclick="valider()">Valider</button>
+			<button onclick="window.location.href = 'Association.html';">Suivant</button>
+		</div>
+	</div>
+	<script src="script.js"></script>
+	<script>
+		setDifficulte('moyen');
+	</script>
+</body>
+
+</html>

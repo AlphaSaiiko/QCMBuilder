@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>QCMBuilder : Associez chaque concept Java à sa description</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1>Associez chaque concept Java à sa description.</h1>
+		<p class="qcm-type">Associer chaque sujet à sa réponse</p>
+		<div class="content">
+			<div class="sujet">
+				<div class="rectangle" onclick="Association(this)">Interface</div>
+				<div class="rectangle" onclick="Association(this)">Classe abstraite</div>
+				<div class="rectangle" onclick="Association(this)">Garbage Collector</div>
+				<div class="rectangle" onclick="Association(this)">Polymorphisme</div>
+				<div class="rectangle" onclick="Association(this)">Encapsulation</div>
+			</div>
+			<div class="proposition">
+				<div class="rectangle" onclick="Association(this)">Permet de regrouper des méthodes et attributs tout en
+					pouvant inclure des méthodes déjà implémentées.</div>
+				<div class="rectangle" onclick="Association(this)">Propriété qui permet à un objet de prendre
+					différentes formes selon son contexte d'exécution.</div>
+				<div class="rectangle" onclick="Association(this)">Mécanisme qui protège les données d'une classe en les
+					rendant accessibles uniquement via des méthodes dédiées.</div>
+				<div class="rectangle" onclick="Association(this)">Permet de déclarer des méthodes sans implémentation,
+					qui doivent être définies dans les classes qui l'implémentent.</div>
+				<div class="rectangle" onclick="Association(this)">Composant qui gère la mémoire en supprimant
+					automatiquement les objets inutilisés.</div>
+			</div>
+		</div>
+		<svg id="svg-container"
+			style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></svg>
+		<div class="buttons-container">
+			<button onclick="precedent()">Précédent</button>
+			<button onclick="feedback()">Feedback</button>
+			<button onclick="valider()">Valider</button>
+			<button onclick="window.location.href = 'QcmAvecElimination.html';">Suivant</button>
+		</div>
+	</div>
+	<script src="script.js"></script>
+	<script>
+		setDifficile('difficile');
+	</script>
+</body>
+
+</html>

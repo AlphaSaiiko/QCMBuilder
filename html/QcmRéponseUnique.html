@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>QCMBuilder : Question à choix multiple : Réponse Unique</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1>En Java, laquelle de ces affirmations sur les classes et objets est correcte ?</h1>
+		<p class="qcm-type">Une seul réponse possible</p>
+		<div class="rectangles-container">
+			<div class="rectangle" onclick="changeCouleur(this)">Une classe peut avoir plusieurs constructeurs.</div>
+			<div class="rectangle" onclick="changeCouleur(this)">Une classe peut hériter de plusieurs classes à la fois.
+			</div>
+			<div class="rectangle" onclick="changeCouleur(this)">Un objet peut être créé sans utiliser de constructeur.
+			</div>
+			<div class="rectangle" onclick="changeCouleur(this)">Une méthode déclarée static peut accéder directement
+				aux variables d'instance de la classe.</div>
+		</div>
+		<div class="buttons-container">
+			<button onclick="precedent()">Précédent</button>
+			<button onclick="feedback()">Feedback</button>
+			<button onclick="valider()">Valider</button>
+			<button onclick="window.location.href = 'QcmRéponseMultiple.html';">Suivant</button>
+		</div>
+	</div>
+	<script src="script.js"></script>
+	<script>
+		setDifficulte('tresfacile')
+	</script>
+</body>
+
+</html>

@@ -1,187 +1,177 @@
-/* Réinitialisation générale */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Corps de la page */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    text-align: center;
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f9;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
 }
 
-/* Titres et paragraphes */
-h2 {
-    margin-bottom: 15px;
-}
-
-p {
-    margin-bottom: 20px;
-}
-
-/* Conteneur des colonnes */
-.association-entitees {
-    display: flex;
-    justify-content: center;
-    gap: 150px;
-    margin-bottom: 30px;
-}
-
-.proposition-qcm {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    margin-bottom: 30px;
-}
-
-/* Colonne et listes */
-.colonne {
-    text-align: left;
-}
-
-.terms,
-.definitions {
-    list-style: none;
-    padding: 0;
-}
-
-.terms li,
-.definitions li {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Conteneur des boutons */
-.button-container button {
-    padding: 10px 20px;
-    margin: 5px;
-    font-size: 16px;
-    border: none;
-    background-color: #007BFF;
-    color: #ffffff;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.button-container button:hover {
-    background-color: #0056b3;
-}
-
-/* Réinitialisation générale */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Style général du corps */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    text-align: center;
-}
-/* Conteneur principal */
 .container {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 30px 50px;
-    max-width: 500px;
-    width: 90%;
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	width: 80%;
+	max-width: 1000px;
 }
 
-/* Titre principal */
 h1 {
-    margin-bottom: 20px;
-    font-size: 28px;
-    color: #333;
+	color: #333;
+	margin-bottom: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-/* Paragraphes */
-p {
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #555;
+.qcm-type {
+	color: #666;
+	font-size: 14px;
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: center;
 }
 
-/* Bouton */
-button {
-    margin-top: 20px;
-    padding: 12px 20px;
-    font-size: 18px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.content {
+	display: flex;
+	justify-content: space-between;
 }
 
-button:hover {
-    background-color: #0056b3;
+.sujet,
+.proposition {
+	width: 48%;
 }
 
-/* Style général */
-body {
-    font-family: Arial, sans-serif;
+.rectangle {
+	width: 100%;
+	height: 50px;
+	background-color: grey;
+	margin: 10px 0;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	border-radius: 10px;
+	transition: background-color 0.3s, transform 0.3s;
 }
 
-h2 {
-    text-align: center;
+.rectangle:hover {
+	transform: scale(1.05);
 }
 
-.association-entitees {
-    display: flex;
-    justify-content: center;
-    position: relative;
+.buttons-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
 }
 
-.colonne {
-    margin: 0 20px;
+.buttons-container button {
+	padding: 10px 20px;
+	font-size: 16px;
+	cursor: pointer;
+	border: none;
+	border-radius: 5px;
+	background-color: #007bff;
+	color: white;
+	transition: background-color 0.3s, transform 0.3s;
+	margin: 0 10px;
 }
 
-.terms, .definitions {
-    list-style-type: none;
-    padding: 0;
+.buttons-container button:hover {
+	background-color: #0056b3;
+	transform: scale(1.05);
 }
 
-li {
-    padding: 10px;
-    border: 1px solid #ddd;
-    cursor: pointer;
+.buttons-container button:active {
+	background-color: #004494;
+}	
+
+/* Classes pour les couleurs d'ombre en fonction de la difficulté */
+.tresfacile {
+	box-shadow: 0 4px 8px rgba(0, 255, 0, 0.5);
+	/* Vert pour facile */
 }
 
-li.selected {
-    background-color: #d1e7dd; /* Vert clair */
-    border-color: #0f5132;
+.facile {
+	box-shadow: 0 4px 8px rgba(255, 255, 0, 0.5);
+	/* Jaune pour moyen */
 }
 
-li.matched {
-    background-color: #cfe2ff; /* Bleu clair pour les éléments appariés */
-    pointer-events: none;
+.moyen {
+	box-shadow: 0 4px 8px rgba(255, 0, 0, 0.5);
+	/* Rouge pour difficile */
 }
 
-#connection-lines {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Empêche les clics sur le SVG */
+.difficile {
+	box-shadow: grey;
+}
+
+
+.corp-titre {
+		background-color: #fff;
+		padding: 20px;
+		border-radius: 10px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		width: 80%;
+		max-width: 500px;
+}
+
+.corp-titre p {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.corp-titre span {
+	font-weight: bold;
+	display: flex;
+	padding: 10px;
+}
+
+/* Styles pour les cercles de couleur derrière les lettres "N" et "F" */
+.cercleFacile {
+	position: relative;
+	display: inline-block;
+	background-color: green;
+	width: .5em;
+	height: .5em;
+	border-radius: 100%;
+	display: flex;
+	align-items: center;
+	margin: 0 5px;
+	justify-content: center;
+}
+
+.cercleMoyen {
+	position: relative;
+	display: inline-block;
+	background-color: red;
+	width: .5em;
+	height: .5em;
+	border-radius: 100%;
+	display: flex;
+	align-items: center;
+	margin: 0 5px;
+	justify-content: center;
+}
+
+.boutonDiv {
+	display:flex;
+	justify-content: center	;
+	align-items: center;
+}
+
+.corp-titre button {
+		padding: 10px 20px;
+		font-size: 16px;
+		cursor: pointer;
+		border: none;
+		border-radius: 5px;
+		background-color: #007bff;
+		color: white;
+		transition: background-color 0.3s, transform 0.3s;
+		margin: 0 10px;
 }

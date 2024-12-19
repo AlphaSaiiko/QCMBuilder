@@ -1,14 +1,9 @@
 package modele;
 
-import modele.option.*;
-import controleur.*;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import java.util.List;
+import modele.option.IOption;
 
 public class CreationQuestionHTML {
 
@@ -67,9 +62,48 @@ public class CreationQuestionHTML {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-
 	}
+
+	public void pageQuestionChoixUnique(Question question) {
+		StringBuilder htmlContent = new StringBuilder();
+	
+		htmlContent.append("<!DOCTYPE html>\n");
+		htmlContent.append("<html lang=\"fr\">\n");
+		htmlContent.append("<head>\n");
+		htmlContent.append("    <meta charset=\"UTF-8\">\n");
+		htmlContent.append("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n");
+		htmlContent.append("    <title>QCMBuilder : Question à choix multiple : Réponse Unique</title>\n");
+		htmlContent.append("    <link rel=\"stylesheet\" href=\"style.css\">\n");
+		htmlContent.append("</head>\n");
+		htmlContent.append("<body>\n");
+		htmlContent.append("    <div class=\"container\">\n");
+		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>\n");
+		htmlContent.append("        <p class=\"qcm-type\">Une seule réponse possible</p>\n");
+		htmlContent.append("        <div class=\"rectangles-container\">\n");
+	
+		for (IOption option : question.getEnsOptions())
+		{
+			htmlContent.append("            <div class=\"rectangle\" onclick=\"changeCouleur(this)\">").append(option.getEnonce()).append("</div>\n");
+		}
+	
+		htmlContent.append("        </div>\n");
+		htmlContent.append("        <div class=\"buttons-container\">\n");
+		htmlContent.append("            <button onclick=\"precedent()\">Précédent</button>\n");
+		htmlContent.append("            <button onclick=\"feedback()\">Feedback</button>\n");
+		htmlContent.append("            <button onclick=\"valider()\">Valider</button>\n");
+		htmlContent.append("            <button onclick=\"window.location.href = 'QcmRéponseMultiple.html';\">Suivant</button>\n");
+		htmlContent.append("        </div>\n");
+		htmlContent.append("    </div>\n");
+		htmlContent.append("    <script src=\"script.js\"></script>\n");
+		htmlContent.append("    <script>\n");
+		htmlContent.append("        setDifficulte('tresfacile')\n");
+		htmlContent.append("    </script>\n");
+		htmlContent.append("</body>\n");
+		htmlContent.append("</html>");
+	
+		System.out.println(htmlContent.toString());
+	}
+	
 
 	private void ecrireTimer(int duree)
 	{
