@@ -237,6 +237,11 @@ public class Controleur
 		new Accueil();
 	}
 
+	public static void recupererQuestion(Evaluation eval, Notion notion, int tfValue, int fValue, int mValue, int dValue)
+	{
+		eval.recupererQuestion(notion, tfValue, fValue, mValue, dValue);
+	}
+
 	public static void creerNotion(String titreNotion, Ressource ressource)
 	{
 		Notion.creerNotion(titreNotion, ressource);

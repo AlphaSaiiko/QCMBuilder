@@ -1,21 +1,17 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import modele.CreationHTML;
 import modele.Evaluation;
 import modele.Notion;
 import modele.Ressource;
-import modele.CreationHTML;
-import controleur.*;
 
 public class TabEvaluation extends JFrame
 {
@@ -167,13 +163,24 @@ public class TabEvaluation extends JFrame
 	{
 		// Collecter les notions sélectionnées
 		List<Notion> selectedNotions = new ArrayList<>();
+		Evaluation evaluation = new Evaluation(ressource, this.bChrono);
+
 		for (int row = 0; row < model.getRowCount() - 1; row++)
 		{
 			Boolean isSelected = (Boolean) model.getValueAt(row, 1);
 			if (isSelected)
 			{
 				String notionName = (String) model.getValueAt(row, 0);
-				selectedNotions.add(new Notion(notionName, ressource));
+				Notion not = Notion.trouverNotionParNom(notionName, ressource);
+				selectedNotions.add(not);
+
+				// Récupérer les valeurs numériques des colonnes TF, F, M, D
+				int tfValue = Integer.parseInt((String) model.getValueAt(row, 2));
+				int fValue = Integer.parseInt((String) model.getValueAt(row, 3));
+				int mValue = Integer.parseInt((String) model.getValueAt(row, 4));
+				int dValue = Integer.parseInt((String) model.getValueAt(row, 5));
+
+				Controleur.recupererQuestion(evaluation, not, tfValue, fValue, mValue, dValue);
 			}
 		}
 
@@ -184,71 +191,8 @@ public class TabEvaluation extends JFrame
 			return;
 		}
 
-		// Créer l'objet Evaluation
-		Evaluation evaluation = new Evaluation(ressource, this.bChrono); // Exemple
-																					// :
-																					// la
-																					// première
-																					// notion
-		for (Notion notion : selectedNotions)
-		{
-			evaluation.ajouterNotion(notion);
-		}
-
-		// Envoyer l'évaluation
-		sendEvaluation(evaluation);
-
 		//HTML
 		CreationHTML html = new CreationHTML(evaluation);
-		// Enregistrer l'évaluation dans un fichier
-		enregistrerEvaluation(evaluation);
-	}
-
-
-	private void enregistrerEvaluation(Evaluation evaluation)
-	{
-		JFileChooser dirChooser = new JFileChooser();
-		dirChooser.setDialogTitle("Choisir un emplacement pour le répertoire");
-		dirChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Sélectionne uniquement les répertoires
-
-		// Ajoute un PropertyChangeListener pour réinitialiser le champ de nom de fichier
-		dirChooser.addPropertyChangeListener(evt -> {
-			if (JFileChooser.DIRECTORY_CHANGED_PROPERTY.equals(evt.getPropertyName())) {
-				dirChooser.setSelectedFile(null); // Réinitialise le champ de nom de fichier
-			}
-		});
-
-		int userSelection = dirChooser.showSaveDialog(this);
-
-		if (userSelection == JFileChooser.APPROVE_OPTION) {
-			String dirName = dirChooser.getSelectedFile().getAbsolutePath();
-			File directory = new File(dirName);
-
-			// Vérifie si le répertoire existe, sinon le crée
-			if (!directory.exists()) {
-				directory.mkdirs();
-				System.out.println("Répertoire créé à l'emplacement : " + dirName);
-			} else {
-				System.out.println("Le répertoire existe déjà : " + dirName);
-			}
-
-			try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(directory, "evaluation.txt")))) {
-				// Écris quelque chose dans le fichier pour tester
-				writer.write("Contenu de l'évaluation...");
-				JOptionPane.showMessageDialog(this, "Évaluation enregistrée dans le répertoire : " + dirName);
-			} catch (IOException e) {
-				e.printStackTrace();
-				JOptionPane.showMessageDialog(this, "Erreur lors de l'enregistrement de l'évaluation.", "Erreur",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		}
-		}
-
-	private void sendEvaluation(Evaluation evaluation)
-	{
-		JOptionPane.showMessageDialog(this, "Évaluation générée et envoyée avec succès : " + evaluation.getLienEval());
-		System.out.println("Évaluation générée et envoyée avec succès : " + evaluation.getLienEval());
-		System.out.println("Détails de l'évaluation : " + evaluation.toString());
 	}
 
 	
@@ -258,7 +202,6 @@ public class TabEvaluation extends JFrame
 	{
 		private final Color[] colors = { Color.GREEN, Color.CYAN, Color.RED, Color.GRAY };
 
-		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column)
 		{
@@ -268,7 +211,6 @@ public class TabEvaluation extends JFrame
 
 			return new JComponent()
 			{
-				@Override
 				protected void paintComponent(Graphics g)
 				{
 					super.paintComponent(g);
@@ -311,7 +253,6 @@ public class TabEvaluation extends JFrame
 			textField = (JTextField) getComponent();
 		}
 
-		@Override
 		public boolean stopCellEditing()
 		{
 			String value = textField.getText();
@@ -330,7 +271,6 @@ public class TabEvaluation extends JFrame
 
 	class CheckBoxRenderer extends JCheckBox implements TableCellRenderer
 	{
-		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column)
 		{
