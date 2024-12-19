@@ -5,124 +5,193 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+
 import modele.Question;
 import modele.option.OptionElimination;
 
 public class QuestionAvecElimination extends JFrame
 {
-	private JPanel panelQuestion;
-	private JTextArea textareaQuestion;
-	private ButtonGroup groupeBouton;
-	private Question question;
+	/**
+	 * +-------------+
+	 * |  ATTRIBUTS  |
+	 * +-------------+
+	 */
 
-	private int optionsMax		 = 6;
-	private int optionsActuelles = 0;
+	private       Question    question              ;
+	private       JPanel      panelQuestion         ;
+	private       JPanel      panelBoutons          ;
+	private       JPanel      panelOptions          ;
+	private       PanelSaisie panelEnonce           ;
+	private       PanelSaisie panelExplication      ;
+	private       JFrame      frameExplication      ;
+	private       int         nbOptions        = 0  ;
+	private final int         nbMaxOptions     = 6  ;
+	private final int         HAUTEUR_OPTIONS  = 150;
+	private final int         LARGEUR_OPTIONS  = 600;
+
+
+
+
+	/**
+	 * +--------------+
+	 * | CONSTRUCTEUR |
+	 * +--------------+
+	 */
 
 	public QuestionAvecElimination(Question question)
 	{
 		this.question = question;
-		this.groupeBouton = new ButtonGroup();
-		// Initialiser le conteneur principal
-		JPanel panelPrincipal = new JPanel(new BorderLayout());
 
-		// Ajouter le bouton "Retour" en haut à gauche
+
+		// Panel principal
+		JPanel panelPrincipal = new JPanel();
+		panelPrincipal.setLayout(new BorderLayout());
+
+
+		// Bouton "Retour" en haut à gauche
 		JButton btnRetour = new JButton("Retour");
-		btnRetour.addActionListener(e -> {
+
+		btnRetour.addActionListener(e ->
+		{
 			Controleur.ouvrirCreerQuestion();
 			dispose();
 		});
+
 		JPanel panelRetour = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panelRetour.add(btnRetour);
 
-		// Ajouter la ressource et la notion en haut à gauche
-		JLabel nomResEtNotion = new JLabel("Ressource : " + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + 
-		                              "  ;  Notion : " + question.getNotion().getNom());
-		panelRetour.add(nomResEtNotion);
+
+		// Ressource et la notion en haut à gauche
+		JLabel lblRessourceNotion = new JLabel(
+			"Ressource : " + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + 
+		    "  ;  Notion : " + question.getNotion().getNom()
+		);
+		panelRetour.add(lblRessourceNotion);
 		this.add(panelRetour, BorderLayout.NORTH);
 
-		// Initialiser le panel des questions
-		panelQuestion = new JPanel();
-		panelQuestion.setLayout(new BoxLayout(panelQuestion, BoxLayout.Y_AXIS));
 
-		// Ajouter un champ de texte pour écrire la question
-		textareaQuestion = new JTextArea(5, 60);
-		textareaQuestion.setLineWrap(true);
-		textareaQuestion.setWrapStyleWord(true);
-		textareaQuestion.setFont(new Font("Arial", Font.PLAIN, 18));
-		textareaQuestion.setMaximumSize(new Dimension(Integer.MAX_VALUE, textareaQuestion.getPreferredSize().height));
-		panelQuestion.add(new JScrollPane(textareaQuestion));
+		// Panel de la question (texte et options)
+		panelQuestion = new JPanel(new BorderLayout());
 
-		// Ajouter un panel pour les boutons "Ajouter", "Explication" et "Enregistrer"
-		JPanel panelBoutons = new JPanel();
-		panelBoutons.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		// Ajouter un bouton "Ajouter" 
-		JButton boutonAjouter = new JButton("Ajouter");
-		panelBoutons.add(boutonAjouter);
+		// PanelSaisie pour l'énoncé
+		panelEnonce = new PanelSaisie();
+		Dimension dimensionsEnonce = new Dimension(0, 400);
+		panelEnonce.setPreferredSize(dimensionsEnonce);
+		panelEnonce.setMinimumSize(dimensionsEnonce);
+		panelEnonce.setMaximumSize(dimensionsEnonce);
+		panelQuestion.add(panelEnonce, BorderLayout.NORTH);
+		
 
-		// Ajouter un bouton "Explication" 
-		JButton boutonExplication = new JButton("Explication");
-		panelBoutons.add(boutonExplication);
+		// Panel pour les options
+		panelOptions = new JPanel();
+		panelOptions.setLayout(new BoxLayout(panelOptions, BoxLayout.Y_AXIS));
+		panelQuestion.add(panelOptions, BorderLayout.CENTER);
 
-		// Ajouter un bouton "Enregistrer"
-		JButton boutonEnregistrer = new JButton("Enregistrer");
-		panelBoutons.add(boutonEnregistrer);
 
-		// Ajouter le panel des boutons au panel des questions
-		panelQuestion.add(panelBoutons);
+		// Panel pour les boutons
+        panelBoutons = new JPanel();
+        panelBoutons.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		// Ajouter un ActionListener au bouton "Ajouter"
-		boutonAjouter.addActionListener(new ActionListener()
+		JButton btnAjouter = new JButton("Ajouter une option");
+
+		btnAjouter.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if (optionsActuelles >= optionsMax)
+				// Cas ou il y a trop d'options
+				if (nbOptions >= nbMaxOptions)
 				{
-					JOptionPane.showMessageDialog(null,
-							"Le nombre maximum de réponses est atteint (" + optionsMax + ").", "Erreur",
-							JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(
+						null,
+						"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
+						"Erreur",
+						JOptionPane.ERROR_MESSAGE
+					);
+
 					return;
 				}
 				
-				// Créer un nouveau panel trash
-				JPanel newTrashPanel = new JPanel(new GridBagLayout());
+
+				// Panel contenant l'option
+				JPanel panelOption = new JPanel(new GridBagLayout());
 				GridBagConstraints gbc = new GridBagConstraints();
 				gbc.insets = new Insets(5, 5, 5, 5);
+
+
+				// Bouton "Supprimer"
+				ImageIcon iconeSupprimer = new ImageIcon(
+					new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
+				);
+
+				JButton btnSupprimer = new JButton(iconeSupprimer);
+				btnSupprimer.setPreferredSize(new Dimension(40, 40));
+				btnSupprimer.setBorderPainted(false);
+				btnSupprimer.setContentAreaFilled(false);
+				btnSupprimer.setFocusPainted(false);
+				btnSupprimer.setOpaque(false);
+
 				gbc.gridx = 0;
 				gbc.gridy = 0;
-				gbc.anchor = GridBagConstraints.WEST;
+				gbc.anchor = GridBagConstraints.CENTER;
+				gbc.fill = GridBagConstraints.NONE;
+				panelOption.add(btnSupprimer, gbc);
 
-				// Ajouter un label intitulé "Réponse:"
-				JLabel labelReponse = new JLabel("Réponse:");
-				labelReponse.setFont(new Font("Arial", Font.PLAIN, 18));
-				newTrashPanel.add(labelReponse, gbc);
+				btnSupprimer.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						panelOptions.remove(panelOption);
+						nbOptions--;
+						panelOptions.revalidate();
+						panelOptions.repaint();
+					}
+				});
 
-				// Augmenter la taille du JTextField
-				JTextField newTextField = new JTextField();
-				newTextField.setFont(new Font("Arial", Font.PLAIN, 18));
-				newTextField.setPreferredSize(new Dimension(400, 30));
+
+				// Label "Option :"
+				JLabel labelReponse = new JLabel("Option :");
+
 				gbc.gridx = 1;
+				gbc.gridy = 0;
 				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.weightx = 1.0;
-				newTrashPanel.add(newTextField, gbc);
+				gbc.anchor = GridBagConstraints.CENTER;
+				panelOption.add(labelReponse, gbc);
+
+
+				// Panel de saisie pour l'option
+				PanelSaisie panelSaisieOption = new PanelSaisie(false);
+				panelSaisieOption.setHauteur(HAUTEUR_OPTIONS);
+				panelSaisieOption.setLargeur(LARGEUR_OPTIONS);
 
 				gbc.gridx = 2;
-				gbc.fill = GridBagConstraints.NONE;
-				gbc.weightx = 0;
+				gbc.gridy = 0;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+				gbc.anchor = GridBagConstraints.CENTER;
+				gbc.weightx = 1.0;
+				panelOption.add(panelSaisieOption, gbc);
 
-				// Ajouter un label pour l'ordre
-				JLabel labelOrdre = new JLabel("Ordre:");
-				labelOrdre.setFont(new Font("Arial", Font.PLAIN, 18));
+
+				// Label "Ordre :"
+				JLabel labelOrdre = new JLabel("Ordre :");
+
 				gbc.gridx = 3;
-				newTrashPanel.add(labelOrdre, gbc);
+				gbc.gridy = 0;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+				gbc.anchor = GridBagConstraints.CENTER;
+				panelOption.add(labelOrdre, gbc);
 
-				// Ajouter le JTextField pour l'ordre
+
+				// JTextField pour l'ordre
 				JTextField texteOrdre = new JTextField();
-				texteOrdre.setFont(new Font("Arial", Font.PLAIN, 18));
-				texteOrdre.setPreferredSize(new Dimension(50, 30));
-				gbc.gridx = 4;
-				newTrashPanel.add(texteOrdre, gbc);
+				texteOrdre.setPreferredSize(new Dimension(30, 30));
 
+				gbc.gridx = 4;
+				gbc.gridy = 0;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+				gbc.anchor = GridBagConstraints.CENTER;
+				panelOption.add(texteOrdre, gbc);
 
 				texteOrdre.addActionListener(new ActionListener()
 				{
@@ -133,19 +202,25 @@ public class QuestionAvecElimination extends JFrame
 				});
 
 
-				// Ajouter un label pour les points
-				JLabel labelPoints = new JLabel("Points:");
-				labelPoints.setFont(new Font("Arial", Font.PLAIN, 18));
+				// Label "Points :"
+				JLabel labelPoints = new JLabel("Points :");
+
 				gbc.gridx = 5;
-				newTrashPanel.add(labelPoints, gbc);
+				gbc.gridy = 0;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+				gbc.anchor = GridBagConstraints.CENTER;
+				panelOption.add(labelPoints, gbc);
 
-				// Ajouter le JTextField pour les points
+
+				// JTextField pour les points
 				JTextField textePoints = new JTextField();
-				textePoints.setFont(new Font("Arial", Font.PLAIN, 18));
-				textePoints.setPreferredSize(new Dimension(50, 30));
-				gbc.gridx = 6;
-				newTrashPanel.add(textePoints, gbc);
+				textePoints.setPreferredSize(new Dimension(30, 30));
 
+				gbc.gridx = 6;
+				gbc.gridy = 0;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+				gbc.anchor = GridBagConstraints.CENTER;
+				panelOption.add(textePoints, gbc);
 
 				textePoints.addActionListener(new ActionListener()
 				{
@@ -156,16 +231,17 @@ public class QuestionAvecElimination extends JFrame
 				});
 
 
-				// Ajouter un bouton radio
-				JRadioButton newRadioButton = new JRadioButton();
-				newRadioButton.setPreferredSize(new Dimension(30, 30));
-				groupeBouton.add(newRadioButton);
+				// Bouton radio pour sélectionner la bonne réponse
+				JRadioButton btnRadio = new JRadioButton();
+				btnRadio.setPreferredSize(new Dimension(30, 30));
+
 				gbc.gridx = 7;
-				newTrashPanel.add(newRadioButton, gbc);
+				gbc.gridy = 0;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+				gbc.anchor = GridBagConstraints.CENTER;
+				panelOption.add(btnRadio, gbc);
 
-				
-
-				newRadioButton.addActionListener(new ActionListener()
+				btnRadio.addActionListener(new ActionListener()
 				{
 					public void actionPerformed(ActionEvent e)
 					{
@@ -174,122 +250,115 @@ public class QuestionAvecElimination extends JFrame
 				});
 
 
-
-				// Redimensionner l'icône de poubelle
-				ImageIcon newTrashIcon = new ImageIcon(new ImageIcon("./lib/icones/delete.png").getImage()
-						.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-				JButton newTrashButton = new JButton(newTrashIcon);
-				newTrashButton.setPreferredSize(new Dimension(40, 40));
-				newTrashButton.setBorderPainted(false);
-				newTrashButton.setContentAreaFilled(false);
-				newTrashButton.setFocusPainted(false);
-				newTrashButton.setOpaque(false);
-				gbc.gridx = 8;
-				newTrashPanel.add(newTrashButton, gbc);
-
-				// Ajouter un ActionListener au bouton de poubelle
-				newTrashButton.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						// Supprimer le panel parent lorsque l'icône de poubelle est cliquée
-						panelQuestion.remove(newTrashPanel);
-						panelQuestion.revalidate();
-						panelQuestion.repaint();
-					}
-				});
-
-				// Ajouter le nouveau panel trash au conteneur principal
-				System.out.println(panelQuestion.getComponentCount() - 1);
-				System.out.println(panelQuestion.getComponentCount());
-				panelQuestion.add(newTrashPanel, panelQuestion.getComponentCount() - 1);
-
-				// Incrémenter le compteur de réponses
-				optionsActuelles++;
-
-				// Rafraîchir l'interface utilisateur
-				panelQuestion.revalidate();
-				panelQuestion.repaint();
+				// Ajout du Panel de l'option au panel des options
+				panelOptions.add(panelOption);
+				nbOptions++;
+				panelOptions.revalidate();
+				panelOptions.repaint();
 			}
 		});
 
-		// Ajouter un ActionListener au bouton "Explication"
-		boutonExplication.addActionListener(new ActionListener()
+
+		// Bouton "Explication"
+		JButton btnExplication = new JButton("Explication");
+
+        btnExplication.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                if (frameExplication == null || !frameExplication.isDisplayable())
+                {
+                    frameExplication = new JFrame("Explication");
+                    frameExplication.setSize(400, 300);
+                    frameExplication.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                    panelExplication = new PanelSaisie();
+                    frameExplication.add(panelExplication);
+
+                    frameExplication.setLocationRelativeTo(null);
+                    frameExplication.setVisible(true);
+                }
+                else
+                {
+                    frameExplication.toFront();
+                }
+            }
+        });
+
+
+		// Bouton "Enregistrer"
+		JButton btnEnregistrer = new JButton("Enregistrer");
+
+		btnEnregistrer.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				// Créer et afficher une nouvelle fenêtre pour écrire l'explication
-				JFrame explicationFrame = new JFrame("Explication");
-				explicationFrame.setSize(400, 300);
-				explicationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-				JTextArea explicationArea = new JTextArea(10, 30);
-				explicationArea.setLineWrap(true);
-				explicationArea.setWrapStyleWord(true);
-				explicationArea.setFont(new Font("Arial", Font.PLAIN, 18));
-
-				explicationFrame.add(new JScrollPane(explicationArea));
-				explicationFrame.setVisible(true);
-			}
-		});
-
-		// Ajouter un ActionListener au bouton "Enregistrer"
-		boutonEnregistrer.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				
-				
 				// Vérification si la question à une réponse : AKA si une des options est valide
 				// Vérification si l'une des réponses n'est pas remplie
 				// Vérification si l'une des réponse est illégale (Si une réponse valide à un ordre et un point en moins)
-				boolean aReponse = false;
-				boolean reponsesRemplies = true;
-				if (optionsActuelles < 1) reponsesRemplies = false;
-				if (groupeBouton != null && optionsActuelles > 0)
+				boolean aReponse         = false;
+				boolean reponsesRemplies = true ;
+
+				if (nbOptions < 1)
+					reponsesRemplies = false;
+
+				if (nbOptions > 0)
 				{
-					
-					for (int i = 1; i < panelQuestion.getComponentCount() - 1; i++)
+					for (int i = 0; i < panelOptions.getComponentCount(); i++) 
 					{
-						JPanel panel = (JPanel) panelQuestion.getComponent(i);
-						JTextField textField = (JTextField) panel.getComponent(1);
-						JRadioButton radioButton = (JRadioButton) panel.getComponent(6);
+						Component composant = panelOptions.getComponent(i);
 						
-						if (radioButton.isSelected())
-							aReponse = true;
-						if (textField.getText().trim().isEmpty())
-							reponsesRemplies = false;
-					}
-						
-				}
-
-
+						JPanel panelOption = (JPanel) composant;
 				
+
+						// Récupérez les sous-composants du JPanel
+						Component[] composantsOption = panelOption.getComponents();
+
+						PanelSaisie  panelSaisieOption = (PanelSaisie ) composantsOption[2];
+						JRadioButton btnRadio          = (JRadioButton) composantsOption[7];
+
+
+						// Vérifier les champs de texte vides
+						if (panelSaisieOption.getTexte().isEmpty()) 
+							reponsesRemplies = false;
+
+
+						// Vérifier si il y a une bonne réponse
+						if (btnRadio.isSelected())
+							aReponse = true;
+					}
+				}
 					
 				String erreurs = "";
 
-				if (! aReponse)																	erreurs += "N'oubliez pas de sélectionner une réponse.\n";
-				if (! reponsesRemplies)															erreurs += "N'oubliez pas de remplir toutes les réponses.\n";
-				if (optionsActuelles < 2)														erreurs += "Vous devez avoir au moins deux options. \n";
-				if (optionsActuelles > optionsMax)												erreurs += "Vous ne pouvez avoir que six options maximum. \n";
-				if (QuestionAvecElimination.this.textareaQuestion.getText().trim().isEmpty())	erreurs += "Veuillez remplir la question. \n";
+				if (! aReponse)                                                           { erreurs += "N'oubliez pas de sélectionner une réponse.\n"    ; }
+				if (! reponsesRemplies)                                                   { erreurs += "N'oubliez pas de remplir toutes les réponses.\n" ; }
+				if (nbOptions < 2)                                                        { erreurs += "Vous devez avoir au moins deux options. \n"      ; }
+				if (nbOptions > nbMaxOptions)                                             { erreurs += "Vous ne pouvez avoir que six options maximum. \n"; }
+				if (QuestionAvecElimination.this.panelEnonce.getTexte().trim().isEmpty()) { erreurs += "Veuillez remplir la question. \n"                ; }
 
 				if (erreurs.trim().isEmpty())
 				{
-					// Enregistrer la question dans un fichier		
-					question.setEnonce(textareaQuestion.getText());
+					// Enregistrer l'énoncé	
+					question.setEnonce(panelEnonce.getTexte());
+
 
 					//Enregistrer les réponses
-					for (int i = 1; i < panelQuestion.getComponentCount() - 1; i++)
+					for (int i = 0; i < panelOptions.getComponentCount(); i++)
 					{
-						JPanel panel = (JPanel) panelQuestion.getComponent(i);
+						Component composant = panelOptions.getComponent(i);
 
-						JTextField textField = (JTextField) panel.getComponent(1);
-						JTextField ordre = (JTextField) panel.getComponent(3);
-						JTextField points = (JTextField) panel.getComponent(5);
-						JRadioButton radioButton = (JRadioButton) panel.getComponent(6);
+						JPanel panelOption = (JPanel) composant;
+				
 
-						
+						// Récupérez les sous-composants du JPanel
+						Component[] composantsOption = panelOption.getComponents();
+
+						PanelSaisie  panelSaisieOption = (PanelSaisie ) composantsOption[2];
+						JTextField   ordre             = (JTextField  ) composantsOption[4];
+						JTextField   points            = (JTextField  ) composantsOption[6];
+						JRadioButton btnRadio          = (JRadioButton) composantsOption[7];
+					
 						if (ordre.getText().isEmpty())
 						{
 							ordre.setText("-1");
@@ -300,74 +369,87 @@ public class QuestionAvecElimination extends JFrame
 							points.setText("-1");
 						}
 
-						OptionElimination rep = Controleur.creerReponseElimination(textField.getText(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), radioButton.isSelected(), question);
+						OptionElimination option = Controleur.creerReponseElimination(panelSaisieOption.getTexte(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), btnRadio.isSelected(), question);
 
-						question.ajouterOption(rep);
+						question.ajouterOption(option);
+
+
+						// Fermer la fenêtre
+						QuestionAvecElimination.this.dispose();
+						new Accueil();
 					}
-
-					// Fermer la fenêtre
-					QuestionAvecElimination.this.dispose();
-					new Accueil();
-				
 				}
 				else JOptionPane.showMessageDialog(QuestionAvecElimination.this, erreurs, "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
+		// Ajout des boutons au JPanel contenant les boutons
+		panelBoutons.add(btnAjouter);
+		panelBoutons.add(btnExplication);
+		panelBoutons.add(btnEnregistrer);
 
 
-		panelPrincipal.add(panelQuestion, BorderLayout.NORTH);
+		// Ajout des composants au panel principal
+		JScrollPane scrollPaneQuestion = new JScrollPane(panelQuestion);
+		scrollPaneQuestion.getVerticalScrollBar().setUnitIncrement(16);
+		panelPrincipal.add(scrollPaneQuestion);
+		panelPrincipal.add(panelBoutons, BorderLayout.SOUTH);
 
-		// Ajouter tout dans le conteneur principal
-		add(panelPrincipal, BorderLayout.CENTER);
 
-		// Afficher la fenêtre
-		setTitle("Question Avec Elimination");
-		setSize(1000, 800);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
+		// Ajout du panel principal à la frame et configuration de cette dernière
+		this.add(panelPrincipal, BorderLayout.CENTER);
+		this.setTitle("Question Elimination");
+		this.setSize(1000, 800);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
 	}
 
 	public void majLegalite()
 	{
-		if (groupeBouton != null && optionsActuelles > 0)
+		if (nbOptions > 0)
+		{
+			for (int i = 0; i < panelOptions.getComponentCount(); i++)
 			{
-				
-				for (int i = 1; i < panelQuestion.getComponentCount() - 1; i++)
-				{
-					JPanel panel = (JPanel) panelQuestion.getComponent(i);
-					JTextField textField     = (JTextField) panel.getComponent(1);
-					JTextField ordre         = (JTextField) panel.getComponent(3);
-					JTextField points        = (JTextField) panel.getComponent(5);
-					JRadioButton radioButton = (JRadioButton) panel.getComponent(6);
-					
-					if (radioButton.isSelected())
-					{
-						ordre .setEnabled(false);
-						points.setEnabled(false);
-						ordre .setText("");
-						points.setText("");
-					}
-					else
-					{
-						ordre .setEnabled(true);
-						points.setEnabled(true);
-					}
+				Component composant = panelOptions.getComponent(i);
 
-					if (ordre.getText().trim().length() > 0 || points.getText().trim().length() > 0)
-					{
-						radioButton.setEnabled(false);
-					}
-					else
-					{
-						radioButton.setEnabled(true);
-						ordre .setText("");
-						points.setText("");
-					}
+				JPanel panelOption = (JPanel) composant;
+		
+
+				// Récupérez les sous-composants du JPanel
+				Component[] composantsOption = panelOption.getComponents();
+
+				JTextField   ordre             = (JTextField  ) composantsOption[4];
+				JTextField   points            = (JTextField  ) composantsOption[6];
+				JRadioButton radioButton       = (JRadioButton) composantsOption[7];
+				
+				if (radioButton.isSelected())
+				{
+					ordre .setEnabled(false);
+					points.setEnabled(false);
+					ordre .setText("");
+					points.setText("");
 				}
-					
+				else
+				{
+					ordre .setEnabled(true);
+					points.setEnabled(true);
+				}
+
+				if (ordre.getText().trim().length() > 0 || points.getText().trim().length() > 0)
+				{
+					radioButton.setEnabled(false);
+				}
+				else
+				{
+					radioButton.setEnabled(true);
+					ordre .setText("");
+					points.setText("");
+				}
 			}
+				
+		}
+
 	}
 
 }

@@ -190,6 +190,7 @@ public class PanelSaisie extends JPanel
 	 */
 
 	public void setHauteur(int hauteur) { this.setPreferredSize(new Dimension(this.getPreferredSize().width, hauteur)); }
+	public void setLargeur(int largeur) { this.setPreferredSize(new Dimension(largeur, this.getPreferredSize().height)); }
 	
 
 
