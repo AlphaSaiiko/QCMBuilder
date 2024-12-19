@@ -175,10 +175,18 @@ public class TabEvaluation extends JFrame
 				selectedNotions.add(not);
 
 				// Récupérer les valeurs numériques des colonnes TF, F, M, D
-				int tfValue = Integer.parseInt((String) model.getValueAt(row, 2));
-				int fValue = Integer.parseInt((String) model.getValueAt(row, 3));
-				int mValue = Integer.parseInt((String) model.getValueAt(row, 4));
-				int dValue = Integer.parseInt((String) model.getValueAt(row, 5));
+				int tfValue = model.getValueAt(row, 2) != null && !((String) model.getValueAt(row, 2)).isEmpty() ? Integer.parseInt((String) model.getValueAt(row, 2)) : 0;
+				int fValue = model.getValueAt(row, 3) != null && !((String) model.getValueAt(row, 3)).isEmpty() ? Integer.parseInt((String) model.getValueAt(row, 3)) : 0;
+				int mValue = model.getValueAt(row, 4) != null && !((String) model.getValueAt(row, 4)).isEmpty() ? Integer.parseInt((String) model.getValueAt(row, 4)) : 0;
+				int dValue = model.getValueAt(row, 5) != null && !((String) model.getValueAt(row, 5)).isEmpty() ? Integer.parseInt((String) model.getValueAt(row, 5)) : 0;
+
+				if (tfValue == 0 && fValue == 0 && mValue == 0 && dValue == 0)
+				{
+					JOptionPane.showMessageDialog(this, "Veuillez entrer au moins une valeur pour la notion " + notionName + ".", "Erreur",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
 
 				Controleur.recupererQuestion(evaluation, not, tfValue, fValue, mValue, dValue);
 			}
