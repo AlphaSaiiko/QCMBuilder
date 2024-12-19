@@ -242,10 +242,9 @@ public class QuestionAvecElimination extends JFrame
 				
 				// Vérification si la question à une réponse : AKA si une des options est valide
 				// Vérification si l'une des réponses n'est pas remplie
-//				// Vérification si l'une des réponse est illégale (Si une réponse valide à un ordre et un point en moins)
+				// Vérification si l'une des réponse est illégale (Si une réponse valide à un ordre et un point en moins)
 				boolean aReponse = false;
 				boolean reponsesRemplies = true;
-//				boolean reponseIllegale  = false;
 				if (optionsActuelles < 1) reponsesRemplies = false;
 				if (groupeBouton != null && optionsActuelles > 0)
 				{
