@@ -1,6 +1,7 @@
 package modele;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Evaluation
@@ -26,7 +27,7 @@ public class Evaluation
 	 * +--------------+
 	 */
 
-	public Evaluation(Ressource ressource, Notion notion, boolean bChrono)
+	public Evaluation(Ressource ressource, boolean bChrono)
 	{
 		this.ressource	    = ressource                ;
 		this.listeNotions   = new ArrayList<Notion>  ();
@@ -116,5 +117,46 @@ public class Evaluation
 		}
 		return "Evaluation{" + "ressource=" + ressource.getNom() + ", notions=[" + notionsStr.toString() + "]"
 				+ ", lienEval='" + lienEval + '\'' + '}';
+	}
+
+	public void recupererQuestion(Notion notion, int tf, int f, int m, int d)
+	{
+		List<Question> tmpLst = new ArrayList<Question>();
+		List<Question> lstQuestion = new ArrayList<Question>();
+		lstQuestion = notion.getListeQuestions();
+
+		Collections.shuffle(lstQuestion);
+
+		for (Question question : lstQuestion)
+		{
+			if (question.getDifficulte() == 1 && tf>0)
+			{
+				tmpLst.add(question);
+				tf = tf-1;
+			}
+			if (question.getDifficulte() == 2 && f>0)
+			{
+				tmpLst.add(question);
+				f = f-1;
+			}
+			if (question.getDifficulte() == 3 && m>0)
+			{
+				tmpLst.add(question);
+				m = m-1;
+			}
+			if (question.getDifficulte() == 4 && d>0)
+			{
+				tmpLst.add(question);
+				d = d-1;
+			}
+		}
+
+		for (Question question : tmpLst)
+		{
+			this.listeQuestions.add(question);
+		}
+
+		this.listeNotions.add(notion);
+		Collections.shuffle(this.listeQuestions);
 	}
 }

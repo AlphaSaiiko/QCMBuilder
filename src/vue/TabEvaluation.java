@@ -2,6 +2,7 @@ package vue;
 
 import java.awt.*;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -184,7 +185,7 @@ public class TabEvaluation extends JFrame
 		}
 
 		// Créer l'objet Evaluation
-		Evaluation evaluation = new Evaluation(ressource, selectedNotions.get(0), this.bChrono); // Exemple
+		Evaluation evaluation = new Evaluation(ressource, this.bChrono); // Exemple
 																					// :
 																					// la
 																					// première
@@ -206,26 +207,42 @@ public class TabEvaluation extends JFrame
 
 	private void enregistrerEvaluation(Evaluation evaluation)
 	{
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setDialogTitle("Enregistrer l'évaluation");
-		int userSelection = fileChooser.showSaveDialog(this);
+		JFileChooser dirChooser = new JFileChooser();
+		dirChooser.setDialogTitle("Choisir un emplacement pour le répertoire");
+		dirChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Sélectionne uniquement les répertoires
 
-		if (userSelection == JFileChooser.APPROVE_OPTION)
-		{
-			String fileName = fileChooser.getSelectedFile().getAbsolutePath();
-			try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName)))
-			{
-				writer.write(evaluation.toString());
-				JOptionPane.showMessageDialog(this, "Évaluation enregistrée dans le fichier : " + fileName);
-				ControleurFichier fich = new ControleurFichier("");
-			} catch (IOException e)
-			{
+		// Ajoute un PropertyChangeListener pour réinitialiser le champ de nom de fichier
+		dirChooser.addPropertyChangeListener(evt -> {
+			if (JFileChooser.DIRECTORY_CHANGED_PROPERTY.equals(evt.getPropertyName())) {
+				dirChooser.setSelectedFile(null); // Réinitialise le champ de nom de fichier
+			}
+		});
+
+		int userSelection = dirChooser.showSaveDialog(this);
+
+		if (userSelection == JFileChooser.APPROVE_OPTION) {
+			String dirName = dirChooser.getSelectedFile().getAbsolutePath();
+			File directory = new File(dirName);
+
+			// Vérifie si le répertoire existe, sinon le crée
+			if (!directory.exists()) {
+				directory.mkdirs();
+				System.out.println("Répertoire créé à l'emplacement : " + dirName);
+			} else {
+				System.out.println("Le répertoire existe déjà : " + dirName);
+			}
+
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(directory, "evaluation.txt")))) {
+				// Écris quelque chose dans le fichier pour tester
+				writer.write("Contenu de l'évaluation...");
+				JOptionPane.showMessageDialog(this, "Évaluation enregistrée dans le répertoire : " + dirName);
+			} catch (IOException e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(this, "Erreur lors de l'enregistrement de l'évaluation.", "Erreur",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
-	}
+		}
 
 	private void sendEvaluation(Evaluation evaluation)
 	{
