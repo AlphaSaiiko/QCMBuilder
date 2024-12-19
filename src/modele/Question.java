@@ -256,7 +256,7 @@ public class Question
 	 * via le contrôleur de fichiers pour s'assurer que les modifications sont persistées.
 	 */
 	public void mettreAJourQuestions() {
-		String chemin = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + ".rtf";
+		String chemin = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion;
 		File fichier = new File(chemin);
 	
 		// Vérifiez si le fichier existe avant de tenter de le modifier
