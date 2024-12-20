@@ -1,17 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Élimer les mauvaises réponses dans l'ordre spécifié
-    const eliminationOrder = Array.from(document.querySelectorAll('.mauvaise-reponse[data-order]'))
-        .sort((a, b) => a.getAttribute('data-order') - b.getAttribute('data-order'));
-
-    let currentIndex = 0;
-
-    document.getElementById('eliminar').addEventListener('click', () => {
-        if (currentIndex < eliminationOrder.length) {
-            const toEliminate = eliminationOrder[currentIndex];
-            toEliminate.style.display = 'none';
-            currentIndex++;
-        }
-    });
+    // Mélanger les réponses (au cas où)
+    randomizeOrder('.reponse', '#question');
 
     // Gérer la sélection des réponses
     let selectedAnswer = null;
