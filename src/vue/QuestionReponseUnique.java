@@ -28,16 +28,17 @@ public class QuestionReponseUnique extends JFrame
 	private       int         nbOptions        = 0  ;
 	private final int         nbMaxOptions     = 6  ;
 	private final int         HAUTEUR_OPTIONS  = 150;
-	private final int         LARGEUR_OPTIONS  = 600;
+	private final int         LARGEUR_OPTIONS  = 800;
 
 
 
 
 	/**
 	 * +--------------+
-	* | CONSTRUCTEUR |
-	* +--------------+
-	*/
+	 * | CONSTRUCTEUR |
+	 * +--------------+
+	 */
+
 	public QuestionReponseUnique(Question question)
 	{
 		this.question = question;
@@ -64,7 +65,7 @@ public class QuestionReponseUnique extends JFrame
 		// Ressource et la notion en haut à gauche
 		JLabel lblRessourceNotion = new JLabel(
 			"Ressource : " + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + 
-			"  ;  Notion : " + question.getNotion().getNom()
+			", notion : " + question.getNotion().getNom()
 		);
 		panelRetour.add(lblRessourceNotion);
 		this.add(panelRetour, BorderLayout.NORTH);

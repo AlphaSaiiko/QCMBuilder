@@ -61,7 +61,7 @@ public class QuestionAssociation extends JFrame
 		// Ressource et la notion en haut à gauche
 		JLabel lblRessourceNotion = new JLabel(
 			"Ressource : " + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + 
-			"  ;  Notion : " + question.getNotion().getNom()
+			", notion : " + question.getNotion().getNom()
 		);
 		panelRetour.add(lblRessourceNotion);
 		this.add(panelRetour, BorderLayout.NORTH);
