@@ -28,6 +28,15 @@ public class CreationHTML {
 
 		this.evaluation = evaluation;
 
+		this.questionHTML.ecrireCSSAssociation();
+		this.questionHTML.ecrireCSSElimination();
+		this.questionHTML.ecrireCSSReponseUnique();
+
+		this.questionHTML.ecrireJsAssociation();
+		this.questionHTML.ecrireJsElimination();
+		this.questionHTML.ecrireJsReponseMultiple();
+		this.questionHTML.ecrireJsReponseUnique();
+
 		System.out.println("liste question : " + this.evaluation.getListeQuestions()) ;
 
 		htmlContent.append("<!DOCTYPE html>\n");
@@ -70,7 +79,9 @@ public class CreationHTML {
 		for (Question question : this.evaluation.getListeQuestions())
 		{
 			if (question.getType().equals("QAEPR")){this.questionHTML.pageQuestionElimination(question);}
-			if (question.getType().equals("QCMRU")){this.questionHTML.pageQuestionChoixUnique(question);}
+			if (question.getType().equals("QCMRU")){this.questionHTML.pageQuestionUnique(question);}
+			if (question.getType().equals("QCMRM")){this.questionHTML.pageQuestionMultiple(question);}
+			if (question.getType().equals("QAE")){this.questionHTML.pageQuestionChoixAssociation(question);}
 		}
 
 		this.pageDeFin();
