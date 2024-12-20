@@ -148,8 +148,23 @@ public class CreationQuestionHTML {
 		htmlContent.append("</head>").append("\n");
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
-		htmlContent.append("        <h1>Quelles sont les villes françaises ?</h1>").append("\n");
+		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
 		htmlContent.append("        <div class=\"question\" id=\"question\">").append("\n");
+		for (IOption reponse : question.getEnsOptions())
+		{
+			if (reponse instanceof Option)
+			{
+				Option opt = (Option) reponse;
+				if (opt.getEstReponse())
+				{
+					htmlContent.append("            <div class=\"reponse bonne-reponse\">").append(opt.getEnonce()).append("</div>").append("\n");
+				}
+				else
+				{
+					htmlContent.append("            <div class=\"reponse mauvaise-reponse\">").append(opt.getEnonce()).append("</div>").append("\n");
+				}
+			}
+		}
 		htmlContent.append("            <div class=\"reponse bonne-reponse\">Paris</div>").append("\n");
 		htmlContent.append("            <div class=\"reponse mauvaise-reponse\">Londres</div>").append("\n");
 		htmlContent.append("            <div class=\"reponse bonne-reponse\">Marseille</div>").append("\n");
