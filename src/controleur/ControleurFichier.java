@@ -146,13 +146,18 @@ public class ControleurFichier
 			return;
 		}
 
-		String ligneEntiere = qst.getType() + ";" + qst.getEnonce() + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";";
+		String enonce = inclureEmplacementPj(qst.getEnonce(), chemin);
+
+		String ligneEntiere = qst.getType() + ";" + enonce + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";";
 		if (qst.getEnsOptions() != null)
 		{
 			for (IOption option : qst.getEnsOptions())
 			{
-				ligneEntiere += option.getType() + "/" + option.getEnonce() + "/" + option.getId();
-				if (option instanceof OptionElimination) {
+				enonce = inclureEmplacementPj(option.getEnonce(), chemin);
+
+				ligneEntiere += option.getType() + "/" + enonce + "/" + option.getId();
+				if (option instanceof OptionElimination)
+				{
 					OptionElimination optionE = (OptionElimination) option;
 					ligneEntiere += "/" + optionE.getEstReponse() + "/" + optionE.getOrdre() + "/" + optionE.getNbPointsMoins();
 				}
@@ -179,6 +184,24 @@ public class ControleurFichier
 			System.err.println("Une erreur s'est produite lors de la modification du fichier : " + e.getMessage());
 		}
 	}
+
+
+
+	public String inclureEmplacementPj(String contenu, String emplacement)
+	{
+		int indexDernierSlash = emplacement.lastIndexOf("/");
+		if (indexDernierSlash != -1)
+			emplacement = emplacement.substring(0, indexDernierSlash + 1);
+	
+		int index = contenu.indexOf("<img src=\"complements/") + 10;
+
+		if (index != -1) 
+			contenu = contenu.substring(0, index) + emplacement + contenu.substring(index);
+	
+		return contenu;
+	}
+	
+
 
 
 

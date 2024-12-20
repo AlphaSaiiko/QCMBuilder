@@ -236,8 +236,8 @@ public class QuestionAssociation extends JFrame
 						PanelSaisie panelSaisieOption1 = (PanelSaisie) composantsOption[1];
 						PanelSaisie panelSaisieOption2 = (PanelSaisie) composantsOption[2];
 
-						String stringOption1 = panelSaisieOption1.getTexte();
-						String stringOption2 = panelSaisieOption2.getTexte();
+						String stringOption1 = panelSaisieOption1.getContenu();
+						String stringOption2 = panelSaisieOption2.getContenu();
 
 
 						// Vérifiez les champs de texte vides
@@ -248,15 +248,15 @@ public class QuestionAssociation extends JFrame
 					
 				String erreurs = "";
 
-				if (! reponsesRemplies)                                               { erreurs += "N'oubliez pas de remplir toutes les réponses.\n"          ; }
-				if (nbOptions < 2)                                                    { erreurs += "Vous devez avoir au moins deux lignes d'options. \n"      ; }
-				if (nbOptions > nbMaxOptions)                                         { erreurs += "Vous ne pouvez avoir que six lignes d'options maximum. \n"; }
-				if (QuestionAssociation.this.panelEnonce.getTexte().trim().isEmpty()) { erreurs += "Veuillez remplir la question. \n"                         ; }
+				if (! reponsesRemplies)                                                 { erreurs += "N'oubliez pas de remplir toutes les réponses.\n"          ; }
+				if (nbOptions < 2)                                                      { erreurs += "Vous devez avoir au moins deux lignes d'options. \n"      ; }
+				if (nbOptions > nbMaxOptions)                                           { erreurs += "Vous ne pouvez avoir que six lignes d'options maximum. \n"; }
+				if (QuestionAssociation.this.panelEnonce.getContenu().trim().isEmpty()) { erreurs += "Veuillez remplir la question. \n"                         ; }
 
 				if (erreurs.trim().isEmpty())
 				{
 					// Enregistrer l'énoncé
-					question.setEnonce(panelEnonce.getTexte());
+					question.setEnonce(panelEnonce.getContenu());
 
 
 					// Enregistrer les réponses
@@ -275,8 +275,8 @@ public class QuestionAssociation extends JFrame
 							PanelSaisie panelSaisieOption1 = (PanelSaisie) composantsOption[1];
 							PanelSaisie panelSaisieOption2 = (PanelSaisie) composantsOption[2];
 
-							String stringOption1 = panelSaisieOption1.getTexte();
-							String stringOption2 = panelSaisieOption2.getTexte();
+							String stringOption1 = panelSaisieOption1.getContenu();
+							String stringOption2 = panelSaisieOption2.getContenu();
 
 							System.out.println("Réponse 1 : " + stringOption1);
 							System.out.println("Réponse 2 : " + stringOption2);

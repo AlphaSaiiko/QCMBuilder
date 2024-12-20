@@ -13,6 +13,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import modele.Question;
+
 public class PanelSaisie extends JPanel
 {
 	/**
@@ -162,7 +164,8 @@ public class PanelSaisie extends JPanel
 				}
 			}
 			
-			private boolean estImage(File fichier) {
+			private boolean estImage(File fichier)
+			{
 				String nomFichier = fichier.getName().toLowerCase();
 				return nomFichier.endsWith(".png") || nomFichier.endsWith(".jpg") || nomFichier.endsWith(".jpeg") || nomFichier.endsWith(".gif");
 			}
@@ -177,8 +180,45 @@ public class PanelSaisie extends JPanel
 	 * | GETTEURS |
 	 * +----------+
 	 */
-	
-	public String getTexte() { return this.texte.getText(); }
+
+	public String getContenu()
+	{
+		StyledDocument document = texte.getStyledDocument();
+		String contenu = "";
+
+		for (int i = 0; i < document.getLength(); i++)
+		{
+			Element      element = document.getCharacterElement(i)    ;
+			AttributeSet attrs   = element.getAttributes       ()     ;
+			Icon         image   = StyleConstants.getIcon      (attrs);
+
+			if (image != null && image instanceof ImageIcon)
+			{
+				String emplacementImage = ((ImageIcon) image).getDescription();
+				String nomImage         = new File(emplacementImage).getName();
+
+				contenu += "<img src=\"complements/" + nomImage + "\" alt=\"Image\">";
+			}
+			else
+			{
+				try
+				{
+					String caractere = document.getText(i, 1);
+
+					if (caractere.equals("\n"))
+						contenu += "<br>";
+					else
+						contenu += caractere;
+				}
+				catch (BadLocationException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return contenu;
+	}
 
 
 
@@ -228,12 +268,16 @@ public class PanelSaisie extends JPanel
 		// Basculer l'état du style
 		if (style == StyleConstants.Bold)
 			StyleConstants.setBold(nouveauxStyles, !StyleConstants.isBold(stylesActuels));
-		else 
+		else
+		{
 			if (style == StyleConstants.Italic)
 				StyleConstants.setItalic(nouveauxStyles, !StyleConstants.isItalic(stylesActuels));
 			else
+			{
 				if (style == StyleConstants.Underline)
 					StyleConstants.setUnderline(nouveauxStyles, !StyleConstants.isUnderline(stylesActuels));
+			}
+		}
 
 	
 		// Appliquer les nouveaux styles

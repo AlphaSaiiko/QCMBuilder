@@ -255,18 +255,21 @@ public class Question
 	 * Cette méthode récupère la liste des questions à l'aide du contrôleur, puis les écrit dans le fichier de stockage
 	 * via le contrôleur de fichiers pour s'assurer que les modifications sont persistées.
 	 */
-	public void mettreAJourQuestions() {
-		String chemin = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion;
-		File fichier = new File(chemin);
+	public void mettreAJourQuestions()
+	{
+		String emplacement = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion;
+		File fichier = new File(emplacement);
 	
+
 		// Vérifiez si le fichier existe avant de tenter de le modifier
-		if (fichier.exists()) {
+		if (fichier.exists())
+		{
 			ControleurFichier controleurFichier = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
 			controleurFichier.modifierQuestion("question" + this.numQuestion + "/question" + this.numQuestion, this);
-			System.out.println("Fichier mis à jour : " + chemin);
-		} else {
-			System.err.println("Erreur : Le fichier n'existe pas et ne peut donc pas être modifié.");
+			System.out.println("Fichier mis à jour : " + emplacement);
 		}
+		else
+			System.err.println("Erreur : Le fichier n'existe pas et ne peut donc pas être modifié.");
 	}
 }
 	

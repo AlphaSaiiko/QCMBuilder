@@ -251,7 +251,7 @@ public class QuestionReponseUnique extends JFrame
 
 
 						// Vérifier les champs de texte vides
-						if (panelSaisieOption.getTexte().isEmpty()) 
+						if (panelSaisieOption.getContenu().isEmpty()) 
 							reponsesRemplies = false;
 
 						if (btnRadio.isSelected())
@@ -262,16 +262,16 @@ public class QuestionReponseUnique extends JFrame
 
 				String erreurs = "";
 
-				if (! aReponse)                                                         { erreurs += "N'oubliez pas de sélectionner une réponse.\n"    ; }
-				if (! reponsesRemplies)                                                 { erreurs += "N'oubliez pas de remplir toutes les réponses.\n" ; }
-				if (nbOptions < 2)                                                      { erreurs += "Vous devez avoir au moins deux options. \n"      ; }
-				if (nbOptions > nbMaxOptions)                                           { erreurs += "Vous ne pouvez avoir que six options maximum. \n"; }
-				if (QuestionReponseUnique.this.panelEnonce.getTexte().trim().isEmpty()) { erreurs += "Veuillez remplir la question. \n"                ; }
+				if (! aReponse)                                                           { erreurs += "N'oubliez pas de sélectionner une réponse.\n"    ; }
+				if (! reponsesRemplies)                                                   { erreurs += "N'oubliez pas de remplir toutes les réponses.\n" ; }
+				if (nbOptions < 2)                                                        { erreurs += "Vous devez avoir au moins deux options. \n"      ; }
+				if (nbOptions > nbMaxOptions)                                             { erreurs += "Vous ne pouvez avoir que six options maximum. \n"; }
+				if (QuestionReponseUnique.this.panelEnonce.getContenu().trim().isEmpty()) { erreurs += "Veuillez remplir la question. \n"                ; }
 
 				if (erreurs.trim().isEmpty())
 				{
 					// Enregistrer la question dans un fichier
-					question.setEnonce(panelEnonce.getTexte());
+					question.setEnonce(panelEnonce.getContenu());
 
 					//Enregistrer les réponses
 					for (int i = 0; i < panelOptions.getComponentCount(); i++)
@@ -287,7 +287,7 @@ public class QuestionReponseUnique extends JFrame
 						PanelSaisie  panelSaisieOption = (PanelSaisie ) composantsOption[1];
 						JRadioButton btnRadio          = (JRadioButton) composantsOption[2];
 
-						Option option = Controleur.creerReponse(panelSaisieOption.getTexte(), btnRadio.isSelected(), question);
+						Option option = Controleur.creerReponse(panelSaisieOption.getContenu(), btnRadio.isSelected(), question);
 
 						question.ajouterOption(option);
 					}

@@ -315,7 +315,7 @@ public class QuestionElimination extends JFrame
 
 
 						// Vérifier les champs de texte vides
-						if (panelSaisieOption.getTexte().isEmpty()) 
+						if (panelSaisieOption.getContenu().isEmpty()) 
 							reponsesRemplies = false;
 
 
@@ -327,16 +327,16 @@ public class QuestionElimination extends JFrame
 					
 				String erreurs = "";
 
-				if (! aReponse)                                                           { erreurs += "N'oubliez pas de sélectionner une réponse.\n"    ; }
-				if (! reponsesRemplies)                                                   { erreurs += "N'oubliez pas de remplir toutes les réponses.\n" ; }
-				if (nbOptions < 2)                                                        { erreurs += "Vous devez avoir au moins deux options. \n"      ; }
-				if (nbOptions > nbMaxOptions)                                             { erreurs += "Vous ne pouvez avoir que six options maximum. \n"; }
-				if (QuestionElimination.this.panelEnonce.getTexte().trim().isEmpty()) { erreurs += "Veuillez remplir la question. \n"                ; }
+				if (! aReponse)                                                         { erreurs += "N'oubliez pas de sélectionner une réponse.\n"    ; }
+				if (! reponsesRemplies)                                                 { erreurs += "N'oubliez pas de remplir toutes les réponses.\n" ; }
+				if (nbOptions < 2)                                                      { erreurs += "Vous devez avoir au moins deux options. \n"      ; }
+				if (nbOptions > nbMaxOptions)                                           { erreurs += "Vous ne pouvez avoir que six options maximum. \n"; }
+				if (QuestionElimination.this.panelEnonce.getContenu().trim().isEmpty()) { erreurs += "Veuillez remplir la question. \n"                ; }
 
 				if (erreurs.trim().isEmpty())
 				{
 					// Enregistrer l'énoncé	
-					question.setEnonce(panelEnonce.getTexte());
+					question.setEnonce(panelEnonce.getContenu());
 
 
 					//Enregistrer les réponses
@@ -365,7 +365,7 @@ public class QuestionElimination extends JFrame
 							points.setText("-1");
 						}
 
-						OptionElimination option = Controleur.creerReponseElimination(panelSaisieOption.getTexte(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), btnRadio.isSelected(), question);
+						OptionElimination option = Controleur.creerReponseElimination(panelSaisieOption.getContenu(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), btnRadio.isSelected(), question);
 
 						question.ajouterOption(option);
 					}
