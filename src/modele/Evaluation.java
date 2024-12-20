@@ -17,6 +17,7 @@ public class Evaluation
 	private List<Question> listeQuestions;
 	private String         lienEval      ; // Lien de l'évaluation à mettre sur l'intranet
 	private boolean			bChrono;
+	private int questionTf, questionF, questionM, questionD;
 
 
 
@@ -33,6 +34,7 @@ public class Evaluation
 		this.listeNotions   = new ArrayList<Notion>  ();
 		this.listeQuestions = new ArrayList<Question>();
 		this.bChrono = bChrono;
+		this.questionTf = this.questionF = this.questionM = this.questionD = 0;
 	}
 
 
@@ -49,6 +51,11 @@ public class Evaluation
 	public List<Question> getListeQuestions() { return listeQuestions; }
 	public String         getLienEval      () { return lienEval      ; }
 	public boolean getChrono() { return this.bChrono;}
+	public int getQuestionTresFacile() { return this.questionTf;}
+	public int getQuestionFacile() { return this.questionF;}
+	public int getQuestionMoyen() { return this.questionM;}
+	public int getQuestionDifficile() { return this.questionD;}
+	public int getNbQuestion() { return this.questionTf+this.questionF+this.questionM+this.questionD;}
 
 
 
@@ -133,21 +140,25 @@ public class Evaluation
 			{
 				tmpLst.add(question);
 				tf = tf-1;
+				this.questionTf++;
 			}
 			if (question.getDifficulte() == 2 && f>0)
 			{
 				tmpLst.add(question);
 				f = f-1;
+				this.questionF++;
 			}
 			if (question.getDifficulte() == 3 && m>0)
 			{
 				tmpLst.add(question);
 				m = m-1;
+				this.questionM++;
 			}
 			if (question.getDifficulte() == 4 && d>0)
 			{
 				tmpLst.add(question);
 				d = d-1;
+				this.questionD++;
 			}
 		}
 
