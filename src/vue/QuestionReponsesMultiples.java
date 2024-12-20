@@ -1,220 +1,294 @@
 package vue;
 
-import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.*;
-import modele.*;
+
+import controleur.Controleur;
+import modele.Question;
 import modele.option.Option;
+import modele.option.OptionElimination;
 
 public class QuestionReponsesMultiples extends JFrame
 {
-	private JPanel questionPanel;
-	private JTextArea questionArea;
-	private Question question;
-	private ArrayList<JCheckBox> groupeBouton;
+	/**
+	 * +-------------+
+	 * |  ATTRIBUTS  |
+	 * +-------------+
+	 */
 
-	private int optionsMax       = 6; // Limite du nombre de réponses
-	private int optionsActuelles = 0; // Compteur des réponses ajoutées
+	private       Question    question              ;
+	private       JPanel      panelQuestion         ;
+	private       JPanel      panelBoutons          ;
+	private       JPanel      panelOptions          ;
+	private       PanelSaisie panelEnonce           ;
+	private       PanelSaisie panelExplication      ;
+	private       JFrame      frameExplication      ;
+	private       int         nbOptions        = 0  ;
+	private final int         nbMaxOptions     = 6  ;
+	private final int         HAUTEUR_OPTIONS  = 150;
+	private final int         LARGEUR_OPTIONS  = 600;
 
-	public QuestionReponsesMultiples(Question question) 
+
+
+
+	/**
+	 * +--------------+
+	* | CONSTRUCTEUR |
+	* +--------------+
+	*/
+	public QuestionReponsesMultiples(Question question)
 	{
-		this.question     = question;
-		this.groupeBouton = new ArrayList<JCheckBox>();
+		this.question = question;
 
-		// Initialiser le conteneur principal
-		JPanel mainPanel = new JPanel(new BorderLayout());
 
-		// Ajouter le bouton "Retour" en haut à gauche
+		// Panel principal
+		JPanel panelPrincipal = new JPanel();
+		panelPrincipal.setLayout(new BorderLayout());
+
+
+		// Bouton "Retour" en haut à gauche
 		JButton btnRetour = new JButton("Retour");
-		btnRetour.addActionListener(e -> {
+
+		btnRetour.addActionListener(e ->
+		{
 			Controleur.ouvrirCreerQuestion();
 			dispose();
 		});
-		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		topPanel.add(btnRetour);
 
-		// Ajouter la ressource et la notion en haut à gauche
-		JLabel nomResEtNotion = new JLabel("Ressource : " + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + 
-		                              "  ;  Notion : " + question.getNotion().getNom());
-		topPanel.add(nomResEtNotion);
-		mainPanel.add(topPanel, BorderLayout.NORTH);
+		JPanel panelRetour = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panelRetour.add(btnRetour);
 
-		// Initialiser le panel des questions
-		questionPanel = new JPanel();
-		questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
 
-		// Ajouter un champ de texte pour écrire la question avec un JScrollPane
-		this.questionArea = new JTextArea(10, 80);
-		this.questionArea.setLineWrap(true);
-		this.questionArea.setWrapStyleWord(true);
-		this.questionArea.setFont(new Font("Arial", Font.PLAIN, 18));
-		JScrollPane questionScrollPane = new JScrollPane(questionArea);
-		questionScrollPane.setPreferredSize(new Dimension(800, 200));
-		questionPanel.add(questionScrollPane);
+		// Ressource et la notion en haut à gauche
+		JLabel lblRessourceNotion = new JLabel(
+			"Ressource : " + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + 
+			"  ;  Notion : " + question.getNotion().getNom()
+		);
+		panelRetour.add(lblRessourceNotion);
+		this.add(panelRetour, BorderLayout.NORTH);
 
-		// Ajouter un panel pour les boutons "Ajouter", "Explication" et "Enregistrer"
-		JPanel panelBoutons = new JPanel();
-		panelBoutons.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+		// Panel de la question (texte et options)
+		panelQuestion = new JPanel(new BorderLayout());
+
+
+		// PanelSaisie pour l'énoncé
+		panelEnonce = new PanelSaisie();
+		Dimension dimensionsEnonce = new Dimension(0, 400);
+		panelEnonce.setPreferredSize(dimensionsEnonce);
+		panelEnonce.setMinimumSize(dimensionsEnonce);
+		panelEnonce.setMaximumSize(dimensionsEnonce);
+		panelQuestion.add(panelEnonce, BorderLayout.NORTH);
 		
-		// Ajouter un bouton "Ajouter" 
-		JButton boutonAjouter = new JButton("Ajouter");
-		panelBoutons.add(boutonAjouter);
 
-		// Ajouter un bouton "Explication" 
-		JButton boutonExplication = new JButton("Explication");
-		panelBoutons.add(boutonExplication);
+		// Panel pour les options
+		panelOptions = new JPanel();
+		panelOptions.setLayout(new BoxLayout(panelOptions, BoxLayout.Y_AXIS));
+		panelQuestion.add(panelOptions, BorderLayout.CENTER);
 
-		// Ajouter un bouton "Enregistrer"
-		JButton saveBtn = new JButton("Enregistrer");
-		panelBoutons.add(saveBtn);
 
-		// Ajouter le panel des boutons au panel des questions
-		questionPanel.add(panelBoutons);
+		// Panel pour les boutons
+		panelBoutons = new JPanel();
+		panelBoutons.setLayout(new FlowLayout(FlowLayout.LEFT));
+ 
 
 		// Ajouter un ActionListener au bouton "Ajouter"
-		boutonAjouter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (optionsActuelles >= optionsMax) {
-					JOptionPane.showMessageDialog(null, "Le nombre maximum de réponses est atteint (" + optionsMax + ").", "Erreur", JOptionPane.ERROR_MESSAGE);
+		JButton btnAjouter = new JButton("Ajouter une option");
+
+		btnAjouter.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				// Cas ou il y a trop d'options
+				if (nbOptions >= nbMaxOptions)
+				{
+					JOptionPane.showMessageDialog(
+						null,
+						"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
+						"Erreur",
+						JOptionPane.ERROR_MESSAGE
+					);
+
 					return;
 				}
+				
 
-				// Créer un nouveau panel trash
-				JPanel poubellePnl = new JPanel(new GridBagLayout());
+				// Panel contenant l'option
+				JPanel panelOption = new JPanel(new GridBagLayout());
 				GridBagConstraints gbc = new GridBagConstraints();
 				gbc.insets = new Insets(5, 5, 5, 5);
+
+
+				// Bouton "Supprimer"
+				ImageIcon iconeSupprimer = new ImageIcon(
+					new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
+				);
+
+				JButton btnSupprimer = new JButton(iconeSupprimer);
+				btnSupprimer.setPreferredSize(new Dimension(40, 40));
+				btnSupprimer.setBorderPainted(false);
+				btnSupprimer.setContentAreaFilled(false);
+				btnSupprimer.setFocusPainted(false);
+				btnSupprimer.setOpaque(false);
+
 				gbc.gridx = 0;
 				gbc.gridy = 0;
-				gbc.anchor = GridBagConstraints.WEST;
+				gbc.anchor = GridBagConstraints.CENTER;
+				gbc.fill = GridBagConstraints.NONE;
+				panelOption.add(btnSupprimer, gbc);
 
-				// Redimensionner l'icône de poubelle
-				ImageIcon poubelleIcon = new ImageIcon(new ImageIcon("./lib/icones/delete.png").getImage()
-						.getScaledInstance(40, 40, Image.SCALE_SMOOTH));
-				JButton poubelleBtn = new JButton(poubelleIcon);
-				poubelleBtn.setPreferredSize(new Dimension(40, 40));
-				poubelleBtn.setBorderPainted(false);
-				poubelleBtn.setContentAreaFilled(false);
-				poubelleBtn.setFocusPainted(false);
-				poubelleBtn.setOpaque(false);
-				poubellePnl.add(poubelleBtn, gbc);
-
-				// Ajouter un ActionListener au bouton de poubelle
-				poubelleBtn.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						// Supprimer le panel parent lorsque l'icône de poubelle
-						// est cliquée
-						questionPanel.remove(poubellePnl);
-						optionsActuelles--;
-						questionPanel.revalidate();
-						questionPanel.repaint();
+				btnSupprimer.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						panelOptions.remove(panelOption);
+						nbOptions--;
+						panelOptions.revalidate();
+						panelOptions.repaint();
 					}
 				});
 
-				// Augmenter la taille du JTextField
-				JTextField newTextField = new JTextField();
-				newTextField.setFont(new Font("Arial", Font.PLAIN, 18));
-				newTextField.setPreferredSize(new Dimension(400, 30));
-				gbc.gridx = 1;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.weightx = 1.0;
-				poubellePnl.add(newTextField, gbc);
 
-				gbc.gridx = 2;
-				gbc.fill = GridBagConstraints.NONE;
-				gbc.weightx = 0;
+				// Panel de saisie pour l'option
+				PanelSaisie panelSaisieOption = new PanelSaisie(false);
+				panelSaisieOption.setHauteur(HAUTEUR_OPTIONS);
+				panelSaisieOption.setLargeur(LARGEUR_OPTIONS);
+
+				gbc.gridx = 1;
+				gbc.gridy = 0;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+				gbc.anchor = GridBagConstraints.CENTER;
+				gbc.weightx = 1.0;
+				panelOption.add(panelSaisieOption, gbc);
 
 
 				// Ajouter une case à cocher
-				JCheckBox newCheckBox = new JCheckBox();
-				groupeBouton.add(newCheckBox);
-				newCheckBox.setPreferredSize(new Dimension(30, 30));
-				poubellePnl.add(newCheckBox, gbc);
+				JCheckBox caseACocher = new JCheckBox();
+				caseACocher.setPreferredSize(new Dimension(30, 30));
+				panelOption.add(caseACocher, gbc);
 
-				// Ajouter le nouveau panel trash au conteneur principal
-				questionPanel.add(poubellePnl, questionPanel.getComponentCount() - 1);
+				gbc.gridx = 2;
+				gbc.gridy = 0;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+				gbc.anchor = GridBagConstraints.CENTER;
+				panelOption.add(caseACocher, gbc);
 
-				// Incrémenter le compteur de réponses
-				optionsActuelles++;
-
-				// Rafraîchir l'interface utilisateur
-				questionPanel.revalidate();
-				questionPanel.repaint();
+				// Ajout du Panel de l'option au panel des options
+				panelOptions.add(panelOption);
+				nbOptions++;
+				panelOptions.revalidate();
+				panelOptions.repaint();
 			}
 		});
 
-		// Ajouter un ActionListener au bouton "Explication"
-		boutonExplication.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Créer et afficher une nouvelle fenêtre pour écrire
-				// l'explication
-				JFrame explicationFrame = new JFrame("Explication");
-				explicationFrame.setSize(400, 300);
-				explicationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-				JTextArea explicationArea = new JTextArea(10, 30);
-				explicationArea.setLineWrap(true);
-				explicationArea.setWrapStyleWord(true);
-				explicationArea.setFont(new Font("Arial", Font.PLAIN, 18));
+		// Bouton "Explication"
+		JButton btnExplication = new JButton("Explication");
 
-				explicationFrame.add(new JScrollPane(explicationArea));
-				explicationFrame.setVisible(true);
-			}
-		});
+        btnExplication.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                if (frameExplication == null || !frameExplication.isDisplayable())
+                {
+                    frameExplication = new JFrame("Explication");
+                    frameExplication.setSize(400, 300);
+                    frameExplication.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		// Ajouter un ActionListener au bouton "Enregistrer"
-		saveBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+                    panelExplication = new PanelSaisie();
+                    frameExplication.add(panelExplication);
+
+                    frameExplication.setLocationRelativeTo(null);
+                    frameExplication.setVisible(true);
+                }
+                else
+                {
+                    frameExplication.toFront();
+                }
+            }
+        });
+
+
+		// Bouton "Enregistrer"
+		JButton btnEnregistrer = new JButton("Enregistrer");
+
+		btnEnregistrer.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
 				// Vérification si la question à une réponse : AKA si au moins une des options est valide
 				// Vérification si l'une des réponses n'est pas remplie
-				int nbReponses = 0;
+				int     nbReponses       = 0   ;
 				boolean reponsesRemplies = true;
-				if (optionsActuelles < 1) reponsesRemplies = false;
-				if (groupeBouton != null && optionsActuelles > 0)
+
+				if (nbOptions < 1)
+					reponsesRemplies = false;
+
+
+				if (nbOptions > 0)
 				{
-					for (int i = 1; i < questionPanel.getComponentCount() - 1; i++)
+					for (int i = 0; i < panelOptions.getComponentCount(); i++) 
 					{
-						JPanel     panel       = (JPanel)     questionPanel.getComponent(i);
-						JTextField textField   = (JTextField) panel.getComponent(1);
-						JCheckBox  radioButton = (JCheckBox)  panel.getComponent(2);
+						Component composant = panelOptions.getComponent(i);
 						
-						if (radioButton.isSelected())
-							nbReponses++;
-						if (textField.getText().trim().isEmpty())
-							reponsesRemplies = false;
-					}
-						
-				}
-
-
+						JPanel panelOption = (JPanel) composant;
 				
+
+						// Récupérez les sous-composants du JPanel
+						Component[] composantsOption = panelOption.getComponents();
+
+						PanelSaisie panelSaisieOption = (PanelSaisie) composantsOption[1];
+						JCheckBox   caseACocher       = (JCheckBox  ) composantsOption[2];
+
+
+						// Vérifier les champs de texte vides
+						if (panelSaisieOption.getTexte().isEmpty()) 
+							reponsesRemplies = false;
+
+
+						// Compter les bonnes réponse
+						if (caseACocher.isSelected())
+							nbReponses++;
+					}
+				}
 					
 				String erreurs = "";
 
-				if (nbReponses == 0)													erreurs += "N'oubliez pas de sélectionner des réponses.\n";
-				if (nbReponses == 1)													erreurs += "Sélectionnez au moins deux réponses, si vous souhaitez une seule,\n nous vous demanderons d'utiliser une question à réponse unique.\n";
-				if (! reponsesRemplies)													erreurs += "N'oubliez pas de remplir toutes les réponses.\n";
-				if (optionsActuelles < 2)											    erreurs += "Vous devez avoir au moins deux options. \n";
-				if (optionsActuelles > optionsMax)										erreurs += "Vous ne pouvez avoir que six options maximum. \n";
-				if (QuestionReponsesMultiples.this.questionArea.getText().trim().isEmpty()) erreurs += "Veuillez remplir la question. \n";
+				if (nbReponses == 0)                                                        { erreurs += "N'oubliez pas de sélectionner des réponses.\n"                                                                                        ; }
+				if (nbReponses == 1)                                                        { erreurs += "Sélectionnez au moins deux réponses, si vous souhaitez une seule,\n nous vous demanderons d'utiliser une question à réponse unique.\n"; }
+				if (! reponsesRemplies)                                                     { erreurs += "N'oubliez pas de remplir toutes les réponses.\n"                                                                                      ; }
+				if (nbOptions < 2)                                                          { erreurs += "Vous devez avoir au moins deux options. \n"                                                                                           ; }
+				if (nbOptions > nbMaxOptions)                                               { erreurs += "Vous ne pouvez avoir que six options maximum. \n"                                                                                     ; }
+				if (QuestionReponsesMultiples.this.panelEnonce.getTexte().trim().isEmpty()) { erreurs += "Veuillez remplir la question. \n"                                                                                                     ; }
 
 				if (erreurs.trim().isEmpty())
 				{
 					// Enregistrer la question dans un fichier
-					question.setEnonce(questionArea.getText());
+					question.setEnonce(panelEnonce.getTexte());
 
-					// Enregistrer les réponses
-					for (int i = 1; i < questionPanel.getComponentCount() - 1; i++)
+
+					//Enregistrer les réponses
+					for (int i = 0; i < panelOptions.getComponentCount(); i++)
 					{
-						JPanel panel = (JPanel) questionPanel.getComponent(i);
-						JTextField textField = (JTextField) panel.getComponent(1);
-						JCheckBox checkBox = (JCheckBox) panel.getComponent(2);
-						Option o = Controleur.creerReponse(textField.getText(), checkBox.isSelected(), question);
-						question.ajouterOption(o);
+						Component composant = panelOptions.getComponent(i);
+
+						JPanel panelOption = (JPanel) composant;
+				
+
+						// Récupérez les sous-composants du JPanel
+						Component[] composantsOption = panelOption.getComponents();
+
+						PanelSaisie panelSaisieOption = (PanelSaisie) composantsOption[1];
+						JCheckBox   caseACocher       = (JCheckBox  ) composantsOption[2];
+
+						Option option = Controleur.creerReponse(panelSaisieOption.getTexte(), caseACocher.isSelected(), question);
+
+						question.ajouterOption(option);
 					}
+
 
 					// Fermer la fenêtre
 					QuestionReponsesMultiples.this.dispose();
@@ -226,16 +300,26 @@ public class QuestionReponsesMultiples extends JFrame
 			}
 		});
 
-		mainPanel.add(questionPanel, BorderLayout.CENTER);
+		
+		// Ajout des boutons au JPanel contenant les boutons
+		panelBoutons.add(btnAjouter);
+		panelBoutons.add(btnExplication);
+		panelBoutons.add(btnEnregistrer);
 
-		// Ajouter tout dans le conteneur principal
-		add(mainPanel, BorderLayout.CENTER);
 
-		// Afficher la fenêtre
-		setTitle("Question Réponse Multiple");
-		setSize(800, 600);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
+		// Ajout des composants au panel principal
+		JScrollPane scrollPaneQuestion = new JScrollPane(panelQuestion);
+		scrollPaneQuestion.getVerticalScrollBar().setUnitIncrement(16);
+		panelPrincipal.add(scrollPaneQuestion);
+		panelPrincipal.add(panelBoutons, BorderLayout.SOUTH);
+
+
+		// Ajout du panel principal à la frame et configuration de cette dernière
+		this.add(panelPrincipal, BorderLayout.CENTER);
+		this.setTitle("Question Elimination");
+		this.setSize(1000, 800);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
 	}
 }

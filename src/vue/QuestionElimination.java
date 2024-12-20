@@ -150,22 +150,12 @@ public class QuestionElimination extends JFrame
 				});
 
 
-				// Label "Option :"
-				JLabel labelReponse = new JLabel("Option :");
-
-				gbc.gridx = 1;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				panelOption.add(labelReponse, gbc);
-
-
 				// Panel de saisie pour l'option
 				PanelSaisie panelSaisieOption = new PanelSaisie(false);
 				panelSaisieOption.setHauteur(HAUTEUR_OPTIONS);
 				panelSaisieOption.setLargeur(LARGEUR_OPTIONS);
 
-				gbc.gridx = 2;
+				gbc.gridx = 1;
 				gbc.gridy = 0;
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 				gbc.anchor = GridBagConstraints.CENTER;
@@ -176,7 +166,7 @@ public class QuestionElimination extends JFrame
 				// Label "Ordre :"
 				JLabel labelOrdre = new JLabel("Ordre :");
 
-				gbc.gridx = 3;
+				gbc.gridx = 2;
 				gbc.gridy = 0;
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 				gbc.anchor = GridBagConstraints.CENTER;
@@ -187,7 +177,7 @@ public class QuestionElimination extends JFrame
 				JTextField texteOrdre = new JTextField();
 				texteOrdre.setPreferredSize(new Dimension(30, 30));
 
-				gbc.gridx = 4;
+				gbc.gridx = 3;
 				gbc.gridy = 0;
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 				gbc.anchor = GridBagConstraints.CENTER;
@@ -205,7 +195,7 @@ public class QuestionElimination extends JFrame
 				// Label "Points :"
 				JLabel labelPoints = new JLabel("Points :");
 
-				gbc.gridx = 5;
+				gbc.gridx = 4;
 				gbc.gridy = 0;
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 				gbc.anchor = GridBagConstraints.CENTER;
@@ -216,7 +206,7 @@ public class QuestionElimination extends JFrame
 				JTextField textePoints = new JTextField();
 				textePoints.setPreferredSize(new Dimension(30, 30));
 
-				gbc.gridx = 6;
+				gbc.gridx = 5;
 				gbc.gridy = 0;
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 				gbc.anchor = GridBagConstraints.CENTER;
@@ -235,7 +225,7 @@ public class QuestionElimination extends JFrame
 				JRadioButton btnRadio = new JRadioButton();
 				btnRadio.setPreferredSize(new Dimension(30, 30));
 
-				gbc.gridx = 7;
+				gbc.gridx = 6;
 				gbc.gridy = 0;
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 				gbc.anchor = GridBagConstraints.CENTER;
@@ -314,8 +304,8 @@ public class QuestionElimination extends JFrame
 						// Récupérez les sous-composants du JPanel
 						Component[] composantsOption = panelOption.getComponents();
 
-						PanelSaisie  panelSaisieOption = (PanelSaisie ) composantsOption[2];
-						JRadioButton btnRadio          = (JRadioButton) composantsOption[7];
+						PanelSaisie  panelSaisieOption = (PanelSaisie ) composantsOption[1];
+						JRadioButton btnRadio          = (JRadioButton) composantsOption[6];
 
 
 						// Vérifier les champs de texte vides
@@ -354,10 +344,10 @@ public class QuestionElimination extends JFrame
 						// Récupérez les sous-composants du JPanel
 						Component[] composantsOption = panelOption.getComponents();
 
-						PanelSaisie  panelSaisieOption = (PanelSaisie ) composantsOption[2];
-						JTextField   ordre             = (JTextField  ) composantsOption[4];
-						JTextField   points            = (JTextField  ) composantsOption[6];
-						JRadioButton btnRadio          = (JRadioButton) composantsOption[7];
+						PanelSaisie  panelSaisieOption = (PanelSaisie ) composantsOption[1];
+						JTextField   ordre             = (JTextField  ) composantsOption[3];
+						JTextField   points            = (JTextField  ) composantsOption[5];
+						JRadioButton btnRadio          = (JRadioButton) composantsOption[6];
 					
 						if (ordre.getText().isEmpty())
 						{
@@ -372,12 +362,12 @@ public class QuestionElimination extends JFrame
 						OptionElimination option = Controleur.creerReponseElimination(panelSaisieOption.getTexte(), Integer.parseInt(ordre.getText()), Double.parseDouble(points.getText()), btnRadio.isSelected(), question);
 
 						question.ajouterOption(option);
-
-
-						// Fermer la fenêtre
-						QuestionElimination.this.dispose();
-						new Accueil();
 					}
+					
+					
+					// Fermer la fenêtre
+					QuestionElimination.this.dispose();
+					new Accueil();
 				}
 				else JOptionPane.showMessageDialog(QuestionElimination.this, erreurs, "Erreur", JOptionPane.ERROR_MESSAGE);
 			}
@@ -419,9 +409,9 @@ public class QuestionElimination extends JFrame
 				// Récupérez les sous-composants du JPanel
 				Component[] composantsOption = panelOption.getComponents();
 
-				JTextField   ordre             = (JTextField  ) composantsOption[4];
-				JTextField   points            = (JTextField  ) composantsOption[6];
-				JRadioButton radioButton       = (JRadioButton) composantsOption[7];
+				JTextField   ordre             = (JTextField  ) composantsOption[3];
+				JTextField   points            = (JTextField  ) composantsOption[5];
+				JRadioButton radioButton       = (JRadioButton) composantsOption[6];
 				
 				if (radioButton.isSelected())
 				{
