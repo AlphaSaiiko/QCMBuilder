@@ -283,4 +283,15 @@ public class CreationQuestionHTML {
 		}
     }
 
+    public void pageQuestionChoixAssociation() {
+        StringBuilder htmlContent = new StringBuilder();
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page3.html"))) {
+			writer.write(htmlContent.toString());
+			System.out.println("Le fichier js a été généré avec succès !");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+
 	}
