@@ -332,13 +332,10 @@ public class CreationHTML {
 
 		tf = f = d =m = 0;
 
-		for (Notion n : this.evaluation.getListeNotions())
-		{
-			tf += n.getNbQuestionTresFacile();
-			f += n.getNbQuestionFacile();
-			m += n.getNbQuestionMoyen();
-			d += n.getNbQuestionDifficile();
-		}
+		tf = this.evaluation.getQuestionTresFacile();
+		f = this.evaluation.getQuestionFacile();
+		m = this.evaluation.getQuestionMoyen();
+		d = this.evaluation.getQuestionDifficile();
 
 
 
@@ -359,14 +356,13 @@ public class CreationHTML {
 		{
 			htmlContent.append("        <p><span class=\"bold-texte\"> Notion(s) : </span> "+n.getNom()+"</p>").append("\n");
 		}
-
-
-		htmlContent.append("        <p> <span class=\"bold-texte\"> Nombre de questions : </span> 4 dont 2 <span class=\"cercleDifficile\">F</span> et 2").append("\n");
-		htmlContent.append("            <span class=\"cercleMoyen\">M</span> </p>").append("\n");
-		htmlContent.append("        <p> <span class=\"bold-texte\">Score global : </span> 4/4</p>").append("\n");
-		htmlContent.append("        <div class=\"boutonDiv\">").append("\n");
-		htmlContent.append("            <button onclick=\"location.href='QcmRéponseUnique.html';\">Commencer l'évaluation</button>").append("\n");
-		htmlContent.append("        </div>").append("\n");
+		htmlContent.append("        <p> <span class=\"bold-texte\"> Nombre de questions : </span> "+this.evaluation.getNbQuestion()+" dont ");
+		if (tf>0){htmlContent.append(tf+"<span class=\"cercleTresFacile\">TF</span> ");}
+		if (f>0){htmlContent.append(f+"<span class=\"cercleFacile\">F</span> ");}
+		if (m>0){htmlContent.append(m+"<span class=\"cercleMoyen\">M</span> ");}
+		if (d>0){htmlContent.append(tf+"<span class=\"cercleDifficile\">D</span> ");}
+		htmlContent.append("</p> \n");
+		htmlContent.append("        <p> <span class=\"bold-texte\">Score global : </span> 4/"+this.evaluation.getNbQuestion()+"</p>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
