@@ -16,6 +16,7 @@ public class CreationHTML {
 	private ControleurFichier ctrl = new ControleurFichier("");
 	private Evaluation evaluation;
 	private CreationQuestionHTML questionHTML;
+	private int numQuestion;
 
 
 	public CreationHTML(Evaluation evaluation){
@@ -27,6 +28,7 @@ public class CreationHTML {
 		this.questionHTML = new CreationQuestionHTML(evaluation);
 
 		this.evaluation = evaluation;
+		this.numQuestion = 1;
 
 		this.questionHTML.ecrireCSSAssociation();
 		this.questionHTML.ecrireCSSElimination();
@@ -78,10 +80,10 @@ public class CreationHTML {
 
 		for (Question question : this.evaluation.getListeQuestions())
 		{
-			if (question.getType().equals("QAEPR")){this.questionHTML.pageQuestionElimination(question);}
-			if (question.getType().equals("QCMRU")){this.questionHTML.pageQuestionUnique(question);}
-			if (question.getType().equals("QCMRM")){this.questionHTML.pageQuestionMultiple(question);}
-			if (question.getType().equals("QAE")){this.questionHTML.pageQuestionChoixAssociation(question);}
+			if (question.getType().equals("QAEPR")){this.questionHTML.pageQuestionElimination(question, this.numQuestion);}
+			if (question.getType().equals("QCMRU")){this.questionHTML.pageQuestionUnique(question, this.numQuestion);}
+			if (question.getType().equals("QCMRM")){this.questionHTML.pageQuestionMultiple(question, this.numQuestion);}
+			if (question.getType().equals("QAE")){this.questionHTML.pageQuestionChoixAssociation(question, this.numQuestion);}
 		}
 
 		this.pageDeFin();

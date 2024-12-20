@@ -12,7 +12,7 @@ public class CreationQuestionHTML {
 	public CreationQuestionHTML(Evaluation evaluation){this.evaluation = evaluation;}
 
 
-    public void pageQuestionChoixAssociation(Question question) {
+    public void pageQuestionChoixAssociation(Question question, int numQuestion) {
         StringBuilder htmlContent = new StringBuilder();
 
 
@@ -54,7 +54,7 @@ public class CreationQuestionHTML {
 		}
     }
 
-	public void pageQuestionElimination(Question question)
+	public void pageQuestionElimination(Question question, int numQuestion)
 	{
 		StringBuilder htmlContent = new StringBuilder();
 		htmlContent.append("<!DOCTYPE html>").append("\n");
@@ -107,7 +107,7 @@ public class CreationQuestionHTML {
 		}
 	}
 
-	public void pageQuestionUnique (Question question)
+	public void pageQuestionUnique (Question question, int numQuestion)
 	{
 		StringBuilder htmlContent = new StringBuilder();
 		htmlContent.append("<!DOCTYPE html>").append("\n");
@@ -153,7 +153,7 @@ public class CreationQuestionHTML {
 
 	}
 
-	public void pageQuestionMultiple(Question question)
+	public void pageQuestionMultiple(Question question, int numQuestion)
 	{
 		StringBuilder htmlContent = new StringBuilder();
 
