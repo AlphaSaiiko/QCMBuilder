@@ -60,214 +60,225 @@ public class CreationHTML {
 		htmlContent.append("</html>\n");
 
 		// Sauvegarde dans un fichier HTML
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/titres.html"))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/pageDAccueil.html"))) {
 			writer.write(htmlContent.toString());
 			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-
-		htmlContent = new StringBuilder();
 		for (Question question : this.evaluation.getListeQuestions())
 		{
-			questionHTML.pageQuestionElimination(question);
+			if (question.getType().equals("QAEPR")){this.questionHTML.pageQuestionElimination(question);}
+			if (question.getType().equals("QCMRU")){this.questionHTML.pageQuestionChoixUnique(question);}
 		}
+
+		this.pageDeFin();
+
+
 	}
 
 	public void ecrireCSS()
 	{
 		StringBuilder cssContent = new StringBuilder();
 
-		cssContent.append("/* Réinitialisation générale */\n");
-		cssContent.append("* {\n");
-		cssContent.append("    margin: 0;\n");
-		cssContent.append("    padding: 0;\n");
-		cssContent.append("    box-sizing: border-box;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append("/* Corps de la page */\n");
-		cssContent.append("body {\n");
-		cssContent.append("    font-family: Arial, sans-serif;\n");
-		cssContent.append("    background-color: #f8f9fa;\n");
-		cssContent.append("    display: flex;\n");
-		cssContent.append("    flex-direction: column;\n");
-		cssContent.append("    align-items: center;\n");
-		cssContent.append("    justify-content: center;\n");
-		cssContent.append("    min-height: 100vh;\n");
-		cssContent.append("    text-align: center;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append("/* Titres et paragraphes */\n");
-		cssContent.append("h2 {\n");
-		cssContent.append("    margin-bottom: 15px;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append("p {\n");
-		cssContent.append("    margin-bottom: 20px;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append("/* Conteneur des colonnes */\n");
-		cssContent.append(".association-entitees {\n");
-		cssContent.append("    display: flex;\n");
-		cssContent.append("    justify-content: center;\n");
-		cssContent.append("    gap: 150px;\n");
-		cssContent.append("    margin-bottom: 30px;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append(".proposition-qcm {\n");
-		cssContent.append("    display: flex;\n");
-		cssContent.append("    justify-content: center;\n");
-		cssContent.append("    gap: 50px;\n");
-		cssContent.append("    margin-bottom: 30px;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append("/* Colonne et listes */\n");
-		cssContent.append(".colonne {\n");
-		cssContent.append("    text-align: left;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append(".terms,\n");
-		cssContent.append(".definitions {\n");
-		cssContent.append("    list-style: none;\n");
-		cssContent.append("    padding: 0;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append(".terms li,\n");
-		cssContent.append(".definitions li {\n");
-		cssContent.append("    border: 1px solid #ccc;\n");
-		cssContent.append("    padding: 10px;\n");
-		cssContent.append("    margin: 10px 0;\n");
-		cssContent.append("    background-color: #fff;\n");
-		cssContent.append("    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append("/* Conteneur des boutons */\n");
-		cssContent.append(".button-container button {\n");
-		cssContent.append("    padding: 10px 20px;\n");
-		cssContent.append("    margin: 5px;\n");
-		cssContent.append("    font-size: 16px;\n");
-		cssContent.append("    border: none;\n");
-		cssContent.append("    background-color: #007BFF;\n");
-		cssContent.append("    color: #ffffff;\n");
-		cssContent.append("    cursor: pointer;\n");
-		cssContent.append("    border-radius: 5px;\n");
-		cssContent.append("    transition: background-color 0.3s ease;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append(".button-container button:hover {\n");
-		cssContent.append("    background-color: #0056b3;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append("/* Réinitialisation générale */\n");
-		cssContent.append("* {\n");
-		cssContent.append("    margin: 0;\n");
-		cssContent.append("    padding: 0;\n");
-		cssContent.append("    box-sizing: border-box;\n");
-		cssContent.append("}\n\n");
-		
-		cssContent.append("/* Style général du corps */\n");
-		cssContent.append("body {\n");
-		cssContent.append("    font-family: Arial, sans-serif;\n");
-		cssContent.append("    background-color: #f4f4f9;\n");
-		cssContent.append("    display: flex;\n");
-		cssContent.append("    justify-content: center;\n");
-		cssContent.append("    align-items: center;\n");
-		cssContent.append("    min-height: 100vh;\n");
-		cssContent.append("    text-align: center;\n");
-		cssContent.append("}\n");
+		cssContent.append("body {").append("\n");
+		cssContent.append("    font-family: Arial, sans-serif;").append("\n");
+		cssContent.append("    background-color: #f4f4f9;").append("\n");
+		cssContent.append("    margin: 0;").append("\n");
+		cssContent.append("    padding: 0;").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("    height: 100vh;").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("/* Conteneur principal */\n");
-		cssContent.append(".container {\n");
-		cssContent.append("    background-color: #ffffff;\n");
-		cssContent.append("    border: 1px solid #ddd;\n");
-		cssContent.append("    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n");
-		cssContent.append("    border-radius: 10px;\n");
-		cssContent.append("    padding: 30px 50px;\n");
-		cssContent.append("    max-width: 500px;\n");
-		cssContent.append("    width: 90%;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".container {").append("\n");
+		cssContent.append("    background-color: #fff;").append("\n");
+		cssContent.append("    padding: 20px;").append("\n");
+		cssContent.append("    border-radius: 10px;").append("\n");
+		cssContent.append("    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);").append("\n");
+		cssContent.append("    width: 80%;").append("\n");
+		cssContent.append("    max-width: 1000px;").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("/* Titre principal */\n");
-		cssContent.append("h1 {\n");
-		cssContent.append("    margin-bottom: 20px;\n");
-		cssContent.append("    font-size: 28px;\n");
-		cssContent.append("    color: #333;\n");
-		cssContent.append("}\n\n");
+		cssContent.append("h1 {").append("\n");
+		cssContent.append("    color: #333;").append("\n");
+		cssContent.append("    margin-bottom: 10px;").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("/* Paragraphes */\n");
-		cssContent.append("p {\n");
-		cssContent.append("    margin-bottom: 10px;\n");
-		cssContent.append("    font-size: 18px;\n");
-		cssContent.append("    color: #555;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".qcm-type {").append("\n");
+		cssContent.append("    color: #666;").append("\n");
+		cssContent.append("    font-size: 14px;").append("\n");
+		cssContent.append("    margin-bottom: 20px;").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("/* Bouton */\n");
-		cssContent.append("button {\n");
-		cssContent.append("    margin-top: 20px;\n");
-		cssContent.append("    padding: 12px 20px;\n");
-		cssContent.append("    font-size: 18px;\n");
-		cssContent.append("    background-color: #007BFF;\n");
-		cssContent.append("    color: white;\n");
-		cssContent.append("    border: none;\n");
-		cssContent.append("    border-radius: 5px;\n");
-		cssContent.append("    cursor: pointer;\n");
-		cssContent.append("    transition: background-color 0.3s ease;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".content {").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    justify-content: space-between;").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("button:hover {\n");
-		cssContent.append("    background-color: #0056b3;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".sujet,").append("\n");
+		cssContent.append(".proposition {").append("\n");
+		cssContent.append("    width: 48%;").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("/* Style général */\n");
-		cssContent.append("body {\n");
-		cssContent.append("    font-family: Arial, sans-serif;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".rectangle {").append("\n");
+		cssContent.append("    width: 100%;").append("\n");
+		cssContent.append("    height: 50px;").append("\n");
+		cssContent.append("    background-color: grey;").append("\n");
+		cssContent.append("    margin: 10px 0;").append("\n");
+		cssContent.append("    cursor: pointer;").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("    text-align: center;").append("\n");
+		cssContent.append("    border-radius: 10px;").append("\n");
+		cssContent.append("    transition: background-color 0.3s, transform 0.3s;").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("h2 {\n");
-		cssContent.append("    text-align: center;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".rectangle:hover {").append("\n");
+		cssContent.append("    transform: scale(1.05);").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append(".association-entitees {\n");
-		cssContent.append("    display: flex;\n");
-		cssContent.append("    justify-content: center;\n");
-		cssContent.append("    position: relative;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".buttons-container {").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("    margin-top: 20px;").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append(".colonne {\n");
-		cssContent.append("    margin: 0 20px;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".buttons-container button {").append("\n");
+		cssContent.append("    padding: 10px 20px;").append("\n");
+		cssContent.append("    font-size: 16px;").append("\n");
+		cssContent.append("    cursor: pointer;").append("\n");
+		cssContent.append("    border: none;").append("\n");
+		cssContent.append("    border-radius: 5px;").append("\n");
+		cssContent.append("    background-color: #007bff;").append("\n");
+		cssContent.append("    color: white;").append("\n");
+		cssContent.append("    transition: background-color 0.3s, transform 0.3s;").append("\n");
+		cssContent.append("    margin: 0 10px;").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append(".terms, .definitions {\n");
-		cssContent.append("    list-style-type: none;\n");
-		cssContent.append("    padding: 0;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".buttons-container button:hover {").append("\n");
+		cssContent.append("    background-color: #0056b3;").append("\n");
+		cssContent.append("    transform: scale(1.05);").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("li {\n");
-		cssContent.append("    padding: 10px;\n");
-		cssContent.append("    border: 1px solid #ddd;\n");
-		cssContent.append("    cursor: pointer;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".buttons-container button:active {").append("\n");
+		cssContent.append("    background-color: #004494;").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("li.selected {\n");
-		cssContent.append("    background-color: #d1e7dd; /* Vert clair */\n");
-		cssContent.append("    border-color: #0f5132;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".tresfacile {").append("\n");
+		cssContent.append("    box-shadow: 0 4px 8px rgba(0, 255, 0, 0.5);").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("li.matched {\n");
-		cssContent.append("    background-color: #cfe2ff; /* Bleu clair pour les éléments appariés */\n");
-		cssContent.append("    pointer-events: none;\n");
-		cssContent.append("}\n\n");
+		cssContent.append(".facile {").append("\n");
+		cssContent.append("    box-shadow: 0 4px 8px rgba(255, 255, 0, 0.5);").append("\n");
+		cssContent.append("}").append("\n");
 
-		cssContent.append("#connection-lines {\n");
-		cssContent.append("    position: absolute;\n");
-		cssContent.append("    top: 0;\n");
-		cssContent.append("    left: 0;\n");
-		cssContent.append("    width: 100%;\n");
-		cssContent.append("    height: 100%;\n");
-		cssContent.append("    pointer-events: none; /* Empêche les clics sur le SVG */\n");
-		cssContent.append("}\n");
+		cssContent.append(".moyen {").append("\n");
+		cssContent.append("    box-shadow: 0 4px 8px rgba(255, 0, 0, 0.5);").append("\n");
+		cssContent.append("}").append("\n");
 
+		cssContent.append(".difficile {").append("\n");
+		cssContent.append("    box-shadow: grey;").append("\n");
+		cssContent.append("}").append("\n");
+
+		cssContent.append(".corp-titre {").append("\n");
+		cssContent.append("    background-color: #fff;").append("\n");
+		cssContent.append("    padding: 20px;").append("\n");
+		cssContent.append("    border-radius: 10px;").append("\n");
+		cssContent.append("    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);").append("\n");
+		cssContent.append("    width: 80%;").append("\n");
+		cssContent.append("    max-width: 500px;").append("\n");
+		cssContent.append("}").append("\n");
+
+		cssContent.append(".corp-titre p {").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("}").append("\n");
+
+		cssContent.append(".corp-titre span {").append("\n");
+		cssContent.append("    font-weight: bold;").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    padding: 10px;").append("\n");
+		cssContent.append("}").append("\n");
+
+		cssContent.append(".cercleFacile {").append("\n");
+		cssContent.append("    position: relative;").append("\n");
+		cssContent.append("    display: inline-block;").append("\n");
+		cssContent.append("    background-color: blue;").append("\n");
+		cssContent.append("    width: .5em;").append("\n");
+		cssContent.append("    height: .5em;").append("\n");
+		cssContent.append("    border-radius: 100%;").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("    margin: 0 5px;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("}").append("\n");
+
+		cssContent.append(".cercleMoyen {").append("\n");
+		cssContent.append("    position: relative;").append("\n");
+		cssContent.append("    display: inline-block;").append("\n");
+		cssContent.append("    background-color: red;").append("\n");
+		cssContent.append("    width: .5em;").append("\n");
+		cssContent.append("    height: .5em;").append("\n");
+		cssContent.append("    border-radius: 100%;").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("    margin: 0 5px;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("}").append("\n");
+
+		cssContent.append(".cercleTresFacile {").append("\n");
+		cssContent.append("    position: relative;").append("\n");
+		cssContent.append("    display: inline-block;").append("\n");
+		cssContent.append("    background-color: green;").append("\n");
+		cssContent.append("    width: .5em;").append("\n");
+		cssContent.append("    height: .5em;").append("\n");
+		cssContent.append("    border-radius: 100%;").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("    margin: 0 5px;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("}").append("\n");
+
+		cssContent.append(".cercleDifficile {").append("\n");
+		cssContent.append("    position: relative;").append("\n");
+		cssContent.append("    display: inline-block;").append("\n");
+		cssContent.append("    background-color: grey;").append("\n");
+		cssContent.append("    width: .5em;").append("\n");
+		cssContent.append("    height: .5em;").append("\n");
+		cssContent.append("    border-radius: 100%;").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("    margin: 0 5px;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("}").append("\n");
+
+		cssContent.append(".boutonDiv {").append("\n");
+		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("}").append("\n");
+
+		cssContent.append(".corp-titre button {").append("\n");
+		cssContent.append("    padding: 10px 20px;").append("\n");
+		cssContent.append("    font-size: 16px;").append("\n");
+		cssContent.append("    cursor: pointer;").append("\n");
+		cssContent.append("    border: none;").append("\n");
+		cssContent.append("    border-radius: 5px;").append("\n");
+		cssContent.append("    background-color: #007bff;").append("\n");
+		cssContent.append("    color: white;").append("\n");
+		cssContent.append("    transition: background-color 0.3s, transform 0.3s;").append("\n");
+		cssContent.append("    margin: 0 10px;").append("\n");
+		cssContent.append("}").append("\n");
 		
 
 
@@ -311,5 +322,60 @@ public class CreationHTML {
 		}
 		htmlContent.append("\t<button onclick=\"location.href='page1.html';\">Commencer l'évaluation</button>");
 		htmlContent.append("\t</div>");
+	}
+
+	public void pageDeFin()
+	{
+		StringBuilder htmlContent = new StringBuilder();
+
+		int tf, f, d, m;
+
+		tf = f = d =m = 0;
+
+		for (Notion n : this.evaluation.getListeNotions())
+		{
+			tf += n.getNbQuestionTresFacile();
+			f += n.getNbQuestionFacile();
+			m += n.getNbQuestionMoyen();
+			d += n.getNbQuestionDifficile();
+		}
+
+
+
+		htmlContent.append("<!DOCTYPE html>").append("\n");
+		htmlContent.append("<html lang=\"fr\">").append("\n");
+		htmlContent.append("<head>").append("\n");
+		htmlContent.append("    <meta charset=\"UTF-8\">").append("\n");
+		htmlContent.append("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">").append("\n");
+		htmlContent.append("    <title>Evaluation</title>").append("\n");
+		htmlContent.append("    <link rel=\"stylesheet\" href=\"style.css\">").append("\n");
+		htmlContent.append("</head>").append("\n");
+		htmlContent.append("<body>").append("\n");
+		htmlContent.append("    <div class=\"corp-titre\">").append("\n");
+		htmlContent.append("        <h1>Évaluation Terminée ! </h1>").append("\n");
+		htmlContent.append("        <p> <span class=\"bold-texte\"> Ressource : </span> "+ this.evaluation.getRessource().getNom() + "</p>").append("\n");
+
+		for (Notion n : this.evaluation.getListeNotions())
+		{
+			htmlContent.append("        <p><span class=\"bold-texte\"> Notion(s) : </span> "+n.getNom()+"</p>").append("\n");
+		}
+
+
+		htmlContent.append("        <p> <span class=\"bold-texte\"> Nombre de questions : </span> 4 dont 2 <span class=\"cercleDifficile\">F</span> et 2").append("\n");
+		htmlContent.append("            <span class=\"cercleMoyen\">M</span> </p>").append("\n");
+		htmlContent.append("        <p> <span class=\"bold-texte\">Score global : </span> 4/4</p>").append("\n");
+		htmlContent.append("        <div class=\"boutonDiv\">").append("\n");
+		htmlContent.append("            <button onclick=\"location.href='QcmRéponseUnique.html';\">Commencer l'évaluation</button>").append("\n");
+		htmlContent.append("        </div>").append("\n");
+		htmlContent.append("    </div>").append("\n");
+		htmlContent.append("</body>").append("\n");
+		htmlContent.append("</html>").append("\n");
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/pageDeFin.html"))) {
+			writer.write(htmlContent.toString());
+			System.out.println("Le fichier HTML a été généré avec succès !");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
