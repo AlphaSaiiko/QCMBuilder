@@ -9,7 +9,6 @@ import javax.swing.*;
 import controleur.Controleur;
 import modele.Question;
 import modele.option.Option;
-import modele.option.OptionElimination;
 
 public class QuestionReponsesMultiples extends JFrame
 {

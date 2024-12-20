@@ -1,11 +1,11 @@
 package vue;
 
-import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import controleur.Controleur;
 import modele.Question;
 import modele.option.OptionElimination;
 
@@ -92,6 +92,11 @@ public class QuestionElimination extends JFrame
 		// Panel pour les boutons
         panelBoutons = new JPanel();
         panelBoutons.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+
+		// Initialiser le groupe de boutons radio
+		ButtonGroup groupeBtnsRadio = new ButtonGroup();
+
 
 		// Ajouter un ActionListener au bouton "Ajouter"
 		JButton btnAjouter = new JButton("Ajouter une option");
@@ -229,6 +234,7 @@ public class QuestionElimination extends JFrame
 				gbc.gridy = 0;
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 				gbc.anchor = GridBagConstraints.CENTER;
+				groupeBtnsRadio.add(btnRadio);
 				panelOption.add(btnRadio, gbc);
 
 				btnRadio.addActionListener(new ActionListener()
