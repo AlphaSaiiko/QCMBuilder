@@ -26,7 +26,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("</head>").append("\n");
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
-		htmlContent.append("        <h1>Associez les mots aux définitions</h1>").append("\n");
+		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
 		htmlContent.append("        <div class=\"columns\">").append("\n");
 		htmlContent.append("            <div class=\"words\" id=\"words\">").append("\n");
 		htmlContent.append("                <div class=\"word\" data-id=\"1\">Chat</div>").append("\n");
