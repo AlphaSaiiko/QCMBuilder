@@ -189,15 +189,18 @@ public class ControleurFichier
 
 	public String inclureEmplacementPj(String contenu, String emplacement)
 	{
-		int indexDernierSlash = emplacement.lastIndexOf("/");
-		if (indexDernierSlash != -1)
-			emplacement = emplacement.substring(0, indexDernierSlash + 1);
+		if (contenu.indexOf("<img src=\"complements/") != -1)
+		{
+			int indexDernierSlash = emplacement.lastIndexOf("/");
+			if (indexDernierSlash != -1)
+				emplacement = emplacement.substring(0, indexDernierSlash + 1);
+		
+			int index = contenu.indexOf("<img src=\"complements/") + 10;
 	
-		int index = contenu.indexOf("<img src=\"complements/") + 10;
+			if (index != -1) 
+				contenu = contenu.substring(0, index) + emplacement + contenu.substring(index);
+		}
 
-		if (index != -1) 
-			contenu = contenu.substring(0, index) + emplacement + contenu.substring(index);
-	
 		return contenu;
 	}
 	
