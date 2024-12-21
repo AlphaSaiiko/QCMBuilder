@@ -165,6 +165,7 @@ public class ControleurFichier
 			{
 				File fichierSource = new File(image);
 				copierImage(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+				enonce = gererPiecesJointes(enonce, emplacement.substring(0, indexDernierSlash + 1) + "complements/");
 			}
 		}
 			
@@ -185,6 +186,7 @@ public class ControleurFichier
 					{
 						File fichierSource = new File(image);
 						copierImage(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+						enonce = gererPiecesJointes(enonce, emplacement.substring(0, indexDernierSlash + 1) + "complements/");
 					}
 				}
 
@@ -280,6 +282,43 @@ public class ControleurFichier
         } catch (IOException e) {
             System.out.println("Erreur lors de la copie de l'image : " + e.getMessage());
         }
+    }
+
+
+	// ON FINI PAR DU CHATGPT
+	public static String gererPiecesJointes(String enonce, String emplacement) {
+        // Expression régulière pour détecter les balises <img> avec un attribut src
+        String regex = "<img\\s+[^>]*src\\s*=\\s*\"([^\"]+)\"";
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(enonce);
+
+        // Construire le nouveau contenu avec les chemins mis à jour
+        StringBuffer resultat = new StringBuffer();
+
+        while (matcher.find()) {
+            // Chemin d'origine de l'image
+            String cheminOrigine = matcher.group(1);
+
+            // Extraire uniquement le nom du fichier
+            String nomFichier = cheminOrigine.substring(cheminOrigine.lastIndexOf("\\") + 1);
+
+            // Vérifier si le chemin généré contient déjà l'emplacement relatif
+            if (!cheminOrigine.contains(emplacement)) {
+                // Nouveau chemin relatif
+                String nouveauChemin = "./" + emplacement.replace("\\", "/") + nomFichier;
+
+                // Remplacer le chemin d'origine par le nouveau chemin dans la balise <img>
+                matcher.appendReplacement(resultat, matcher.group(0).replace(cheminOrigine, nouveauChemin));
+            } else {
+                // Conserver le chemin existant si déjà correct
+                matcher.appendReplacement(resultat, matcher.group(0));
+            }
+        }
+
+        // Ajouter le reste du texte après la dernière correspondance
+        matcher.appendTail(resultat);
+
+        return resultat.toString();
     }
 
 
