@@ -1,6 +1,7 @@
 package controleur;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,7 +9,11 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import modele.Notion;
 import modele.Question;
 import modele.Ressource;
@@ -24,16 +29,16 @@ public class ControleurFichier
 	 * | ATTRIBUTS  |
 	 * +------------+
 	 */
-	private String chemin;
+	private String emplacement;
 
 	/*
 	 * +--------------+
 	 * | CONSTRUCTEUR |
 	 * +--------------+
 	 */
-	public ControleurFichier(String chemin)
+	public ControleurFichier(String emplacement)
 	{
-		this.chemin = chemin;
+		this.emplacement = emplacement;
 	}
 
 	/*
@@ -47,7 +52,7 @@ public class ControleurFichier
 		{
 			nomFichier += ".rtf";
 		}
-		nomFichier = this.chemin + nomFichier;
+		nomFichier = this.emplacement + nomFichier;
 
 		try
 		{
@@ -71,7 +76,7 @@ public class ControleurFichier
 
 	public void ajouterFichier(String nomFichier)
 	{
-		nomFichier = this.chemin + nomFichier;
+		nomFichier = this.emplacement + nomFichier;
 		File fichier = new File(nomFichier);
 
 		// Vérification et création du répertoire
@@ -92,7 +97,7 @@ public class ControleurFichier
 
 	public void supprimerFichier(String nomFichier)
 	{
-		nomFichier = this.chemin + nomFichier;
+		nomFichier = this.emplacement + nomFichier;
 		File fichier = new File(nomFichier);
 
 		if (fichier.exists())
@@ -105,19 +110,19 @@ public class ControleurFichier
 		}
 	}
 
-	public void ecrireQuestion(String chemin, Question qst)
+	public void ecrireQuestion(String emplacement, Question qst)
 	{
-		if (!chemin.endsWith(".rtf"))
+		if (!emplacement.endsWith(".rtf"))
 		{
-			chemin += ".rtf";
+			emplacement += ".rtf";
 		}
-		chemin = this.chemin + chemin;
+		emplacement = this.emplacement + emplacement;
 		try
 		{
-			PrintWriter pw = new PrintWriter(new FileOutputStream(chemin, false));
+			PrintWriter pw = new PrintWriter(new FileOutputStream(emplacement, false));
 			pw.println(qst.getType() + ";" + qst.getEnonce() + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom());
 			pw.close();
-			System.out.println("Fichier RTF créé : " + chemin);
+			System.out.println("Fichier RTF créé : " + emplacement);
 		}
 		catch (Exception e)
 		{
@@ -127,33 +132,61 @@ public class ControleurFichier
 
 	public boolean exists(String nom)
 	{
-		nom = this.chemin + nom;
+		nom = this.emplacement + nom;
 		File fichier = new File(nom);
 		return fichier.exists();
 	}
 
-	public void modifierQuestion(String chemin, Question qst)
+	public void modifierQuestion(String emplacement, Question qst)
 	{
-		if (!chemin.endsWith(".rtf")) {
-			chemin += ".rtf";
+		if (!emplacement.endsWith(".rtf")) {
+			emplacement += ".rtf";
 		}
-		chemin = this.chemin + chemin;
+		emplacement = this.emplacement + emplacement;
 
-		File fichier = new File(chemin);
+		File fichier = new File(emplacement);
 
 		// Vérifie si le fichier existe
 		if (!fichier.exists()) {
 			return;
 		}
 
-		String enonce = inclureEmplacementPj(qst.getEnonce(), chemin);
+
+		String  enonce                    ;
+
+		enonce = qst.getEnonce();
+		if (aImage(qst.getEnonce(), emplacement))
+		{
+			int indexDernierSlash = emplacement.lastIndexOf("/");
+			new File(emplacement.substring(0, indexDernierSlash + 1) + File.separator + "complements").mkdirs();
+
+			List<String> listeComplements = getImages(enonce);
+			for (String image : listeComplements)
+			{
+				File fichierSource = new File(image);
+				copierImage(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+			}
+		}
+			
 
 		String ligneEntiere = qst.getType() + ";" + enonce + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";";
 		if (qst.getEnsOptions() != null)
 		{
 			for (IOption option : qst.getEnsOptions())
 			{
-				enonce = inclureEmplacementPj(option.getEnonce(), chemin);
+				enonce = option.getEnonce();
+				if (aImage(option.getEnonce(), emplacement))
+				{
+					int indexDernierSlash = emplacement.lastIndexOf("/");
+					new File(emplacement.substring(0, indexDernierSlash + 1) + File.separator + "complements").mkdirs();
+
+					List<String> listeComplements = getImages(enonce);
+					for (String image : listeComplements)
+					{
+						File fichierSource = new File(image);
+						copierImage(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+					}
+				}
 
 				ligneEntiere += option.getType() + "/" + enonce + "/" + option.getId();
 				if (option instanceof OptionElimination)
@@ -167,19 +200,18 @@ public class ControleurFichier
 				}
 				ligneEntiere += "|";
 			}
-			
 		}
 		
 		try {
 			// Lire toutes les lignes du fichier
-			List<String> lignes = Files.readAllLines(Paths.get(chemin));
+			List<String> lignes = Files.readAllLines(Paths.get(emplacement));
 
 			if (!lignes.isEmpty()) {
 				lignes.set(0, ligneEntiere);
 			}
 
 			// Réécrire le contenu modifié dans le fichier
-			Files.write(Paths.get(chemin), lignes, StandardOpenOption.TRUNCATE_EXISTING);
+			Files.write(Paths.get(emplacement), lignes, StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (IOException e) {
 			System.err.println("Une erreur s'est produite lors de la modification du fichier : " + e.getMessage());
 		}
@@ -187,35 +219,80 @@ public class ControleurFichier
 
 
 
-	public String inclureEmplacementPj(String contenu, String emplacement)
+	// FULL CHATGPT
+    private boolean aImage(String contenu, String emplacement) {
+        // Expression régulière pour détecter une balise <img> avec l'attribut src
+        String regex = "<img\\s+[^>]*src\\s*=\\s*\"[^\"]+\"";
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(contenu);
+
+        // Retourne vrai si une correspondance est trouvée
+        return matcher.find();
+    }
+
+
+	// ENCORE FULL CHATGPT
+	private static List<String> getImages(String contenu) {
+        // Liste pour stocker les chemins des images trouvés
+        List<String> imagePaths = new ArrayList<>();
+
+        // Expression régulière pour trouver les balises <img> avec un attribut src
+        String regex = "<img[^>]*src=\\\"([^\\\"]*)\\\"";
+
+        // Compiler l'expression régulière
+        Pattern pattern = Pattern.compile(regex);
+
+        // Matcher pour rechercher les correspondances dans le contenu
+        Matcher matcher = pattern.matcher(contenu);
+
+        // Parcourir toutes les correspondances trouvées
+        while (matcher.find()) {
+            // Ajouter la valeur de l'attribut src à la liste
+            imagePaths.add(matcher.group(1));
+        }
+
+        return imagePaths;
+    }
+
+
+	// TOUJOURS ENCORE FULL CHATGPT
+	public static void copierImage(File fichierSource, String emplacementCible) {
+        File fichierCible = new File(emplacementCible);
+
+        // Vérifie si le fichier source existe
+        if (!fichierSource.exists()) {
+            System.out.println("Le fichier source n'existe pas : " + fichierSource.getName());
+            return;
+        }
+
+        // Tente de copier le fichier
+        try (FileInputStream inputStream = new FileInputStream(fichierSource);
+             FileOutputStream outputStream = new FileOutputStream(fichierCible)) {
+
+            byte[] buffer = new byte[1024];
+            int longueur;
+
+            // Lit et écrit les données en utilisant un buffer
+            while ((longueur = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, longueur);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erreur lors de la copie de l'image : " + e.getMessage());
+        }
+    }
+
+
+
+
+	public void modifierReponse(String emplacement, IOption opt)
 	{
-		if (contenu.indexOf("<img src=\"complements/") != -1)
+		if (!emplacement.endsWith(".rtf"))
 		{
-			int indexDernierSlash = emplacement.lastIndexOf("/");
-			if (indexDernierSlash != -1)
-				emplacement = emplacement.substring(0, indexDernierSlash + 1);
-		
-			int index = contenu.indexOf("<img src=\"complements/") + 10;
-	
-			if (index != -1) 
-				contenu = contenu.substring(0, index) + emplacement + contenu.substring(index);
+			emplacement += ".rtf";
 		}
-
-		return contenu;
-	}
-	
-
-
-
-
-	public void modifierReponse(String chemin, IOption opt)
-	{
-		if (!chemin.endsWith(".rtf"))
-		{
-			chemin += ".rtf";
-		}
-		chemin = this.chemin + chemin;
-		File fichier = new File(chemin);
+		emplacement = this.emplacement + emplacement;
+		File fichier = new File(emplacement);
 
 		// Vérifie si le fichier existe
 		if (!fichier.exists())
@@ -233,7 +310,7 @@ public class ControleurFichier
 		try
 		{
 			// Lire toutes les lignes du fichier
-			List<String> lignes = Files.readAllLines(Paths.get(chemin));
+			List<String> lignes = Files.readAllLines(Paths.get(emplacement));
 
 			// Identifier et modifier la ligne correspondante
 			for (int i = 0; i < lignes.size(); i++)
@@ -247,7 +324,7 @@ public class ControleurFichier
 			}
 
 			// Réécrire le contenu modifié dans le fichier
-			Files.write(Paths.get(chemin), lignes, StandardOpenOption.TRUNCATE_EXISTING);
+			Files.write(Paths.get(emplacement), lignes, StandardOpenOption.TRUNCATE_EXISTING);
 		}
 		catch (IOException e)
 		{

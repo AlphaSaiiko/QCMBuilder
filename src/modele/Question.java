@@ -267,7 +267,6 @@ public class Question
 		{
 			ControleurFichier controleurFichier = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
 			controleurFichier.modifierQuestion("question" + this.numQuestion + "/question" + this.numQuestion, this);
-			System.out.println("Fichier mis à jour : " + emplacement);
 		}
 		else
 			System.err.println("Erreur : Le fichier n'existe pas et ne peut donc pas être modifié.");

@@ -195,9 +195,9 @@ public class PanelSaisie extends JPanel
 			if (image != null && image instanceof ImageIcon)
 			{
 				String emplacementImage = ((ImageIcon) image).getDescription();
-				String nomImage         = new File(emplacementImage).getName();
+//				String nomImage         = new File(emplacementImage).getName();
 
-				contenu += "<img src=\"complements/" + nomImage + "\" alt=\"Image\">";
+				contenu += "<img src=\"" + emplacementImage + "\" alt=\"Image\">";
 			}
 			else
 			{
