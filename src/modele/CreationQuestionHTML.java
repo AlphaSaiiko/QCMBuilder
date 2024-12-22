@@ -60,7 +60,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
 	
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page3.html"))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
 			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
@@ -111,7 +111,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("    <script src=\"scriptElimination.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page4.html"))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
 			System.out.println("Le fichier js a été généré avec succès !");
 		} catch (IOException e) {
@@ -156,7 +156,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page2.html"))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
 			System.out.println("Le fichier js a été généré avec succès !");
 		} catch (IOException e) {
@@ -207,7 +207,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page1.html"))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
 			System.out.println("Le fichier html a été généré avec succès !");
 		} catch (IOException e) {
