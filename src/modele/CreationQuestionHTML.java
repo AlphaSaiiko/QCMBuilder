@@ -9,12 +9,19 @@ import modele.option.*;
 public class CreationQuestionHTML {
 
 	private Evaluation evaluation;
+	private int nbQuestion;
 
-	public CreationQuestionHTML(Evaluation evaluation){this.evaluation = evaluation;}
+	public CreationQuestionHTML(Evaluation evaluation){
+		this.evaluation = evaluation;
+	}
 
 
     public void pageQuestionChoixAssociation(Question question, int numQuestion) {
 		StringBuilder htmlContent = new StringBuilder();
+
+		String pageSuivante;
+		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
+		else {pageSuivante = "pageDeFin";}
 	
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
@@ -55,6 +62,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("            </div>\n");
 		htmlContent.append("        </div>\n");
 		htmlContent.append("        <button onclick=\"validate()\">Valider</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptAssociation.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
@@ -73,6 +81,11 @@ public class CreationQuestionHTML {
 	public void pageQuestionElimination(Question question, int numQuestion)
 	{
 		StringBuilder htmlContent = new StringBuilder();
+
+		String pageSuivante;
+		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
+		else {pageSuivante = "pageDeFin";}
+
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
 		htmlContent.append("<head>").append("\n");
@@ -107,6 +120,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("        <button id=\"eliminar\">Éliminer</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptElimination.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
@@ -122,6 +136,11 @@ public class CreationQuestionHTML {
 	public void pageQuestionUnique (Question question, int numQuestion)
 	{
 		StringBuilder htmlContent = new StringBuilder();
+
+		String pageSuivante;
+		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
+		else {pageSuivante = "pageDeFin";}
+
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
 		htmlContent.append("<head>").append("\n");
@@ -151,6 +170,7 @@ public class CreationQuestionHTML {
 		}
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptReponseUnique.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
@@ -168,6 +188,10 @@ public class CreationQuestionHTML {
 	public void pageQuestionMultiple(Question question, int numQuestion)
 	{
 		StringBuilder htmlContent = new StringBuilder();
+
+		String pageSuivante;
+		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
+		else {pageSuivante = "pageDeFin";}
 
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
@@ -198,6 +222,7 @@ public class CreationQuestionHTML {
 		}
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptReponseMultiple.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
