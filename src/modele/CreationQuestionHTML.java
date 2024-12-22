@@ -20,8 +20,12 @@ public class CreationQuestionHTML {
 		StringBuilder htmlContent = new StringBuilder();
 
 		String pageSuivante;
+		String pagePrecedente;
 		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
 		else {pageSuivante = "pageDeFin";}
+
+		if(numQuestion>1){pagePrecedente = "page"+(numQuestion-1);}
+		else{pagePrecedente="pageDAccueil";}
 	
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
@@ -61,6 +65,7 @@ public class CreationQuestionHTML {
 		}
 		htmlContent.append("            </div>\n");
 		htmlContent.append("        </div>\n");
+		htmlContent.append("        <button onclick=\"location.href='"+pagePrecedente+".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button onclick=\"validate()\">Valider</button>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
@@ -83,8 +88,12 @@ public class CreationQuestionHTML {
 		StringBuilder htmlContent = new StringBuilder();
 
 		String pageSuivante;
+		String pagePrecedente;
 		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
 		else {pageSuivante = "pageDeFin";}
+
+		if(numQuestion>1){pagePrecedente = "page"+(numQuestion-1);}
+		else{pagePrecedente="pageDAccueil";}
 
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
@@ -118,6 +127,7 @@ public class CreationQuestionHTML {
 			}
 		}
 		htmlContent.append("        </div>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='"+pagePrecedente+".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button id=\"eliminar\">Éliminer</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
@@ -138,8 +148,12 @@ public class CreationQuestionHTML {
 		StringBuilder htmlContent = new StringBuilder();
 
 		String pageSuivante;
+		String pagePrecedente;
 		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
 		else {pageSuivante = "pageDeFin";}
+
+		if(numQuestion>1){pagePrecedente = "page"+(numQuestion-1);}
+		else{pagePrecedente="pageDAccueil";}
 
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
@@ -169,6 +183,7 @@ public class CreationQuestionHTML {
 			
 		}
 		htmlContent.append("        </div>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='"+pagePrecedente+".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
@@ -190,8 +205,12 @@ public class CreationQuestionHTML {
 		StringBuilder htmlContent = new StringBuilder();
 
 		String pageSuivante;
+		String pagePrecedente;
 		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
 		else {pageSuivante = "pageDeFin";}
+
+		if(numQuestion>1){pagePrecedente = "page"+(numQuestion-1);}
+		else{pagePrecedente="pageDAccueil";}
 
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
@@ -221,6 +240,7 @@ public class CreationQuestionHTML {
 			}
 		}
 		htmlContent.append("        </div>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='"+pagePrecedente+".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
