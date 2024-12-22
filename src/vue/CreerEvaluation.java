@@ -169,7 +169,7 @@ public class CreerEvaluation extends JFrame
 		
 		// Ajout du panel principal à la frame et configuration de cette dernière
 		this.add(panelPrincipal);
-		this.setSize(500, 300);
+		this.setSize(800, 300);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);

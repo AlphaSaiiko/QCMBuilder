@@ -3,27 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Association de Mots</title>
-    <link rel="stylesheet" href="styleAssociation.css">
+    <title>Question à Réponse Unique</title>
+    <link rel="stylesheet" href="styleReponseUnique.css">
 </head>
 <body>
     <div class="container">
-        <h1>Associez chaque joueur de l’OM avec son poste principal.</h1>
-        <div class="columns">
-            <div class="words" id="words">
-                <div class="word" data-id="1">Fabien Barthez</div>
-                <div class="word" data-id="2">Didier Drogba</div>
-                <div class="word" data-id="3">Dimitri Payet</div>
-            </div>
-            <svg id="svg-container"></svg>
-            <div class="definitions" id="definitions">
-                <div class="definition" data-id="1">Gardien de but</div>
-                <div class="definition" data-id="2">Attaquant</div>
-                <div class="definition" data-id="3">Milieu offensif</div>
-            </div>
+        <h1>En quelle année l’OM a-t-il remporté la Ligue des Champions ?</h1>
+        <div class="question" id="question">
+            <div class="reponse mauvaise-reponse">1991</div>
+            <div class="reponse bonne-reponse">1993</div>
+            <div class="reponse mauvaise-reponse">1995</div>
+            <div class="reponse mauvaise-reponse">1997</div>
         </div>
-        <button onclick="validate()">Valider</button>
+        <button id="valider">Valider</button>
     </div>
-    <script src="scriptAssociation.js"></script>
+    <script src="scriptReponseUnique.js"></script>
 </body>
 </html>
