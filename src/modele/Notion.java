@@ -15,6 +15,7 @@ public class Notion
 	private List<Question> listeQuestions;
 	private String         nom           ;
 	private Ressource      ressource     ;
+	private int questionTresFacile, questionFacile, questionMoyen, questionDifficile;
 
 
 
@@ -35,6 +36,7 @@ public class Notion
 		this.listeQuestions = new ArrayList<>();
 		ressource.ajouterNotion(this);
 		Ressource.mettreAJourRessources();
+		this.questionDifficile = this.questionFacile = this.questionMoyen = this.questionTresFacile = 0;
 	}
 
 
@@ -73,6 +75,10 @@ public class Notion
 	public int            getNbQuestion    ()           { return this.listeQuestions.size()     ; }
 	public List<Question> getListeQuestions()           { return this.listeQuestions            ; }
 	public Question       getQuestion      (int indice) { return this.listeQuestions.get(indice); }
+	public int getNbQuestionTresFacile	   ()			{return this.questionTresFacile			; }
+	public int getNbQuestionFacile		   ()			{return this.questionFacile				; }
+	public int getNbQuestionMoyen		   ()			{return this.questionMoyen				; }
+	public int getNbQuestionDifficile	   ()			{return this.questionDifficile			; }
 
 
 
@@ -124,6 +130,20 @@ public class Notion
 		{
 			this.listeQuestions.add(question);
 			Ressource.mettreAJourRessources();
+
+			switch (question.getDifficulte()) {
+				case 1: this.questionTresFacile++;
+					break;
+				case 2: this.questionFacile++;
+					break;
+				case 3: this.questionMoyen++;
+					break;
+				case 4: this.questionDifficile++;
+					break;
+			
+				default:
+					break;
+			}
 		}
 	}
 
