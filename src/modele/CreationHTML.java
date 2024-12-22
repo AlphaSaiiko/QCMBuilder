@@ -1,13 +1,9 @@
 package modele;
 
-import modele.option.*;
 import controleur.*;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-
 import java.util.List;
 
 public class CreationHTML {
@@ -80,10 +76,10 @@ public class CreationHTML {
 
 		for (Question question : this.evaluation.getListeQuestions())
 		{
-			if (question.getType().equals("QAEPR")){this.questionHTML.pageQuestionElimination(question, this.numQuestion);}
-			if (question.getType().equals("QCMRU")){this.questionHTML.pageQuestionUnique(question, this.numQuestion);}
-			if (question.getType().equals("QCMRM")){this.questionHTML.pageQuestionMultiple(question, this.numQuestion);}
-			if (question.getType().equals("QAE")){this.questionHTML.pageQuestionChoixAssociation(question, this.numQuestion);}
+			if (question.getType().equals("QAEPR")){this.questionHTML.pageQuestionElimination(question, this.numQuestion); this.numQuestion++;}
+			if (question.getType().equals("QCMRU")){this.questionHTML.pageQuestionUnique(question, this.numQuestion); this.numQuestion++;}
+			if (question.getType().equals("QCMRM")){this.questionHTML.pageQuestionMultiple(question, this.numQuestion); this.numQuestion++;}
+			if (question.getType().equals("QAE")){this.questionHTML.pageQuestionChoixAssociation(question, this.numQuestion); this.numQuestion++;}
 		}
 
 		this.pageDeFin();

@@ -196,10 +196,6 @@ public class CreationQuestionHTML {
 				}
 			}
 		}
-		htmlContent.append("            <div class=\"reponse bonne-reponse\">Paris</div>").append("\n");
-		htmlContent.append("            <div class=\"reponse mauvaise-reponse\">Londres</div>").append("\n");
-		htmlContent.append("            <div class=\"reponse bonne-reponse\">Marseille</div>").append("\n");
-		htmlContent.append("            <div class=\"reponse mauvaise-reponse\">Berlin</div>").append("\n");
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
