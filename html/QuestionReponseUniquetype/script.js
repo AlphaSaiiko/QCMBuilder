@@ -35,3 +35,4 @@ function randomizeOrder(selector, parentSelector) {
 
 	shuffledItems.forEach(item => parent.appendChild(item));
 }
+

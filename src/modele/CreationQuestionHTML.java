@@ -3,6 +3,7 @@ package modele;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import modele.option.*;
 
 public class CreationQuestionHTML {
@@ -13,9 +14,8 @@ public class CreationQuestionHTML {
 
 
     public void pageQuestionChoixAssociation(Question question, int numQuestion) {
-        StringBuilder htmlContent = new StringBuilder();
-
-
+		StringBuilder htmlContent = new StringBuilder();
+	
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
 		htmlContent.append("<head>").append("\n");
@@ -28,31 +28,47 @@ public class CreationQuestionHTML {
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
 		htmlContent.append("        <div class=\"columns\">").append("\n");
-		htmlContent.append("            <div class=\"words\" id=\"words\">").append("\n");
-		htmlContent.append("                <div class=\"word\" data-id=\"1\">Chat</div>").append("\n");
-		htmlContent.append("                <div class=\"word\" data-id=\"2\">Chien</div>").append("\n");
-		htmlContent.append("                <div class=\"word\" data-id=\"3\">Oiseau</div>").append("\n");
-		htmlContent.append("            </div>").append("\n");
-		htmlContent.append("            <svg id=\"svg-container\"></svg>").append("\n");
-		htmlContent.append("            <div class=\"definitions\" id=\"definitions\">").append("\n");
-		htmlContent.append("                <div class=\"definition\" data-id=\"1\">Un animal qui miaule</div>").append("\n");
-		htmlContent.append("                <div class=\"definition\" data-id=\"2\">Un animal qui aboie</div>").append("\n");
-		htmlContent.append("                <div class=\"definition\" data-id=\"3\">Un animal qui chante</div>").append("\n");
-		htmlContent.append("            </div>").append("\n");
-		htmlContent.append("        </div>").append("\n");
+	
+		List<IOption> banqueDeReponses = question.getEnsOptions();
+		int id = 1; // Initialiser l'ID à 1 pour les mots et les définitions
+	
+		htmlContent.append("            <div class=\"words\" id=\"words\">\n");
+		for (IOption reponse : banqueDeReponses) {
+			if (reponse.getId() % 2 == 1) { // Vérifie si l'ID est impair (mot)
+				htmlContent.append("                <div class=\"word\" data-id=\"").append(id).append("\">")
+						  .append(reponse.getEnonce()).append("</div>\n");
+				id++; // Incrémenter l'ID après chaque ajout
+			}
+		}
+		htmlContent.append("            </div>\n");
+		htmlContent.append("            <svg id=\"svg-container\"></svg>\n");
+		
+		id = 1; // Réinitialiser l'ID à 1 pour les définitions
+		htmlContent.append("            <div class=\"definitions\" id=\"definitions\">\n");
+		for (IOption reponse : banqueDeReponses) {
+			if (reponse.getId() % 2 == 0) { // Vérifie si l'ID est pair (définition)
+				htmlContent.append("                <div class=\"definition\" data-id=\"").append(id).append("\">")
+						  .append(reponse.getEnonce()).append("</div>\n");
+				id++; // Incrémenter l'ID après chaque ajout
+			}
+		}
+		htmlContent.append("            </div>\n");
+		htmlContent.append("        </div>\n");
 		htmlContent.append("        <button onclick=\"validate()\">Valider</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptAssociation.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page3.html"))) {
+	
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page3.html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
+			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }
+	}
+	
+	
 
 	public void pageQuestionElimination(Question question, int numQuestion)
 	{
@@ -88,10 +104,6 @@ public class CreationQuestionHTML {
 				}
 			}
 		}
-		htmlContent.append("            <div class=\"reponse mauvaise-reponse\">Cherbourg</div>").append("\n");
-		htmlContent.append("            <div class=\"reponse mauvaise-reponse\" data-order=\"1\">Marseille</div>").append("\n");
-		htmlContent.append("            <div class=\"reponse bonne-reponse\">Paris</div>").append("\n");
-		htmlContent.append("            <div class=\"reponse mauvaise-reponse\" data-order=\"2\">Le Havre</div>").append("\n");
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("        <button id=\"eliminar\">Éliminer</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
@@ -263,7 +275,7 @@ public class CreationQuestionHTML {
 		jsContent.append("    shuffledItems.forEach(item => parent.appendChild(item));").append("\n");
 		jsContent.append("}").append("\n");
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptReponseMultiple.html"))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptReponseMultiple.js"))) {
 			writer.write(jsContent.toString());
 			System.out.println("Le fichier html a été généré avec succès !");
 		} catch (IOException e) {
