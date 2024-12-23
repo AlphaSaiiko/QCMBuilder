@@ -43,13 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Fermer le pop-up
-    const popupCloseButton = document.getElementById('popup-close');
-    if (popupCloseButton) {
-        popupCloseButton.addEventListener('click', () => {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'none';
-        });
-    }
+    document.getElementById('popup-close').addEventListener('click', () => {
+        const popup = document.getElementById('popup');
+        popup.style.display = 'none';
+    });
 });
 
 function randomizeOrder(selector, parentSelector) {

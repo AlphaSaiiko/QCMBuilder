@@ -38,6 +38,26 @@ body {
     cursor: pointer;
 }
 
+.word:hover, .definition:hover {
+    background-color: #b3d9ff;
+}
+
+.btn {
+    margin: 10px 5px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
 svg {
     position: absolute;
     width: 100%;

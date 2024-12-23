@@ -61,18 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Fermer le pop-up
-    const popupCloseButton = document.getElementById('popup-close');
-    if (popupCloseButton) {
-        popupCloseButton.addEventListener('click', () => {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'none';
-        });
-    }
+    document.getElementById('popup-close').addEventListener('click', () => {
+        const popup = document.getElementById('popup');
+        popup.style.display = 'none';
+    });
 });
 
 function randomizeOrder(selector, parentSelector) {
     const items = document.querySelectorAll(selector);
     const parent = document.querySelector(parentSelector);
     const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);
+
     shuffledItems.forEach(item => parent.appendChild(item));
 }

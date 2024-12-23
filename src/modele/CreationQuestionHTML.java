@@ -18,14 +18,20 @@ public class CreationQuestionHTML {
 
     public void pageQuestionChoixAssociation(Question question, int numQuestion) {
 		StringBuilder htmlContent = new StringBuilder();
-
+	
 		String pageSuivante;
 		String pagePrecedente;
-		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
-		else {pageSuivante = "pageDeFin";}
-
-		if(numQuestion>1){pagePrecedente = "page"+(numQuestion-1);}
-		else{pagePrecedente="pageDAccueil";}
+		if (numQuestion < this.evaluation.getNbQuestion()) {
+			pageSuivante = "page" + (numQuestion + 1) + "";
+		} else {
+			pageSuivante = "pageDeFin";
+		}
+	
+		if (numQuestion > 1) {
+			pagePrecedente = "page" + (numQuestion - 1);
+		} else {
+			pagePrecedente = "pageDAccueil";
+		}
 	
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
@@ -53,7 +59,7 @@ public class CreationQuestionHTML {
 		}
 		htmlContent.append("            </div>\n");
 		htmlContent.append("            <svg id=\"svg-container\"></svg>\n");
-		
+	
 		id = 1; // Réinitialiser l'ID à 1 pour les définitions
 		htmlContent.append("            <div class=\"definitions\" id=\"definitions\">\n");
 		for (IOption reponse : banqueDeReponses) {
@@ -65,9 +71,9 @@ public class CreationQuestionHTML {
 		}
 		htmlContent.append("            </div>\n");
 		htmlContent.append("        </div>\n");
-		htmlContent.append("        <button onclick=\"location.href='"+pagePrecedente+".html';\">Précédent</button>").append("\n");
-		htmlContent.append("        <button onclick=\"validate()\">Valider</button>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
+		htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
+		htmlContent.append("        <button class=\"btn\" onclick=\"validate()\">Valider</button>").append("\n");
+		htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pageSuivante).append(".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptAssociation.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
@@ -80,6 +86,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	
 
@@ -255,7 +262,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("        <div class=\"popup-content\">").append("\n");
 		htmlContent.append("            <span class=\"close\" id=\"popup-close\">&times;</span>").append("\n");
 		htmlContent.append("            <p id=\"popup-text\"></p>").append("\n");
-		htmlContent.append("            <p>Eh oui, Lionel Messi et Neymar Jr ont bien joué pour le PSG.</p>").append("\n");
+		htmlContent.append("            <p>").append(question.getFeedback()).append("</p>").append("\n");
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptReponseMultiple.js\"></script>").append("\n");
@@ -603,10 +610,9 @@ public class CreationQuestionHTML {
 		}
 	}
 
-	public void ecrireCSSAssociation()
-	{
+	public void ecrireCSSAssociation() {
 		StringBuilder cssContent = new StringBuilder();
-
+	
 		cssContent.append("body {").append("\n");
 		cssContent.append("    font-family: Arial, sans-serif;").append("\n");
 		cssContent.append("    display: flex;").append("\n");
@@ -647,20 +653,41 @@ public class CreationQuestionHTML {
 		cssContent.append("    cursor: pointer;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
+		cssContent.append(".word:hover, .definition:hover {").append("\n");
+		cssContent.append("    background-color: #b3d9ff;").append("\n");
+		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+		cssContent.append(".btn {").append("\n");
+		cssContent.append("    margin: 10px 5px;").append("\n");
+		cssContent.append("    padding: 10px 20px;").append("\n");
+		cssContent.append("    background-color: #4CAF50;").append("\n");
+		cssContent.append("    color: white;").append("\n");
+		cssContent.append("    border: none;").append("\n");
+		cssContent.append("    border-radius: 5px;").append("\n");
+		cssContent.append("    cursor: pointer;").append("\n");
+		cssContent.append("    transition: background-color 0.3s ease, transform 0.3s ease;").append("\n");
+		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+		cssContent.append(".btn:hover {").append("\n");
+		cssContent.append("    background-color: #45a049;").append("\n");
+		cssContent.append("    transform: translateY(-2px);").append("\n");
+		cssContent.append("}").append("\n");
+		cssContent.append("\n");
 		cssContent.append("svg {").append("\n");
 		cssContent.append("    position: absolute;").append("\n");
 		cssContent.append("    width: 100%;").append("\n");
 		cssContent.append("    height: 100%;").append("\n");
 		cssContent.append("    pointer-events: none;").append("\n");
 		cssContent.append("}").append("\n");
-
+	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/styleAssociation.css"))) {
 			writer.write(cssContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
+			System.out.println("Le fichier CSS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public void ecrireCSSElimination()
 	{
