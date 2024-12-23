@@ -16,15 +16,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Valider la réponse sélectionnée
     document.getElementById('valider').addEventListener('click', () => {
+        const popup = document.getElementById('popup');
+        const popupText = document.getElementById('popup-text');
         if (selectedAnswer) {
             if (selectedAnswer.classList.contains('bonne-reponse')) {
-                alert('Bravo! Vous avez trouvé la bonne réponse.');
+                popupText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
             } else {
-                alert('Désolé, la réponse sélectionnée est incorrecte.');
+                popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
             }
         } else {
-            alert('Veuillez sélectionner une réponse.');
+            popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
         }
+        popup.style.display = 'flex';
+
+        // Transformer le bouton 'Valider' en 'Feedback'
+        const validerButton = document.getElementById('valider');
+        validerButton.textContent = 'Feedback';
+        validerButton.removeEventListener('click', this);
+        validerButton.addEventListener('click', () => {
+            popup.style.display = 'flex';
+        });
+    });
+
+    // Redirection vers la page suivante
+    document.getElementById('suivant').addEventListener('click', () => {
+        location.href = 'page3.html';
+    });
+
+    // Fermer le pop-up
+    document.getElementById('popup-close').addEventListener('click', () => {
+        document.getElementById('popup').style.display = 'none';
     });
 });
 

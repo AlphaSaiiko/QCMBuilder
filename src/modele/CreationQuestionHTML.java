@@ -180,12 +180,19 @@ public class CreationQuestionHTML {
 					htmlContent.append("            <div class=\"reponse mauvaise-reponse\">").append(opt.getEnonce()).append("</div>").append("\n");
 				}
 			}
-			
+
 		}
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='"+pagePrecedente+".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
+		htmlContent.append("        <button id=\"suivant\">Suivant</button>").append("\n");
+		htmlContent.append("    </div>").append("\n");
+		htmlContent.append("    <div id=\"popup\" class=\"popup\">").append("\n");
+		htmlContent.append("        <div class=\"popup-content\">").append("\n");
+		htmlContent.append("            <span class=\"close\" id=\"popup-close\">&times;</span>").append("\n");
+		htmlContent.append("            <p id=\"popup-text\"></p>").append("\n");
+		htmlContent.append("            <p>").append(question.getFeedback()).append("</p>").append("\n");
+		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptReponseUnique.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
@@ -193,12 +200,12 @@ public class CreationQuestionHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
+			System.out.println("Le fichier html a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
+
 
 	public void pageQuestionMultiple(Question question, int numQuestion)
 	{
@@ -345,15 +352,36 @@ public class CreationQuestionHTML {
 		jsContent.append("\n");
 		jsContent.append("    // Valider la réponse sélectionnée").append("\n");
 		jsContent.append("    document.getElementById('valider').addEventListener('click', () => {").append("\n");
+		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
+		jsContent.append("        const popupText = document.getElementById('popup-text');").append("\n");
 		jsContent.append("        if (selectedAnswer) {").append("\n");
 		jsContent.append("            if (selectedAnswer.classList.contains('bonne-reponse')) {").append("\n");
-		jsContent.append("                alert('Bravo! Vous avez trouvé la bonne réponse.');").append("\n");
+		jsContent.append("                popupText.innerHTML = '<span style=\"color: green;\">Bonne réponse!</span>';").append("\n");
 		jsContent.append("            } else {").append("\n");
-		jsContent.append("                alert('Désolé, la réponse sélectionnée est incorrecte.');").append("\n");
+		jsContent.append("                popupText.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
 		jsContent.append("            }").append("\n");
 		jsContent.append("        } else {").append("\n");
-		jsContent.append("            alert('Veuillez sélectionner une réponse.');").append("\n");
+		jsContent.append("            popupText.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
 		jsContent.append("        }").append("\n");
+		jsContent.append("        popup.style.display = 'flex';").append("\n");
+		jsContent.append("\n");
+		jsContent.append("        // Transformer le bouton 'Valider' en 'Feedback'").append("\n");
+		jsContent.append("        const validerButton = document.getElementById('valider');").append("\n");
+		jsContent.append("        validerButton.textContent = 'Feedback';").append("\n");
+		jsContent.append("        validerButton.removeEventListener('click', this);").append("\n");
+		jsContent.append("        validerButton.addEventListener('click', () => {").append("\n");
+		jsContent.append("            popup.style.display = 'flex';").append("\n");
+		jsContent.append("        });").append("\n");
+		jsContent.append("    });").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    // Redirection vers la page suivante").append("\n");
+		jsContent.append("    document.getElementById('suivant').addEventListener('click', () => {").append("\n");
+		jsContent.append("        location.href = 'page3.html';").append("\n");
+		jsContent.append("    });").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    // Fermer le pop-up").append("\n");
+		jsContent.append("    document.getElementById('popup-close').addEventListener('click', () => {").append("\n");
+		jsContent.append("        document.getElementById('popup').style.display = 'none';").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("});").append("\n");
 		jsContent.append("\n");
@@ -371,8 +399,8 @@ public class CreationQuestionHTML {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
+
 
 
 	public void ecrireJsElimination()
@@ -741,14 +769,47 @@ public class CreationQuestionHTML {
 		cssContent.append("button:hover {").append("\n");
 		cssContent.append("    background-color: #45a049;").append("\n");
 		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+
+		cssContent.append(".popup {").append("\n");
+		cssContent.append("    display: none;").append("\n");
+		cssContent.append("    position: fixed;").append("\n");
+		cssContent.append("    top: 0;").append("\n");
+		cssContent.append("    left: 0;").append("\n");
+		cssContent.append("    width: 100%;").append("\n");
+		cssContent.append("    height: 100%;").append("\n");
+		cssContent.append("    background-color: rgba(0, 0, 0, 0.5);").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+
+		cssContent.append(".popup-content {").append("\n");
+		cssContent.append("    background-color: #fff;").append("\n");
+		cssContent.append("    padding: 20px;").append("\n");
+		cssContent.append("    border-radius: 5px;").append("\n");
+		cssContent.append("    text-align: center;").append("\n");
+		cssContent.append("    position: relative;").append("\n");
+		cssContent.append("    width: 50%;").append("\n");
+		cssContent.append("    margin: 0 auto;").append("\n");
+		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+
+		cssContent.append(".close {").append("\n");
+		cssContent.append("    position: absolute;").append("\n");
+		cssContent.append("    top: 10px;").append("\n");
+		cssContent.append("    right: 10px;").append("\n");
+		cssContent.append("    font-size: 20px;").append("\n");
+		cssContent.append("    cursor: pointer;").append("\n");
+		cssContent.append("    color: #333;").append("\n");
+		cssContent.append("}").append("\n");
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/styleReponseUnique.css"))) {
 			writer.write(cssContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
+			System.out.println("Le fichier css a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-
-	}
+}
