@@ -1,11 +1,10 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-
-import controleur.Controleur;
 import modele.Question;
 import modele.option.OptionElimination;
 
@@ -353,7 +352,6 @@ public class QuestionElimination extends JFrame
 
 		// Ajout des boutons au JPanel contenant les boutons
 		panelBoutons.add(btnAjouter);
-		panelBoutons.add(btnExplication);
 		panelBoutons.add(btnEnregistrer);
 
 
