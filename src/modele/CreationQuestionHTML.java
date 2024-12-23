@@ -90,18 +90,23 @@ public class CreationQuestionHTML {
 	
 	
 
-	public void pageQuestionElimination(Question question, int numQuestion)
-	{
+	public void pageQuestionElimination(Question question, int numQuestion) {
 		StringBuilder htmlContent = new StringBuilder();
-
+	
 		String pageSuivante;
 		String pagePrecedente;
-		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
-		else {pageSuivante = "pageDeFin";}
-
-		if(numQuestion>1){pagePrecedente = "page"+(numQuestion-1);}
-		else{pagePrecedente="pageDAccueil";}
-
+		if (numQuestion < this.evaluation.getNbQuestion()) {
+			pageSuivante = "page" + (numQuestion + 1);
+		} else {
+			pageSuivante = "pageDeFin";
+		}
+	
+		if (numQuestion > 1) {
+			pagePrecedente = "page" + (numQuestion - 1);
+		} else {
+			pagePrecedente = "pageDAccueil";
+		}
+	
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
 		htmlContent.append("<head>").append("\n");
@@ -114,41 +119,42 @@ public class CreationQuestionHTML {
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
 		htmlContent.append("        <div class=\"question\" id=\"question\">").append("\n");
-		for (IOption reponse : question.getEnsOptions())
-		{
-			if (reponse instanceof OptionElimination)
-			{
+		for (IOption reponse : question.getEnsOptions()) {
+			if (reponse instanceof OptionElimination) {
 				OptionElimination opt = (OptionElimination) reponse;
-				if (opt.getOrdre() != -1)
-				{
+				if (opt.getOrdre() != -1) {
 					htmlContent.append("            <div class=\"reponse mauvaise-reponse\" data-order=\"").append(opt.getOrdre()).append("\">").append(opt.getEnonce()).append("</div>").append("\n");
-				}
-				else if (opt.getEstReponse())
-				{
+				} else if (opt.getEstReponse()) {
 					htmlContent.append("            <div class=\"reponse bonne-reponse\">").append(opt.getEnonce()).append("</div>").append("\n");
-				}
-				else
-				{
+				} else {
 					htmlContent.append("            <div class=\"reponse mauvaise-reponse\">").append(opt.getEnonce()).append("</div>").append("\n");
 				}
 			}
 		}
 		htmlContent.append("        </div>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='"+pagePrecedente+".html';\">Précédent</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button id=\"eliminar\">Éliminer</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='").append(pageSuivante).append(".html';\">Suivant</button>").append("\n");
+		htmlContent.append("    </div>").append("\n");
+		htmlContent.append("    <div id=\"popup\" class=\"popup\">").append("\n");
+		htmlContent.append("        <div class=\"popup-content\">").append("\n");
+		htmlContent.append("            <span class=\"close\" id=\"popup-close\">&times;</span>").append("\n");
+		htmlContent.append("            <p id=\"popup-text\"></p>").append("\n");
+		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptElimination.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
+	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
+			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public void pageQuestionUnique (Question question, int numQuestion)
 	{
@@ -440,11 +446,12 @@ public class CreationQuestionHTML {
 
 
 
-	public void ecrireJsElimination()
-	{
+	public void ecrireJsElimination() {
 		StringBuilder jsContent = new StringBuilder();
-
+	
 		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
+		jsContent.append("    // Mélanger les réponses (au cas où)").append("\n");
+		jsContent.append("    randomizeOrder('.reponse', '#question');").append("\n\n");
 		jsContent.append("    // Élimer les mauvaises réponses dans l'ordre spécifié").append("\n");
 		jsContent.append("    const eliminationOrder = Array.from(document.querySelectorAll('.mauvaise-reponse[data-order]'))").append("\n");
 		jsContent.append("        .sort((a, b) => a.getAttribute('data-order') - b.getAttribute('data-order'));").append("\n\n");
@@ -458,26 +465,45 @@ public class CreationQuestionHTML {
 		jsContent.append("    });").append("\n\n");
 		jsContent.append("    // Gérer la sélection des réponses").append("\n");
 		jsContent.append("    let selectedAnswer = null;").append("\n");
+		jsContent.append("    let isValidationDone = false;").append("\n");
 		jsContent.append("    document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
 		jsContent.append("        reponse.addEventListener('click', () => {").append("\n");
-		jsContent.append("            if (selectedAnswer) {").append("\n");
-		jsContent.append("                selectedAnswer.classList.remove('selected');").append("\n");
+		jsContent.append("            if (!isValidationDone) {").append("\n");
+		jsContent.append("                if (selectedAnswer) {").append("\n");
+		jsContent.append("                    selectedAnswer.classList.remove('selected');").append("\n");
+		jsContent.append("                }").append("\n");
+		jsContent.append("                reponse.classList.add('selected');").append("\n");
+		jsContent.append("                selectedAnswer = reponse;").append("\n");
 		jsContent.append("            }").append("\n");
-		jsContent.append("            reponse.classList.add('selected');").append("\n");
-		jsContent.append("            selectedAnswer = reponse;").append("\n");
 		jsContent.append("        });").append("\n");
 		jsContent.append("    });").append("\n\n");
 		jsContent.append("    // Valider la réponse sélectionnée").append("\n");
 		jsContent.append("    document.getElementById('valider').addEventListener('click', () => {").append("\n");
 		jsContent.append("        if (selectedAnswer) {").append("\n");
+		jsContent.append("            const popup = document.getElementById('popup');").append("\n");
+		jsContent.append("            const popupText = document.getElementById('popup-text');").append("\n\n");
 		jsContent.append("            if (selectedAnswer.classList.contains('bonne-reponse')) {").append("\n");
-		jsContent.append("                alert('Bravo! Vous avez trouvé la bonne réponse.');").append("\n");
+		jsContent.append("                popupText.innerHTML = '<span style=\"color: green;\">Bravo! Vous avez trouvé la bonne réponse.</span>';").append("\n");
 		jsContent.append("            } else {").append("\n");
-		jsContent.append("                alert('Désolé, la réponse sélectionnée est incorrecte.');").append("\n");
+		jsContent.append("                popupText.innerHTML = '<span style=\"color: red;\">Désolé, la réponse sélectionnée est incorrecte.</span>';").append("\n");
 		jsContent.append("            }").append("\n");
+		jsContent.append("            popup.style.display = 'flex';").append("\n");
+		jsContent.append("            isValidationDone = true;").append("\n\n");
+		jsContent.append("            // Transformer le bouton 'Valider' en 'Feedback'").append("\n");
+		jsContent.append("            const validerButton = document.getElementById('valider');").append("\n");
+		jsContent.append("            validerButton.textContent = 'Feedback';").append("\n");
+		jsContent.append("            validerButton.removeEventListener('click', this);").append("\n");
+		jsContent.append("            validerButton.addEventListener('click', () => {").append("\n");
+		jsContent.append("                popup.style.display = 'flex';").append("\n");
+		jsContent.append("            });").append("\n");
 		jsContent.append("        } else {").append("\n");
 		jsContent.append("            alert('Veuillez sélectionner une réponse.');").append("\n");
 		jsContent.append("        }").append("\n");
+		jsContent.append("    });").append("\n\n");
+		jsContent.append("    // Fermer le pop-up").append("\n");
+		jsContent.append("    document.getElementById('popup-close').addEventListener('click', () => {").append("\n");
+		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
+		jsContent.append("        popup.style.display = 'none';").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("});").append("\n\n");
 		jsContent.append("function randomizeOrder(selector, parentSelector) {").append("\n");
@@ -486,7 +512,7 @@ public class CreationQuestionHTML {
 		jsContent.append("    const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);").append("\n\n");
 		jsContent.append("    shuffledItems.forEach(item => parent.appendChild(item));").append("\n");
 		jsContent.append("}").append("\n");
-
+	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptElimination.js"))) {
 			writer.write(jsContent.toString());
 			System.out.println("Le fichier js a été généré avec succès !");
@@ -494,6 +520,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 
 
 	public void ecrireJsAssociation()
@@ -689,10 +716,9 @@ public class CreationQuestionHTML {
 	}
 	
 
-	public void ecrireCSSElimination()
-	{
+	public void ecrireCSSElimination() {
 		StringBuilder cssContent = new StringBuilder();
-
+	
 		cssContent.append("body {").append("\n");
 		cssContent.append("    font-family: Arial, sans-serif;").append("\n");
 		cssContent.append("    display: flex;").append("\n");
@@ -703,13 +729,13 @@ public class CreationQuestionHTML {
 		cssContent.append("    background-color: #f7f7f7;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
-
+	
 		cssContent.append(".container {").append("\n");
 		cssContent.append("    text-align: center;").append("\n");
 		cssContent.append("    position: relative;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
-
+	
 		cssContent.append(".question {").append("\n");
 		cssContent.append("    display: flex;").append("\n");
 		cssContent.append("    flex-direction: column;").append("\n");
@@ -723,7 +749,7 @@ public class CreationQuestionHTML {
 		cssContent.append("    background-color: #fff;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
-
+	
 		cssContent.append(".reponse {").append("\n");
 		cssContent.append("    margin: 10px 0;").append("\n");
 		cssContent.append("    padding: 10px;").append("\n");
@@ -731,14 +757,15 @@ public class CreationQuestionHTML {
 		cssContent.append("    border: 1px solid #ccc;").append("\n");
 		cssContent.append("    border-radius: 5px;").append("\n");
 		cssContent.append("    cursor: pointer;").append("\n");
+		cssContent.append("    transition: background-color 0.3s ease;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
-
+	
 		cssContent.append(".reponse.selected {").append("\n");
 		cssContent.append("    background-color: #b3d9ff; /* Highlight selected answer */").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
-
+	
 		cssContent.append("button {").append("\n");
 		cssContent.append("    margin: 10px 5px;").append("\n");
 		cssContent.append("    padding: 10px 20px;").append("\n");
@@ -747,20 +774,57 @@ public class CreationQuestionHTML {
 		cssContent.append("    border: none;").append("\n");
 		cssContent.append("    border-radius: 5px;").append("\n");
 		cssContent.append("    cursor: pointer;").append("\n");
+		cssContent.append("    transition: background-color 0.3s ease;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
-
+	
 		cssContent.append("button:hover {").append("\n");
 		cssContent.append("    background-color: #45a049;").append("\n");
 		cssContent.append("}").append("\n");
-
+		cssContent.append("\n");
+	
+		cssContent.append(".popup {").append("\n");
+		cssContent.append("    display: none;").append("\n");
+		cssContent.append("    position: fixed;").append("\n");
+		cssContent.append("    top: 0;").append("\n");
+		cssContent.append("    left: 0;").append("\n");
+		cssContent.append("    width: 100%;").append("\n");
+		cssContent.append("    height: 100%;").append("\n");
+		cssContent.append("    background-color: rgba(0,0,0,0.5);").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+	
+		cssContent.append(".popup-content {").append("\n");
+		cssContent.append("    background-color: #fff;").append("\n");
+		cssContent.append("    padding: 20px;").append("\n");
+		cssContent.append("    border-radius: 5px;").append("\n");
+		cssContent.append("    text-align: center;").append("\n");
+		cssContent.append("    position: relative;").append("\n");
+		cssContent.append("    width: 50%;").append("\n"); // Ajout pour centrer et ajuster la taille
+		cssContent.append("    margin: 0 auto;").append("\n"); // Ajout pour centrer et ajuster la taille
+		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+	
+		cssContent.append(".close {").append("\n");
+		cssContent.append("    position: absolute;").append("\n");
+		cssContent.append("    top: 10px;").append("\n");
+		cssContent.append("    right: 10px;").append("\n");
+		cssContent.append("    font-size: 20px;").append("\n"); // Ajusté pour être plus petit
+		cssContent.append("    cursor: pointer;").append("\n");
+		cssContent.append("    color: #333;").append("\n"); // Couleur du texte
+		cssContent.append("}").append("\n");
+	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/styleElimination.css"))) {
 			writer.write(cssContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
+			System.out.println("Le fichier CSS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	public void ecrireCSSReponseUnique()
 	{
