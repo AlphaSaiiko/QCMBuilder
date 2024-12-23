@@ -14,20 +14,23 @@ function randomizeOrder(selector, parentSelector) {
 let motSelectionne = null;
 let connexions = {};
 let reverseConnexions = {};
+let isValidationDone = false;
 
 // Ajouter un événement de clic à chaque mot
 document.querySelectorAll('.word').forEach(mot => {
     mot.addEventListener('click', () => {
-        motSelectionne = mot;
-        clearSelection();
-        mot.style.backgroundColor = '#d3d3d3'; // Mettre en surbrillance le mot sélectionné
+        if (!isValidationDone) {
+            motSelectionne = mot;
+            clearSelection();
+            mot.style.backgroundColor = '#d3d3d3'; // Mettre en surbrillance le mot sélectionné
+        }
     });
 });
 
 // Ajouter un événement de clic à chaque définition
 document.querySelectorAll('.definition').forEach(definition => {
     definition.addEventListener('click', () => {
-        if (motSelectionne) {
+        if (motSelectionne && !isValidationDone) {
             let motId = motSelectionne.getAttribute('data-id');
             let defId = definition.getAttribute('data-id');
 
@@ -100,7 +103,7 @@ function validate() {
     let mots = document.querySelectorAll('.word').length;
 
     if (totalAssociations < mots) {
-        alert("Il manque des associations.");
+        showPopup('<span style="color: red;">Il manque des associations.</span>');
         return;
     }
 
@@ -112,8 +115,25 @@ function validate() {
     }
 
     if (correct) {
-        alert("Bravo! Toutes les associations sont correctes.");
+        showPopup('<span style="color: green;">Bravo! Toutes les associations sont correctes.</span>');
     } else {
-        alert("Désolé, certaines associations sont incorrectes. Essayez encore.");
+        showPopup('<span style="color: red;">Désolé, certaines associations sont incorrectes. Essayez encore.</span>');
     }
+    isValidationDone = true; // Désactiver les modifications après validation
+    const validerButton = document.querySelector('.btn[onclick="validate()"]');
+    validerButton.textContent = 'Feedback';
 }
+
+// Fonction pour afficher le pop-up avec un message
+function showPopup(message) {
+    const popup = document.getElementById('popup');
+    const popupText = document.getElementById('popup-text');
+    popupText.innerHTML = message;
+    popup.style.display = 'flex';
+}
+
+// Fermer le pop-up
+document.getElementById('popup-close').addEventListener('click', () => {
+    const popup = document.getElementById('popup');
+    popup.style.display = 'none';
+});

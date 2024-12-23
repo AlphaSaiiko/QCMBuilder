@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Association de Mots</title>
-    <link rel="stylesheet" href="styleAssociation.css">
+    <title>Question à Réponse Unique</title>
+    <link rel="stylesheet" href="styleReponseUnique.css">
 </head>
 <body>
     <div class="container">
-        <h1>Associez chaque joueur avec son numéro de maillot au PSG.</h1>
-        <div class="columns">
-            <div class="words" id="words">
-                <div class="word" data-id="1">Neymar Jr</div>
-                <div class="word" data-id="2">Kylian Mbappé</div>
-                <div class="word" data-id="3">Lionel Messi</div>
-            </div>
-            <svg id="svg-container"></svg>
-            <div class="definitions" id="definitions">
-                <div class="definition" data-id="1">10</div>
-                <div class="definition" data-id="2">7</div>
-                <div class="definition" data-id="3">30</div>
-            </div>
+        <h1>Date de création du PSG ?</h1>
+        <div class="question" id="question">
+            <div class="reponse mauvaise-reponse">1960</div>
+            <div class="reponse bonne-reponse">1970</div>
+            <div class="reponse mauvaise-reponse">1980</div>
+            <div class="reponse mauvaise-reponse">1990</div>
         </div>
-        <button class="btn" onclick="location.href='page1.html';">Précédent</button>
-        <button class="btn" onclick="validate()">Valider</button>
-        <button class="btn" onclick="location.href='page3.html';">Suivant</button>
+        <button onclick="location.href='page1.html';">Précédent</button>
+        <button id="valider">Valider</button>
+        <button onclick="location.href='page3.html';">Suivant</button>
     </div>
-    <script src="scriptAssociation.js"></script>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="popup-close">&times;</span>
+            <p id="popup-text"></p>
+            <p></p>
+        </div>
+    </div>
+    <script src="scriptReponseUnique.js"></script>
 </body>
 </html>

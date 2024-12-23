@@ -22,7 +22,7 @@ public class CreationQuestionHTML {
 		String pageSuivante;
 		String pagePrecedente;
 		if (numQuestion < this.evaluation.getNbQuestion()) {
-			pageSuivante = "page" + (numQuestion + 1) + "";
+			pageSuivante = "page" + (numQuestion + 1);
 		} else {
 			pageSuivante = "pageDeFin";
 		}
@@ -74,6 +74,12 @@ public class CreationQuestionHTML {
 		htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button class=\"btn\" onclick=\"validate()\">Valider</button>").append("\n");
 		htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pageSuivante).append(".html';\">Suivant</button>").append("\n");
+		htmlContent.append("    </div>\n");
+		htmlContent.append("    <div id=\"popup\" class=\"popup\">").append("\n");
+		htmlContent.append("        <div class=\"popup-content\">").append("\n");
+		htmlContent.append("            <span class=\"close\" id=\"popup-close\">&times;</span>").append("\n");
+		htmlContent.append("            <p id=\"popup-text\"></p>").append("\n");
+		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptAssociation.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
@@ -86,6 +92,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	
 	
@@ -523,11 +530,9 @@ public class CreationQuestionHTML {
 	
 
 
-	public void ecrireJsAssociation()
-	{
+	public void ecrireJsAssociation() {
 		StringBuilder jsContent = new StringBuilder();
-
-
+	
 		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
 		jsContent.append("    randomizeOrder('.word', '#words');").append("\n");
 		jsContent.append("    randomizeOrder('.definition', '#definitions');").append("\n");
@@ -540,19 +545,22 @@ public class CreationQuestionHTML {
 		jsContent.append("}").append("\n\n");
 		jsContent.append("let motSelectionne = null;").append("\n");
 		jsContent.append("let connexions = {};").append("\n");
-		jsContent.append("let reverseConnexions = {};").append("\n\n");
+		jsContent.append("let reverseConnexions = {};").append("\n");
+		jsContent.append("let isValidationDone = false;").append("\n\n"); // Ajout d'une variable pour vérifier si la validation est effectuée
 		jsContent.append("// Ajouter un événement de clic à chaque mot").append("\n");
 		jsContent.append("document.querySelectorAll('.word').forEach(mot => {").append("\n");
 		jsContent.append("    mot.addEventListener('click', () => {").append("\n");
-		jsContent.append("        motSelectionne = mot;").append("\n");
-		jsContent.append("        clearSelection();").append("\n");
-		jsContent.append("        mot.style.backgroundColor = '#d3d3d3'; // Mettre en surbrillance le mot sélectionné").append("\n");
+		jsContent.append("        if (!isValidationDone) {").append("\n");
+		jsContent.append("            motSelectionne = mot;").append("\n");
+		jsContent.append("            clearSelection();").append("\n");
+		jsContent.append("            mot.style.backgroundColor = '#d3d3d3'; // Mettre en surbrillance le mot sélectionné").append("\n");
+		jsContent.append("        }").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("});").append("\n\n");
 		jsContent.append("// Ajouter un événement de clic à chaque définition").append("\n");
 		jsContent.append("document.querySelectorAll('.definition').forEach(definition => {").append("\n");
 		jsContent.append("    definition.addEventListener('click', () => {").append("\n");
-		jsContent.append("        if (motSelectionne) {").append("\n");
+		jsContent.append("        if (motSelectionne && !isValidationDone) {").append("\n");
 		jsContent.append("            let motId = motSelectionne.getAttribute('data-id');").append("\n");
 		jsContent.append("            let defId = definition.getAttribute('data-id');").append("\n\n");
 		jsContent.append("            if (connexions[motId]) {").append("\n");
@@ -613,7 +621,7 @@ public class CreationQuestionHTML {
 		jsContent.append("    let totalAssociations = Object.keys(connexions).length;").append("\n");
 		jsContent.append("    let mots = document.querySelectorAll('.word').length;").append("\n\n");
 		jsContent.append("    if (totalAssociations < mots) {").append("\n");
-		jsContent.append("        alert(\"Il manque des associations.\");").append("\n");
+		jsContent.append("        showPopup('<span style=\"color: red;\">Il manque des associations.</span>');").append("\n");
 		jsContent.append("        return;").append("\n");
 		jsContent.append("    }").append("\n\n");
 		jsContent.append("    for (let motId in connexions) {").append("\n");
@@ -623,19 +631,35 @@ public class CreationQuestionHTML {
 		jsContent.append("        }").append("\n");
 		jsContent.append("    }").append("\n\n");
 		jsContent.append("    if (correct) {").append("\n");
-		jsContent.append("        alert(\"Bravo! Toutes les associations sont correctes.\");").append("\n");
+		jsContent.append("        showPopup('<span style=\"color: green;\">Bravo! Toutes les associations sont correctes.</span>');").append("\n");
 		jsContent.append("    } else {").append("\n");
-		jsContent.append("        alert(\"Désolé, certaines associations sont incorrectes. Essayez encore.\");").append("\n");
+		jsContent.append("        showPopup('<span style=\"color: red;\">Désolé, certaines associations sont incorrectes. Essayez encore.</span>');").append("\n");
 		jsContent.append("    }").append("\n");
-		jsContent.append("}").append("\n");
-
+		jsContent.append("    isValidationDone = true; // Désactiver les modifications après validation").append("\n");
+		jsContent.append("    const validerButton = document.querySelector('.btn[onclick=\"validate()\"]');").append("\n");
+		jsContent.append("    validerButton.textContent = 'Feedback';").append("\n");
+		jsContent.append("}").append("\n\n");
+		jsContent.append("// Fonction pour afficher le pop-up avec un message").append("\n");
+		jsContent.append("function showPopup(message) {").append("\n");
+		jsContent.append("    const popup = document.getElementById('popup');").append("\n");
+		jsContent.append("    const popupText = document.getElementById('popup-text');").append("\n");
+		jsContent.append("    popupText.innerHTML = message;").append("\n");
+		jsContent.append("    popup.style.display = 'flex';").append("\n");
+		jsContent.append("}").append("\n\n");
+		jsContent.append("// Fermer le pop-up").append("\n");
+		jsContent.append("document.getElementById('popup-close').addEventListener('click', () => {").append("\n");
+		jsContent.append("    const popup = document.getElementById('popup');").append("\n");
+		jsContent.append("    popup.style.display = 'none';").append("\n");
+		jsContent.append("});").append("\n");
+	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptAssociation.js"))) {
 			writer.write(jsContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
+			System.out.println("Le fichier JS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public void ecrireCSSAssociation() {
 		StringBuilder cssContent = new StringBuilder();
@@ -678,6 +702,7 @@ public class CreationQuestionHTML {
 		cssContent.append("    border: 1px solid #ccc;").append("\n");
 		cssContent.append("    border-radius: 5px;").append("\n");
 		cssContent.append("    cursor: pointer;").append("\n");
+		cssContent.append("    transition: background-color 0.3s ease;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
 		cssContent.append(".word:hover, .definition:hover {").append("\n");
@@ -706,6 +731,37 @@ public class CreationQuestionHTML {
 		cssContent.append("    height: 100%;").append("\n");
 		cssContent.append("    pointer-events: none;").append("\n");
 		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+		cssContent.append(".popup {").append("\n");
+		cssContent.append("    display: none;").append("\n");
+		cssContent.append("    position: fixed;").append("\n");
+		cssContent.append("    top: 0;").append("\n");
+		cssContent.append("    left: 0;").append("\n");
+		cssContent.append("    width: 100%;").append("\n");
+		cssContent.append("    height: 100%;").append("\n");
+		cssContent.append("    background-color: rgba(0, 0, 0, 0.5);").append("\n");
+		cssContent.append("    justify-content: center;").append("\n");
+		cssContent.append("    align-items: center;").append("\n");
+		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+		cssContent.append(".popup-content {").append("\n");
+		cssContent.append("    background-color: #fff;").append("\n");
+		cssContent.append("    padding: 20px;").append("\n");
+		cssContent.append("    border-radius: 5px;").append("\n");
+		cssContent.append("    text-align: center;").append("\n");
+		cssContent.append("    position: relative;").append("\n");
+		cssContent.append("    width: 50%;").append("\n"); // Ajout pour centrer et ajuster la taille
+		cssContent.append("    margin: 0 auto;").append("\n"); // Ajout pour centrer et ajuster la taille
+		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+		cssContent.append(".close {").append("\n");
+		cssContent.append("    position: absolute;").append("\n");
+		cssContent.append("    top: 10px;").append("\n");
+		cssContent.append("    right: 10px;").append("\n");
+		cssContent.append("    font-size: 20px;").append("\n"); // Ajusté pour être plus petit
+		cssContent.append("    cursor: pointer;").append("\n");
+		cssContent.append("    color: #333;").append("\n"); // Couleur du texte
+		cssContent.append("}").append("\n");
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/styleAssociation.css"))) {
 			writer.write(cssContent.toString());
@@ -714,6 +770,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 
 	public void ecrireCSSElimination() {
