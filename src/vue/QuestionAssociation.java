@@ -180,34 +180,6 @@ public class QuestionAssociation extends JFrame
 			}
 		});
 
-
-		// Bouton "Explication"
-		JButton btnExplication = new JButton("Explication");
-
-		btnExplication.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				if (frameExplication == null || !frameExplication.isDisplayable())
-				{
-					frameExplication = new JFrame("Explication");
-					frameExplication.setSize(400, 300);
-					frameExplication.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-					panelExplication = new PanelSaisie();
-					frameExplication.add(panelExplication);
-
-					frameExplication.setLocationRelativeTo(null);
-					frameExplication.setVisible(true);
-				}
-				else
-				{
-					frameExplication.toFront();
-				}
-			}
-		});
-
-
 		// Bouton "Enregistrer"
 		JButton btnEnregistrer = new JButton("Enregistrer");
 
