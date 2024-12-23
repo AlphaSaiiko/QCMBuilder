@@ -185,7 +185,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='"+pagePrecedente+".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
-		htmlContent.append("        <button id=\"suivant\">Suivant</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <div id=\"popup\" class=\"popup\">").append("\n");
 		htmlContent.append("        <div class=\"popup-content\">").append("\n");
@@ -251,6 +251,13 @@ public class CreationQuestionHTML {
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
+		htmlContent.append("    <div id=\"popup\" class=\"popup\">").append("\n");
+		htmlContent.append("        <div class=\"popup-content\">").append("\n");
+		htmlContent.append("            <span class=\"close\" id=\"popup-close\">&times;</span>").append("\n");
+		htmlContent.append("            <p id=\"popup-text\"></p>").append("\n");
+		htmlContent.append("            <p>Eh oui, Lionel Messi et Neymar Jr ont bien joué pour le PSG.</p>").append("\n");
+		htmlContent.append("        </div>").append("\n");
+		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptReponseMultiple.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
@@ -263,25 +270,26 @@ public class CreationQuestionHTML {
 		}
 	}
 
-
-	public void ecrireJsReponseMultiple()
-	{
+	public void ecrireJsReponseMultiple() {
 		StringBuilder jsContent = new StringBuilder();
-
+	
 		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
 		jsContent.append("    // Mélanger les réponses (au cas où)").append("\n");
 		jsContent.append("    randomizeOrder('.reponse', '#question');").append("\n");
 		jsContent.append("\n");
 		jsContent.append("    // Gérer la sélection des réponses").append("\n");
 		jsContent.append("    let selectedAnswers = new Set();").append("\n");
+		jsContent.append("    let isValidationDone = false;").append("\n");
 		jsContent.append("    document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
 		jsContent.append("        reponse.addEventListener('click', () => {").append("\n");
-		jsContent.append("            if (selectedAnswers.has(reponse)) {").append("\n");
-		jsContent.append("                reponse.classList.remove('selected');").append("\n");
-		jsContent.append("                selectedAnswers.delete(reponse);").append("\n");
-		jsContent.append("            } else {").append("\n");
-		jsContent.append("                reponse.classList.add('selected');").append("\n");
-		jsContent.append("                selectedAnswers.add(reponse);").append("\n");
+		jsContent.append("            if (!isValidationDone) {").append("\n");
+		jsContent.append("                if (selectedAnswers.has(reponse)) {").append("\n");
+		jsContent.append("                    reponse.classList.remove('selected');").append("\n");
+		jsContent.append("                    selectedAnswers.delete(reponse);").append("\n");
+		jsContent.append("                } else {").append("\n");
+		jsContent.append("                    reponse.classList.add('selected');").append("\n");
+		jsContent.append("                    selectedAnswers.add(reponse);").append("\n");
+		jsContent.append("                }").append("\n");
 		jsContent.append("            }").append("\n");
 		jsContent.append("        });").append("\n");
 		jsContent.append("    });").append("\n");
@@ -307,11 +315,30 @@ public class CreationQuestionHTML {
 		jsContent.append("            }").append("\n");
 		jsContent.append("        });").append("\n");
 		jsContent.append("\n");
+		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
+		jsContent.append("        const popupText = document.getElementById('popup-text');").append("\n");
+		jsContent.append("\n");
 		jsContent.append("        if (allCorrect) {").append("\n");
-		jsContent.append("            alert('Bravo! Vous avez sélectionné toutes les bonnes réponses.');").append("\n");
+		jsContent.append("            popupText.innerHTML = '<span style=\"color: green;\">Bonne réponse!</span>';").append("\n");
 		jsContent.append("        } else {").append("\n");
-		jsContent.append("            alert('Désolé, certaines réponses sélectionnées sont incorrectes.');").append("\n");
+		jsContent.append("            popupText.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
 		jsContent.append("        }").append("\n");
+		jsContent.append("        popup.style.display = 'flex';").append("\n");
+		jsContent.append("        isValidationDone = true;").append("\n");
+		jsContent.append("\n");
+		jsContent.append("        // Transformer le bouton 'Valider' en 'Feedback'").append("\n");
+		jsContent.append("        const validerButton = document.getElementById('valider');").append("\n");
+		jsContent.append("        validerButton.textContent = 'Feedback';").append("\n");
+		jsContent.append("        validerButton.removeEventListener('click', this);").append("\n");
+		jsContent.append("        validerButton.addEventListener('click', () => {").append("\n");
+		jsContent.append("            popup.style.display = 'flex';").append("\n");
+		jsContent.append("        });").append("\n");
+		jsContent.append("    });").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    // Fermer le pop-up").append("\n");
+		jsContent.append("    document.getElementById('popup-close').addEventListener('click', () => {").append("\n");
+		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
+		jsContent.append("        popup.style.display = 'none';").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("});").append("\n");
 		jsContent.append("\n");
@@ -322,31 +349,36 @@ public class CreationQuestionHTML {
 		jsContent.append("\n");
 		jsContent.append("    shuffledItems.forEach(item => parent.appendChild(item));").append("\n");
 		jsContent.append("}").append("\n");
-
+	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptReponseMultiple.js"))) {
 			writer.write(jsContent.toString());
-			System.out.println("Le fichier html a été généré avec succès !");
+			System.out.println("Le fichier js a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
 
-	public void ecrireJsReponseUnique()
-	{
+
+	public void ecrireJsReponseUnique() {
 		StringBuilder jsContent = new StringBuilder();
+	
 		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
 		jsContent.append("    // Mélanger les réponses (au cas où)").append("\n");
 		jsContent.append("    randomizeOrder('.reponse', '#question');").append("\n");
 		jsContent.append("\n");
 		jsContent.append("    // Gérer la sélection des réponses").append("\n");
 		jsContent.append("    let selectedAnswer = null;").append("\n");
+		jsContent.append("    let isValidationDone = false;").append("\n");
 		jsContent.append("    document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
 		jsContent.append("        reponse.addEventListener('click', () => {").append("\n");
-		jsContent.append("            if (selectedAnswer) {").append("\n");
-		jsContent.append("                selectedAnswer.classList.remove('selected');").append("\n");
+		jsContent.append("            if (!isValidationDone) {").append("\n");
+		jsContent.append("                if (selectedAnswer) {").append("\n");
+		jsContent.append("                    selectedAnswer.classList.remove('selected');").append("\n");
+		jsContent.append("                }").append("\n");
+		jsContent.append("                reponse.classList.add('selected');").append("\n");
+		jsContent.append("                selectedAnswer = reponse;").append("\n");
 		jsContent.append("            }").append("\n");
-		jsContent.append("            reponse.classList.add('selected');").append("\n");
-		jsContent.append("            selectedAnswer = reponse;").append("\n");
 		jsContent.append("        });").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("\n");
@@ -364,6 +396,7 @@ public class CreationQuestionHTML {
 		jsContent.append("            popupText.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
 		jsContent.append("        }").append("\n");
 		jsContent.append("        popup.style.display = 'flex';").append("\n");
+		jsContent.append("        isValidationDone = true;").append("\n");
 		jsContent.append("\n");
 		jsContent.append("        // Transformer le bouton 'Valider' en 'Feedback'").append("\n");
 		jsContent.append("        const validerButton = document.getElementById('valider');").append("\n");
@@ -374,14 +407,10 @@ public class CreationQuestionHTML {
 		jsContent.append("        });").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("\n");
-		jsContent.append("    // Redirection vers la page suivante").append("\n");
-		jsContent.append("    document.getElementById('suivant').addEventListener('click', () => {").append("\n");
-		jsContent.append("        location.href = 'page3.html';").append("\n");
-		jsContent.append("    });").append("\n");
-		jsContent.append("\n");
 		jsContent.append("    // Fermer le pop-up").append("\n");
 		jsContent.append("    document.getElementById('popup-close').addEventListener('click', () => {").append("\n");
-		jsContent.append("        document.getElementById('popup').style.display = 'none';").append("\n");
+		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
+		jsContent.append("        popup.style.display = 'none';").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("});").append("\n");
 		jsContent.append("\n");
@@ -389,10 +418,9 @@ public class CreationQuestionHTML {
 		jsContent.append("    const items = document.querySelectorAll(selector);").append("\n");
 		jsContent.append("    const parent = document.querySelector(parentSelector);").append("\n");
 		jsContent.append("    const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);").append("\n");
-		jsContent.append("\n");
 		jsContent.append("    shuffledItems.forEach(item => parent.appendChild(item));").append("\n");
 		jsContent.append("}").append("\n");
-
+	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptReponseUnique.js"))) {
 			writer.write(jsContent.toString());
 			System.out.println("Le fichier js a été généré avec succès !");
@@ -400,6 +428,8 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
+
 
 
 

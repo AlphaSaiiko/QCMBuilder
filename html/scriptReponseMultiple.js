@@ -4,14 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gérer la sélection des réponses
     let selectedAnswers = new Set();
+    let isValidationDone = false;
     document.querySelectorAll('.reponse').forEach(reponse => {
         reponse.addEventListener('click', () => {
-            if (selectedAnswers.has(reponse)) {
-                reponse.classList.remove('selected');
-                selectedAnswers.delete(reponse);
-            } else {
-                reponse.classList.add('selected');
-                selectedAnswers.add(reponse);
+            if (!isValidationDone) {
+                if (selectedAnswers.has(reponse)) {
+                    reponse.classList.remove('selected');
+                    selectedAnswers.delete(reponse);
+                } else {
+                    reponse.classList.add('selected');
+                    selectedAnswers.add(reponse);
+                }
             }
         });
     });
@@ -37,18 +40,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        const popup = document.getElementById('popup');
+        const popupText = document.getElementById('popup-text');
+
         if (allCorrect) {
-            alert('Bravo! Vous avez sélectionné toutes les bonnes réponses.');
+            popupText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
         } else {
-            alert('Désolé, certaines réponses sélectionnées sont incorrectes.');
+            popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
         }
+        popup.style.display = 'flex';
+        isValidationDone = true;
+
+        // Transformer le bouton 'Valider' en 'Feedback'
+        const validerButton = document.getElementById('valider');
+        validerButton.textContent = 'Feedback';
+        validerButton.removeEventListener('click', this);
+        validerButton.addEventListener('click', () => {
+            popup.style.display = 'flex';
+        });
     });
+
+    // Fermer le pop-up
+    const popupCloseButton = document.getElementById('popup-close');
+    if (popupCloseButton) {
+        popupCloseButton.addEventListener('click', () => {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        });
+    }
 });
 
 function randomizeOrder(selector, parentSelector) {
     const items = document.querySelectorAll(selector);
     const parent = document.querySelector(parentSelector);
     const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);
-
     shuffledItems.forEach(item => parent.appendChild(item));
 }

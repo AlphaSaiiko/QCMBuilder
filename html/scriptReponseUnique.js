@@ -4,13 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gérer la sélection des réponses
     let selectedAnswer = null;
+    let isValidationDone = false;
     document.querySelectorAll('.reponse').forEach(reponse => {
         reponse.addEventListener('click', () => {
-            if (selectedAnswer) {
-                selectedAnswer.classList.remove('selected');
+            if (!isValidationDone) {
+                if (selectedAnswer) {
+                    selectedAnswer.classList.remove('selected');
+                }
+                reponse.classList.add('selected');
+                selectedAnswer = reponse;
             }
-            reponse.classList.add('selected');
-            selectedAnswer = reponse;
         });
     });
 
@@ -28,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
         }
         popup.style.display = 'flex';
+        isValidationDone = true;
 
         // Transformer le bouton 'Valider' en 'Feedback'
         const validerButton = document.getElementById('valider');
@@ -38,21 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Redirection vers la page suivante
-    document.getElementById('suivant').addEventListener('click', () => {
-        location.href = 'page3.html';
-    });
-
     // Fermer le pop-up
-    document.getElementById('popup-close').addEventListener('click', () => {
-        document.getElementById('popup').style.display = 'none';
-    });
+    const popupCloseButton = document.getElementById('popup-close');
+    if (popupCloseButton) {
+        popupCloseButton.addEventListener('click', () => {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        });
+    }
 });
 
 function randomizeOrder(selector, parentSelector) {
     const items = document.querySelectorAll(selector);
     const parent = document.querySelector(parentSelector);
     const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);
-
     shuffledItems.forEach(item => parent.appendChild(item));
 }
