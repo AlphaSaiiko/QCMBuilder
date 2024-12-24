@@ -223,7 +223,7 @@ public class CreationQuestionHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier html a été généré avec succès !");
+			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -287,7 +287,7 @@ public class CreationQuestionHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier html a été généré avec succès !");
+			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -375,7 +375,7 @@ public class CreationQuestionHTML {
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptReponseMultiple.js"))) {
 			writer.write(jsContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
+			System.out.println("Le fichier JS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -446,7 +446,7 @@ public class CreationQuestionHTML {
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptReponseUnique.js"))) {
 			writer.write(jsContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
+			System.out.println("Le fichier JS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -527,7 +527,7 @@ public class CreationQuestionHTML {
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptElimination.js"))) {
 			writer.write(jsContent.toString());
-			System.out.println("Le fichier js a été généré avec succès !");
+			System.out.println("Le fichier JS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -991,7 +991,7 @@ public class CreationQuestionHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/styleReponseUnique.css"))) {
 			writer.write(cssContent.toString());
-			System.out.println("Le fichier css a été généré avec succès !");
+			System.out.println("Le fichier CSS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
