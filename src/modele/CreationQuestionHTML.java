@@ -126,11 +126,12 @@ public class CreationQuestionHTML {
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
 		htmlContent.append("        <div class=\"question\" id=\"question\">").append("\n");
+	
 		for (IOption reponse : question.getEnsOptions()) {
 			if (reponse instanceof OptionElimination) {
 				OptionElimination opt = (OptionElimination) reponse;
 				if (opt.getOrdre() != -1) {
-					htmlContent.append("            <div class=\"reponse mauvaise-reponse\" data-order=\"").append(opt.getOrdre()).append("\">").append(opt.getEnonce()).append("</div>").append("\n");
+					htmlContent.append("            <div class=\"reponse mauvaise-reponse\" data-order=\"").append(opt.getOrdre()).append("\" ptselim=\"").append(opt.getNbPointsMoins()).append("\">").append(opt.getEnonce()).append("</div>").append("\n");
 				} else if (opt.getEstReponse()) {
 					htmlContent.append("            <div class=\"reponse bonne-reponse\">").append(opt.getEnonce()).append("</div>").append("\n");
 				} else {
@@ -138,6 +139,7 @@ public class CreationQuestionHTML {
 				}
 			}
 		}
+	
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button id=\"eliminar\">Éliminer</button>").append("\n");
@@ -161,6 +163,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 
 	public void pageQuestionUnique (Question question, int numQuestion)
@@ -466,7 +469,9 @@ public class CreationQuestionHTML {
 		jsContent.append("    document.getElementById('eliminar').addEventListener('click', () => {").append("\n");
 		jsContent.append("        if (currentIndex < eliminationOrder.length) {").append("\n");
 		jsContent.append("            const toEliminate = eliminationOrder[currentIndex];").append("\n");
-		jsContent.append("            toEliminate.style.display = 'none';").append("\n");
+		jsContent.append("            const ptselim = toEliminate.getAttribute('ptselim');").append("\n");
+		jsContent.append("            toEliminate.innerHTML = `<span style='color: red;'>${ptselim} pts</span>`;").append("\n");
+		jsContent.append("            toEliminate.style.cursor = 'default';").append("\n");
 		jsContent.append("            currentIndex++;").append("\n");
 		jsContent.append("        }").append("\n");
 		jsContent.append("    });").append("\n\n");
@@ -527,6 +532,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 
 
@@ -880,6 +886,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	
 

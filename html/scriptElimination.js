@@ -11,7 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('eliminar').addEventListener('click', () => {
         if (currentIndex < eliminationOrder.length) {
             const toEliminate = eliminationOrder[currentIndex];
-            toEliminate.style.display = 'none';
+            const ptselim = toEliminate.getAttribute('ptselim');
+            toEliminate.innerHTML = `<span style='color: red;'>${ptselim} pts</span>`;
+            toEliminate.style.cursor = 'default';
             currentIndex++;
         }
     });
