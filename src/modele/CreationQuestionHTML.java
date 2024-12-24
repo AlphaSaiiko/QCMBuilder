@@ -414,9 +414,14 @@ public class CreationQuestionHTML {
 		jsContent.append("                popupText.innerHTML = '<span style=\"color: green;\">Bonne réponse!</span>';").append("\n");
 		jsContent.append("            } else {").append("\n");
 		jsContent.append("                popupText.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
+		jsContent.append("                selectedAnswer.style.backgroundColor = 'red';").append("\n");
 		jsContent.append("            }").append("\n");
+		jsContent.append("            // Mettre en évidence les bonnes réponses").append("\n");
+		jsContent.append("            document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {").append("\n");
+		jsContent.append("                goodAnswer.style.backgroundColor = 'green';").append("\n");
+		jsContent.append("            });").append("\n");
 		jsContent.append("        } else {").append("\n");
-		jsContent.append("            popupText.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
+		jsContent.append("            popupText.innerHTML = '<span style=\"color: red;\">Veuillez sélectionner une réponse!</span>';").append("\n");
 		jsContent.append("        }").append("\n");
 		jsContent.append("        popup.style.display = 'flex';").append("\n");
 		jsContent.append("        isValidationDone = true;").append("\n");
@@ -451,6 +456,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 
 

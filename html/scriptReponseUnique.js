@@ -26,9 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 popupText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
             } else {
                 popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
+                selectedAnswer.style.backgroundColor = 'red';
             }
+            // Mettre en évidence les bonnes réponses
+            document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
+                goodAnswer.style.backgroundColor = 'green';
+            });
         } else {
-            popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
+            popupText.innerHTML = '<span style="color: red;">Veuillez sélectionner une réponse!</span>';
         }
         popup.style.display = 'flex';
         isValidationDone = true;
