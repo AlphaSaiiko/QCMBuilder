@@ -338,6 +338,20 @@ public class CreationQuestionHTML {
 		jsContent.append("            }").append("\n");
 		jsContent.append("        });").append("\n");
 		jsContent.append("\n");
+		jsContent.append("        if (allCorrect) {").append("\n");
+		jsContent.append("            bonnesReponses.forEach(reponse => {").append("\n");
+		jsContent.append("                reponse.style.backgroundColor = 'green'; // Mettre en vert les bonnes réponses").append("\n");
+		jsContent.append("            });").append("\n");
+		jsContent.append("        } else {").append("\n");
+		jsContent.append("            document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
+		jsContent.append("                if (reponse.classList.contains('bonne-reponse')) {").append("\n");
+		jsContent.append("                    reponse.style.backgroundColor = 'green'; // Mettre en vert les bonnes réponses").append("\n");
+		jsContent.append("                } else {").append("\n");
+		jsContent.append("                    reponse.style.backgroundColor = 'red'; // Mettre en rouge les mauvaises réponses").append("\n");
+		jsContent.append("                }").append("\n");
+		jsContent.append("            });").append("\n");
+		jsContent.append("        }").append("\n");
+		jsContent.append("\n");
 		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
 		jsContent.append("        const popupText = document.getElementById('popup-text');").append("\n");
 		jsContent.append("\n");
@@ -369,7 +383,6 @@ public class CreationQuestionHTML {
 		jsContent.append("    const items = document.querySelectorAll(selector);").append("\n");
 		jsContent.append("    const parent = document.querySelector(parentSelector);").append("\n");
 		jsContent.append("    const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);").append("\n");
-		jsContent.append("\n");
 		jsContent.append("    shuffledItems.forEach(item => parent.appendChild(item));").append("\n");
 		jsContent.append("}").append("\n");
 	
@@ -380,6 +393,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 
 

@@ -40,6 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        if (allCorrect) {
+            bonnesReponses.forEach(reponse => {
+                reponse.style.backgroundColor = 'green'; // Mettre en vert les bonnes réponses
+            });
+        } else {
+            document.querySelectorAll('.reponse').forEach(reponse => {
+                if (reponse.classList.contains('bonne-reponse')) {
+                    reponse.style.backgroundColor = 'green'; // Mettre en vert les bonnes réponses
+                } else {
+                    reponse.style.backgroundColor = 'red'; // Mettre en rouge les mauvaises réponses
+                }
+            });
+        }
+
         const popup = document.getElementById('popup');
         const popupText = document.getElementById('popup-text');
 
@@ -71,6 +85,5 @@ function randomizeOrder(selector, parentSelector) {
     const items = document.querySelectorAll(selector);
     const parent = document.querySelector(parentSelector);
     const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);
-
     shuffledItems.forEach(item => parent.appendChild(item));
 }
