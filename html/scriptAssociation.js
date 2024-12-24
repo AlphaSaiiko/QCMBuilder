@@ -53,13 +53,13 @@ document.querySelectorAll('.definition').forEach(definition => {
             connexions[motId] = defId;
             reverseConnexions[defId] = motId;
 
-            drawLine(motSelectionne, definition);
+            drawLine(motSelectionne, definition, 'black');
             clearSelection();
         }
     });
 });
 
-function drawLine(sujet, proposition) {
+function drawLine(sujet, proposition, color) {
     const svg = document.getElementById('svg-container');
     const sujetRect = sujet.getBoundingClientRect();
     const propositionRect = proposition.getBoundingClientRect();
@@ -73,7 +73,7 @@ function drawLine(sujet, proposition) {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     const d = `M ${x1},${y1} C ${(x1 + x2) / 2},${y1} ${(x1 + x2) / 2},${y2} ${x2},${y2}`;
     path.setAttribute('d', d);
-    path.setAttribute('stroke', 'black');
+    path.setAttribute('stroke', color);
     path.setAttribute('stroke-width', '2');
     path.setAttribute('fill', 'none');
     path.setAttribute('class', `line-${sujet.getAttribute('data-id')}-${proposition.getAttribute('data-id')}`);
@@ -108,9 +108,14 @@ function validate() {
     }
 
     for (let motId in connexions) {
-        if (connexions[motId] != motId) {
+        const isCorrect = connexions[motId] == motId;
+        drawLine(
+            document.querySelector(`.word[data-id='${motId}']`),
+            document.querySelector(`.definition[data-id='${connexions[motId]}']`),
+            isCorrect ? 'green' : 'red'
+        );
+        if (!isCorrect) {
             correct = false;
-            break;
         }
     }
 

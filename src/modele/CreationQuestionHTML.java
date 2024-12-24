@@ -577,7 +577,7 @@ public class CreationQuestionHTML {
 		jsContent.append("let motSelectionne = null;").append("\n");
 		jsContent.append("let connexions = {};").append("\n");
 		jsContent.append("let reverseConnexions = {};").append("\n");
-		jsContent.append("let isValidationDone = false;").append("\n\n"); // Ajout d'une variable pour vérifier si la validation est effectuée
+		jsContent.append("let isValidationDone = false;").append("\n\n");
 		jsContent.append("// Ajouter un événement de clic à chaque mot").append("\n");
 		jsContent.append("document.querySelectorAll('.word').forEach(mot => {").append("\n");
 		jsContent.append("    mot.addEventListener('click', () => {").append("\n");
@@ -610,12 +610,12 @@ public class CreationQuestionHTML {
 		jsContent.append("            }").append("\n\n");
 		jsContent.append("            connexions[motId] = defId;").append("\n");
 		jsContent.append("            reverseConnexions[defId] = motId;").append("\n\n");
-		jsContent.append("            drawLine(motSelectionne, definition);").append("\n");
+		jsContent.append("            drawLine(motSelectionne, definition, 'black');").append("\n");
 		jsContent.append("            clearSelection();").append("\n");
 		jsContent.append("        }").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("});").append("\n\n");
-		jsContent.append("function drawLine(sujet, proposition) {").append("\n");
+		jsContent.append("function drawLine(sujet, proposition, color) {").append("\n");
 		jsContent.append("    const svg = document.getElementById('svg-container');").append("\n");
 		jsContent.append("    const sujetRect = sujet.getBoundingClientRect();").append("\n");
 		jsContent.append("    const propositionRect = proposition.getBoundingClientRect();").append("\n");
@@ -627,7 +627,7 @@ public class CreationQuestionHTML {
 		jsContent.append("    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');").append("\n");
 		jsContent.append("    const d = `M ${x1},${y1} C ${(x1 + x2) / 2},${y1} ${(x1 + x2) / 2},${y2} ${x2},${y2}`;").append("\n");
 		jsContent.append("    path.setAttribute('d', d);").append("\n");
-		jsContent.append("    path.setAttribute('stroke', 'black');").append("\n");
+		jsContent.append("    path.setAttribute('stroke', color);").append("\n");
 		jsContent.append("    path.setAttribute('stroke-width', '2');").append("\n");
 		jsContent.append("    path.setAttribute('fill', 'none');").append("\n");
 		jsContent.append("    path.setAttribute('class', `line-${sujet.getAttribute('data-id')}-${proposition.getAttribute('data-id')}`);").append("\n\n");
@@ -656,15 +656,20 @@ public class CreationQuestionHTML {
 		jsContent.append("        return;").append("\n");
 		jsContent.append("    }").append("\n\n");
 		jsContent.append("    for (let motId in connexions) {").append("\n");
-		jsContent.append("        if (connexions[motId] != motId) {").append("\n");
+		jsContent.append("        const isCorrect = connexions[motId] == motId;").append("\n");
+		jsContent.append("        drawLine(").append("\n");
+		jsContent.append("            document.querySelector(`.word[data-id='${motId}']`),").append("\n");
+		jsContent.append("            document.querySelector(`.definition[data-id='${connexions[motId]}']`),").append("\n");
+		jsContent.append("            isCorrect ? 'green' : 'red'").append("\n");
+		jsContent.append("        );").append("\n");
+		jsContent.append("        if (!isCorrect) {").append("\n");
 		jsContent.append("            correct = false;").append("\n");
-		jsContent.append("            break;").append("\n");
 		jsContent.append("        }").append("\n");
 		jsContent.append("    }").append("\n\n");
 		jsContent.append("    if (correct) {").append("\n");
 		jsContent.append("        showPopup('<span style=\"color: green;\">Bravo! Toutes les associations sont correctes.</span>');").append("\n");
 		jsContent.append("    } else {").append("\n");
-		jsContent.append("        showPopup('<span style=\"color: red;\">Désolé, certaines associations sont incorrectes. Essayez encore.</span>');").append("\n");
+		jsContent.append("        showPopup('<span style=\"color: red;\">Désolé, certaines associations sont incorrectes.</span>');").append("\n");
 		jsContent.append("    }").append("\n");
 		jsContent.append("    isValidationDone = true; // Désactiver les modifications après validation").append("\n");
 		jsContent.append("    const validerButton = document.querySelector('.btn[onclick=\"validate()\"]');").append("\n");
@@ -690,6 +695,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 
 	public void ecrireCSSAssociation() {
