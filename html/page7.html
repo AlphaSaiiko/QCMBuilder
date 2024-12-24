@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question à Élimination</title>
-    <link rel="stylesheet" href="styleElimination.css">
+    <title>Question à Réponse Unique</title>
+    <link rel="stylesheet" href="styleReponseUnique.css">
 </head>
 <body>
     <div class="container">
-        <h1>Parmi ces trophées, lequel l’OM n’a jamais remporté ?</h1>
+        <h1>En quelle année l’OM a-t-il remporté la Ligue des Champions ?</h1>
         <div class="question" id="question">
-            <div class="reponse mauvaise-reponse" data-order="1" ptselim="-0.25">Ligue des Champions</div>
-            <div class="reponse mauvaise-reponse">Ligue 1</div>
-            <div class="reponse bonne-reponse">Ligue Europa</div>
-            <div class="reponse mauvaise-reponse" data-order="2" ptselim="-0.25">Coupe de France</div>
+            <div class="reponse mauvaise-reponse">1991</div>
+            <div class="reponse bonne-reponse">1993</div>
+            <div class="reponse mauvaise-reponse">1995</div>
+            <div class="reponse mauvaise-reponse">1997</div>
         </div>
         <button onclick="location.href='page6.html';">Précédent</button>
-        <button id="eliminar">Éliminer</button>
         <button id="valider">Valider</button>
         <button onclick="location.href='page8.html';">Suivant</button>
     </div>
@@ -24,8 +23,9 @@
         <div class="popup-content">
             <span class="close" id="popup-close">&times;</span>
             <p id="popup-text"></p>
+            <p></p>
         </div>
     </div>
-    <script src="scriptElimination.js"></script>
+    <script src="scriptReponseUnique.js"></script>
 </body>
 </html>

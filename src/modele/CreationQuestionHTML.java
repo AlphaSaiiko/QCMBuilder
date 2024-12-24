@@ -492,6 +492,7 @@ public class CreationQuestionHTML {
 		jsContent.append("            const ptselim = toEliminate.getAttribute('ptselim');").append("\n");
 		jsContent.append("            toEliminate.innerHTML = `<span style='color: red;'>${ptselim} pts</span>`;").append("\n");
 		jsContent.append("            toEliminate.style.cursor = 'default';").append("\n");
+		jsContent.append("            toEliminate.classList.add('eliminated');").append("\n");
 		jsContent.append("            currentIndex++;").append("\n");
 		jsContent.append("        }").append("\n");
 		jsContent.append("    });").append("\n\n");
@@ -500,7 +501,7 @@ public class CreationQuestionHTML {
 		jsContent.append("    let isValidationDone = false;").append("\n");
 		jsContent.append("    document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
 		jsContent.append("        reponse.addEventListener('click', () => {").append("\n");
-		jsContent.append("            if (!isValidationDone) {").append("\n");
+		jsContent.append("            if (!isValidationDone && !reponse.classList.contains('eliminated')) {").append("\n");
 		jsContent.append("                if (selectedAnswer) {").append("\n");
 		jsContent.append("                    selectedAnswer.classList.remove('selected');").append("\n");
 		jsContent.append("                }").append("\n");
@@ -516,8 +517,11 @@ public class CreationQuestionHTML {
 		jsContent.append("            const popupText = document.getElementById('popup-text');").append("\n\n");
 		jsContent.append("            if (selectedAnswer.classList.contains('bonne-reponse')) {").append("\n");
 		jsContent.append("                popupText.innerHTML = '<span style=\"color: green;\">Bravo! Vous avez trouvé la bonne réponse.</span>';").append("\n");
+		jsContent.append("                selectedAnswer.style.backgroundColor = 'green';").append("\n");
 		jsContent.append("            } else {").append("\n");
 		jsContent.append("                popupText.innerHTML = '<span style=\"color: red;\">Désolé, la réponse sélectionnée est incorrecte.</span>';").append("\n");
+		jsContent.append("                selectedAnswer.style.backgroundColor = 'red';").append("\n");
+		jsContent.append("                document.querySelector('.bonne-reponse').style.backgroundColor = 'green';").append("\n");
 		jsContent.append("            }").append("\n");
 		jsContent.append("            popup.style.display = 'flex';").append("\n");
 		jsContent.append("            isValidationDone = true;").append("\n\n");
@@ -552,6 +556,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	
 

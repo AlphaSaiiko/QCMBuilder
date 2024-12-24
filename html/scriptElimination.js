@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const ptselim = toEliminate.getAttribute('ptselim');
             toEliminate.innerHTML = `<span style='color: red;'>${ptselim} pts</span>`;
             toEliminate.style.cursor = 'default';
+            toEliminate.classList.add('eliminated');
             currentIndex++;
         }
     });
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isValidationDone = false;
     document.querySelectorAll('.reponse').forEach(reponse => {
         reponse.addEventListener('click', () => {
-            if (!isValidationDone) {
+            if (!isValidationDone && !reponse.classList.contains('eliminated')) {
                 if (selectedAnswer) {
                     selectedAnswer.classList.remove('selected');
                 }
@@ -41,8 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (selectedAnswer.classList.contains('bonne-reponse')) {
                 popupText.innerHTML = '<span style="color: green;">Bravo! Vous avez trouvé la bonne réponse.</span>';
+                selectedAnswer.style.backgroundColor = 'green';
             } else {
                 popupText.innerHTML = '<span style="color: red;">Désolé, la réponse sélectionnée est incorrecte.</span>';
+                selectedAnswer.style.backgroundColor = 'red';
+                document.querySelector('.bonne-reponse').style.backgroundColor = 'green';
             }
             popup.style.display = 'flex';
             isValidationDone = true;
