@@ -122,7 +122,7 @@ function validate() {
     if (correct) {
         showPopup('<span style="color: green;">Bravo! Toutes les associations sont correctes.</span>');
     } else {
-        showPopup('<span style="color: red;">Désolé, certaines associations sont incorrectes. Essayez encore.</span>');
+        showPopup('<span style="color: red;">Désolé, certaines associations sont incorrectes.</span>');
     }
     isValidationDone = true; // Désactiver les modifications après validation
     const validerButton = document.querySelector('.btn[onclick="validate()"]');

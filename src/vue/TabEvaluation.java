@@ -96,7 +96,11 @@ public class TabEvaluation extends JFrame
 	
 		// Bouton "Générer l'évaluation"
 		JButton generateButton = new JButton("Générer l'évaluation");
-		generateButton.addActionListener(e -> generateTabEvaluation(ressource));
+		generateButton.addActionListener(e -> {
+			generateTabEvaluation(ressource);
+			dispose(); // Fermer la fenêtre actuelle
+			new Accueil(); // Ouvrir la page d'accueil
+		});
 	
 		bottomPanel.add(generateButton, BorderLayout.CENTER);
 	
