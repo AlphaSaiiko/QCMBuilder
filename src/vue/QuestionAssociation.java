@@ -21,12 +21,9 @@ public class QuestionAssociation extends JFrame
 		private       JPanel      panelQuestion         ;
 		private       PanelSaisie panelEnonce           ;
 		private       PanelSaisie panelExplication      ;
-		private       JFrame      frameExplication      ;
 		private       int         nbOptions        = 0  ;
 		private final int         nbMaxOptions     = 6  ;
 		private final int         HAUTEUR_OPTIONS  = 150;
-
-
 
 
 	/**
@@ -39,11 +36,9 @@ public class QuestionAssociation extends JFrame
 	{
 		this.question = question;
 
-
 		// Panel principal
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new BorderLayout());
-
 
 		// Bouton "Retour" en haut à gauche
 		JButton btnRetour = new JButton("Retour");
@@ -57,7 +52,6 @@ public class QuestionAssociation extends JFrame
 		JPanel panelRetour = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panelRetour.add(btnRetour);
 
-
 		// Ressource et la notion en haut à gauche
 		JLabel lblRessourceNotion = new JLabel(
 			"Ressource : " + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + 
@@ -66,30 +60,41 @@ public class QuestionAssociation extends JFrame
 		panelRetour.add(lblRessourceNotion);
 		this.add(panelRetour, BorderLayout.NORTH);
 
-
 		// Panel de la question (texte et options)
 		panelQuestion = new JPanel(new BorderLayout());
 
-
 		// PanelSaisie pour l'énoncé
+		JPanel panelEnonceWrapper = new JPanel(new BorderLayout());
+		JLabel lblEnonce = new JLabel("Énoncé");
+		panelEnonceWrapper.add(lblEnonce, BorderLayout.NORTH);
 		panelEnonce = new PanelSaisie();
-		Dimension dimensionsEnonce = new Dimension(0, 400);
+		Dimension dimensionsEnonce = new Dimension(0, 200);
 		panelEnonce.setPreferredSize(dimensionsEnonce);
 		panelEnonce.setMinimumSize(dimensionsEnonce);
 		panelEnonce.setMaximumSize(dimensionsEnonce);
-		panelQuestion.add(panelEnonce, BorderLayout.NORTH);
-		
+		panelEnonceWrapper.add(panelEnonce, BorderLayout.CENTER);
+		panelQuestion.add(panelEnonceWrapper, BorderLayout.NORTH);
+
+		// PanelSaisie pour l'explication
+		JPanel panelExplicationWrapper = new JPanel(new BorderLayout());
+		JLabel lblExplication = new JLabel("Explication");
+		panelExplicationWrapper.add(lblExplication, BorderLayout.NORTH);
+		panelExplication = new PanelSaisie();
+		Dimension dimensionsExplication = new Dimension(0, 200);
+		panelExplication.setPreferredSize(dimensionsExplication);
+		panelExplication.setMinimumSize(dimensionsExplication);
+		panelExplication.setMaximumSize(dimensionsExplication);
+		panelExplicationWrapper.add(panelExplication, BorderLayout.CENTER);
+		panelQuestion.add(panelExplicationWrapper, BorderLayout.CENTER);
 
 		// Panel pour les options
 		JPanel panelOptions = new JPanel();
 		panelOptions.setLayout(new BoxLayout(panelOptions, BoxLayout.Y_AXIS));
-		panelQuestion.add(panelOptions, BorderLayout.CENTER);
-
+		panelQuestion.add(panelOptions, BorderLayout.SOUTH);
 
 		// Panel pour les boutons
 		JPanel panelBoutons = new JPanel();
 		panelBoutons.setLayout(new FlowLayout(FlowLayout.LEFT));
-
 
 		// Bouton "Ajouter"
 		JButton btnAjouter = new JButton("Ajouter une option");
@@ -111,12 +116,10 @@ public class QuestionAssociation extends JFrame
 					return;
 				}
 
-
 				// Panel contenant l'option
 				JPanel panelOption = new JPanel(new GridBagLayout());
 				GridBagConstraints gbc = new GridBagConstraints();
 				gbc.insets = new Insets(5, 5, 5, 5);
-
 
 				// Bouton "Supprimer"
 				ImageIcon iconeSupprimer = new ImageIcon(
@@ -147,7 +150,6 @@ public class QuestionAssociation extends JFrame
 					}
 				});
 
-
 				// Premier élément
 				PanelSaisie element1 = new PanelSaisie(false);
 				element1.setHauteur(HAUTEUR_OPTIONS);
@@ -158,7 +160,6 @@ public class QuestionAssociation extends JFrame
 				gbc.anchor = GridBagConstraints.CENTER;
 				gbc.weightx = 1.0;
 				panelOption.add(element1, gbc);
-
 
 				// Second élément
 				PanelSaisie element2 = new PanelSaisie(false);
@@ -171,7 +172,6 @@ public class QuestionAssociation extends JFrame
 				gbc.weightx = 1.0;
 				panelOption.add(element2, gbc);
 
-
 				// Ajout du Panel de l'option au panel des options
 				panelOptions.add(panelOption);
 				nbOptions++;
@@ -179,34 +179,6 @@ public class QuestionAssociation extends JFrame
 				panelOptions.repaint();
 			}
 		});
-
-
-		// Bouton "Explication"
-		JButton btnExplication = new JButton("Explication");
-
-		btnExplication.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				if (frameExplication == null || !frameExplication.isDisplayable())
-				{
-					frameExplication = new JFrame("Explication");
-					frameExplication.setSize(400, 300);
-					frameExplication.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-					panelExplication = new PanelSaisie();
-					frameExplication.add(panelExplication);
-
-					frameExplication.setLocationRelativeTo(null);
-					frameExplication.setVisible(true);
-				}
-				else
-				{
-					frameExplication.toFront();
-				}
-			}
-		});
-
 
 		// Bouton "Enregistrer"
 		JButton btnEnregistrer = new JButton("Enregistrer");
@@ -228,7 +200,7 @@ public class QuestionAssociation extends JFrame
 						Component composant = panelOptions.getComponent(i);
 						
 						JPanel panelOption = (JPanel) composant;
-				
+					
 
 						// Récupérez les sous-composants du JPanel
 						Component[] composantsOption = panelOption.getComponents();
@@ -238,7 +210,6 @@ public class QuestionAssociation extends JFrame
 
 						String stringOption1 = panelSaisieOption1.getContenu();
 						String stringOption2 = panelSaisieOption2.getContenu();
-
 
 						// Vérifiez les champs de texte vides
 						if (stringOption1.isEmpty() || stringOption2.isEmpty()) 
@@ -258,18 +229,17 @@ public class QuestionAssociation extends JFrame
 					// Enregistrer l'énoncé
 					question.setEnonce(panelEnonce.getContenu());
 
-
 					// Enregistrer les réponses
 					for (int i = 0; i < panelOptions.getComponentCount(); i++)
 					{
 						Component composant = panelOptions.getComponent(i);
-					
+						
 						JPanel panelOption = (JPanel) composant;
-				
+					
 
 						// Récupérez les sous-composants du JPanel
 						Component[] composantsOption = panelOption.getComponents();
-				
+					
 						try 
 						{
 							PanelSaisie panelSaisieOption1 = (PanelSaisie) composantsOption[1];
@@ -304,7 +274,6 @@ public class QuestionAssociation extends JFrame
 						}
 					}
 
-
 					// Fermer la fenêtre
 					QuestionAssociation.this.dispose();
 					new Accueil();
@@ -314,12 +283,9 @@ public class QuestionAssociation extends JFrame
 			}
 		});
 
-
 		// Ajout des boutons au JPanel contenant les boutons
 		panelBoutons.add(btnAjouter);
-		panelBoutons.add(btnExplication);
 		panelBoutons.add(btnEnregistrer);
-
 
 		// Ajout des composants au panel principal
 		JScrollPane scrollPaneQuestion = new JScrollPane(panelQuestion);
@@ -327,7 +293,6 @@ public class QuestionAssociation extends JFrame
 		panelPrincipal.add(scrollPaneQuestion);
 		panelPrincipal.add(panelBoutons, BorderLayout.SOUTH);
 
-		
 		// Ajout du panel principal à la frame et configuration de cette dernière
 		this.add(panelPrincipal, BorderLayout.CENTER);
 		this.setTitle("Question Association");

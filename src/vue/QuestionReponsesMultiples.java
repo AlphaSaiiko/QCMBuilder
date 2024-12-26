@@ -24,7 +24,6 @@ public class QuestionReponsesMultiples extends JFrame
 	private       JPanel      panelOptions          ;
 	private       PanelSaisie panelEnonce           ;
 	private       PanelSaisie panelExplication      ;
-	private       JFrame      frameExplication      ;
 	private       int         nbOptions        = 0  ;
 	private final int         nbMaxOptions     = 6  ;
 	private final int         HAUTEUR_OPTIONS  = 150;
@@ -82,12 +81,31 @@ public class QuestionReponsesMultiples extends JFrame
 		panelEnonce.setMinimumSize(dimensionsEnonce);
 		panelEnonce.setMaximumSize(dimensionsEnonce);
 		panelQuestion.add(panelEnonce, BorderLayout.NORTH);
-		
+
+		// PanelSaisie pour l'explication
+		JPanel panelExplicationWrapper = new JPanel(new BorderLayout());
+		JLabel lblExplication = new JLabel("Explication");
+		panelExplicationWrapper.add(lblExplication, BorderLayout.NORTH);
+		panelExplication = new PanelSaisie();
+		Dimension dimensionsExplication = new Dimension(0, 200);
+		panelExplication.setPreferredSize(dimensionsExplication);
+		panelExplication.setMinimumSize(dimensionsExplication);
+		panelExplication.setMaximumSize(dimensionsExplication);
+		panelExplicationWrapper.add(panelExplication, BorderLayout.CENTER);
 
 		// Panel pour les options
 		panelOptions = new JPanel();
 		panelOptions.setLayout(new BoxLayout(panelOptions, BoxLayout.Y_AXIS));
-		panelQuestion.add(panelOptions, BorderLayout.CENTER);
+
+		// Nouveau panneau intermédiaire
+		JPanel panelCentre = new JPanel();
+		panelCentre.setLayout(new BoxLayout(panelCentre, BoxLayout.Y_AXIS));
+		panelCentre.add(panelExplicationWrapper); // Ajoute le panel d'explication
+		panelCentre.add(panelOptions);            // Ajoute le panel des options
+
+		// Ajoute le panneau combiné au BorderLayout.CENTER de panelQuestion
+		panelQuestion.add(panelCentre, BorderLayout.CENTER);
+
 
 
 		// Panel pour les boutons
@@ -185,31 +203,7 @@ public class QuestionReponsesMultiples extends JFrame
 		});
 
 
-		// Bouton "Explication"
-		JButton btnExplication = new JButton("Explication");
-
-        btnExplication.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                if (frameExplication == null || !frameExplication.isDisplayable())
-                {
-                    frameExplication = new JFrame("Explication");
-                    frameExplication.setSize(400, 300);
-                    frameExplication.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-                    panelExplication = new PanelSaisie();
-                    frameExplication.add(panelExplication);
-
-                    frameExplication.setLocationRelativeTo(null);
-                    frameExplication.setVisible(true);
-                }
-                else
-                {
-                    frameExplication.toFront();
-                }
-            }
-        });
+	
 
 
 		// Bouton "Enregistrer"
@@ -303,7 +297,6 @@ public class QuestionReponsesMultiples extends JFrame
 		
 		// Ajout des boutons au JPanel contenant les boutons
 		panelBoutons.add(btnAjouter);
-		panelBoutons.add(btnExplication);
 		panelBoutons.add(btnEnregistrer);
 
 
