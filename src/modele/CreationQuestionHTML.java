@@ -78,7 +78,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("    <div id=\"popup\" class=\"popup\">").append("\n");
 		htmlContent.append("        <div class=\"popup-content\">").append("\n");
 		htmlContent.append("            <span class=\"close\" id=\"popup-close\">&times;</span>").append("\n");
-		htmlContent.append("            <p id=\"popup-text\"></p>").append("\n");
+		htmlContent.append("            <p id=\"popup-text\">").append(question.getFeedback()).append("</p>").append("\n");
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptAssociation.js\"></script>").append("\n");
@@ -149,7 +149,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("    <div id=\"popup\" class=\"popup\">").append("\n");
 		htmlContent.append("        <div class=\"popup-content\">").append("\n");
 		htmlContent.append("            <span class=\"close\" id=\"popup-close\">&times;</span>").append("\n");
-		htmlContent.append("            <p id=\"popup-text\"></p>").append("\n");
+		htmlContent.append("            <p id=\"popup-text\">").append(question.getFeedback()).append("</p>").append("\n");
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptElimination.js\"></script>").append("\n");
