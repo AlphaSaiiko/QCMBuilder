@@ -126,6 +126,7 @@ public class Question
 	public void setFeedback(String feedback)
 	{
 		this.feedback = feedback;
+		this.mettreAJourQuestions();
 	}
 
 	public void setNbPoints(int nbPoints)

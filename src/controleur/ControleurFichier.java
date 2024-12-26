@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import modele.Notion;
 import modele.Question;
 import modele.Ressource;
@@ -170,7 +169,7 @@ public class ControleurFichier
 		}
 			
 
-		String ligneEntiere = qst.getType() + ";" + enonce + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";";
+		String ligneEntiere = qst.getType() + ";" + enonce + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";" + qst.getFeedback() + ";";
 		if (qst.getEnsOptions() != null)
 		{
 			for (IOption option : qst.getEnsOptions())
