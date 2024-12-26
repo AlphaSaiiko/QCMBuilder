@@ -21,7 +21,7 @@ public class QuestionReponseUnique extends JFrame
 	private       JPanel      panelBoutons          ;
 	private       JPanel      panelOptions          ;
 	private       PanelSaisie panelEnonce           ;
-	private       PanelSaisie panelExplication      ;
+	private       PanelSaisie panelFeedback      ;
 	private       JFrame      frameExplication      ;
 	private       int         nbOptions        = 0  ;
 	private final int         nbMaxOptions     = 6  ;
@@ -82,15 +82,15 @@ public class QuestionReponseUnique extends JFrame
 		panelQuestion.add(panelEnonce, BorderLayout.NORTH);
 
 		// PanelSaisie pour l'explication
-		JPanel panelExplicationWrapper = new JPanel(new BorderLayout());
+		JPanel panelFeedbackWrapper = new JPanel(new BorderLayout());
 		JLabel lblExplication = new JLabel("Explication");
-		panelExplicationWrapper.add(lblExplication, BorderLayout.NORTH);
-		panelExplication = new PanelSaisie();
+		panelFeedbackWrapper.add(lblExplication, BorderLayout.NORTH);
+		panelFeedback = new PanelSaisie();
 		Dimension dimensionsExplication = new Dimension(0, 200);
-		panelExplication.setPreferredSize(dimensionsExplication);
-		panelExplication.setMinimumSize(dimensionsExplication);
-		panelExplication.setMaximumSize(dimensionsExplication);
-		panelExplicationWrapper.add(panelExplication, BorderLayout.CENTER);
+		panelFeedback.setPreferredSize(dimensionsExplication);
+		panelFeedback.setMinimumSize(dimensionsExplication);
+		panelFeedback.setMaximumSize(dimensionsExplication);
+		panelFeedbackWrapper.add(panelFeedback, BorderLayout.CENTER);
 
 		// Panel pour les options
 		panelOptions = new JPanel();
@@ -99,7 +99,7 @@ public class QuestionReponseUnique extends JFrame
 		// Nouveau panneau intermédiaire
 		JPanel panelCentre = new JPanel();
 		panelCentre.setLayout(new BoxLayout(panelCentre, BoxLayout.Y_AXIS));
-		panelCentre.add(panelExplicationWrapper); // Ajoute le panel d'explication
+		panelCentre.add(panelFeedbackWrapper); // Ajoute le panel d'explication
 		panelCentre.add(panelOptions);            // Ajoute le panel des options
 
 		// Ajoute le panneau combiné au BorderLayout.CENTER de panelQuestion
@@ -206,12 +206,6 @@ public class QuestionReponseUnique extends JFrame
 				panelOptions.repaint();
 			}
 		});
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> c1eaf4a54ba8267ace1f6cde2c9815993fb7400d
 		
 		// Bouton "Enregistrer"
 		JButton btnEnregistrer = new JButton("Enregistrer");
@@ -267,6 +261,10 @@ public class QuestionReponseUnique extends JFrame
 				{
 					// Enregistrer la question dans un fichier
 					question.setEnonce(panelEnonce.getContenu());
+					
+					// Enregistrer l'explication
+					if (! panelFeedback.getContenu().trim().isEmpty())
+						question.setFeedback(panelFeedback.getContenu());
 
 					//Enregistrer les réponses
 					for (int i = 0; i < panelOptions.getComponentCount(); i++)
