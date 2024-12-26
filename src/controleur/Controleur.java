@@ -121,7 +121,7 @@ public class Controleur
 						String ligneQuestion = sc.nextLine();
 						Object[] ligne = ligneQuestion.split(";");
 	
-						if (ligne.length < 5) {
+						if (ligne.length < 6) {
 							System.err.println("Erreur : la ligne ne contient pas assez d'éléments.");
 							continue;
 						}
