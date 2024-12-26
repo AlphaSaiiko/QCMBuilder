@@ -20,6 +20,7 @@ public class Question
 
 	private String        type            ;
 	private String        enonce          ;
+	private String 	      feedback        ;
 	private int           nbPoints        ;
 	private int           temps           ;
 	private int           difficulte      ;
@@ -48,6 +49,7 @@ public class Question
 		this.type       = type      ;
 
 		this.idQuestion  = ++Question.compteurQuestion;
+		this.feedback = "";
 
 		this.numQuestion = (notion.getNbQuestion() + 1);
 		this.listeComplements = new ArrayList<>();
@@ -90,6 +92,7 @@ public class Question
 
 	public String        getType       ()        { return type                 ; }
 	public String        getEnonce     ()        { return enonce               ; }
+	public String        getFeedback   ()        { return feedback             ; }
 	public int           getNbPoints   ()        { return nbPoints             ; }
 	public int           getTemps      ()        { return temps                ; }
 	public int           getDifficulte ()        { return difficulte           ; }
@@ -118,6 +121,11 @@ public class Question
 	{
 		this.enonce = enonce;
 		this.mettreAJourQuestions();
+	}
+
+	public void setFeedback(String feedback)
+	{
+		this.feedback = feedback;
 	}
 
 	public void setNbPoints(int nbPoints)

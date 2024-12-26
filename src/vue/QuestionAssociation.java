@@ -1,11 +1,10 @@
 package vue;
 
-import javax.swing.*;
+import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import controleur.Controleur;
+import javax.swing.*;
 import modele.Question;
 import modele.option.OptionAssociation;
 

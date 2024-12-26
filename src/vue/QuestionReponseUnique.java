@@ -1,12 +1,10 @@
 package vue;
 
+import controleur.Controleur;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 import javax.swing.*;
-
-import controleur.Controleur;
 import modele.Question;
 import modele.option.Option;
 
@@ -208,9 +206,12 @@ public class QuestionReponseUnique extends JFrame
 				panelOptions.repaint();
 			}
 		});
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> c1eaf4a54ba8267ace1f6cde2c9815993fb7400d
 		
 		// Bouton "Enregistrer"
 		JButton btnEnregistrer = new JButton("Enregistrer");
