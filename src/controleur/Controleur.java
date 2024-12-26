@@ -131,13 +131,15 @@ public class Controleur
 						int nbPoints = Integer.parseInt(String.valueOf(ligne[2]));
 						int temps = Integer.parseInt(String.valueOf(ligne[3]));
 						int difficulte = Integer.parseInt(String.valueOf(ligne[4]));
+						String feedback = String.valueOf(ligne[6]);
 	
 						Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
 						tmp.setEnonce(intitule);
+						tmp.setFeedback(feedback);
 						System.out.println("Question créée : " + tmp.getEnonce());
 	
-						if (ligne.length > 6) {
-							String reponses = String.valueOf(ligne[6]);
+						if (ligne.length > 7) {
+							String reponses = String.valueOf(ligne[7]);
 							switch (tmp.getType()) {
 								case "QCMRU":
 								case "QCMRM":
