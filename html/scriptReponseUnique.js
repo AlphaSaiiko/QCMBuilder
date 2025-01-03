@@ -15,20 +15,24 @@ document.addEventListener('DOMContentLoaded', () => {
         restoreState(questionId);
     }
 
-    document.querySelectorAll('.reponse').forEach(reponse => {
-        reponse.addEventListener('click', () => {
-            if (!isValidationDone) {
-                if (selectedAnswer) {
-                    selectedAnswer.classList.remove('selected');
+    function enableAnswerSelection() {
+        document.querySelectorAll('.reponse').forEach(reponse => {
+            reponse.addEventListener('click', () => {
+                if (!isValidationDone) {
+                    if (selectedAnswer) {
+                        selectedAnswer.classList.remove('selected');
+                    }
+                    reponse.classList.add('selected');
+                    selectedAnswer = reponse;
                 }
-                reponse.classList.add('selected');
-                selectedAnswer = reponse;
-            }
+            });
         });
-    });
+    }
+    
+    enableAnswerSelection();
 
     // Valider la réponse sélectionnée
-    document.getElementById('valider').addEventListener('click', () => {
+    document.getElementById('valider').addEventListener('click', function validate() {
         const popup = document.getElementById('popup');
         const popupText = document.getElementById('popup-text');
         const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));
@@ -51,19 +55,31 @@ document.addEventListener('DOMContentLoaded', () => {
             // Sauvegarder l'état
             localStorage.setItem(`isValidationDone-${questionId}`, true);
             localStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.innerHTML);
-        } else {
-            popupText.innerHTML = '<span style="color: red;">Veuillez sélectionner une réponse!</span>';
-        }
-        popup.style.display = 'flex';
-        isValidationDone = true;
 
-        // Transformer le bouton 'Valider' en 'Feedback'
-        const validerButton = document.getElementById('valider');
-        validerButton.textContent = 'Feedback';
-        validerButton.removeEventListener('click', this);
-        validerButton.addEventListener('click', () => {
+            // Transformer le bouton 'Valider' en 'Feedback'
+            const validerButton = document.getElementById('valider');
+            validerButton.textContent = 'Feedback';
+            validerButton.removeEventListener('click', validate);
+            validerButton.addEventListener('click', () => {
+                const popupFeedback = document.getElementById('popup');
+                const popupFeedbackText = document.getElementById('popup-text');
+                if (selectedAnswer.classList.contains('bonne-reponse')) {
+                    popupFeedbackText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
+                } else {
+                    popupFeedbackText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
+                }
+                popupFeedback.style.display = 'flex';
+            });
+
+            // Afficher le pop-up personnalisé
             popup.style.display = 'flex';
-        });
+            isValidationDone = true; // Ne marquer comme "validation terminée" que si une réponse est sélectionnée
+        } else {
+            alert('Veuillez sélectionner une réponse !');
+            isValidationDone = false;
+        }
+
+        enableAnswerSelection();
     });
 
     // Fermer le pop-up
