@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isValidationDone = localStorage.getItem(`isValidationDone-${questionId}`) === 'true';
     if (isValidationDone) {
         restoreState(questionId);
+        transformButtonToFeedback(); // Assurez-vous d'appeler la fonction ici
     }
 
     function enableAnswerSelection() {
@@ -28,11 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-    
+
     enableAnswerSelection();
 
     // Valider la réponse sélectionnée
-    document.getElementById('valider').addEventListener('click', function validate() {
+    function validate() {
         const popup = document.getElementById('popup');
         const popupText = document.getElementById('popup-text');
         const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));
@@ -55,32 +56,44 @@ document.addEventListener('DOMContentLoaded', () => {
             // Sauvegarder l'état
             localStorage.setItem(`isValidationDone-${questionId}`, true);
             localStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.innerHTML);
+            localStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
 
             // Transformer le bouton 'Valider' en 'Feedback'
-            const validerButton = document.getElementById('valider');
-            validerButton.textContent = 'Feedback';
-            validerButton.removeEventListener('click', validate);
-            validerButton.addEventListener('click', () => {
-                const popupFeedback = document.getElementById('popup');
-                const popupFeedbackText = document.getElementById('popup-text');
-                if (selectedAnswer.classList.contains('bonne-reponse')) {
-                    popupFeedbackText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
-                } else {
-                    popupFeedbackText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
-                }
-                popupFeedback.style.display = 'flex';
-            });
+            transformButtonToFeedback();
 
             // Afficher le pop-up personnalisé
             popup.style.display = 'flex';
             isValidationDone = true; // Ne marquer comme "validation terminée" que si une réponse est sélectionnée
-        } else {
+        } else if (!isValidationDone) {
             alert('Veuillez sélectionner une réponse !');
             isValidationDone = false;
         }
 
         enableAnswerSelection();
-    });
+    }
+
+    document.getElementById('valider').addEventListener('click', validate);
+
+    function transformButtonToFeedback() {
+        const validerButton = document.getElementById('valider');
+        validerButton.textContent = 'Feedback';
+        validerButton.removeEventListener('click', validate);
+        validerButton.addEventListener('click', () => {
+            const popupFeedback = document.getElementById('popup');
+            const popupFeedbackText = document.getElementById('popup-text');
+            const savedPopupText = localStorage.getItem(`popupText-${questionId}`);
+            if (savedPopupText) {
+                popupFeedbackText.innerHTML = savedPopupText;
+            } else {
+                if (selectedAnswer && selectedAnswer.classList.contains('bonne-reponse')) {
+                    popupFeedbackText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
+                } else {
+                    popupFeedbackText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
+                }
+            }
+            popupFeedback.style.display = 'flex';
+        });
+    }
 
     // Fermer le pop-up
     document.getElementById('popup-close').addEventListener('click', () => {
@@ -104,6 +117,10 @@ function restoreState(questionId) {
     document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
         goodAnswer.style.backgroundColor = 'green';
     });
+    const savedPopupText = localStorage.getItem(`popupText-${questionId}`);
+    if (savedPopupText) {
+        document.getElementById('popup-text').innerHTML = savedPopupText;
+    }
 }
 
 function randomizeOrder(selector, parentSelector) {

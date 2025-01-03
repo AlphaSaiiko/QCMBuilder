@@ -397,10 +397,8 @@ public class CreationQuestionHTML {
 		}
 	}
 	
-	
-
-
-	public void ecrireJsReponseUnique() {
+	public void ecrireJsReponseUnique()
+	{
 		StringBuilder jsContent = new StringBuilder();
 	
 		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
@@ -418,22 +416,27 @@ public class CreationQuestionHTML {
 		jsContent.append("    let isValidationDone = localStorage.getItem(`isValidationDone-${questionId}`) === 'true';").append("\n");
 		jsContent.append("    if (isValidationDone) {").append("\n");
 		jsContent.append("        restoreState(questionId);").append("\n");
+		jsContent.append("        transformButtonToFeedback(); // Assurez-vous d'appeler la fonction ici").append("\n");
 		jsContent.append("    }").append("\n");
 		jsContent.append("\n");
-		jsContent.append("    document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
-		jsContent.append("        reponse.addEventListener('click', () => {").append("\n");
-		jsContent.append("            if (!isValidationDone) {").append("\n");
-		jsContent.append("                if (selectedAnswer) {").append("\n");
-		jsContent.append("                    selectedAnswer.classList.remove('selected');").append("\n");
+		jsContent.append("    function enableAnswerSelection() {").append("\n");
+		jsContent.append("        document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
+		jsContent.append("            reponse.addEventListener('click', () => {").append("\n");
+		jsContent.append("                if (!isValidationDone) {").append("\n");
+		jsContent.append("                    if (selectedAnswer) {").append("\n");
+		jsContent.append("                        selectedAnswer.classList.remove('selected');").append("\n");
+		jsContent.append("                    }").append("\n");
+		jsContent.append("                    reponse.classList.add('selected');").append("\n");
+		jsContent.append("                    selectedAnswer = reponse;").append("\n");
 		jsContent.append("                }").append("\n");
-		jsContent.append("                reponse.classList.add('selected');").append("\n");
-		jsContent.append("                selectedAnswer = reponse;").append("\n");
-		jsContent.append("            }").append("\n");
+		jsContent.append("            });").append("\n");
 		jsContent.append("        });").append("\n");
-		jsContent.append("    });").append("\n");
+		jsContent.append("    }").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    enableAnswerSelection();").append("\n");
 		jsContent.append("\n");
 		jsContent.append("    // Valider la réponse sélectionnée").append("\n");
-		jsContent.append("    document.getElementById('valider').addEventListener('click', () => {").append("\n");
+		jsContent.append("    function validate() {").append("\n");
 		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
 		jsContent.append("        const popupText = document.getElementById('popup-text');").append("\n");
 		jsContent.append("        const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));").append("\n");
@@ -456,20 +459,44 @@ public class CreationQuestionHTML {
 		jsContent.append("            // Sauvegarder l'état").append("\n");
 		jsContent.append("            localStorage.setItem(`isValidationDone-${questionId}`, true);").append("\n");
 		jsContent.append("            localStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.innerHTML);").append("\n");
-		jsContent.append("        } else {").append("\n");
-		jsContent.append("            popupText.innerHTML = '<span style=\"color: red;\">Veuillez sélectionner une réponse!</span>';").append("\n");
-		jsContent.append("        }").append("\n");
-		jsContent.append("        popup.style.display = 'flex';").append("\n");
-		jsContent.append("        isValidationDone = true;").append("\n");
+		jsContent.append("            localStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);").append("\n");
 		jsContent.append("\n");
-		jsContent.append("        // Transformer le bouton 'Valider' en 'Feedback'").append("\n");
+		jsContent.append("            // Transformer le bouton 'Valider' en 'Feedback'").append("\n");
+		jsContent.append("            transformButtonToFeedback();").append("\n");
+		jsContent.append("\n");
+		jsContent.append("            // Afficher le pop-up personnalisé").append("\n");
+		jsContent.append("            popup.style.display = 'flex';").append("\n");
+		jsContent.append("            isValidationDone = true; // Ne marquer comme \"validation terminée\" que si une réponse est sélectionnée").append("\n");
+		jsContent.append("        } else if (!isValidationDone) {").append("\n");
+		jsContent.append("            alert('Veuillez sélectionner une réponse !');").append("\n");
+		jsContent.append("            isValidationDone = false;").append("\n");
+		jsContent.append("        }").append("\n");
+		jsContent.append("\n");
+		jsContent.append("        enableAnswerSelection();").append("\n");
+		jsContent.append("    }").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    document.getElementById('valider').addEventListener('click', validate);").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    function transformButtonToFeedback() {").append("\n");
 		jsContent.append("        const validerButton = document.getElementById('valider');").append("\n");
 		jsContent.append("        validerButton.textContent = 'Feedback';").append("\n");
-		jsContent.append("        validerButton.removeEventListener('click', this);").append("\n");
+		jsContent.append("        validerButton.removeEventListener('click', validate);").append("\n");
 		jsContent.append("        validerButton.addEventListener('click', () => {").append("\n");
-		jsContent.append("            popup.style.display = 'flex';").append("\n");
+		jsContent.append("            const popupFeedback = document.getElementById('popup');").append("\n");
+		jsContent.append("            const popupFeedbackText = document.getElementById('popup-text');").append("\n");
+		jsContent.append("            const savedPopupText = localStorage.getItem(`popupText-${questionId}`);").append("\n");
+		jsContent.append("            if (savedPopupText) {").append("\n");
+		jsContent.append("                popupFeedbackText.innerHTML = savedPopupText;").append("\n");
+		jsContent.append("            } else {").append("\n");
+		jsContent.append("                if (selectedAnswer && selectedAnswer.classList.contains('bonne-reponse')) {").append("\n");
+		jsContent.append("                    popupFeedbackText.innerHTML = '<span style=\"color: green;\">Bonne réponse!</span>';").append("\n");
+		jsContent.append("                } else {").append("\n");
+		jsContent.append("                    popupFeedbackText.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
+		jsContent.append("                }").append("\n");
+		jsContent.append("            }").append("\n");
+		jsContent.append("            popupFeedback.style.display = 'flex';").append("\n");
 		jsContent.append("        });").append("\n");
-		jsContent.append("    });").append("\n");
+		jsContent.append("    }").append("\n");
 		jsContent.append("\n");
 		jsContent.append("    // Fermer le pop-up").append("\n");
 		jsContent.append("    document.getElementById('popup-close').addEventListener('click', () => {").append("\n");
@@ -493,6 +520,10 @@ public class CreationQuestionHTML {
 		jsContent.append("    document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {").append("\n");
 		jsContent.append("        goodAnswer.style.backgroundColor = 'green';").append("\n");
 		jsContent.append("    });").append("\n");
+		jsContent.append("    const savedPopupText = localStorage.getItem(`popupText-${questionId}`);").append("\n");
+		jsContent.append("    if (savedPopupText) {").append("\n");
+		jsContent.append("        document.getElementById('popup-text').innerHTML = savedPopupText;").append("\n");
+		jsContent.append("    }").append("\n");
 		jsContent.append("}").append("\n");
 		jsContent.append("\n");
 		jsContent.append("function randomizeOrder(selector, parentSelector) {").append("\n");
@@ -509,97 +540,87 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
-
-
-
-
-	public void ecrireJsElimination() {
-		StringBuilder jsContent = new StringBuilder();
-	
-		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
-		jsContent.append("    // Mélanger les réponses (au cas où)").append("\n");
-		jsContent.append("    randomizeOrder('.reponse', '#question');").append("\n\n");
-		jsContent.append("    // Élimer les mauvaises réponses dans l'ordre spécifié").append("\n");
-		jsContent.append("    const eliminationOrder = Array.from(document.querySelectorAll('.mauvaise-reponse[data-order]'))").append("\n");
-		jsContent.append("        .sort((a, b) => a.getAttribute('data-order') - b.getAttribute('data-order'));").append("\n\n");
-		jsContent.append("    let currentIndex = 0;").append("\n\n");
-		jsContent.append("    document.getElementById('eliminar').addEventListener('click', () => {").append("\n");
-		jsContent.append("        if (currentIndex < eliminationOrder.length) {").append("\n");
-		jsContent.append("            const toEliminate = eliminationOrder[currentIndex];").append("\n");
-		jsContent.append("            const ptselim = toEliminate.getAttribute('ptselim');").append("\n");
-		jsContent.append("            toEliminate.innerHTML = `<span style='color: red;'>${ptselim} pts</span>`;").append("\n");
-		jsContent.append("            toEliminate.style.cursor = 'default';").append("\n");
-		jsContent.append("            toEliminate.classList.add('eliminated');").append("\n");
-		jsContent.append("            currentIndex++;").append("\n");
-		jsContent.append("        }").append("\n");
-		jsContent.append("    });").append("\n\n");
-		jsContent.append("    // Gérer la sélection des réponses").append("\n");
-		jsContent.append("    let selectedAnswer = null;").append("\n");
-		jsContent.append("    let isValidationDone = false;").append("\n");
-		jsContent.append("    document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
-		jsContent.append("        reponse.addEventListener('click', () => {").append("\n");
-		jsContent.append("            if (!isValidationDone && !reponse.classList.contains('eliminated')) {").append("\n");
-		jsContent.append("                if (selectedAnswer) {").append("\n");
-		jsContent.append("                    selectedAnswer.classList.remove('selected');").append("\n");
-		jsContent.append("                }").append("\n");
-		jsContent.append("                reponse.classList.add('selected');").append("\n");
-		jsContent.append("                selectedAnswer = reponse;").append("\n");
-		jsContent.append("            }").append("\n");
-		jsContent.append("        });").append("\n");
-		jsContent.append("    });").append("\n\n");
-		jsContent.append("    // Valider la réponse sélectionnée").append("\n");
-		jsContent.append("    document.getElementById('valider').addEventListener('click', () => {").append("\n");
-		jsContent.append("        if (selectedAnswer) {").append("\n");
-		jsContent.append("            const popup = document.getElementById('popup');").append("\n");
-		jsContent.append("            const popupText = document.getElementById('popup-text');").append("\n\n");
-		jsContent.append("            if (selectedAnswer.classList.contains('bonne-reponse')) {").append("\n");
-		jsContent.append("                popupText.innerHTML = '<span style=\"color: green;\">Bravo! Vous avez trouvé la bonne réponse.</span>';").append("\n");
-		jsContent.append("                selectedAnswer.style.backgroundColor = 'green';").append("\n");
-		jsContent.append("            } else {").append("\n");
-		jsContent.append("                popupText.innerHTML = '<span style=\"color: red;\">Désolé, la réponse sélectionnée est incorrecte.</span>';").append("\n");
-		jsContent.append("                selectedAnswer.style.backgroundColor = 'red';").append("\n");
-		jsContent.append("                document.querySelector('.bonne-reponse').style.backgroundColor = 'green';").append("\n");
-		jsContent.append("            }").append("\n");
-		jsContent.append("            popup.style.display = 'flex';").append("\n");
-		jsContent.append("            isValidationDone = true;").append("\n\n");
-		jsContent.append("            // Transformer le bouton 'Valider' en 'Feedback'").append("\n");
-		jsContent.append("            const validerButton = document.getElementById('valider');").append("\n");
-		jsContent.append("            validerButton.textContent = 'Feedback';").append("\n");
-		jsContent.append("            validerButton.removeEventListener('click', this);").append("\n");
-		jsContent.append("            validerButton.addEventListener('click', () => {").append("\n");
-		jsContent.append("                popup.style.display = 'flex';").append("\n");
-		jsContent.append("            });").append("\n");
-		jsContent.append("        } else {").append("\n");
-		jsContent.append("            alert('Veuillez sélectionner une réponse.');").append("\n");
-		jsContent.append("        }").append("\n");
-		jsContent.append("    });").append("\n\n");
-		jsContent.append("    // Fermer le pop-up").append("\n");
-		jsContent.append("    document.getElementById('popup-close').addEventListener('click', () => {").append("\n");
-		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
-		jsContent.append("        popup.style.display = 'none';").append("\n");
-		jsContent.append("    });").append("\n");
-		jsContent.append("});").append("\n\n");
-		jsContent.append("function randomizeOrder(selector, parentSelector) {").append("\n");
-		jsContent.append("    const items = document.querySelectorAll(selector);").append("\n");
-		jsContent.append("    const parent = document.querySelector(parentSelector);").append("\n");
-		jsContent.append("    const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);").append("\n\n");
-		jsContent.append("    shuffledItems.forEach(item => parent.appendChild(item));").append("\n");
-		jsContent.append("}").append("\n");
-	
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptElimination.js"))) {
-			writer.write(jsContent.toString());
-			System.out.println("Le fichier JS a été généré avec succès !");
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		public void ecrireJsElimination() {
+			StringBuilder jsContent = new StringBuilder();
+		
+			jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
+			jsContent.append("    // Mélanger les réponses (au cas où)").append("\n");
+			jsContent.append("    randomizeOrder('.reponse', '#question');").append("\n\n");
+			jsContent.append("    // Élimer les mauvaises réponses dans l'ordre spécifié").append("\n");
+			jsContent.append("    const eliminationOrder = Array.from(document.querySelectorAll('.mauvaise-reponse[data-order]'))").append("\n");
+			jsContent.append("        .sort((a, b) => a.getAttribute('data-order') - b.getAttribute('data-order'));").append("\n\n");
+			jsContent.append("    let currentIndex = 0;").append("\n\n");
+			jsContent.append("    document.getElementById('eliminar').addEventListener('click', () => {").append("\n");
+			jsContent.append("        if (currentIndex < eliminationOrder.length) {").append("\n");
+			jsContent.append("            const toEliminate = eliminationOrder[currentIndex];").append("\n");
+			jsContent.append("            const ptselim = toEliminate.getAttribute('ptselim');").append("\n");
+			jsContent.append("            toEliminate.innerHTML = `<span style='color: red;'>${ptselim} pts</span>`;").append("\n");
+			jsContent.append("            toEliminate.style.cursor = 'default';").append("\n");
+			jsContent.append("            toEliminate.classList.add('eliminated');").append("\n");
+			jsContent.append("            currentIndex++;").append("\n");
+			jsContent.append("        }").append("\n");
+			jsContent.append("    });").append("\n\n");
+			jsContent.append("    // Gérer la sélection des réponses").append("\n");
+			jsContent.append("    let selectedAnswer = null;").append("\n");
+			jsContent.append("    let isValidationDone = false;").append("\n");
+			jsContent.append("    document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
+			jsContent.append("        reponse.addEventListener('click', () => {").append("\n");
+			jsContent.append("            if (!isValidationDone && !reponse.classList.contains('eliminated')) {").append("\n");
+			jsContent.append("                if (selectedAnswer) {").append("\n");
+			jsContent.append("                    selectedAnswer.classList.remove('selected');").append("\n");
+			jsContent.append("                }").append("\n");
+			jsContent.append("                reponse.classList.add('selected');").append("\n");
+			jsContent.append("                selectedAnswer = reponse;").append("\n");
+			jsContent.append("            }").append("\n");
+			jsContent.append("        });").append("\n");
+			jsContent.append("    });").append("\n\n");
+			jsContent.append("    // Valider la réponse sélectionnée").append("\n");
+			jsContent.append("    document.getElementById('valider').addEventListener('click', () => {").append("\n");
+			jsContent.append("        if (selectedAnswer) {").append("\n");
+			jsContent.append("            const popup = document.getElementById('popup');").append("\n");
+			jsContent.append("            const popupText = document.getElementById('popup-text');").append("\n\n");
+			jsContent.append("            if (selectedAnswer.classList.contains('bonne-reponse')) {").append("\n");
+			jsContent.append("                popupText.innerHTML = '<span style=\"color: green;\">Bravo! Vous avez trouvé la bonne réponse.</span>';").append("\n");
+			jsContent.append("                selectedAnswer.style.backgroundColor = 'green';").append("\n");
+			jsContent.append("            } else {").append("\n");
+			jsContent.append("                popupText.innerHTML = '<span style=\"color: red;\">Désolé, la réponse sélectionnée est incorrecte.</span>';").append("\n");
+			jsContent.append("                selectedAnswer.style.backgroundColor = 'red';").append("\n");
+			jsContent.append("                document.querySelector('.bonne-reponse').style.backgroundColor = 'green';").append("\n");
+			jsContent.append("            }").append("\n");
+			jsContent.append("            popup.style.display = 'flex';").append("\n");
+			jsContent.append("            isValidationDone = true;").append("\n\n");
+			jsContent.append("            // Transformer le bouton 'Valider' en 'Feedback'").append("\n");
+			jsContent.append("            const validerButton = document.getElementById('valider');").append("\n");
+			jsContent.append("            validerButton.textContent = 'Feedback';").append("\n");
+			jsContent.append("            validerButton.removeEventListener('click', this);").append("\n");
+			jsContent.append("            validerButton.addEventListener('click', () => {").append("\n");
+			jsContent.append("                popup.style.display = 'flex';").append("\n");
+			jsContent.append("            });").append("\n");
+			jsContent.append("        } else {").append("\n");
+			jsContent.append("            alert('Veuillez sélectionner une réponse.');").append("\n");
+			jsContent.append("        }").append("\n");
+			jsContent.append("    });").append("\n\n");
+			jsContent.append("    // Fermer le pop-up").append("\n");
+			jsContent.append("    document.getElementById('popup-close').addEventListener('click', () => {").append("\n");
+			jsContent.append("        const popup = document.getElementById('popup');").append("\n");
+			jsContent.append("        popup.style.display = 'none';").append("\n");
+			jsContent.append("    });").append("\n");
+			jsContent.append("});").append("\n\n");
+			jsContent.append("function randomizeOrder(selector, parentSelector) {").append("\n");
+			jsContent.append("    const items = document.querySelectorAll(selector);").append("\n");
+			jsContent.append("    const parent = document.querySelector(parentSelector);").append("\n");
+			jsContent.append("    const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);").append("\n\n");
+			jsContent.append("    shuffledItems.forEach(item => parent.appendChild(item));").append("\n");
+			jsContent.append("}").append("\n");
+		
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptElimination.js"))) {
+				writer.write(jsContent.toString());
+				System.out.println("Le fichier JS a été généré avec succès !");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-	}
-	
-	
-	
 
 
 	public void ecrireJsAssociation() {
