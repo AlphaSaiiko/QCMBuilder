@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const questionElement = document.querySelector('.question');
-    const questionId = questionElement.getAttribute('data-question-id');
+    const questionId = document.querySelector('.question').getAttribute('data-question-id');
 
     // Mélanger les réponses (au cas où)
     randomizeOrder('.reponse', '#question');
@@ -12,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Gérer la sélection des réponses
     let selectedAnswer = null;
     let isValidationDone = localStorage.getItem(`isValidationDone-${questionId}`) === 'true';
-    
     if (isValidationDone) {
         restoreState(questionId);
     }
@@ -33,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('valider').addEventListener('click', () => {
         const popup = document.getElementById('popup');
         const popupText = document.getElementById('popup-text');
-        const questionPoints = parseFloat(questionElement.getAttribute('data-points'));
+        const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));
 
         if (selectedAnswer) {
             if (selectedAnswer.classList.contains('bonne-reponse')) {
@@ -51,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Sauvegarder l'état
-            localStorage.setItem(`isValidationDone-${questionId}`, 'true');
+            localStorage.setItem(`isValidationDone-${questionId}`, true);
             localStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.innerHTML);
         } else {
             popupText.innerHTML = '<span style="color: red;">Veuillez sélectionner une réponse!</span>';

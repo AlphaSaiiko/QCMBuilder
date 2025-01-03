@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question à Réponse Unique</title>
+    <title>Question à Réponses Multiples</title>
     <link rel="stylesheet" href="styleReponseUnique.css">
 </head>
 <body>
     <div class="container">
-        <h1>Date de création du PSG ?</h1>
-        <div id="points">Points : 0</div>
-        <div class="question" id="question" data-points="1" data-question-id="question-2">
-            <div class="reponse mauvaise-reponse">1960</div>
-            <div class="reponse bonne-reponse">1970</div>
-            <div class="reponse mauvaise-reponse">1980</div>
-            <div class="reponse mauvaise-reponse">1990</div>
+        <h1>Quels joueurs suivants ont joué pour le PSG ?</h1>
+        <div class="question" id="question">
+            <div class="reponse bonne-reponse">Lionel Messi</div>
+            <div class="reponse bonne-reponse">Neymar Jr</div>
+            <div class="reponse mauvaise-reponse">Cristiano Ronaldo</div>
+            <div class="reponse mauvaise-reponse">Zinedine Zidane</div>
         </div>
         <button onclick="location.href='page1.html';">Précédent</button>
         <button id="valider">Valider</button>
@@ -24,9 +23,9 @@
         <div class="popup-content">
             <span class="close" id="popup-close">&times;</span>
             <p id="popup-text"></p>
-            <p>En 1970 bien sûr !</p>
+            <p>Messi et Neymar !!</p>
         </div>
     </div>
-    <script src="scriptReponseUnique.js"></script>
+    <script src="scriptReponseMultiple.js"></script>
 </body>
 </html>
