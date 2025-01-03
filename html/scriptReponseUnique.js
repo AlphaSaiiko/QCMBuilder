@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const questionElement = document.querySelector('.question');
+    const questionId = questionElement.getAttribute('data-question-id');
+
     // Mélanger les réponses (au cas où)
     randomizeOrder('.reponse', '#question');
 
@@ -8,7 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gérer la sélection des réponses
     let selectedAnswer = null;
-    let isValidationDone = false;
+    let isValidationDone = localStorage.getItem(`isValidationDone-${questionId}`) === 'true';
+    
+    if (isValidationDone) {
+        restoreState(questionId);
+    }
+
     document.querySelectorAll('.reponse').forEach(reponse => {
         reponse.addEventListener('click', () => {
             if (!isValidationDone) {
@@ -25,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('valider').addEventListener('click', () => {
         const popup = document.getElementById('popup');
         const popupText = document.getElementById('popup-text');
-        const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));
+        const questionPoints = parseFloat(questionElement.getAttribute('data-points'));
 
         if (selectedAnswer) {
             if (selectedAnswer.classList.contains('bonne-reponse')) {
@@ -41,6 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
                 goodAnswer.style.backgroundColor = 'green';
             });
+
+            // Sauvegarder l'état
+            localStorage.setItem(`isValidationDone-${questionId}`, 'true');
+            localStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.innerHTML);
         } else {
             popupText.innerHTML = '<span style="color: red;">Veuillez sélectionner une réponse!</span>';
         }
@@ -62,6 +74,23 @@ document.addEventListener('DOMContentLoaded', () => {
         popup.style.display = 'none';
     });
 });
+
+function restoreState(questionId) {
+    const selectedAnswerText = localStorage.getItem(`selectedAnswer-${questionId}`);
+    document.querySelectorAll('.reponse').forEach(reponse => {
+        if (reponse.innerHTML === selectedAnswerText) {
+            reponse.classList.add('selected');
+            if (reponse.classList.contains('bonne-reponse')) {
+                reponse.style.backgroundColor = 'green';
+            } else {
+                reponse.style.backgroundColor = 'red';
+            }
+        }
+    });
+    document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
+        goodAnswer.style.backgroundColor = 'green';
+    });
+}
 
 function randomizeOrder(selector, parentSelector) {
     const items = document.querySelectorAll(selector);

@@ -48,6 +48,12 @@ public class CreationHTML {
 		htmlContent.append("<script>\n");
 		htmlContent.append("    window.onload = function() {\n");
 		htmlContent.append("        localStorage.setItem('points', 0);\n");
+		htmlContent.append("        // Réinitialiser l'état de toutes les questions\n");
+		htmlContent.append("        const totalQuestions = 21; // Nombre total de questions\n");
+		htmlContent.append("        for (let i = 1; i <= totalQuestions; i++) {\n");
+		htmlContent.append("            localStorage.removeItem(`isValidationDone-question-${i}`);\n");
+		htmlContent.append("            localStorage.removeItem(`selectedAnswer-question-${i}`);\n");
+		htmlContent.append("        }\n");
 		htmlContent.append("    };\n");
 		htmlContent.append("</script>\n");
 		htmlContent.append("</head>\n");
@@ -308,34 +314,34 @@ public class CreationHTML {
 	{
 		if (this.evaluation.getChrono())
 		{
-			htmlContent.append("\t<div class=\"container\">");
-			htmlContent.append("\t\t<h1>Évaluation chronométrée</h1>");
+			htmlContent.append("\t<div class=\"container\">").append("\n");
+			htmlContent.append("\t\t<h1>Évaluation chronométrée</h1>").append("\n");
 		}
 		else
 		{
-			htmlContent.append("\t<div class=\"container\">");
-			htmlContent.append("\t\t<h1>Évaluation</h1>");
+			htmlContent.append("\t<div class=\"container\">").append("\n");
+			htmlContent.append("\t\t<h1>Évaluation</h1>").append("\n");
 		}
-		htmlContent.append("\t\t<p><strong>Ressource :</strong> "+ressource+"</p>");
+		htmlContent.append("\t\t<p><strong>Ressource :</strong> "+ressource+"</p>").append("\n");
 		for (Notion n : notion)
 		{
-			htmlContent.append("\t\t<p><strong>Notion(s) :</strong> "+n.getNom()+"</p>");
+			htmlContent.append("\t\t<p><strong>Notion(s) :</strong> "+n.getNom()+"</p>").append("\n");
 		}
-		htmlContent.append("\t\t<p><strong>Nombre de questions :</strong> 21 dont 11 <b>F</b> et 10 <b>M</b></p>");
+		htmlContent.append("\t\t<p><strong>Nombre de questions :</strong> 21 dont 11 <b>F</b> et 10 <b>M</b></p>").append("\n");
 		if (duree >= 0){
 			if (duree>60)
 			{
 				int min = duree/60;
 				int sec = duree%60;
-				htmlContent.append("\t\t<p><strong>Durée totale prévue :</strong> "+min+"min "+sec+"sec </p>");
+				htmlContent.append("\t\t<p><strong>Durée totale prévue :</strong> "+min+"min "+sec+"sec </p>").append("\n");
 			}
 			else
 			{
-				htmlContent.append("\t\t<p><strong>Durée totale prévue :</strong> "+duree+"sec </p>");
+				htmlContent.append("\t\t<p><strong>Durée totale prévue :</strong> "+duree+"sec </p>").append("\n");
 			}
 		}
-		htmlContent.append("\t<button onclick=\"location.href='page1.html';\">Commencer l'évaluation</button>");
-		htmlContent.append("\t</div>");
+		htmlContent.append("\t<button onclick=\"location.href='page1.html';\">Commencer l'évaluation</button>").append("\n");
+		htmlContent.append("\t</div>").append("\n");
 	}
 
 	public void pageDeFin()

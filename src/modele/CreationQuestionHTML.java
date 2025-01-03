@@ -195,7 +195,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
 		htmlContent.append("        <div id=\"points\">Points : 0</div>").append("\n");
-		htmlContent.append("        <div class=\"question\" id=\"question\" data-points=\"").append(question.getNbPoints()).append("\">").append("\n");
+		htmlContent.append("        <div class=\"question\" id=\"question\" data-points=\"").append(question.getNbPoints()).append("\" data-question-id=\"question-").append(numQuestion).append("\">").append("\n");
 		for (IOption reponse : question.getEnsOptions()) {
 			if (reponse instanceof Option) {
 				Option opt = (Option) reponse;
@@ -229,6 +229,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 
 
@@ -403,6 +404,8 @@ public class CreationQuestionHTML {
 		StringBuilder jsContent = new StringBuilder();
 	
 		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
+		jsContent.append("    const questionId = document.querySelector('.question').getAttribute('data-question-id');").append("\n");
+		jsContent.append("\n");
 		jsContent.append("    // Mélanger les réponses (au cas où)").append("\n");
 		jsContent.append("    randomizeOrder('.reponse', '#question');").append("\n");
 		jsContent.append("\n");
@@ -412,7 +415,11 @@ public class CreationQuestionHTML {
 		jsContent.append("\n");
 		jsContent.append("    // Gérer la sélection des réponses").append("\n");
 		jsContent.append("    let selectedAnswer = null;").append("\n");
-		jsContent.append("    let isValidationDone = false;").append("\n");
+		jsContent.append("    let isValidationDone = localStorage.getItem(`isValidationDone-${questionId}`) === 'true';").append("\n");
+		jsContent.append("    if (isValidationDone) {").append("\n");
+		jsContent.append("        restoreState(questionId);").append("\n");
+		jsContent.append("    }").append("\n");
+		jsContent.append("\n");
 		jsContent.append("    document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
 		jsContent.append("        reponse.addEventListener('click', () => {").append("\n");
 		jsContent.append("            if (!isValidationDone) {").append("\n");
@@ -445,6 +452,10 @@ public class CreationQuestionHTML {
 		jsContent.append("            document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {").append("\n");
 		jsContent.append("                goodAnswer.style.backgroundColor = 'green';").append("\n");
 		jsContent.append("            });").append("\n");
+		jsContent.append("\n");
+		jsContent.append("            // Sauvegarder l'état").append("\n");
+		jsContent.append("            localStorage.setItem(`isValidationDone-${questionId}`, true);").append("\n");
+		jsContent.append("            localStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.innerHTML);").append("\n");
 		jsContent.append("        } else {").append("\n");
 		jsContent.append("            popupText.innerHTML = '<span style=\"color: red;\">Veuillez sélectionner une réponse!</span>';").append("\n");
 		jsContent.append("        }").append("\n");
@@ -467,6 +478,23 @@ public class CreationQuestionHTML {
 		jsContent.append("    });").append("\n");
 		jsContent.append("});").append("\n");
 		jsContent.append("\n");
+		jsContent.append("function restoreState(questionId) {").append("\n");
+		jsContent.append("    const selectedAnswerText = localStorage.getItem(`selectedAnswer-${questionId}`);").append("\n");
+		jsContent.append("    document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
+		jsContent.append("        if (reponse.innerHTML === selectedAnswerText) {").append("\n");
+		jsContent.append("            reponse.classList.add('selected');").append("\n");
+		jsContent.append("            if (reponse.classList.contains('bonne-reponse')) {").append("\n");
+		jsContent.append("                reponse.style.backgroundColor = 'green';").append("\n");
+		jsContent.append("            } else {").append("\n");
+		jsContent.append("                reponse.style.backgroundColor = 'red';").append("\n");
+		jsContent.append("            }").append("\n");
+		jsContent.append("        }").append("\n");
+		jsContent.append("    });").append("\n");
+		jsContent.append("    document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {").append("\n");
+		jsContent.append("        goodAnswer.style.backgroundColor = 'green';").append("\n");
+		jsContent.append("    });").append("\n");
+		jsContent.append("}").append("\n");
+		jsContent.append("\n");
 		jsContent.append("function randomizeOrder(selector, parentSelector) {").append("\n");
 		jsContent.append("    const items = document.querySelectorAll(selector);").append("\n");
 		jsContent.append("    const parent = document.querySelector(parentSelector);").append("\n");
@@ -481,6 +509,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	
 	
