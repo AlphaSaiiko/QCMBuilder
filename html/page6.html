@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question à Élimination</title>
+    <link rel="stylesheet" href="styleElimination.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Parmi ces trophées, lequel le PSG n'a jamais remporté ?<br><br></h1>
+        <div class="question" id="question">
+            <div class="reponse mauvaise-reponse" data-order="1" ptselim="-0.25">Ligue 1<br></div>
+            <div class="reponse bonne-reponse">Ligue des Champions<br></div>
+            <div class="reponse mauvaise-reponse" data-order="2" ptselim="-0.25"> Coupe de France</div>
+            <div class="reponse mauvaise-reponse">Trophée des Champions</div>
+        </div>
+        <button onclick="location.href='page5.html';">Précédent</button>
+        <button id="eliminar">Éliminer</button>
+        <button id="valider">Valider</button>
+        <button onclick="location.href='page7.html';">Suivant</button>
+    </div>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="popup-close">&times;</span>
+            <p id="popup-text">Jamais la ldc malheureusement</p>
+        </div>
+    </div>
+    <script src="scriptElimination.js"></script>
+</body>
+</html>

@@ -166,18 +166,23 @@ public class CreationQuestionHTML {
 	
 	
 
-	public void pageQuestionUnique (Question question, int numQuestion)
-	{
+	public void pageQuestionUnique(Question question, int numQuestion) {
 		StringBuilder htmlContent = new StringBuilder();
-
+	
 		String pageSuivante;
 		String pagePrecedente;
-		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
-		else {pageSuivante = "pageDeFin";}
-
-		if(numQuestion>1){pagePrecedente = "page"+(numQuestion-1);}
-		else{pagePrecedente="pageDAccueil";}
-
+		if (numQuestion < this.evaluation.getNbQuestion()) {
+			pageSuivante = "page" + (numQuestion + 1);
+		} else {
+			pageSuivante = "pageDeFin";
+		}
+	
+		if (numQuestion > 1) {
+			pagePrecedente = "page" + (numQuestion - 1);
+		} else {
+			pagePrecedente = "pageDAccueil";
+		}
+	
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
 		htmlContent.append("<head>").append("\n");
@@ -189,26 +194,22 @@ public class CreationQuestionHTML {
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
-		htmlContent.append("        <div class=\"question\" id=\"question\">").append("\n");
+		htmlContent.append("        <div id=\"points\">Points : 0</div>").append("\n");
+		htmlContent.append("        <div class=\"question\" id=\"question\" data-points=\"").append(question.getNbPoints()).append("\">").append("\n");
 		for (IOption reponse : question.getEnsOptions()) {
-			if (reponse instanceof Option)
-			{
+			if (reponse instanceof Option) {
 				Option opt = (Option) reponse;
-				if (opt.getEstReponse())
-				{
+				if (opt.getEstReponse()) {
 					htmlContent.append("            <div class=\"reponse bonne-reponse\">").append(opt.getEnonce()).append("</div>").append("\n");
-				}
-				else
-				{
+				} else {
 					htmlContent.append("            <div class=\"reponse mauvaise-reponse\">").append(opt.getEnonce()).append("</div>").append("\n");
 				}
 			}
-
 		}
 		htmlContent.append("        </div>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='"+pagePrecedente+".html';\">Précédent</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='").append(pageSuivante).append(".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <div id=\"popup\" class=\"popup\">").append("\n");
 		htmlContent.append("        <div class=\"popup-content\">").append("\n");
@@ -220,7 +221,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("    <script src=\"scriptReponseUnique.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
-
+	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
 			System.out.println("Le fichier HTML a été généré avec succès !");
@@ -228,6 +229,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 
 
 	public void pageQuestionMultiple(Question question, int numQuestion)
@@ -404,6 +406,10 @@ public class CreationQuestionHTML {
 		jsContent.append("    // Mélanger les réponses (au cas où)").append("\n");
 		jsContent.append("    randomizeOrder('.reponse', '#question');").append("\n");
 		jsContent.append("\n");
+		jsContent.append("    // Initialiser les points à partir du localStorage").append("\n");
+		jsContent.append("    let totalPoints = localStorage.getItem('points') ? parseFloat(localStorage.getItem('points')) : 0;").append("\n");
+		jsContent.append("    document.getElementById('points').textContent = `Points : ${totalPoints}`;").append("\n");
+		jsContent.append("\n");
 		jsContent.append("    // Gérer la sélection des réponses").append("\n");
 		jsContent.append("    let selectedAnswer = null;").append("\n");
 		jsContent.append("    let isValidationDone = false;").append("\n");
@@ -423,9 +429,14 @@ public class CreationQuestionHTML {
 		jsContent.append("    document.getElementById('valider').addEventListener('click', () => {").append("\n");
 		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
 		jsContent.append("        const popupText = document.getElementById('popup-text');").append("\n");
+		jsContent.append("        const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));").append("\n");
+		jsContent.append("\n");
 		jsContent.append("        if (selectedAnswer) {").append("\n");
 		jsContent.append("            if (selectedAnswer.classList.contains('bonne-reponse')) {").append("\n");
 		jsContent.append("                popupText.innerHTML = '<span style=\"color: green;\">Bonne réponse!</span>';").append("\n");
+		jsContent.append("                totalPoints += questionPoints;").append("\n");
+		jsContent.append("                localStorage.setItem('points', totalPoints);").append("\n");
+		jsContent.append("                document.getElementById('points').textContent = `Points : ${totalPoints}`;").append("\n");
 		jsContent.append("            } else {").append("\n");
 		jsContent.append("                popupText.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
 		jsContent.append("                selectedAnswer.style.backgroundColor = 'red';").append("\n");
@@ -470,6 +481,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	
 

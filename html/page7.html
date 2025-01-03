@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question à Réponses Multiples</title>
+    <link rel="stylesheet" href="styleReponseUnique.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Quels joueurs suivants ont joué pour l’OM ?</h1>
+        <div class="question" id="question">
+            <div class="reponse bonne-reponse">Didier Drogba</div>
+            <div class="reponse mauvaise-reponse">Zinedine Zidane</div>
+            <div class="reponse bonne-reponse">Samir Nasri</div>
+            <div class="reponse bonne-reponse">Florian Thauvin</div>
+        </div>
+        <button onclick="location.href='page6.html';">Précédent</button>
+        <button id="valider">Valider</button>
+        <button onclick="location.href='page8.html';">Suivant</button>
+    </div>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="popup-close">&times;</span>
+            <p id="popup-text"></p>
+            <p></p>
+        </div>
+    </div>
+    <script src="scriptReponseMultiple.js"></script>
+</body>
+</html>
