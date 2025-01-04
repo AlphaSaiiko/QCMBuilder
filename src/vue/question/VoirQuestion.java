@@ -1,137 +1,189 @@
 package vue.question;
 
 import controleur.Controleur;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+
+import java.awt.*;
+import javax.swing.*;
+
 import modele.Question;
+import modele.option.Option;
+import modele.option.OptionAssociation;
+import modele.option.OptionElimination;
 
-public class VoirQuestion extends JFrame {
-    private Question question;
+public class VoirQuestion extends JFrame 
+{
+	private Question question;
 
-    public VoirQuestion(Question question) {
-        this.question = question;
-        this.setTitle(question.getEnonce());
-        this.setSize(400, 300);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setLayout(new GridBagLayout());
+	public VoirQuestion(Question question) 
+	{
+		this.question = question;
+		this.setTitle(question.getEnonce());
+		this.setSize(800, 600);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null);
+		this.setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1;
 
-        // Création du panel qui contient le bouton retour
-        JPanel panelHaut = new JPanel();
-        panelHaut.setLayout(new FlowLayout(FlowLayout.LEFT));
+		// Panel pour les attributs avec GridBagLayout
+		JPanel panelAttributs = new JPanel();
+		panelAttributs.setLayout(new GridBagLayout());
 
-        // Bouton "Menu principal"
-        String imageMenu = "./lib/icones/home.png";
-        ImageIcon icon = new ImageIcon(imageMenu);
-        Image img = icon.getImage();
-        Image newImg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
-        icon = new ImageIcon(newImg);
-        JButton btnMenu = new JButton(icon);
-        btnMenu.addActionListener(e -> {
-            Controleur.ouvrirAccueil();
-            dispose();
-        });
-        panelHaut.add(btnMenu);
+		// Contrainte commune pour chaque composant
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(10, 10, 10, 10); // Marges pour l'espacement
+		gbc.weightx = 1.0; // Étendre horizontalement si nécessaire
 
-        // Ajout du bouton retour à la Frame
-        this.add(panelHaut, gbc);
+		// Ligne 1 : Panel Points
+		gbc.gridx = 0; // Colonne 1
+		gbc.gridy = 0; // Ligne 1
+		gbc.weightx = 0.5; // Laisser de l'espace pour la deuxième colonne
+		panelAttributs.add(new JLabel("Nombre de points"), gbc);
 
-        // Panel principal
-        JPanel panelPrincipal = new JPanel();
-        panelPrincipal.setLayout(new GridBagLayout());
-        GridBagConstraints gbcPanelPrincipal = new GridBagConstraints();
-        gbcPanelPrincipal.gridx = 0;
-        gbcPanelPrincipal.gridy = 1;
-        gbcPanelPrincipal.anchor = GridBagConstraints.CENTER;
-        gbcPanelPrincipal.fill = GridBagConstraints.BOTH;
-        gbcPanelPrincipal.weightx = 1.0;
-        gbcPanelPrincipal.weighty = 1.0;
+		gbc.gridx = 1; // Colonne 2
+		panelAttributs.add(new JLabel(String.valueOf(question.getNbPoints())), gbc);
 
-        // Panel pour les points et le temps
-        JPanel panelPointsEtTemps = new JPanel();
-        panelPointsEtTemps.setLayout(new GridBagLayout());
+		// Ligne 2 : Panel Temps
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		panelAttributs.add(new JLabel("Temps de réponse (min : sec)"), gbc);
 
-        // Ajouter le texte des points
-        JLabel textePoints = new JLabel(String.valueOf(question.getNbPoints()));
+		gbc.gridx = 1;
+		String minutes = String.format("%02d", question.getTemps() / 60);
+		String secondes = String.format("%02d", question.getTemps() % 60);
+		panelAttributs.add(new JLabel(minutes + ":" + secondes), gbc);
 
-        // Ajouter les points à son panel
-        JPanel panelPoints = new JPanel();
-        panelPoints.setLayout(new BorderLayout());
-        panelPoints.add(new JLabel("Nombre de points"), BorderLayout.NORTH);
-        panelPoints.add(textePoints, BorderLayout.CENTER);
-        panelPoints.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 10)); // Espacement
+		// Ligne 3 : Panel Difficulté
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		panelAttributs.add(new JLabel("Difficulté"), gbc);
 
-        // Ajouter le texte du temps
-        JLabel texteTemps = new JLabel();
-        String minutes = String.format("%02d", question.getTemps() / 60);
-        String secondes = String.format("%02d", question.getTemps() % 60);
-        texteTemps.setText(minutes + ":" + secondes);
+		gbc.gridx = 1;
+		String difficulte = switch (question.getDifficulte()) 
+		{
+			case 1 -> "Facile";
+			case 3 -> "Difficile";
+			case 4 -> "Très difficile";
+			default -> "Moyenne";
+		};
+		panelAttributs.add(new JLabel(difficulte), gbc);
 
-        // Ajouter le temps à son panel
-        JPanel panelTemps = new JPanel();
-        panelTemps.setLayout(new BorderLayout());
-        panelTemps.add(new JLabel("Temps de réponse (min : sec)"), BorderLayout.NORTH);
-        panelTemps.add(texteTemps, BorderLayout.CENTER);
-        panelTemps.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0)); // Espacement
+		// Ligne 4 : Panel Type
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		panelAttributs.add(new JLabel("Type"), gbc);
 
-        GridBagConstraints gbcPointsEtTemps = new GridBagConstraints();
-        gbcPointsEtTemps.gridx = 0;
-        gbcPointsEtTemps.gridy = 0;
-        gbcPointsEtTemps.insets = new java.awt.Insets(5, 5, 5, 5); // Ajouter des marges
-        panelPointsEtTemps.add(panelPoints, gbcPointsEtTemps);
-        gbcPointsEtTemps.gridx = 1;
-        gbcPointsEtTemps.gridy = 0;
-        panelPointsEtTemps.add(panelTemps, gbcPointsEtTemps);
+		gbc.gridx = 1;
+		String type = switch (question.getType()) 
+		{
+			case "QCMRM" -> "Réponses Multiples";
+			case "QAE"   -> "Association";
+			case "QAEPR" -> "Elimination";
+			default      -> "Réponses Uniques";
+		};
+		panelAttributs.add(new JLabel(type), gbc);
 
-        // Ajouter le panel points et temps au panel principal
-        GridBagConstraints gbcPanelPointsEtTemps = new GridBagConstraints();
-        gbcPanelPointsEtTemps.gridx = 0;
-        gbcPanelPointsEtTemps.gridy = 0;
-        gbcPanelPointsEtTemps.anchor = GridBagConstraints.CENTER;
-        panelPrincipal.add(panelPointsEtTemps, gbcPanelPointsEtTemps);
+		// Ajouter les options en dessous
+		GridBagConstraints gbcLigne = new GridBagConstraints();
+		gbcLigne.fill = GridBagConstraints.HORIZONTAL;
+		gbcLigne.insets = new Insets(5, 5, 5, 5);
+		gbcLigne.gridx = 0; // Colonne 1
+		gbcLigne.gridy = 4; // Ligne pour les options
+		gbcLigne.gridwidth = 2; // Étendre sur les deux colonnes
+		gbcLigne.weightx = 1.0; // Remplissage horizontal
 
-        // Changer le texte de la difficulté selon sa valeur
-        String difficulte = switch (question.getDifficulte()) {
-            case 1 -> "Facile";
-            case 3 -> "Difficile";
-            case 4 -> "Très difficile";
-            default -> "Moyenne";
-        };
+		JPanel panelLigne = new JPanel(new GridBagLayout()); // Contient les options
 
-        // Panel pour bien placer le cercle de difficulté et mettre le titre
-        JPanel panelDifficulte = new JPanel();
-        panelDifficulte.setLayout(new BorderLayout());
-        panelDifficulte.add(new JLabel("Difficulté"), BorderLayout.NORTH);
-        panelDifficulte.add(new JLabel(difficulte), BorderLayout.CENTER);
-        panelDifficulte.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0)); // Espacement
+		type = question.getType(); // Pour adapter la question au type
 
-        // Placer le panel de difficulté juste en dessous du panel principal
-        GridBagConstraints gbcPanelDifficulte = new GridBagConstraints();
-        gbcPanelDifficulte.gridx = 0;
-        gbcPanelDifficulte.gridy = 1;
-        gbcPanelDifficulte.anchor = GridBagConstraints.CENTER;
-        gbcPanelDifficulte.fill = GridBagConstraints.HORIZONTAL;
-        panelPrincipal.add(panelDifficulte, gbcPanelDifficulte);
+		// Ajouter les options selon le type de question
+		ButtonGroup groupeBouton = new ButtonGroup();
 
-        // Ajouter le panel principal à la fenêtre
-        this.add(panelPrincipal, gbcPanelPrincipal);
+		System.out.println(question.getEnsOptions().size());
+		for (int cpt = 0; cpt < question.getEnsOptions().size(); cpt++) 
+		{
+			// Option texte
+			JLabel optionLabel = new JLabel(question.getEnsOptions().get(cpt).getEnonce());
+			optionLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+			gbc.gridx = 0;
+			gbc.gridy = cpt; // Ligne pour chaque option
 
-        // Afficher la fenêtre
-        this.setVisible(true);
-    }
+			if (type.equals("QAEPR"))
+			{
+				panelLigne.add(optionLabel, gbc);
+				JLabel ordrePointsLabel  = new JLabel("\t Ordre  : " + ((OptionElimination) question.getEnsOptions().get(cpt)).getOrdre() +
+													"  Points : " + ((OptionElimination) question.getEnsOptions().get(cpt)).getNbPointsMoins());
+
+				ordrePointsLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+
+
+				// Bouton radio
+				JToggleButton boutonOption;
+				boutonOption = new JRadioButton();
+				
+				boutonOption.setSelected(((OptionElimination) (question.getEnsOptions().get(cpt))).getEstReponse());
+				boutonOption.setEnabled(false);
+				System.out.println(type);
+
+				gbc.gridx = 1;
+				if (! boutonOption.isSelected()) panelLigne.add(ordrePointsLabel, gbc);
+				else                             panelLigne.add(new JLabel(), gbc);
+				
+				gbc.gridx = 2;
+				gbc.anchor = GridBagConstraints.EAST;
+				panelLigne.add(boutonOption, gbc);
+			}
+
+			if (type.equals("QCMRU") || type.equals("QCMRM"))
+			{
+				panelLigne.add(optionLabel, gbc);
+				// Bouton radio
+				JToggleButton boutonOption;
+				if (type.equals("QCMRU")) {  boutonOption = new JRadioButton();}
+				else                               {  boutonOption = new JCheckBox   ();}
+				boutonOption.setSelected(((Option) (question.getEnsOptions().get(cpt))).getEstReponse());
+				boutonOption.setEnabled(false);
+				System.out.println(type);
+				
+				gbc.gridx = 1;
+				gbc.anchor = GridBagConstraints.EAST;
+				panelLigne.add(boutonOption, gbc);
+			}
+
+			if (type.equals("QAE") && cpt % 2 == 0)
+			{
+				optionLabel.setText(optionLabel.getText() + "->");
+
+
+				panelLigne.add(optionLabel, gbc);
+				
+				JLabel associeLabel = new JLabel(  "<-" + ((OptionAssociation)(question.getEnsOptions().get(cpt))).getAssocie().getEnonce());
+				associeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+
+				gbc.gridx = 1;
+				panelLigne.add(associeLabel, gbc);
+			}
+
+
+		}
+
+		// Ajouter panelLigne au panelAttributs
+		gbcLigne.gridy = 5; // Après les attributs
+		panelAttributs.add(panelLigne, gbcLigne);
+
+		// Ajouter panelAttributs à la fenêtre
+		GridBagConstraints gbcPanelAttributs = new GridBagConstraints();
+		gbcPanelAttributs.gridx = 0;
+		gbcPanelAttributs.gridy = 1;
+		gbcPanelAttributs.fill = GridBagConstraints.BOTH;
+		gbcPanelAttributs.weightx = 1.0;
+		gbcPanelAttributs.weighty = 1.0;
+		this.add(panelAttributs, gbcPanelAttributs);
+
+		// Rafraîchir et afficher
+		this.revalidate();
+		this.repaint();
+		this.setVisible(true);
+
+	}
 }

@@ -97,11 +97,15 @@ public class ControleurFichier
 	public void supprimerFichier(String nomFichier)
 	{
 		nomFichier = this.emplacement + nomFichier;
+
 		File fichier = new File(nomFichier);
 
 		if (fichier.exists())
 		{
+			File parent = fichier.getParentFile();
+
 			fichier.delete();
+			parent .delete();
 		}
 		else
 		{
@@ -151,7 +155,7 @@ public class ControleurFichier
 		}
 
 
-		String  enonce                    ;
+		String enonce;
 
 		enonce = qst.getEnonce();
 		if (aImage(qst.getEnonce(), emplacement))

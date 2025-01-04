@@ -20,7 +20,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 	private JComboBox<String> listeRessources;
 	private String            nomRessource   ;
 
-	
+	private Question questionAModifier;
 
 	
 	/**
@@ -29,7 +29,12 @@ public class CreerQuestion extends JFrame implements ActionListener
 	 * +--------------+
 	 */
 
-	 public CreerQuestion() {
+
+	 public CreerQuestion(Question questionAModifier) 
+	 
+	 {
+		this.questionAModifier = questionAModifier;
+		
 		// Panel principal
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new GridBagLayout());
@@ -43,7 +48,8 @@ public class CreerQuestion extends JFrame implements ActionListener
 		icon = new ImageIcon(newImg);
 	
 		JButton btnMenu = new JButton(icon);
-		btnMenu.addActionListener(e -> {
+		btnMenu.addActionListener(e -> 
+		{
 			Controleur.ouvrirAccueil();
 			dispose();
 		});
@@ -57,17 +63,25 @@ public class CreerQuestion extends JFrame implements ActionListener
 		panelPointsEtTemps.setLayout(new GridBagLayout());
 	
 		JPanel panelPoints = new JPanel();
+		JTextArea txaPoints = new JTextArea();
 		panelPoints.setLayout(new BorderLayout());
 		panelPoints.add(new JLabel("Nombre de points"), BorderLayout.NORTH);
-		panelPoints.add(new JTextArea(), BorderLayout.CENTER);
+		panelPoints.add(txaPoints, BorderLayout.CENTER);
 		panelPoints.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 10)); // Espacement
-	
+		if (questionAModifier != null) txaPoints.setText(String.valueOf(questionAModifier.getNbPoints()));
+
 		JPanel panelTemps = new JPanel();
+		JTextArea txaTemps = new JTextArea();
 		panelTemps.setLayout(new BorderLayout());
 		panelTemps.add(new JLabel("Temps de réponse (min : sec)"), BorderLayout.NORTH);
-		panelTemps.add(new JTextArea(), BorderLayout.CENTER);
+		panelTemps.add(txaTemps, BorderLayout.CENTER);
 		panelTemps.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0)); // Espacement
-	
+		if (questionAModifier != null) 
+		{
+			String temps = String.format("%02d", questionAModifier.getTemps()/60) + ":" + String.format("%02d", questionAModifier.getTemps()%60);
+			txaTemps.setText(temps);
+		}
+
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
@@ -82,11 +96,14 @@ public class CreerQuestion extends JFrame implements ActionListener
 		this.listeRessources = new JComboBox<String>(Controleur.getIDsNomsRessources());
 		this.listeRessources.setPreferredSize(new Dimension(150, 30));
 		this.listeRessources.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 10)); // Espacement
-	
+		if (questionAModifier != null) this.listeRessources.setSelectedItem(questionAModifier.getNotion().getRessource().getNom());
+
+		
 		this.nomRessource = String.valueOf(listeRessources.getSelectedItem());
 		String[] decRessource = nomRessource.split("_", 2);
 		String id = "", nom = "";
-		if (decRessource.length == 2) {
+		if (decRessource.length == 2) 
+		{
 			nom = decRessource[1];
 			id = decRessource[0];
 		}
@@ -94,7 +111,9 @@ public class CreerQuestion extends JFrame implements ActionListener
 		this.listeNotions = new JComboBox<String>(Controleur.trouverRessourceParId(id).getNomsNotions());
 		listeNotions.setPreferredSize(new Dimension(150, 30));
 		listeNotions.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 0)); // Espacement
-	
+		if (questionAModifier != null) this.listeNotions.setSelectedItem(questionAModifier.getNotion().getNom());
+
+
 		// Panel pour les ressources
 		JPanel panelRessources = new JPanel();
 		panelRessources.setLayout(new BorderLayout());
@@ -133,33 +152,54 @@ public class CreerQuestion extends JFrame implements ActionListener
 		group.add(dur);
 	
 		// ActionListeners pour changer les couleurs lorsqu'un bouton est sélectionné
-		tresFacile.addActionListener(e -> {
+		tresFacile.addActionListener(e -> 
+		{
 			tresFacile.setBackground(Color.GREEN);
 			facile.setBackground(Color.GRAY);
 			moyen.setBackground(Color.GRAY);
 			dur.setBackground(Color.GRAY);
 		});
 	
-		facile.addActionListener(e -> {
+		facile.addActionListener(e -> 
+		{
 			tresFacile.setBackground(Color.GRAY);
 			facile.setBackground(Color.CYAN);
 			moyen.setBackground(Color.GRAY);
 			dur.setBackground(Color.GRAY);
 		});
 	
-		moyen.addActionListener(e -> {
+		moyen.addActionListener(e -> 
+		{
 			tresFacile.setBackground(Color.GRAY);
 			facile.setBackground(Color.GRAY);
 			moyen.setBackground(Color.RED);
 			dur.setBackground(Color.GRAY);
 		});
 	
-		dur.addActionListener(e -> {
+		dur.addActionListener(e -> 
+		{
 			tresFacile.setBackground(Color.GRAY);
 			facile.setBackground(Color.GRAY);
 			moyen.setBackground(Color.GRAY);
 			dur.setBackground(Color.WHITE);
 		});
+
+		if (questionAModifier != null) 
+		{
+			tresFacile.setBackground(Color.GRAY);
+			facile.setBackground(Color.GRAY);
+			moyen.setBackground(Color.GRAY);
+			dur.setBackground(Color.GRAY);
+
+			switch (questionAModifier.getDifficulte()) 
+			{
+				case 1 -> tresFacile.setBackground(Color.GREEN);
+				case 2 -> facile    .setBackground(Color.CYAN );
+				case 3 -> moyen     .setBackground(Color.RED  );
+				case 4 -> dur       .setBackground(Color.WHITE);
+			}
+		}
+
 	
 		// Panel pour les ronds de difficultés
 		JPanel panelRondsDifficulte = new JPanel();
@@ -194,6 +234,17 @@ public class CreerQuestion extends JFrame implements ActionListener
 	
 		// JComboBox pour le type de question
 		JComboBox<String> listeTypes = new JComboBox<String>(new String[]{"Question à choix multiple à réponse unique", "Question à choix multiple à réponse multiple", "Question à association d’éléments", "Question avec élimination de propositions de réponses"});
+		if (questionAModifier != null)
+		{
+			String type = switch (questionAModifier.getType()) 
+			{
+				case "QCMRM" -> "Réponses Multiples";
+				case "QAE"   -> "Association";
+				case "QAEPR" -> "Elimination";
+				default      -> "Réponses Uniques";
+			};
+			listeTypes.setSelectedItem(type);
+		}
 		panelType.add(listeTypes, BorderLayout.SOUTH);
 	
 		// Bouton pour créer une nouvelle question
@@ -203,20 +254,24 @@ public class CreerQuestion extends JFrame implements ActionListener
 		panelBtnCreerQuestion.add(btnCreerQuestion);
 	
 		// Action listener pour le bouton de création de question
-		btnCreerQuestion.addActionListener(e -> {
+		btnCreerQuestion.addActionListener(e -> 
+		{
 			String erreurs = "";
 	
 			// Récupération des informations pour la création de la question
 			int nbPoints = 1;
 			int tempsReponse = 60;
 	
-			try {
+			try 
+			{
 				nbPoints = Integer.parseInt(((JTextArea) panelPoints.getComponent(1)).getText());
-			} catch (Exception ex) {
+			} catch (Exception ex) 
+			{
 				erreurs = "Veuillez rajouter le nombre de points.\n";
 			}
 	
-			try {
+			try 
+			{
 				String chaineTemps = ((JTextArea) panelTemps.getComponent(1)).getText();
 
 				if (chaineTemps.indexOf(":") == -1 && Integer.parseInt(chaineTemps) > 0)
@@ -228,57 +283,78 @@ public class CreerQuestion extends JFrame implements ActionListener
 				System.out.println(chaineTemps + " = " + minute+":"+seconde);
 	
 				tempsReponse = minute * 60 + seconde;
-			} catch (Exception ex) {
+			} catch (Exception ex) 
+			{
 				erreurs += "Veuillez rajouter le temps de réponse (format XX:XX ou X).\n";
 			}
 	
 			String[] nomRessource = ((String) listeRessources.getSelectedItem()).split("_", 2);
 			String idRes = "", nomRes = "";
-			if (nomRessource.length == 2) {
+			if (nomRessource.length == 2) 
+			{
 				nomRes = nomRessource[1];
 				idRes = nomRessource[0];
 			}
 			Notion notion = Notion.trouverNotionParNom((String) listeNotions.getSelectedItem(), Controleur.trouverRessourceParId(idRes));
 	
 			int difficulte = 0;
-			if (tresFacile.getBackground() == Color.GREEN && facile.getBackground() == Color.CYAN) {
+			if (tresFacile.getBackground() == Color.GREEN && facile.getBackground() == Color.CYAN) 
+			{
 				difficulte = 0;
-			} else if (tresFacile.getBackground() == Color.GREEN) {
+			} 
+			else if (tresFacile.getBackground() == Color.GREEN) 
+			{
 				difficulte = 1;
-			} else if (facile.getBackground() == Color.CYAN) {
+			} 
+			else if (facile.getBackground() == Color.CYAN)
+			{
 				difficulte = 2;
-			} else if (moyen.getBackground() == Color.RED) {
+			} 
+			else if (moyen.getBackground() == Color.RED) 
+			{
 				difficulte = 3;
-			} else if (dur.getBackground() == Color.WHITE) {
+			} 
+			else if (dur.getBackground() == Color.WHITE) 
+			{
 				difficulte = 4;
 			}
 
 			String typeSelectionne = (String) listeTypes.getSelectedItem();
-			if (notion != null && typeSelectionne != null && difficulte != 0 && erreurs.isEmpty()) {
-				if ("Question à choix multiple à réponse unique".equals(typeSelectionne)) {
+			if (notion != null && typeSelectionne != null && difficulte != 0 && erreurs.isEmpty()) 
+			{
+				if ("Question à choix multiple à réponse unique".equals(typeSelectionne)) 
+				{
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRU");
 					new QuestionReponseUnique(tmp);
 					dispose();
-				} else if ("Question à choix multiple à réponse multiple".equals(typeSelectionne)) {
+				} 
+				else if ("Question à choix multiple à réponse multiple".equals(typeSelectionne)) 
+				{
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRM");
 					new QuestionReponsesMultiples(tmp);
 					dispose();
-				} else if ("Question à association d’éléments".equals(typeSelectionne)) {
+				} 
+				else if ("Question à association d’éléments".equals(typeSelectionne)) 
+				{
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAE");
 					new QuestionAssociation(tmp);
 					dispose();
-				} else if ("Question avec élimination de propositions de réponses".equals(typeSelectionne)) {
+				} 
+				else if ("Question avec élimination de propositions de réponses".equals(typeSelectionne)) 
+				{
 					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAEPR");
 					new QuestionElimination(tmp);
 					dispose();
 				}
 			}
 
-			if (difficulte == 0) {
+			if (difficulte == 0) 
+			{
 				erreurs += "Veuillez sélectionner la difficulté.";
 			}
 
-			if (!erreurs.isEmpty()) {
+			if (!erreurs.isEmpty()) 
+			{
 				JOptionPane.showMessageDialog(null, erreurs, "Erreur : paramètres manquants", JOptionPane.ERROR_MESSAGE);
 			}
 			});
@@ -300,7 +376,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 			gbc.gridx = 0;
 			gbc.gridy = 0;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
-			panelPrincipal.add(panelBtnMenu, gbc);
+			if (questionAModifier == null) panelPrincipal.add(panelBtnMenu, gbc);
 
 			gbc.gridy = 1;
 			gbc.fill = GridBagConstraints.BOTH;
@@ -316,16 +392,18 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 			// Configuration finale de la fenêtre
 			this.add(panelPrincipal);
-			this.setTitle("Créer une question");
+			if (questionAModifier == null) this.setTitle("Créer une question");
+			else                           this.setTitle("Modifier une question");
 			this.setSize(700, 330);
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			if (questionAModifier != null) this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			this.setLocationRelativeTo(null);
 			this.setVisible(true);
 
 			listeRessources.addActionListener(this);
 		}
 
-	 
+		
 
 	/**
 	 * +----------+
@@ -338,7 +416,8 @@ public class CreerQuestion extends JFrame implements ActionListener
 	 *
 	 * @param couleur la couleur de fond du bouton
 	 * @param texte   le texte affiché sur le bouton
-	 * @return un objet {@link RoundButton} configuré avec les propriétés spécifiées
+	 * @return un objet 
+	 * {@link RoundButton} configuré avec les propriétés spécifiées
 	 */
 	public static BoutonRond creerBoutonRond(Color couleur, String texte)
 	{
@@ -428,8 +507,10 @@ class BoutonRond extends JButton
 	 */
 	protected void paintComponent(Graphics g)
 	{
-		if (getModel().isArmed()) { g.setColor(Color.lightGray); }
-		else { g.setColor(getBackground()); }
+		if (getModel().isArmed()) 
+		{ g.setColor(Color.lightGray); }
+		else 
+		{ g.setColor(getBackground()); }
 
 		g.fillOval(0, 0, getSize().width - 1, getSize().height - 1);
 		super.paintComponent(g);
