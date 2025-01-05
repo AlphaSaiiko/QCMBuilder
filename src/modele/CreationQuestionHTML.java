@@ -230,21 +230,26 @@ public class CreationQuestionHTML {
 		}
 	}
 	
-	
 
 
 	public void pageQuestionMultiple(Question question, int numQuestion)
 	{
 		StringBuilder htmlContent = new StringBuilder();
-
+	
 		String pageSuivante;
 		String pagePrecedente;
-		if (numQuestion < this.evaluation.getNbQuestion()){pageSuivante = "page"+(numQuestion+1)+"";}
-		else {pageSuivante = "pageDeFin";}
-
-		if(numQuestion>1){pagePrecedente = "page"+(numQuestion-1);}
-		else{pagePrecedente="pageDAccueil";}
-
+		if (numQuestion < this.evaluation.getNbQuestion()) {
+			pageSuivante = "page" + (numQuestion + 1);
+		} else {
+			pageSuivante = "pageDeFin";
+		}
+	
+		if (numQuestion > 1) {
+			pagePrecedente = "page" + (numQuestion - 1);
+		} else {
+			pagePrecedente = "pageDAccueil";
+		}
+	
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
 		htmlContent.append("<head>").append("\n");
@@ -256,26 +261,25 @@ public class CreationQuestionHTML {
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
-		htmlContent.append("        <div class=\"question\" id=\"question\">").append("\n");
-		for (IOption reponse : question.getEnsOptions())
-		{
-			if (reponse instanceof Option)
-			{
+		htmlContent.append("        <div id=\"points\">Points : 0</div>").append("\n");
+		htmlContent.append("        <div class=\"question\" data-points=\"").append(question.getNbPoints()).append("\" data-question-id=\"question-").append(numQuestion).append("\">").append("\n");
+		
+		for (IOption reponse : question.getEnsOptions()) {
+			if (reponse instanceof Option) {
 				Option opt = (Option) reponse;
-				if (opt.getEstReponse())
-				{
-					htmlContent.append("            <div class=\"reponse bonne-reponse\">").append(opt.getEnonce()).append("</div>").append("\n");
-				}
-				else
-				{
-					htmlContent.append("            <div class=\"reponse mauvaise-reponse\">").append(opt.getEnonce()).append("</div>").append("\n");
+				String reponseId = "reponse-" + opt.getId();
+				if (opt.getEstReponse()) {
+					htmlContent.append("            <div class=\"reponse bonne-reponse\" id=\"").append(reponseId).append("\">").append(opt.getEnonce()).append("</div>").append("\n");
+				} else {
+					htmlContent.append("            <div class=\"reponse mauvaise-reponse\" id=\"").append(reponseId).append("\">").append(opt.getEnonce()).append("</div>").append("\n");
 				}
 			}
 		}
+		
 		htmlContent.append("        </div>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='"+pagePrecedente+".html';\">Précédent</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='"+pageSuivante+".html';\">Suivant</button>").append("\n");
+		htmlContent.append("        <button onclick=\"location.href='").append(pageSuivante).append(".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <div id=\"popup\" class=\"popup\">").append("\n");
 		htmlContent.append("        <div class=\"popup-content\">").append("\n");
@@ -287,7 +291,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("    <script src=\"scriptReponseMultiple.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
-
+	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
 			System.out.println("Le fichier HTML a été généré avec succès !");
@@ -295,85 +299,129 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
+
 
 	public void ecrireJsReponseMultiple() {
 		StringBuilder jsContent = new StringBuilder();
 	
 		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
-		jsContent.append("    // Mélanger les réponses (au cas où)").append("\n");
-		jsContent.append("    randomizeOrder('.reponse', '#question');").append("\n");
+		jsContent.append("    const questionId = document.querySelector('.question').getAttribute('data-question-id');").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    // Mélanger les réponses").append("\n");
+		jsContent.append("    randomizeOrder('.reponse', '.question');").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    // Initialiser les points à partir du localStorage").append("\n");
+		jsContent.append("    let totalPoints = localStorage.getItem('points') ? parseFloat(localStorage.getItem('points')) : 0;").append("\n");
+		jsContent.append("    document.getElementById('points').textContent = `Points : ${totalPoints}`;").append("\n");
 		jsContent.append("\n");
 		jsContent.append("    // Gérer la sélection des réponses").append("\n");
 		jsContent.append("    let selectedAnswers = new Set();").append("\n");
-		jsContent.append("    let isValidationDone = false;").append("\n");
-		jsContent.append("    document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
-		jsContent.append("        reponse.addEventListener('click', () => {").append("\n");
-		jsContent.append("            if (!isValidationDone) {").append("\n");
-		jsContent.append("                if (selectedAnswers.has(reponse)) {").append("\n");
-		jsContent.append("                    reponse.classList.remove('selected');").append("\n");
-		jsContent.append("                    selectedAnswers.delete(reponse);").append("\n");
-		jsContent.append("                } else {").append("\n");
-		jsContent.append("                    reponse.classList.add('selected');").append("\n");
-		jsContent.append("                    selectedAnswers.add(reponse);").append("\n");
-		jsContent.append("                }").append("\n");
-		jsContent.append("            }").append("\n");
-		jsContent.append("        });").append("\n");
-		jsContent.append("    });").append("\n");
+		jsContent.append("    let isValidationDone = localStorage.getItem(`isValidationDone-${questionId}`) === 'true';").append("\n");
+		jsContent.append("    if (isValidationDone) {").append("\n");
+		jsContent.append("        restoreState(questionId);").append("\n");
+		jsContent.append("        transformButtonToFeedback();").append("\n");
+		jsContent.append("    } else {").append("\n");
+		jsContent.append("        enableAnswerSelection();").append("\n");
+		jsContent.append("    }").append("\n");
 		jsContent.append("\n");
-		jsContent.append("    // Valider les réponses sélectionnées").append("\n");
-		jsContent.append("    document.getElementById('valider').addEventListener('click', () => {").append("\n");
-		jsContent.append("        const bonnesReponses = document.querySelectorAll('.bonne-reponse');").append("\n");
-		jsContent.append("        const mauvaisesReponses = document.querySelectorAll('.mauvaise-reponse');").append("\n");
-		jsContent.append("\n");
-		jsContent.append("        let allCorrect = true;").append("\n");
-		jsContent.append("\n");
-		jsContent.append("        // Vérifie si toutes les bonnes réponses sont sélectionnées").append("\n");
-		jsContent.append("        bonnesReponses.forEach(reponse => {").append("\n");
-		jsContent.append("            if (!selectedAnswers.has(reponse)) {").append("\n");
-		jsContent.append("                allCorrect = false;").append("\n");
-		jsContent.append("            }").append("\n");
-		jsContent.append("        });").append("\n");
-		jsContent.append("\n");
-		jsContent.append("        // Vérifie qu'aucune mauvaise réponse n'est sélectionnée").append("\n");
-		jsContent.append("        mauvaisesReponses.forEach(reponse => {").append("\n");
-		jsContent.append("            if (selectedAnswers.has(reponse)) {").append("\n");
-		jsContent.append("                allCorrect = false;").append("\n");
-		jsContent.append("            }").append("\n");
-		jsContent.append("        });").append("\n");
-		jsContent.append("\n");
-		jsContent.append("        if (allCorrect) {").append("\n");
-		jsContent.append("            bonnesReponses.forEach(reponse => {").append("\n");
-		jsContent.append("                reponse.style.backgroundColor = 'green'; // Mettre en vert les bonnes réponses").append("\n");
-		jsContent.append("            });").append("\n");
-		jsContent.append("        } else {").append("\n");
-		jsContent.append("            document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
-		jsContent.append("                if (reponse.classList.contains('bonne-reponse')) {").append("\n");
-		jsContent.append("                    reponse.style.backgroundColor = 'green'; // Mettre en vert les bonnes réponses").append("\n");
-		jsContent.append("                } else {").append("\n");
-		jsContent.append("                    reponse.style.backgroundColor = 'red'; // Mettre en rouge les mauvaises réponses").append("\n");
+		jsContent.append("    function enableAnswerSelection() {").append("\n");
+		jsContent.append("        document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
+		jsContent.append("            reponse.addEventListener('click', () => {").append("\n");
+		jsContent.append("                if (!isValidationDone) {").append("\n");
+		jsContent.append("                    if (selectedAnswers.has(reponse.id)) {").append("\n");
+		jsContent.append("                        reponse.classList.remove('selected');").append("\n");
+		jsContent.append("                        selectedAnswers.delete(reponse.id);").append("\n");
+		jsContent.append("                    } else {").append("\n");
+		jsContent.append("                        reponse.classList.add('selected');").append("\n");
+		jsContent.append("                        selectedAnswers.add(reponse.id);").append("\n");
+		jsContent.append("                    }").append("\n");
 		jsContent.append("                }").append("\n");
 		jsContent.append("            });").append("\n");
-		jsContent.append("        }").append("\n");
+		jsContent.append("        });").append("\n");
+		jsContent.append("    }").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    // Valider la réponse sélectionnée").append("\n");
+		jsContent.append("    function validate() {").append("\n");
+		jsContent.append("        if (isValidationDone) return;  // Si la validation est déjà faite, ne pas continuer").append("\n");
 		jsContent.append("\n");
 		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
 		jsContent.append("        const popupText = document.getElementById('popup-text');").append("\n");
+		jsContent.append("        const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));").append("\n");
 		jsContent.append("\n");
-		jsContent.append("        if (allCorrect) {").append("\n");
-		jsContent.append("            popupText.innerHTML = '<span style=\"color: green;\">Bonne réponse!</span>';").append("\n");
+		jsContent.append("        if (selectedAnswers.size > 0) {").append("\n");
+		jsContent.append("            let allCorrect = true;").append("\n");
+		jsContent.append("\n");
+		jsContent.append("            selectedAnswers.forEach(answerId => {").append("\n");
+		jsContent.append("                const answerElement = document.getElementById(answerId);").append("\n");
+		jsContent.append("                if (!answerElement.classList.contains('bonne-reponse')) {").append("\n");
+		jsContent.append("                    allCorrect = false;").append("\n");
+		jsContent.append("                }").append("\n");
+		jsContent.append("            });").append("\n");
+		jsContent.append("\n");
+		jsContent.append("            if (allCorrect) {").append("\n");
+		jsContent.append("                popupText.innerHTML = '<span style=\"color: green;\">Bonne réponse!</span>';").append("\n");
+		jsContent.append("                totalPoints += questionPoints;").append("\n");
+		jsContent.append("                localStorage.setItem('points', totalPoints);").append("\n");
+		jsContent.append("                document.getElementById('points').textContent = `Points : ${totalPoints}`;").append("\n");
+		jsContent.append("            } else {").append("\n");
+		jsContent.append("                popupText.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
+		jsContent.append("            }").append("\n");
+		jsContent.append("\n");
+		jsContent.append("            // Mettre en évidence les bonnes réponses").append("\n");
+		jsContent.append("            document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {").append("\n");
+		jsContent.append("                goodAnswer.style.backgroundColor = 'green';").append("\n");
+		jsContent.append("            });").append("\n");
+		jsContent.append("\n");
+		jsContent.append("            // Marquer les mauvaises réponses").append("\n");
+		jsContent.append("            selectedAnswers.forEach(answerId => {").append("\n");
+		jsContent.append("                const answerElement = document.getElementById(answerId);").append("\n");
+		jsContent.append("                if (!answerElement.classList.contains('bonne-reponse')) {").append("\n");
+		jsContent.append("                    answerElement.style.backgroundColor = 'red';").append("\n");
+		jsContent.append("                }").append("\n");
+		jsContent.append("            });").append("\n");
+		jsContent.append("\n");
+		jsContent.append("            // Sauvegarder l'état").append("\n");
+		jsContent.append("            localStorage.setItem(`isValidationDone-${questionId}`, true);").append("\n");
+		jsContent.append("            localStorage.setItem(`selectedAnswers-${questionId}`, JSON.stringify(Array.from(selectedAnswers)));").append("\n");
+		jsContent.append("            localStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);").append("\n");
+		jsContent.append("\n");
+		jsContent.append("            // Transformer le bouton 'Valider' en 'Feedback'").append("\n");
+		jsContent.append("            transformButtonToFeedback();").append("\n");
+		jsContent.append("\n");
+		jsContent.append("            // Afficher le pop-up personnalisé").append("\n");
+		jsContent.append("            popup.style.display = 'flex';").append("\n");
+		jsContent.append("            isValidationDone = true;").append("\n");
 		jsContent.append("        } else {").append("\n");
-		jsContent.append("            popupText.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
+		jsContent.append("            alert('Veuillez sélectionner une réponse !');").append("\n");
 		jsContent.append("        }").append("\n");
-		jsContent.append("        popup.style.display = 'flex';").append("\n");
-		jsContent.append("        isValidationDone = true;").append("\n");
 		jsContent.append("\n");
-		jsContent.append("        // Transformer le bouton 'Valider' en 'Feedback'").append("\n");
+		jsContent.append("        // Réactiver la sélection des réponses après l'alerte").append("\n");
+		jsContent.append("        document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
+		jsContent.append("            reponse.style.pointerEvents = '';").append("\n");
+		jsContent.append("        });").append("\n");
+		jsContent.append("    }").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    document.getElementById('valider').addEventListener('click', validate);").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    function transformButtonToFeedback() {").append("\n");
 		jsContent.append("        const validerButton = document.getElementById('valider');").append("\n");
 		jsContent.append("        validerButton.textContent = 'Feedback';").append("\n");
-		jsContent.append("        validerButton.removeEventListener('click', this);").append("\n");
-		jsContent.append("        validerButton.addEventListener('click', () => {").append("\n");
-		jsContent.append("            popup.style.display = 'flex';").append("\n");
-		jsContent.append("        });").append("\n");
-		jsContent.append("    });").append("\n");
+		jsContent.append("        validerButton.removeEventListener('click', validate);").append("\n");
+		jsContent.append("        validerButton.addEventListener('click', showFeedback);").append("\n");
+		jsContent.append("    }").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    function showFeedback() {").append("\n");
+		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
+		jsContent.append("        const popupText = document.getElementById('popup-text');").append("\n");
+		jsContent.append("        const savedPopupText = localStorage.getItem(`popupText-${questionId}`);").append("\n");
+		jsContent.append("        if (savedPopupText) {").append("\n");
+		jsContent.append("            popupText.innerHTML = savedPopupText;").append("\n");
+		jsContent.append("        } else {").append("\n");
+		jsContent.append("            popupText.innerHTML = '<span style=\"color: red;\">Pas de feedback disponible.</span>';").append("\n");
+		jsContent.append("        }").append("\n");
+		jsContent.append("        popup.style.display = 'flex';").append("\n");
+		jsContent.append("    }").append("\n");
 		jsContent.append("\n");
 		jsContent.append("    // Fermer le pop-up").append("\n");
 		jsContent.append("    document.getElementById('popup-close').addEventListener('click', () => {").append("\n");
@@ -382,13 +430,37 @@ public class CreationQuestionHTML {
 		jsContent.append("    });").append("\n");
 		jsContent.append("});").append("\n");
 		jsContent.append("\n");
+		jsContent.append("function restoreState(questionId) {").append("\n");
+		jsContent.append("    const selectedAnswers = JSON.parse(localStorage.getItem(`selectedAnswers-${questionId}`));").append("\n");
+		jsContent.append("    if (selectedAnswers) {").append("\n");
+		jsContent.append("        selectedAnswers.forEach(answerId => {").append("\n");
+		jsContent.append("            const reponse = document.getElementById(answerId);").append("\n");
+		jsContent.append("            if (reponse) {").append("\n");
+		jsContent.append("                reponse.classList.add('selected');").append("\n");
+		jsContent.append("                if (reponse.classList.contains('bonne-reponse')) {").append("\n");
+		jsContent.append("                    reponse.style.backgroundColor = 'green';").append("\n");
+		jsContent.append("                } else {").append("\n");
+		jsContent.append("                    reponse.style.backgroundColor = 'red';").append("\n");
+		jsContent.append("                }").append("\n");
+		jsContent.append("            }").append("\n");
+		jsContent.append("        });").append("\n");
+		jsContent.append("    }").append("\n");
+		jsContent.append("    const savedPopupText = localStorage.getItem(`popupText-${questionId}`);").append("\n");
+		jsContent.append("    if (savedPopupText) {").append("\n");
+		jsContent.append("        document.getElementById('popup-text').innerHTML = savedPopupText;").append("\n");
+		jsContent.append("    }").append("\n");
+		jsContent.append("    document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {").append("\n");
+		jsContent.append("        goodAnswer.style.backgroundColor = 'green';").append("\n");
+		jsContent.append("    });").append("\n");
+		jsContent.append("}").append("\n");
+		jsContent.append("\n");
 		jsContent.append("function randomizeOrder(selector, parentSelector) {").append("\n");
 		jsContent.append("    const items = document.querySelectorAll(selector);").append("\n");
 		jsContent.append("    const parent = document.querySelector(parentSelector);").append("\n");
 		jsContent.append("    const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);").append("\n");
 		jsContent.append("    shuffledItems.forEach(item => parent.appendChild(item));").append("\n");
 		jsContent.append("}").append("\n");
-	
+
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptReponseMultiple.js"))) {
 			writer.write(jsContent.toString());
 			System.out.println("Le fichier JS a été généré avec succès !");
@@ -396,6 +468,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	public void ecrireJsReponseUnique()
 	{
