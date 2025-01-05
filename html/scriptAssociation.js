@@ -1,63 +1,79 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const pointsElem = document.getElementById('points');
+    let totalPoints = parseFloat(localStorage.getItem('points')) || 0;
+    pointsElem.textContent = `Points : ${totalPoints}`;  // Mise à jour des points affichés
+
     randomizeOrder('.word', '#words');
     randomizeOrder('.definition', '#definitions');
+    
+    const questionId = getQuestionId();
+    loadPreviousState(questionId);
+    addWordListeners();
+    addDefinitionListeners();
 });
+
+function getQuestionId() {
+    const url = window.location.pathname;
+    const filename = url.substring(url.lastIndexOf('/') + 1);
+    const questionId = filename.match(/\d+/);
+    return questionId ? parseInt(questionId[0], 10) : null;  // Retourne le numéro de la page
+}
 
 function randomizeOrder(selector, parentSelector) {
     const items = document.querySelectorAll(selector);
     const parent = document.querySelector(parentSelector);
     const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);
-
     shuffledItems.forEach(item => parent.appendChild(item));
 }
 
 let motSelectionne = null;
 let connexions = {};
 let reverseConnexions = {};
+let feedbackClicked = false;
 let isValidationDone = false;
 
-// Ajouter un événement de clic à chaque mot
-document.querySelectorAll('.word').forEach(mot => {
-    mot.addEventListener('click', () => {
-        if (!isValidationDone) {
-            motSelectionne = mot;
-            clearSelection();
-            mot.style.backgroundColor = '#d3d3d3'; // Mettre en surbrillance le mot sélectionné
-        }
-    });
-});
-
-// Ajouter un événement de clic à chaque définition
-document.querySelectorAll('.definition').forEach(definition => {
-    definition.addEventListener('click', () => {
-        if (motSelectionne && !isValidationDone) {
-            let motId = motSelectionne.getAttribute('data-id');
-            let defId = definition.getAttribute('data-id');
-
-            if (connexions[motId]) {
-                // Effacer l'ancienne ligne si elle existe
-                let ancienDefId = connexions[motId];
-                delete reverseConnexions[ancienDefId];
-                delete connexions[motId];
-                removeLine(motSelectionne, document.querySelector(`.definition[data-id='${ancienDefId}']`));
+function addWordListeners() {
+    document.querySelectorAll('.word').forEach(mot => {
+        mot.addEventListener('click', () => {
+            if (!isValidationDone) {
+                motSelectionne = mot;
+                clearSelection();
+                mot.style.backgroundColor = '#d3d3d3';
             }
-
-            if (reverseConnexions[defId]) {
-                // Effacer l'ancienne ligne si elle existe
-                let ancienMotId = reverseConnexions[defId];
-                delete connexions[ancienMotId];
-                delete reverseConnexions[defId];
-                removeLine(document.querySelector(`.word[data-id='${ancienMotId}']`), definition);
-            }
-
-            connexions[motId] = defId;
-            reverseConnexions[defId] = motId;
-
-            drawLine(motSelectionne, definition, 'black');
-            clearSelection();
-        }
+        });
     });
-});
+}
+
+function addDefinitionListeners() {
+    document.querySelectorAll('.definition').forEach(definition => {
+        definition.addEventListener('click', () => {
+            if (motSelectionne && !isValidationDone) {
+                let motId = motSelectionne.getAttribute('data-id');
+                let defId = definition.getAttribute('data-id');
+
+                if (connexions[motId]) {
+                    let ancienDefId = connexions[motId];
+                    delete reverseConnexions[ancienDefId];
+                    delete connexions[motId];
+                    removeLine(motSelectionne, document.querySelector(`.definition[data-id='${ancienDefId}']`));
+                }
+
+                if (reverseConnexions[defId]) {
+                    let ancienMotId = reverseConnexions[defId];
+                    delete connexions[ancienMotId];
+                    delete reverseConnexions[defId];
+                    removeLine(document.querySelector(`.word[data-id='${ancienMotId}']`), definition);
+                }
+
+                connexions[motId] = defId;
+                reverseConnexions[defId] = motId;
+
+                drawLine(motSelectionne, definition, 'black');
+                clearSelection();
+            }
+        });
+    });
+}
 
 function drawLine(sujet, proposition, color) {
     const svg = document.getElementById('svg-container');
@@ -89,21 +105,19 @@ function removeLine(sujet, proposition) {
     }
 }
 
-// Fonction pour effacer la sélection
 function clearSelection() {
     document.querySelectorAll('.word').forEach(mot => {
-        mot.style.backgroundColor = '#e3e3e3'; // Réinitialiser la couleur de fond
+        mot.style.backgroundColor = '#e3e3e3';
     });
 }
 
-// Fonction pour valider les connexions
-function validate() {
+function validate(questionId) {
     let correct = true;
     let totalAssociations = Object.keys(connexions).length;
     let mots = document.querySelectorAll('.word').length;
 
-    if (totalAssociations < mots) {
-        showPopup('<span style="color: red;">Il manque des associations.</span>');
+    if (totalAssociations < mots && !isValidationDone) {
+        alert('Il manque des associations.'); // Utiliser une alerte
         return;
     }
 
@@ -119,17 +133,34 @@ function validate() {
         }
     }
 
+    let popupMessage;
     if (correct) {
-        showPopup('<span style="color: green;">Bravo! Toutes les associations sont correctes.</span>');
+        popupMessage = '<span style="color: green;">Bravo! Toutes les associations sont correctes.</span>';
+        if (!feedbackClicked && !isValidationDone) {
+            updatePoints(1);  // Ajouter des points pour les réponses correctes
+        }
     } else {
-        showPopup('<span style="color: red;">Désolé, certaines associations sont incorrectes.</span>');
+        popupMessage = '<span style="color: red;">Désolé, certaines associations sont incorrectes.</span>';
     }
-    isValidationDone = true; // Désactiver les modifications après validation
-    const validerButton = document.querySelector('.btn[onclick="validate()"]');
-    validerButton.textContent = 'Feedback';
+
+    showPopup(popupMessage);
+
+    isValidationDone = true;
+    feedbackClicked = true;
+    localStorage.setItem(`isValidationDone-${questionId}`, 'true');
+    localStorage.setItem(`connexions-${questionId}`, JSON.stringify(connexions));
+    localStorage.setItem(`popupMessage-${questionId}`, popupMessage);
+
+    document.querySelector(`.btn[onclick^="validate(${questionId})"]`).textContent = 'Feedback';
 }
 
-// Fonction pour afficher le pop-up avec un message
+function updatePoints(points) {
+    let totalPoints = parseFloat(localStorage.getItem('points')) || 0;
+    totalPoints += points;
+    localStorage.setItem('points', totalPoints);
+    document.getElementById('points').textContent = `Points : ${totalPoints}`;
+}
+
 function showPopup(message) {
     const popup = document.getElementById('popup');
     const popupText = document.getElementById('popup-text');
@@ -137,8 +168,35 @@ function showPopup(message) {
     popup.style.display = 'flex';
 }
 
-// Fermer le pop-up
 document.getElementById('popup-close').addEventListener('click', () => {
     const popup = document.getElementById('popup');
     popup.style.display = 'none';
 });
+
+function loadPreviousState(questionId) {
+    if (localStorage.getItem(`isValidationDone-${questionId}`) === 'true') {
+        isValidationDone = true;
+        const savedConnexions = JSON.parse(localStorage.getItem(`connexions-${questionId}`));
+        let correct = true;
+        for (let motId in savedConnexions) {
+            const defId = savedConnexions[motId];
+            const mot = document.querySelector(`.word[data-id='${motId}']`);
+            const definition = document.querySelector(`.definition[data-id='${defId}']`);
+            const isCorrect = motId == defId;
+            drawLine(mot, definition, isCorrect ? 'green' : 'red');
+            connexions[motId] = defId;
+            reverseConnexions[defId] = motId;
+            if (!isCorrect) {
+                correct = false;
+            }
+        }
+
+        const savedPopupMessage = localStorage.getItem(`popupMessage-${questionId}`);
+        if (savedPopupMessage) {
+            document.querySelector(`.btn[onclick^="validate(${questionId})"]`).addEventListener('click', () => {
+                showPopup(savedPopupMessage);
+            });
+        }
+        document.querySelector(`.btn[onclick^="validate(${questionId})"]`).textContent = 'Feedback';
+    }
+}

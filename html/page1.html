@@ -3,30 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question à Élimination</title>
-    <link rel="stylesheet" href="styleElimination.css">
+    <title>Association de Mots</title>
+    <link rel="stylesheet" href="styleAssociation.css">
 </head>
 <body>
     <div class="container">
-        <h1>Parmi ces trophées, lequel le PSG n'a jamais remporté ?<br><br></h1>
+        <h1>Associez chaque joueur de l’OM avec son poste principal.</h1>
         <div id="points">Points : 0</div>
-        <div class="question" id="question-1">
-            <div class="reponse mauvaise-reponse" id="reponse-1" data-order="1" ptselim="-0.25">Ligue 1<br></div>
-            <div class="reponse bonne-reponse" id="reponse-2">Ligue des Champions<br></div>
-            <div class="reponse mauvaise-reponse" id="reponse-3" data-order="2" ptselim="-0.25"> Coupe de France</div>
-            <div class="reponse mauvaise-reponse" id="reponse-4">Trophée des Champions</div>
+        <div class="columns">
+            <div class="words" id="words">
+                <div class="word" data-id="1">Fabien Barthez</div>
+                <div class="word" data-id="2">Didier Drogba</div>
+                <div class="word" data-id="3">Dimitri Payet</div>
+            </div>
+            <svg id="svg-container"></svg>
+            <div class="definitions" id="definitions">
+                <div class="definition" data-id="1">Gardien de but</div>
+                <div class="definition" data-id="2">Attaquant</div>
+                <div class="definition" data-id="3">Milieu offensif</div>
+            </div>
         </div>
-        <button onclick="location.href='pageDAccueil.html';">Précédent</button>
-        <button id="eliminar">Éliminer</button>
-        <button id="valider">Valider</button>
-        <button onclick="location.href='page2.html';">Suivant</button>
+        <button class="btn" onclick="location.href='pageDAccueil.html';">Précédent</button>
+        <button class="btn" onclick="validate(1)">Valider</button>
+        <button class="btn" onclick="location.href='page2.html';">Suivant</button>
     </div>
     <div id="popup" class="popup">
         <div class="popup-content">
             <span class="close" id="popup-close">&times;</span>
-            <p id="popup-text">Jamais la ldc malheureusement</p>
+            <p id="popup-text"></p>
         </div>
     </div>
-    <script src="scriptElimination.js"></script>
+    <script src="scriptAssociation.js"></script>
 </body>
 </html>
