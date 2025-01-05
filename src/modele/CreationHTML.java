@@ -47,13 +47,8 @@ public class CreationHTML {
 		htmlContent.append("<link rel=\"stylesheet\" href=\"style.css\">");
 		htmlContent.append("<script>\n");
 		htmlContent.append("    window.onload = function() {\n");
-		htmlContent.append("        localStorage.setItem('points', 0);\n");
-		htmlContent.append("        // Réinitialiser l'état de toutes les questions\n");
-		htmlContent.append("        const totalQuestions = 21; // Nombre total de questions\n");
-		htmlContent.append("        for (let i = 1; i <= totalQuestions; i++) {\n");
-		htmlContent.append("            localStorage.removeItem(`isValidationDone-question-${i}`);\n");
-		htmlContent.append("            localStorage.removeItem(`selectedAnswer-question-${i}`);\n");
-		htmlContent.append("        }\n");
+		htmlContent.append("        // Réinitialiser toutes les sauvegardes du localStorage\n");
+		htmlContent.append("        localStorage.clear();\n");
 		htmlContent.append("    };\n");
 		htmlContent.append("</script>\n");
 		htmlContent.append("</head>\n");

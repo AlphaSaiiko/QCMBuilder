@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question à Réponses Multiples</title>
-    <link rel="stylesheet" href="styleReponseUnique.css">
+    <title>Question à Élimination</title>
+    <link rel="stylesheet" href="styleElimination.css">
 </head>
 <body>
     <div class="container">
-        <h1>Quels joueurs suivants ont joué pour le PSG ?</h1>
+        <h1>Parmi ces trophées, lequel l’OM n’a jamais remporté ?</h1>
         <div id="points">Points : 0</div>
-        <div class="question" data-points="1" data-question-id="question-5">
-            <div class="reponse bonne-reponse" id="reponse-7">Lionel Messi</div>
-            <div class="reponse bonne-reponse" id="reponse-8">Neymar Jr</div>
-            <div class="reponse mauvaise-reponse" id="reponse-9">Cristiano Ronaldo</div>
-            <div class="reponse mauvaise-reponse" id="reponse-10">Zinedine Zidane</div>
+        <div class="question" id="question-5">
+            <div class="reponse mauvaise-reponse" id="reponse-5" data-order="1" ptselim="-0.25">Ligue des Champions</div>
+            <div class="reponse mauvaise-reponse" id="reponse-6">Ligue 1</div>
+            <div class="reponse bonne-reponse" id="reponse-7">Ligue Europa</div>
+            <div class="reponse mauvaise-reponse" id="reponse-8" data-order="2" ptselim="-0.25">Coupe de France</div>
         </div>
         <button onclick="location.href='page4.html';">Précédent</button>
+        <button id="eliminar">Éliminer</button>
         <button id="valider">Valider</button>
         <button onclick="location.href='page6.html';">Suivant</button>
     </div>
@@ -24,9 +25,8 @@
         <div class="popup-content">
             <span class="close" id="popup-close">&times;</span>
             <p id="popup-text"></p>
-            <p>Messi et Neymar !!</p>
         </div>
     </div>
-    <script src="scriptReponseMultiple.js"></script>
+    <script src="scriptElimination.js"></script>
 </body>
 </html>
