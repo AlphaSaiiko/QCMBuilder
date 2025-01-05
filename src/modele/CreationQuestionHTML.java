@@ -44,6 +44,10 @@ public class CreationQuestionHTML {
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
+		if (this.evaluation.getChrono())
+		{
+			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
+		}
 		htmlContent.append("        <div id=\"points\">Points : 0</div>").append("\n");
 		htmlContent.append("        <div class=\"columns\">").append("\n");
 	
@@ -72,7 +76,10 @@ public class CreationQuestionHTML {
 		}
 		htmlContent.append("            </div>\n");
 		htmlContent.append("        </div>\n");
-		htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
+		if(!this.evaluation.getChrono())
+		{
+			htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
+		}
 		htmlContent.append("        <button class=\"btn\" onclick=\"validate(").append(numQuestion).append(")\">Valider</button>").append("\n");
 		htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pageSuivante).append(".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>\n");
@@ -83,6 +90,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptAssociation.js\"></script>").append("\n");
+		htmlContent.append("    <script src=\"timer.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
 	
@@ -123,6 +131,10 @@ public class CreationQuestionHTML {
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
+		if (this.evaluation.getChrono())
+		{
+			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
+		}
 		htmlContent.append("        <div id=\"points\">Points : 0</div>").append("\n");
 		htmlContent.append("        <div class=\"question\" id=\"question-").append(numQuestion).append("\">").append("\n");
 	
@@ -145,7 +157,10 @@ public class CreationQuestionHTML {
 		}
 	
 		htmlContent.append("        </div>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
+		if(!this.evaluation.getChrono())
+		{
+			htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
+		}
 		htmlContent.append("        <button id=\"eliminar\">Éliminer</button>").append("\n");
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='").append(pageSuivante).append(".html';\">Suivant</button>").append("\n");
@@ -157,6 +172,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptElimination.js\"></script>").append("\n");
+		htmlContent.append("    <script src=\"timer.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
 	
@@ -199,6 +215,10 @@ public class CreationQuestionHTML {
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
+		if (this.evaluation.getChrono())
+		{
+			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
+		}
 		htmlContent.append("        <div id=\"points\">Points : 0</div>").append("\n");
 		htmlContent.append("        <div class=\"question\" id=\"question\" data-points=\"").append(question.getNbPoints()).append("\" data-question-id=\"question-").append(numQuestion).append("\">").append("\n");
 		for (IOption reponse : question.getEnsOptions()) {
@@ -212,7 +232,10 @@ public class CreationQuestionHTML {
 			}
 		}
 		htmlContent.append("        </div>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
+		if(!this.evaluation.getChrono())
+		{
+			htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
+		}
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='").append(pageSuivante).append(".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
@@ -224,6 +247,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptReponseUnique.js\"></script>").append("\n");
+		htmlContent.append("    <script src=\"timer.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
 	
@@ -266,6 +290,10 @@ public class CreationQuestionHTML {
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
+		if (this.evaluation.getChrono())
+		{
+			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
+		}
 		htmlContent.append("        <div id=\"points\">Points : 0</div>").append("\n");
 		htmlContent.append("        <div class=\"question\" data-points=\"").append(question.getNbPoints()).append("\" data-question-id=\"question-").append(numQuestion).append("\">").append("\n");
 		
@@ -282,7 +310,10 @@ public class CreationQuestionHTML {
 		}
 		
 		htmlContent.append("        </div>").append("\n");
-		htmlContent.append("        <button onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
+		if(!this.evaluation.getChrono())
+		{
+			htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
+		}
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
 		htmlContent.append("        <button onclick=\"location.href='").append(pageSuivante).append(".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>").append("\n");
@@ -294,6 +325,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("        </div>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("    <script src=\"scriptReponseMultiple.js\"></script>").append("\n");
+		htmlContent.append("    <script src=\"timer.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
 	
@@ -975,6 +1007,42 @@ public class CreationQuestionHTML {
 		jsContent.append("}").append("\n");
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/scriptAssociation.js"))) {
+			writer.write(jsContent.toString());
+			System.out.println("Le fichier JS a été généré avec succès !");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void ecrireJsTimer()
+	{
+		StringBuilder jsContent = new StringBuilder();
+
+		jsContent.append("const timerElement = document.getElementById('timer');");
+		jsContent.append("");
+		jsContent.append("let timeRemaining = parseInt(timerElement.textContent, 10);");
+		jsContent.append("");
+		jsContent.append("function formatTime(seconds) {");
+		jsContent.append("    const minutes = Math.floor(seconds / 60);");
+		jsContent.append("    const secs = seconds % 60;");
+		jsContent.append("    return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;");
+		jsContent.append("}");
+		jsContent.append("");
+		jsContent.append("timerElement.textContent = formatTime(timeRemaining);");
+		jsContent.append("");
+		jsContent.append("function countdown() {");
+		jsContent.append("    if (timeRemaining > 0) {");
+		jsContent.append("        timeRemaining--;");
+		jsContent.append("        timerElement.textContent = formatTime(timeRemaining);");
+		jsContent.append("    } else {");
+		jsContent.append("        clearInterval(timerInterval);");
+		jsContent.append("        alert(\"Le temps est écoulé !\");");
+		jsContent.append("    }");
+		jsContent.append("}");
+		jsContent.append("");
+		jsContent.append("const timerInterval = setInterval(countdown, 1000);");
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/timer.js"))) {
 			writer.write(jsContent.toString());
 			System.out.println("Le fichier JS a été généré avec succès !");
 		} catch (IOException e) {

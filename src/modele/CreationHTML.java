@@ -34,6 +34,7 @@ public class CreationHTML {
 		this.questionHTML.ecrireJsElimination();
 		this.questionHTML.ecrireJsReponseMultiple();
 		this.questionHTML.ecrireJsReponseUnique();
+		this.questionHTML.ecrireJsTimer();
 
 		System.out.println("liste question : " + this.evaluation.getListeQuestions()) ;
 
