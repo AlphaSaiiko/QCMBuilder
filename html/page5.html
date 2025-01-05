@@ -3,23 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question à Élimination</title>
-    <link rel="stylesheet" href="styleElimination.css">
+    <title>Association de Mots</title>
+    <link rel="stylesheet" href="styleAssociation.css">
 </head>
 <body>
     <div class="container">
-        <h1>Parmi ces trophées, lequel l’OM n’a jamais remporté ?</h1>
-        <div id="points">Points : 0</div>
-        <div class="question" id="question-5">
-            <div class="reponse mauvaise-reponse" id="reponse-5" data-order="1" ptselim="-0.25">Ligue des Champions</div>
-            <div class="reponse mauvaise-reponse" id="reponse-6">Ligue 1</div>
-            <div class="reponse bonne-reponse" id="reponse-7">Ligue Europa</div>
-            <div class="reponse mauvaise-reponse" id="reponse-8" data-order="2" ptselim="-0.25">Coupe de France</div>
+        <h1>Associez chaque joueur avec son numéro de maillot au PSG.</h1>
+        <div class="columns">
+            <div class="words" id="words">
+                <div class="word" data-id="1">Neymar Jr</div>
+                <div class="word" data-id="2">Kylian Mbappé</div>
+                <div class="word" data-id="3">Lionel Messi</div>
+            </div>
+            <svg id="svg-container"></svg>
+            <div class="definitions" id="definitions">
+                <div class="definition" data-id="1">10</div>
+                <div class="definition" data-id="2">7</div>
+                <div class="definition" data-id="3">30</div>
+            </div>
         </div>
-        <button onclick="location.href='page4.html';">Précédent</button>
-        <button id="eliminar">Éliminer</button>
-        <button id="valider">Valider</button>
-        <button onclick="location.href='page6.html';">Suivant</button>
+        <button class="btn" onclick="location.href='page4.html';">Précédent</button>
+        <button class="btn" onclick="validate()">Valider</button>
+        <button class="btn" onclick="location.href='page6.html';">Suivant</button>
     </div>
     <div id="popup" class="popup">
         <div class="popup-content">
@@ -27,6 +32,6 @@
             <p id="popup-text"></p>
         </div>
     </div>
-    <script src="scriptElimination.js"></script>
+    <script src="scriptAssociation.js"></script>
 </body>
 </html>

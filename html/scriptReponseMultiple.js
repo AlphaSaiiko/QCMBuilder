@@ -52,7 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            if (allCorrect) {
+            // Vérifier que toutes les bonnes réponses sont sélectionnées
+            const allGoodSelected = Array.from(document.querySelectorAll('.bonne-reponse')).every(goodAnswer => {
+                return selectedAnswers.has(goodAnswer.id);
+            });
+
+            if (allCorrect && allGoodSelected) {
                 popupText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
                 totalPoints += questionPoints;
                 localStorage.setItem('points', totalPoints);

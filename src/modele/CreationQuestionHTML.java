@@ -306,8 +306,6 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
-	
-
 
 	public void ecrireJsReponseMultiple() {
 		StringBuilder jsContent = new StringBuilder();
@@ -366,7 +364,12 @@ public class CreationQuestionHTML {
 		jsContent.append("                }").append("\n");
 		jsContent.append("            });").append("\n");
 		jsContent.append("\n");
-		jsContent.append("            if (allCorrect) {").append("\n");
+		jsContent.append("            // Vérifier que toutes les bonnes réponses sont sélectionnées").append("\n");
+		jsContent.append("            const allGoodSelected = Array.from(document.querySelectorAll('.bonne-reponse')).every(goodAnswer => {").append("\n");
+		jsContent.append("                return selectedAnswers.has(goodAnswer.id);").append("\n");
+		jsContent.append("            });").append("\n");
+		jsContent.append("\n");
+		jsContent.append("            if (allCorrect && allGoodSelected) {").append("\n");
 		jsContent.append("                popupText.innerHTML = '<span style=\"color: green;\">Bonne réponse!</span>';").append("\n");
 		jsContent.append("                totalPoints += questionPoints;").append("\n");
 		jsContent.append("                localStorage.setItem('points', totalPoints);").append("\n");
@@ -475,8 +478,7 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	public void ecrireJsReponseUnique()
 	{
 		StringBuilder jsContent = new StringBuilder();
@@ -768,7 +770,7 @@ public class CreationQuestionHTML {
 	}
 
 	public void ecrireJsAssociation()
-		{
+	{
 		StringBuilder jsContent = new StringBuilder();
 	
 		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
