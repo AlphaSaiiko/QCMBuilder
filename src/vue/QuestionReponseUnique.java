@@ -41,6 +41,8 @@ public class QuestionReponseUnique extends JFrame
 	{
 		this.question = question;
 
+		boolean aModifier = (question.getEnsOptions().size()>0);
+
 
 		// Panel principal
 		JPanel panelPrincipal = new JPanel();

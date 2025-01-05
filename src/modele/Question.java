@@ -172,21 +172,25 @@ public class Question
 	 * Cette méthode utilise le contrôleur de fichiers pour générer un répertoire spécifique à la notion et y ajouter
 	 * un fichier pour la question en cours. Elle crée également un fichier RTF et enregistre les informations de la question.
 	 */
-	public void creerFichierQuestion() {
-    String chemin = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/question" + this.numQuestion + ".rtf";
-    File fichier = new File(chemin);
+	public void creerFichierQuestion() 
+	{
+		String chemin = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/question" + this.numQuestion + ".rtf";
+		File fichier = new File(chemin);
 
-    // Vérifiez si le fichier existe déjà
-    if (!fichier.exists()) {
-        ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion);
-        fichierControleur.ajouterFichier("");
-        fichierControleur.ajouterRtf("/question" + this.numQuestion + ".rtf");
-        fichierControleur.ecrireQuestion("/question" + this.numQuestion + ".rtf", this);
-        System.out.println("Fichier créé : " + chemin);
-    } else {
-        System.out.println("Le fichier existe déjà : " + chemin);
-    }
-}
+		// Vérifiez si le fichier existe déjà
+		if (!fichier.exists()) 
+		{
+			ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion);
+			fichierControleur.ajouterFichier("");
+			fichierControleur.ajouterRtf("/question" + this.numQuestion + ".rtf");
+			fichierControleur.ecrireQuestion("/question" + this.numQuestion + ".rtf", this);
+			System.out.println("Fichier créé : " + chemin);
+		} 
+		else 
+		{
+			System.out.println("Le fichier existe déjà : " + chemin);
+		}
+	}
 
 
 

@@ -223,7 +223,12 @@ public class Controleur
 
 	public static void ouvrirCreerQuestion()
 	{
-		new CreerQuestion();
+		new CreerQuestion(null);
+	}
+
+	public static CreerQuestion ouvrirCreerQuestion(Question qstAModifier)
+	{
+		return (new CreerQuestion(qstAModifier));
 	}
 
 	public static void ouvrirCreerEvaluation()
@@ -352,7 +357,7 @@ public class Controleur
 		Ressource.mettreAJourRessources();
 	}
 
-	public void supprQuestion(Question question)
+	public static void supprQuestion(Question question)
 	{
 		Metier.supprimerQuestion(question);
 		question.mettreAJourQuestions();
