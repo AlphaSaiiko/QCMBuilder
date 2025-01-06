@@ -1022,29 +1022,29 @@ public class CreationQuestionHTML {
 	{
 		StringBuilder jsContent = new StringBuilder();
 
-		jsContent.append("const timerElement = document.getElementById('timer');");
-		jsContent.append("");
-		jsContent.append("let timeRemaining = parseInt(timerElement.textContent, 10);");
-		jsContent.append("");
-		jsContent.append("function formatTime(seconds) {");
-		jsContent.append("    const minutes = Math.floor(seconds / 60);");
-		jsContent.append("    const secs = seconds % 60;");
-		jsContent.append("    return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;");
-		jsContent.append("}");
-		jsContent.append("");
-		jsContent.append("timerElement.textContent = formatTime(timeRemaining);");
-		jsContent.append("");
-		jsContent.append("function countdown() {");
-		jsContent.append("    if (timeRemaining > 0) {");
-		jsContent.append("        timeRemaining--;");
-		jsContent.append("        timerElement.textContent = formatTime(timeRemaining);");
-		jsContent.append("    } else {");
-		jsContent.append("        clearInterval(timerInterval);");
-		jsContent.append("        alert(\"Le temps est écoulé !\");");
-		jsContent.append("    }");
-		jsContent.append("}");
-		jsContent.append("");
-		jsContent.append("const timerInterval = setInterval(countdown, 1000);");
+		jsContent.append("const timerElement = document.getElementById('timer');").append("\n");
+		jsContent.append("").append("\n");
+		jsContent.append("let timeRemaining = parseInt(timerElement.textContent, 10);").append("\n");
+		jsContent.append("").append("\n");
+		jsContent.append("function formatTime(seconds) {").append("\n");
+		jsContent.append("    const minutes = Math.floor(seconds / 60);").append("\n");
+		jsContent.append("    const secs = seconds % 60;").append("\n");
+		jsContent.append("    return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;").append("\n");
+		jsContent.append("}").append("\n");
+		jsContent.append("").append("\n");
+		jsContent.append("timerElement.textContent = formatTime(timeRemaining);").append("\n");
+		jsContent.append("").append("\n");
+		jsContent.append("function countdown() {").append("\n");
+		jsContent.append("    if (timeRemaining > 0) {").append("\n");
+		jsContent.append("        timeRemaining--;").append("\n");
+		jsContent.append("        timerElement.textContent = formatTime(timeRemaining);").append("\n");
+		jsContent.append("    } else {").append("\n");
+		jsContent.append("        clearInterval(timerInterval);").append("\n");
+		jsContent.append("        alert(\"Le temps est écoulé !\");").append("\n");
+		jsContent.append("    }").append("\n");
+		jsContent.append("}").append("\n");
+		jsContent.append("").append("\n");
+		jsContent.append("const timerInterval = setInterval(countdown, 1000);").append("\n");
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/timer.js"))) {
 			writer.write(jsContent.toString());
