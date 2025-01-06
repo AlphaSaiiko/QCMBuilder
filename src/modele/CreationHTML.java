@@ -46,12 +46,6 @@ public class CreationHTML {
 		if (evaluation.getChrono()){htmlContent.append("<title>Evaluation Chronométrée</title>\n");}
 		else {htmlContent.append("<title>Evaluation</title>\n");}
 		htmlContent.append("<link rel=\"stylesheet\" href=\"style.css\">");
-		htmlContent.append("<script>\n");
-		htmlContent.append("    window.onload = function() {\n");
-		htmlContent.append("        // Réinitialiser toutes les sauvegardes du sessionStorage\n");
-		htmlContent.append("        sessionStorage.clear();\n");
-		htmlContent.append("    };\n");
-		htmlContent.append("</script>\n");
 		htmlContent.append("</head>\n");
 		htmlContent.append("<body>\n");
 
