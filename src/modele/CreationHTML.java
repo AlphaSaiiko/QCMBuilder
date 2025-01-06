@@ -391,9 +391,9 @@ public class CreationHTML {
 		if (tf>0){htmlContent.append(tf+"<span class=\"cercleTresFacile\">TF</span> ");}
 		if (f>0){htmlContent.append(f+"<span class=\"cercleFacile\">F</span> ");}
 		if (m>0){htmlContent.append(m+"<span class=\"cercleMoyen\">M</span> ");}
-		if (d>0){htmlContent.append(tf+"<span class=\"cercleDifficile\">D</span> ");}
+		if (d>0){htmlContent.append(d+"<span class=\"cercleDifficile\">D</span> ");}
 		htmlContent.append("</p> \n");
-		htmlContent.append("        <p> <span class=\"bold-texte\">Score global : </span> 4/"+this.evaluation.getNbQuestion()+"</p>").append("\n");
+		htmlContent.append("        <p> <span class=\"bold-texte\">Score global : </span> 4/"+this.evaluation.getNbPoints()+"</p>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
