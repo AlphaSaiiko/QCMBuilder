@@ -308,6 +308,16 @@ public class CreationHTML {
 
 	public void pageAccueil(String ressource, List<Notion> notion, int nbQuestion, int duree)
 	{
+		int tf, f, d, m;
+
+		tf = f = d =m = 0;
+
+		tf = this.evaluation.getQuestionTresFacile();
+		f = this.evaluation.getQuestionFacile();
+		m = this.evaluation.getQuestionMoyen();
+		d = this.evaluation.getQuestionDifficile();
+
+
 		if (this.evaluation.getChrono())
 		{
 			htmlContent.append("\t<div class=\"container\">").append("\n");
@@ -323,7 +333,12 @@ public class CreationHTML {
 		{
 			htmlContent.append("\t\t<p><strong>Notion(s) :</strong> "+n.getNom()+"</p>").append("\n");
 		}
-		htmlContent.append("\t\t<p><strong>Nombre de questions :</strong> 21 dont 11 <b>F</b> et 10 <b>M</b></p>").append("\n");
+		htmlContent.append("\t\t<p><strong>Nombre de questions :</strong> "+(tf+f+m+d)+" dont ");
+		if (tf>0){htmlContent.append("\t\t "+tf+" Très Facile  ");}
+		if (f>0){htmlContent.append("\t\t  "+f+" Facile  ");}
+		if (m>0){htmlContent.append("\t\t  "+m+" Moyenne  ");}
+		if (d>0){htmlContent.append("\t\t  "+d+" Difficile  ");}
+		htmlContent.append("</p>");
 		if (duree >= 0){
 			if (duree>60)
 			{

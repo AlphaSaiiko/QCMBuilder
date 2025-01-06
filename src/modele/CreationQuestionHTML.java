@@ -44,6 +44,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
+		htmlContent.append("<p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>");
 		if (this.evaluation.getChrono())
 		{
 			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
@@ -131,6 +132,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
+		htmlContent.append("<p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>");
 		if (this.evaluation.getChrono())
 		{
 			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
@@ -215,6 +217,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
+		htmlContent.append("<p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>");
 		if (this.evaluation.getChrono())
 		{
 			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
@@ -290,6 +293,7 @@ public class CreationQuestionHTML {
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
 		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
+		htmlContent.append("<p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>");
 		if (this.evaluation.getChrono())
 		{
 			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
