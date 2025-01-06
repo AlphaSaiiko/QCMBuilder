@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import modele.Notion;
@@ -163,12 +164,26 @@ public class ControleurFichier
 			int indexDernierSlash = emplacement.lastIndexOf("/");
 			new File(emplacement.substring(0, indexDernierSlash + 1) + File.separator + "complements").mkdirs();
 
-			List<String> listeComplements = getImages(enonce);
-			for (String image : listeComplements)
+			List<String> listeImages = getImages(enonce);
+			for (String image : listeImages)
 			{
 				File fichierSource = new File(image);
-				copierImage(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
-				enonce = gererPiecesJointes(enonce, emplacement.substring(0, indexDernierSlash + 1) + "complements/");
+				copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+				enonce = gererImages(enonce);
+			}
+		}
+
+		if (aPieceJointe(qst.getEnonce(), emplacement))
+		{
+			int indexDernierSlash = emplacement.lastIndexOf("/");
+			new File(emplacement.substring(0, indexDernierSlash + 1) + File.separator + "complements").mkdirs();
+
+			List<String> listePiecesJointes = getPiecesJointes(enonce);
+			for (String pieceJointe : listePiecesJointes)
+			{
+				File fichierSource = new File(pieceJointe);
+				copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+				enonce = gererPiecesJointes(enonce);
 			}
 		}
 			
@@ -184,12 +199,12 @@ public class ControleurFichier
 					int indexDernierSlash = emplacement.lastIndexOf("/");
 					new File(emplacement.substring(0, indexDernierSlash + 1) + File.separator + "complements").mkdirs();
 
-					List<String> listeComplements = getImages(enonce);
-					for (String image : listeComplements)
+					List<String> listeImages = getImages(enonce);
+					for (String image : listeImages)
 					{
 						File fichierSource = new File(image);
-						copierImage(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
-						enonce = gererPiecesJointes(enonce, emplacement.substring(0, indexDernierSlash + 1) + "complements/");
+						copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+						enonce = gererImages(enonce);
 					}
 				}
 
@@ -223,20 +238,26 @@ public class ControleurFichier
 	}
 
 
+	private boolean aImage(String contenu, String emplacement)
+	{
+		String  regex   = "<img\\s+[^>]*src\\s*=\\s*\"[^\"]+\"";
+		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(contenu);
 
-	// FULL CHATGPT
-    private boolean aImage(String contenu, String emplacement) {
-        // Expression régulière pour détecter une balise <img> avec l'attribut src
-        String regex = "<img\\s+[^>]*src\\s*=\\s*\"[^\"]+\"";
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(contenu);
-
-        // Retourne vrai si une correspondance est trouvée
-        return matcher.find();
-    }
+		return matcher.find();
+	}
 
 
-	// ENCORE FULL CHATGPT
+	private boolean aPieceJointe(String contenu, String emplacement)
+	{
+		String  regex   = "<a\\s+[^>]*href\\s*=\\s*\"file:///[^\"\\s]+\"";
+		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(contenu);
+
+		return matcher.find();
+	}
+
+
 	private static List<String> getImages(String contenu) {
         // Liste pour stocker les chemins des images trouvés
         List<String> imagePaths = new ArrayList<>();
@@ -260,8 +281,38 @@ public class ControleurFichier
     }
 
 
-	// TOUJOURS ENCORE FULL CHATGPT
-	public static void copierImage(File fichierSource, String emplacementCible) {
+	private static List<String> getPiecesJointes(String contenu) {
+		// Liste pour stocker les chemins des pièces jointes trouvées
+		List<String> pieceJointePaths = new ArrayList<>();
+	
+		// Expression régulière pour trouver les balises <a> avec un attribut href
+		String regex = "<a[^>]*href=\\\"([^\\\"]*)\\\"";
+	
+		// Compiler l'expression régulière
+		Pattern pattern = Pattern.compile(regex);
+	
+		// Matcher pour rechercher les correspondances dans le contenu
+		Matcher matcher = pattern.matcher(contenu);
+	
+		// Parcourir toutes les correspondances trouvées
+		while (matcher.find()) {
+			// Récupérer la valeur de l'attribut href
+			String chemin = matcher.group(1);
+	
+			// Supprimer le préfixe "file:" s'il existe
+			if (chemin.startsWith("file:")) {
+				chemin = chemin.replace("file:", "");
+			}
+	
+			// Ajouter le chemin nettoyé à la liste
+			pieceJointePaths.add(chemin);
+		}
+	
+		return pieceJointePaths;
+	}
+	
+
+	public static void copierFichier(File fichierSource, String emplacementCible) {
         File fichierCible = new File(emplacementCible);
 
         // Vérifie si le fichier source existe
@@ -288,41 +339,74 @@ public class ControleurFichier
     }
 
 
-	// ON FINI PAR DU CHATGPT
-	public static String gererPiecesJointes(String enonce, String emplacement) {
-        // Expression régulière pour détecter les balises <img> avec un attribut src
-        String regex = "<img\\s+[^>]*src\\s*=\\s*\"([^\"]+)\"";
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(enonce);
 
-        // Construire le nouveau contenu avec les chemins mis à jour
-        StringBuffer resultat = new StringBuffer();
+	public static String gererImages(String enonce) {
+		// Expression régulière pour détecter les balises <img> avec un attribut src
+		String regex = "<img\\s+[^>]*src\\s*=\\s*\"([^\"]+)\"";
+		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(enonce);
+	
+		// Construire le nouveau contenu avec les chemins mis à jour
+		StringBuffer resultat = new StringBuffer();
+	
+		while (matcher.find()) {
+			// Chemin d'origine de l'image
+			String cheminOrigine = matcher.group(1);
+	
+			// Extraire uniquement le nom du fichier
+			String nomFichier = cheminOrigine.substring(
+				Math.max(cheminOrigine.lastIndexOf("/"), cheminOrigine.lastIndexOf("\\")) + 1
+			);
+	
+			// Nouveau chemin relatif : ici on suppose que toutes les images vont dans le dossier "images/"
+			String nouveauChemin = "complements/" + nomFichier;
+	
+			// Remplacer le chemin d'origine par le nouveau chemin dans la balise <img>
+			matcher.appendReplacement(resultat, matcher.group(0).replace(cheminOrigine, nouveauChemin));
+		}
+	
+		// Ajouter le reste du texte après la dernière correspondance
+		matcher.appendTail(resultat);
+	
+		return resultat.toString();
+	}
+	
 
-        while (matcher.find()) {
-            // Chemin d'origine de l'image
-            String cheminOrigine = matcher.group(1);
 
-            // Extraire uniquement le nom du fichier
-            String nomFichier = cheminOrigine.substring(cheminOrigine.lastIndexOf("\\") + 1);
-
-            // Vérifier si le chemin généré contient déjà l'emplacement relatif
-            if (!cheminOrigine.contains(emplacement)) {
-                // Nouveau chemin relatif
-                String nouveauChemin = "./" + emplacement.replace("\\", "/") + nomFichier;
-
-                // Remplacer le chemin d'origine par le nouveau chemin dans la balise <img>
-                matcher.appendReplacement(resultat, matcher.group(0).replace(cheminOrigine, nouveauChemin));
-            } else {
-                // Conserver le chemin existant si déjà correct
-                matcher.appendReplacement(resultat, matcher.group(0));
-            }
-        }
-
-        // Ajouter le reste du texte après la dernière correspondance
-        matcher.appendTail(resultat);
-
-        return resultat.toString();
-    }
+	public static String gererPiecesJointes(String enonce) {
+		// Expression régulière pour détecter les balises <a> avec un attribut href
+		String regex = "<a\\s+[^>]*href\\s*=\\s*\"([^\"]+)\"";
+		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(enonce);
+	
+		// Construire le nouveau contenu avec les chemins mis à jour
+		StringBuffer resultat = new StringBuffer();
+	
+		while (matcher.find()) {
+			// Chemin d'origine de la pièce jointe
+			String cheminOrigine = matcher.group(1);
+	
+			// Extraire uniquement le nom du fichier en prenant en compte les deux types de séparateurs
+			String nomFichier = cheminOrigine.substring(
+				Math.max(cheminOrigine.lastIndexOf("/"), cheminOrigine.lastIndexOf("\\")) + 1
+			);
+	
+			// Nouveau chemin relatif : ici on suppose que toutes les pièces jointes vont dans le dossier "images/"
+			String nouveauChemin = "complements/" + nomFichier;
+	
+			// Remplacer le chemin d'origine par le nouveau chemin dans la balise <a>
+			matcher.appendReplacement(resultat, matcher.group(0).replace(cheminOrigine, nouveauChemin));
+		}
+	
+		// Ajouter le reste du texte après la dernière correspondance
+		matcher.appendTail(resultat);
+	
+		return resultat.toString();
+	}
+	
+	
+	
+	
 
 
 
