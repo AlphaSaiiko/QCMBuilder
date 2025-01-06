@@ -48,8 +48,8 @@ public class CreationHTML {
 		htmlContent.append("<link rel=\"stylesheet\" href=\"style.css\">");
 		htmlContent.append("<script>\n");
 		htmlContent.append("    window.onload = function() {\n");
-		htmlContent.append("        // Réinitialiser toutes les sauvegardes du localStorage\n");
-		htmlContent.append("        localStorage.clear();\n");
+		htmlContent.append("        // Réinitialiser toutes les sauvegardes du sessionStorage\n");
+		htmlContent.append("        sessionStorage.clear();\n");
 		htmlContent.append("    };\n");
 		htmlContent.append("</script>\n");
 		htmlContent.append("</head>\n");
@@ -399,7 +399,7 @@ public class CreationHTML {
 		htmlContent.append("<script>").append("\n");
 		htmlContent.append("    // Fonction pour mettre à jour le score global").append("\n");
 		htmlContent.append("    function updateScore() {").append("\n");
-		htmlContent.append("        const totalPoints = localStorage.getItem('points') ? parseFloat(localStorage.getItem('points')) : 0;").append("\n");
+		htmlContent.append("        const totalPoints = sessionStorage.getItem('points') ? parseFloat(sessionStorage.getItem('points')) : 0;").append("\n");
 		htmlContent.append("        document.getElementById('score').textContent = totalPoints.toFixed(2);").append("\n"); // Affiche jusqu'à 2 chiffres après la virgule
 		htmlContent.append("    }").append("\n");
 		htmlContent.append("    // Appeler la fonction pour mettre à jour le score lorsque la page se charge").append("\n");
