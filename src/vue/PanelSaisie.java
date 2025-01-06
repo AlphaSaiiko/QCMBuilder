@@ -44,8 +44,7 @@ public class PanelSaisie extends JPanel
 	
 	public PanelSaisie(boolean pieceJointe)
 	{
-		if (pieceJointe)
-			listePiecesJointes = new ArrayList<>();
+		listePiecesJointes = new ArrayList<>();
 		
 
 		// Définir un layout qui occupe tout l'espace disponible
@@ -195,9 +194,8 @@ public class PanelSaisie extends JPanel
 			if (image != null && image instanceof ImageIcon)
 			{
 				String emplacementImage = ((ImageIcon) image).getDescription();
-//				String nomImage         = new File(emplacementImage).getName();
 
-				contenu += "<img src=\"" + emplacementImage + "\" alt=\"Image\">";
+				contenu += "<img src=\"" + emplacementImage + "\">";
 			}
 			else
 			{
@@ -214,6 +212,17 @@ public class PanelSaisie extends JPanel
 				{
 					e.printStackTrace();
 				}
+			}
+		}
+
+		if (!this.listePiecesJointes.isEmpty())
+		{
+			for (File pieceJointe : listePiecesJointes)
+			{
+				String emplacementFichier = pieceJointe.getAbsolutePath();
+				String nomFichier         = pieceJointe.getName();
+				
+				contenu += "<a href=\"file:///" + emplacementFichier + "\" target=\"_blank\">" + nomFichier + "</a><br>";
 			}
 		}
 
@@ -313,7 +322,8 @@ public class PanelSaisie extends JPanel
 	
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			File fichier = fileChooser.getSelectedFile();
-			listePiecesJointes.add(fichier);
+			this.listePiecesJointes.add(fichier);
+			System.out.println(this.listePiecesJointes);
 	
 			JPanel panelPieceJointe = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			panelPieceJointe.setBorder(new LineBorder(Color.BLACK, 1));
@@ -332,10 +342,10 @@ public class PanelSaisie extends JPanel
 	
 			btnSupprimer.addActionListener(e ->
 			{
-				listePiecesJointes.remove(fichier);
+				this.listePiecesJointes.remove(fichier);
 				panelPiecesJointes.remove(panelPieceJointe);
 	
-				if (listePiecesJointes.isEmpty())
+				if (this.listePiecesJointes.isEmpty())
 					this.remove(scrollPanePiecesJointes);
 		
 				this.revalidate();
