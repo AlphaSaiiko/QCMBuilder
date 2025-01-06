@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mélanger les réponses (au cas où)
     randomizeOrder('.reponse', '#question');
 
-    // Initialiser les points à partir du sessionStorage
-    let totalPoints = sessionStorage.getItem('points') ? parseFloat(sessionStorage.getItem('points')) : 0;
+    // Initialiser les points à partir du localStorage
+    let totalPoints = localStorage.getItem('points') ? parseFloat(localStorage.getItem('points')) : 0;
     document.getElementById('points').textContent = `Points : ${totalPoints}`;
 
     // Gérer la sélection des réponses
     let selectedAnswer = null;
-    let isValidationDone = sessionStorage.getItem(`isValidationDone-${questionId}`) === 'true';
+    let isValidationDone = localStorage.getItem(`isValidationDone-${questionId}`) === 'true';
     if (isValidationDone) {
         restoreState(questionId);
         transformButtonToFeedback(); // Assurez-vous d'appeler la fonction ici
@@ -38,32 +38,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const popupText = document.getElementById('popup-text');
         const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));
 
-        if (selectedAnswer) {
-            if (selectedAnswer.classList.contains('bonne-reponse')) {
-                popupText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
-                totalPoints += questionPoints;
-                sessionStorage.setItem('points', totalPoints);
-                document.getElementById('points').textContent = `Points : ${totalPoints}`;
-            } else {
-                popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
-                selectedAnswer.style.backgroundColor = 'red';
+        if (selectedAnswer || timerElement.textContent === '00:00') {
+            if (timerElement.textContent === '00:00') {
+                popupText.innerHTML = '<span style="color: red;">Le temps est écoulé!</span>';
+
+                // Mettre en évidence les bonnes réponses
+                document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
+                    goodAnswer.style.backgroundColor = 'green';
+                });
             }
-            // Mettre en évidence les bonnes réponses
-            document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
-                goodAnswer.style.backgroundColor = 'green';
-            });
+            else
+            {
+                if (selectedAnswer.classList.contains('bonne-reponse')) {
+                    popupText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
+                    totalPoints += questionPoints;
+                    localStorage.setItem('points', totalPoints);
+                    document.getElementById('points').textContent = `Points : ${totalPoints}`;
+                } else {
+                    popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
+                    selectedAnswer.style.backgroundColor = 'red';
+                }
+                // Mettre en évidence les bonnes réponses
+                document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
+                    goodAnswer.style.backgroundColor = 'green';
+                });
 
-            // Sauvegarder l'état
-            sessionStorage.setItem(`isValidationDone-${questionId}`, true);
-            sessionStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.innerHTML);
-            sessionStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
+                // Sauvegarder l'état
+                localStorage.setItem(`isValidationDone-${questionId}`, true);
+                localStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.innerHTML);
+                localStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
 
-            // Transformer le bouton 'Valider' en 'Feedback'
-            transformButtonToFeedback();
+                // Transformer le bouton 'Valider' en 'Feedback'
+                transformButtonToFeedback();
 
-            // Afficher le pop-up personnalisé
-            popup.style.display = 'flex';
-            isValidationDone = true; // Ne marquer comme "validation terminée" que si une réponse est sélectionnée
+                // Afficher le pop-up personnalisé
+                popup.style.display = 'flex';
+                isValidationDone = true; // Ne marquer comme "validation terminée" que si une réponse est sélectionnée
+            }
         } else if (!isValidationDone) {
             alert('Veuillez sélectionner une réponse !');
             isValidationDone = false;
@@ -81,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
         validerButton.addEventListener('click', () => {
             const popupFeedback = document.getElementById('popup');
             const popupFeedbackText = document.getElementById('popup-text');
-            const savedPopupText = sessionStorage.getItem(`popupText-${questionId}`);
+            const savedPopupText = localStorage.getItem(`popupText-${questionId}`);
             if (savedPopupText) {
                 popupFeedbackText.innerHTML = savedPopupText;
             } else {
@@ -103,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function restoreState(questionId) {
-    const selectedAnswerText = sessionStorage.getItem(`selectedAnswer-${questionId}`);
+    const selectedAnswerText = localStorage.getItem(`selectedAnswer-${questionId}`);
     document.querySelectorAll('.reponse').forEach(reponse => {
         if (reponse.innerHTML === selectedAnswerText) {
             reponse.classList.add('selected');
@@ -117,7 +128,7 @@ function restoreState(questionId) {
     document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
         goodAnswer.style.backgroundColor = 'green';
     });
-    const savedPopupText = sessionStorage.getItem(`popupText-${questionId}`);
+    const savedPopupText = localStorage.getItem(`popupText-${questionId}`);
     if (savedPopupText) {
         document.getElementById('popup-text').innerHTML = savedPopupText;
     }
