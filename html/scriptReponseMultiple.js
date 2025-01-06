@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mélanger les réponses
     randomizeOrder('.reponse', '.question');
 
-    // Initialiser les points à partir du localStorage
-    let totalPoints = localStorage.getItem('points') ? parseFloat(localStorage.getItem('points')) : 0;
+    // Initialiser les points à partir du sessionStorage
+    let totalPoints = sessionStorage.getItem('points') ? parseFloat(sessionStorage.getItem('points')) : 0;
     document.getElementById('points').textContent = `Points : ${totalPoints}`;
 
     // Gérer la sélection des réponses
     let selectedAnswers = new Set();
-    let isValidationDone = localStorage.getItem(`isValidationDone-${questionId}`) === 'true';
+    let isValidationDone = sessionStorage.getItem(`isValidationDone-${questionId}`) === 'true';
     if (isValidationDone) {
         restoreState(questionId);
         transformButtonToFeedback();
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (allCorrect && allGoodSelected) {
                 popupText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
                 totalPoints += questionPoints;
-                localStorage.setItem('points', totalPoints);
+                sessionStorage.setItem('points', totalPoints);
                 document.getElementById('points').textContent = `Points : ${totalPoints}`;
             } else {
                 popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
@@ -80,9 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Sauvegarder l'état
-            localStorage.setItem(`isValidationDone-${questionId}`, true);
-            localStorage.setItem(`selectedAnswers-${questionId}`, JSON.stringify(Array.from(selectedAnswers)));
-            localStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
+            sessionStorage.setItem(`isValidationDone-${questionId}`, true);
+            sessionStorage.setItem(`selectedAnswers-${questionId}`, JSON.stringify(Array.from(selectedAnswers)));
+            sessionStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
 
             // Transformer le bouton 'Valider' en 'Feedback'
             transformButtonToFeedback();
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function showFeedback() {
         const popup = document.getElementById('popup');
         const popupText = document.getElementById('popup-text');
-        const savedPopupText = localStorage.getItem(`popupText-${questionId}`);
+        const savedPopupText = sessionStorage.getItem(`popupText-${questionId}`);
         if (savedPopupText) {
             popupText.innerHTML = savedPopupText;
         } else {
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function restoreState(questionId) {
-    const selectedAnswers = JSON.parse(localStorage.getItem(`selectedAnswers-${questionId}`));
+    const selectedAnswers = JSON.parse(sessionStorage.getItem(`selectedAnswers-${questionId}`));
     if (selectedAnswers) {
         selectedAnswers.forEach(answerId => {
             const reponse = document.getElementById(answerId);
@@ -143,7 +143,7 @@ function restoreState(questionId) {
             }
         });
     }
-    const savedPopupText = localStorage.getItem(`popupText-${questionId}`);
+    const savedPopupText = sessionStorage.getItem(`popupText-${questionId}`);
     if (savedPopupText) {
         document.getElementById('popup-text').innerHTML = savedPopupText;
     }

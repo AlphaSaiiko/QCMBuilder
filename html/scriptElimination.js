@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mélanger les réponses
     randomizeOrder('.reponse', '.question');
 
-    // Initialiser les points à partir du localStorage
-    let totalPoints = localStorage.getItem('points') ? parseFloat(localStorage.getItem('points')) : 0;
+    // Initialiser les points à partir du sessionStorage
+    let totalPoints = sessionStorage.getItem('points') ? parseFloat(sessionStorage.getItem('points')) : 0;
     document.getElementById('points').textContent = `Points : ${totalPoints}`;
 
     // Initialiser les points potentiels
@@ -30,14 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
             potentialPoints += ptselim;
 
             // Sauvegarder l'ordre d'élimination
-            localStorage.setItem(`eliminationOrder-${questionId}`, currentIndex);
-            localStorage.setItem(`potentialPoints-${questionId}`, potentialPoints);
+            sessionStorage.setItem(`eliminationOrder-${questionId}`, currentIndex);
+            sessionStorage.setItem(`potentialPoints-${questionId}`, potentialPoints);
         }
     });
 
     // Gérer la sélection des réponses
     let selectedAnswer = null;
-    let isValidationDone = localStorage.getItem(`isValidationDone-${questionId}`) === 'true';
+    let isValidationDone = sessionStorage.getItem(`isValidationDone-${questionId}`) === 'true';
     if (isValidationDone) {
         restoreState();
         initializeToFeedback();
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     popupText.innerHTML = '<span style="color: green;">Bonne réponse !</span>';
                     selectedAnswer.style.backgroundColor = 'green';
                     totalPoints += potentialPoints; // Ajouter les points potentiels au score total
-                    localStorage.setItem('points', totalPoints);
+                    sessionStorage.setItem('points', totalPoints);
                     document.getElementById('points').textContent = `Points : ${totalPoints}`;
                 } else {
                     popupText.innerHTML = '<span style="color: red;">Mauvaise réponse !</span>';
@@ -86,9 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 initializeToFeedback();
 
                 // Sauvegarder l'état
-                localStorage.setItem(`isValidationDone-${questionId}`, true);
-                localStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.getAttribute('id'));
-                localStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
+                sessionStorage.setItem(`isValidationDone-${questionId}`, true);
+                sessionStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.getAttribute('id'));
+                sessionStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
             } else {
                 alert('Veuillez sélectionner une réponse.');
             }
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function restoreState() {
-        const savedSelectedAnswerId = localStorage.getItem(`selectedAnswer-${questionId}`);
+        const savedSelectedAnswerId = sessionStorage.getItem(`selectedAnswer-${questionId}`);
         if (savedSelectedAnswerId) {
             const savedSelectedAnswer = document.getElementById(savedSelectedAnswerId);
             if (savedSelectedAnswer) {
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        const savedPopupText = localStorage.getItem(`popupText-${questionId}`);
+        const savedPopupText = sessionStorage.getItem(`popupText-${questionId}`);
         if (savedPopupText) {
             document.getElementById('popup-text').innerHTML = savedPopupText;
         }
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             goodAnswer.style.backgroundColor = 'green';
         });
 
-        const savedEliminationOrder = parseInt(localStorage.getItem(`eliminationOrder-${questionId}`), 10);
+        const savedEliminationOrder = parseInt(sessionStorage.getItem(`eliminationOrder-${questionId}`), 10);
         for (let i = 0; i < savedEliminationOrder; i++) {
             const toEliminate = eliminationOrder[i];
             const ptselim = parseFloat(toEliminate.getAttribute('ptselim'));

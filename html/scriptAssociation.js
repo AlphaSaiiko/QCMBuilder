@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const pointsElem = document.getElementById('points');
-    let totalPoints = parseFloat(localStorage.getItem('points')) || 0;
+    let totalPoints = parseFloat(sessionStorage.getItem('points')) || 0;
     pointsElem.textContent = `Points : ${totalPoints}`;  // Mise à jour des points affichés
 
     randomizeOrder('.word', '#words');
@@ -147,17 +147,17 @@ function validate(questionId) {
 
     isValidationDone = true;
     feedbackClicked = true;
-    localStorage.setItem(`isValidationDone-${questionId}`, 'true');
-    localStorage.setItem(`connexions-${questionId}`, JSON.stringify(connexions));
-    localStorage.setItem(`popupMessage-${questionId}`, popupMessage);
+    sessionStorage.setItem(`isValidationDone-${questionId}`, 'true');
+    sessionStorage.setItem(`connexions-${questionId}`, JSON.stringify(connexions));
+    sessionStorage.setItem(`popupMessage-${questionId}`, popupMessage);
 
     document.querySelector(`.btn[onclick^="validate(${questionId})"]`).textContent = 'Feedback';
 }
 
 function updatePoints(points) {
-    let totalPoints = parseFloat(localStorage.getItem('points')) || 0;
+    let totalPoints = parseFloat(sessionStorage.getItem('points')) || 0;
     totalPoints += points;
-    localStorage.setItem('points', totalPoints);
+    sessionStorage.setItem('points', totalPoints);
     document.getElementById('points').textContent = `Points : ${totalPoints}`;
 }
 
@@ -174,9 +174,9 @@ document.getElementById('popup-close').addEventListener('click', () => {
 });
 
 function loadPreviousState(questionId) {
-    if (localStorage.getItem(`isValidationDone-${questionId}`) === 'true') {
+    if (sessionStorage.getItem(`isValidationDone-${questionId}`) === 'true') {
         isValidationDone = true;
-        const savedConnexions = JSON.parse(localStorage.getItem(`connexions-${questionId}`));
+        const savedConnexions = JSON.parse(sessionStorage.getItem(`connexions-${questionId}`));
         let correct = true;
         for (let motId in savedConnexions) {
             const defId = savedConnexions[motId];
@@ -191,7 +191,7 @@ function loadPreviousState(questionId) {
             }
         }
 
-        const savedPopupMessage = localStorage.getItem(`popupMessage-${questionId}`);
+        const savedPopupMessage = sessionStorage.getItem(`popupMessage-${questionId}`);
         if (savedPopupMessage) {
             document.querySelector(`.btn[onclick^="validate(${questionId})"]`).addEventListener('click', () => {
                 showPopup(savedPopupMessage);
