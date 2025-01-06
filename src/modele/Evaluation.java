@@ -19,6 +19,7 @@ public class Evaluation
 	private boolean			bChrono;
 	private int questionTf, questionF, questionM, questionD;
 	private float nbPoint;
+	private String chemin;
 
 
 
@@ -29,7 +30,7 @@ public class Evaluation
 	 * +--------------+
 	 */
 
-	public Evaluation(Ressource ressource, boolean bChrono)
+	public Evaluation(Ressource ressource, boolean bChrono, String chemin)
 	{
 		this.ressource	    = ressource                ;
 		this.listeNotions   = new ArrayList<Notion>  ();
@@ -37,6 +38,7 @@ public class Evaluation
 		this.bChrono = bChrono;
 		this.questionTf = this.questionF = this.questionM = this.questionD = 0;
 		this.nbPoint = 0;
+		this.chemin = chemin;
 	}
 
 
@@ -59,6 +61,7 @@ public class Evaluation
 	public int getQuestionDifficile() { return this.questionD;}
 	public int getNbQuestion() { return this.questionTf+this.questionF+this.questionM+this.questionD;}
 	public float getNbPoints() {return this.nbPoint;}
+	public String getChemin() {return this.chemin;}
 
 
 
