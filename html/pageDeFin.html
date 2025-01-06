@@ -12,7 +12,16 @@
         <p> <span class="bold-texte"> Ressource : </span> Tests</p>
         <p><span class="bold-texte"> Notion(s) : </span> Test 1</p>
         <p> <span class="bold-texte"> Nombre de questions : </span> 3 dont 1<span class="cercleFacile">F</span> 1<span class="cercleMoyen">M</span> 1<span class="cercleDifficile">D</span> </p> 
-        <p> <span class="bold-texte">Score global : </span> 4/3.0</p>
+        <p> <span class="bold-texte">Score global : </span> <span id="score"></span>/3.0</p>
     </div>
 </body>
+<script>
+    // Fonction pour mettre à jour le score global
+    function updateScore() {
+        const totalPoints = localStorage.getItem('points') ? parseFloat(localStorage.getItem('points')) : 0;
+        document.getElementById('score').textContent = totalPoints.toFixed(2);
+    }
+    // Appeler la fonction pour mettre à jour le score lorsque la page se charge
+    document.addEventListener('DOMContentLoaded', updateScore);
+</script>
 </html>

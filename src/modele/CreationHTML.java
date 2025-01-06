@@ -393,10 +393,21 @@ public class CreationHTML {
 		if (m>0){htmlContent.append(m+"<span class=\"cercleMoyen\">M</span> ");}
 		if (d>0){htmlContent.append(d+"<span class=\"cercleDifficile\">D</span> ");}
 		htmlContent.append("</p> \n");
-		htmlContent.append("        <p> <span class=\"bold-texte\">Score global : </span> 4/"+this.evaluation.getNbPoints()+"</p>").append("\n");
+		htmlContent.append("        <p> <span class=\"bold-texte\">Score global : </span> <span id=\"score\"></span>/"+this.evaluation.getNbPoints()+"</p>").append("\n");
 		htmlContent.append("    </div>").append("\n");
 		htmlContent.append("</body>").append("\n");
+		htmlContent.append("<script>").append("\n");
+		htmlContent.append("    // Fonction pour mettre à jour le score global").append("\n");
+		htmlContent.append("    function updateScore() {").append("\n");
+		htmlContent.append("        const totalPoints = localStorage.getItem('points') ? parseFloat(localStorage.getItem('points')) : 0;").append("\n");
+		htmlContent.append("        document.getElementById('score').textContent = totalPoints.toFixed(2);").append("\n"); // Affiche jusqu'à 2 chiffres après la virgule
+		htmlContent.append("    }").append("\n");
+		htmlContent.append("    // Appeler la fonction pour mettre à jour le score lorsque la page se charge").append("\n");
+		htmlContent.append("    document.addEventListener('DOMContentLoaded', updateScore);").append("\n");
+		htmlContent.append("</script>").append("\n");
 		htmlContent.append("</html>").append("\n");
+
+
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/pageDeFin.html"))) {
 			writer.write(htmlContent.toString());
