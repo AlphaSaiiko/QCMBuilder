@@ -3,6 +3,10 @@ package modele;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import modele.option.*;
 
@@ -11,12 +15,64 @@ public class CreationQuestionHTML {
 	private Evaluation evaluation;
 	private int nbQuestion;
 
-	public CreationQuestionHTML(Evaluation evaluation){
+	public CreationQuestionHTML(Evaluation evaluation)
+	{
 		this.evaluation = evaluation;
+	}
+
+	public void integrerComplements(Question question) {
+		// Dossier de destination pour les compléments
+		Path dossierDest = Paths.get("html/complements");
+		System.out.println("PATH COMPLEMENT : " + dossierDest);
+	
+		// Créer le dossier "complements" s'il n'existe pas déjà
+		try {
+			if (!Files.exists(dossierDest)) {
+				Files.createDirectories(dossierDest);
+				System.out.println("Dossier 'complements' créé.");
+			} else {
+				System.out.println("Le dossier 'complements' existe déjà.");
+			}
+		} catch (IOException e) {
+			System.out.println("Erreur lors de la création du dossier : " + e.getMessage());
+			return;
+		}
+	
+		// Parcourir tous les compléments de la question
+		for (String complement : question.getComplements()) {
+			try {
+				// Définir le chemin d'origine du complément
+				Path cheminOrigine = Paths.get(complement);
+	
+				// Vérifier si le fichier source existe
+				if (!Files.exists(cheminOrigine)) {
+					System.out.println("Le fichier source n'existe pas : " + complement);
+					continue; // Passer à l'élément suivant si le fichier n'existe pas
+				}
+	
+				// Extraire uniquement le nom du fichier
+				Path nomFichier = cheminOrigine.getFileName();
+	
+				// Définir le chemin de destination dans le dossier "complements"
+				Path cheminDest = dossierDest.resolve(nomFichier);
+	
+				// Vérifier si le fichier existe déjà dans la destination
+				if (Files.exists(cheminDest)) {
+					System.out.println("Le fichier existe déjà dans le dossier de destination : " + cheminDest);
+				} else {
+					// Copier le fichier dans le dossier "complements"
+					Files.copy(cheminOrigine, cheminDest, StandardCopyOption.REPLACE_EXISTING);
+					System.out.println("Complément copié : " + complement);
+				}
+			} catch (IOException e) {
+				System.out.println("Erreur lors de la copie du complément : " + complement + " - " + e.getMessage());
+			}
+		}
 	}
 
 	public void pageQuestionChoixAssociation(Question question, int numQuestion)
 	{
+		this.integrerComplements(question);
 		StringBuilder htmlContent = new StringBuilder();
 	
 		String pageSuivante;
@@ -105,6 +161,7 @@ public class CreationQuestionHTML {
 
 	public void pageQuestionElimination(Question question, int numQuestion)
 	{
+		this.integrerComplements(question);
 		StringBuilder htmlContent = new StringBuilder();
 	
 		String pageSuivante;
@@ -189,7 +246,9 @@ public class CreationQuestionHTML {
 	
 	
 
-	public void pageQuestionUnique(Question question, int numQuestion) {
+	public void pageQuestionUnique(Question question, int numQuestion)
+	{
+		this.integrerComplements(question);
 		StringBuilder htmlContent = new StringBuilder();
 	
 		String pageSuivante;
@@ -266,6 +325,7 @@ public class CreationQuestionHTML {
 
 	public void pageQuestionMultiple(Question question, int numQuestion)
 	{
+		this.integrerComplements(question);
 		StringBuilder htmlContent = new StringBuilder();
 	
 		String pageSuivante;

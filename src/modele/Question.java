@@ -284,5 +284,14 @@ public class Question
 		else
 			System.err.println("Erreur : Le fichier n'existe pas et ne peut donc pas être modifié.");
 	}
+
+
+
+	public boolean ajouterComplement(String emplacement) {
+		if (this.listeComplements.contains(emplacement))
+			return false;
+		
+		return this.listeComplements.add(emplacement);
+	}
 }
 	

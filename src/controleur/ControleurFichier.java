@@ -169,6 +169,7 @@ public class ControleurFichier
 			{
 				File fichierSource = new File(image);
 				copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+				qst.ajouterComplement(emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
 				enonce = gererImages(enonce);
 			}
 		}
@@ -183,6 +184,7 @@ public class ControleurFichier
 			{
 				File fichierSource = new File(pieceJointe);
 				copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+				qst.ajouterComplement(emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
 				enonce = gererPiecesJointes(enonce);
 			}
 		}
@@ -204,6 +206,7 @@ public class ControleurFichier
 					{
 						File fichierSource = new File(image);
 						copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+						qst.ajouterComplement(emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
 						enonce = gererImages(enonce);
 					}
 				}

@@ -222,7 +222,7 @@ public class PanelSaisie extends JPanel
 				String emplacementFichier = pieceJointe.getAbsolutePath();
 				String nomFichier         = pieceJointe.getName();
 				
-				contenu += "<a href=\"file:///" + emplacementFichier + "\" target=\"_blank\">" + nomFichier + "</a><br>";
+				contenu += "<br><a href=\"file:///" + emplacementFichier + "\" target=\"_blank\">" + nomFichier + "</a>";
 			}
 		}
 
