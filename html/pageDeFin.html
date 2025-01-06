@@ -9,16 +9,17 @@
 <body>
     <div class="corp-titre">
         <h1>Évaluation Terminée ! </h1>
-        <p> <span class="bold-texte"> Ressource : </span> Initiation au développement</p>
-        <p><span class="bold-texte"> Notion(s) : </span> Algorithmique</p>
-        <p> <span class="bold-texte"> Nombre de questions : </span> 1 dont 1<span class="cercleFacile">F</span> </p> 
-        <p> <span class="bold-texte">Score global : </span> <span id="score"></span>/5.0</p>
+        <p> <span class="bold-texte"> Ressource : </span> Tests</p>
+        <p><span class="bold-texte"> Notion(s) : </span> Test 1</p>
+        <p><span class="bold-texte"> Notion(s) : </span> Test 2</p>
+        <p> <span class="bold-texte"> Nombre de questions : </span> 8 dont 1<span class="cercleTresFacile">TF</span> 5<span class="cercleFacile">F</span> 1<span class="cercleMoyen">M</span> 1<span class="cercleDifficile">D</span> </p> 
+        <p> <span class="bold-texte">Score global : </span> <span id="score"></span>/8.0</p>
     </div>
 </body>
 <script>
     // Fonction pour mettre à jour le score global
     function updateScore() {
-        const totalPoints = localStorage.getItem('points') ? parseFloat(localStorage.getItem('points')) : 0;
+        const totalPoints = sessionStorage.getItem('points') ? parseFloat(sessionStorage.getItem('points')) : 0;
         document.getElementById('score').textContent = totalPoints.toFixed(2);
     }
     // Appeler la fonction pour mettre à jour le score lorsque la page se charge

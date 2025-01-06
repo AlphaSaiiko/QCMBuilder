@@ -42,65 +42,54 @@ document.addEventListener('DOMContentLoaded', () => {
         const popupText = document.getElementById('popup-text');
         const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));
 
-        if (selectedAnswers.size > 0 || timerElement.textContent === '00:00') {
-            if (timerElement.textContent === '00:00') {
-                popupText.innerHTML = '<span style="color: red;">Le temps est écoulé!</span>';
+        if (selectedAnswers.size > 0) {
+            let allCorrect = true;
 
-                // Mettre en évidence les bonnes réponses
-                document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
-                    goodAnswer.style.backgroundColor = 'green';
-                });
-            }
-            else
-            {
-                let allCorrect = true;
-
-                selectedAnswers.forEach(answerId => {
-                    const answerElement = document.getElementById(answerId);
-                    if (!answerElement.classList.contains('bonne-reponse')) {
-                        allCorrect = false;
-                    }
-              });
-
-                // Vérifier que toutes les bonnes réponses sont sélectionnées
-                const allGoodSelected = Array.from(document.querySelectorAll('.bonne-reponse')).every(goodAnswer => {
-                    return selectedAnswers.has(goodAnswer.id);
-                });
-
-                if (allCorrect && allGoodSelected) {
-                    popupText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
-                    totalPoints += questionPoints;
-                    sessionStorage.setItem('points', totalPoints);
-                    document.getElementById('points').textContent = `Points : ${totalPoints}`;
-                } else {
-                    popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
+            selectedAnswers.forEach(answerId => {
+                const answerElement = document.getElementById(answerId);
+                if (!answerElement.classList.contains('bonne-reponse')) {
+                    allCorrect = false;
                 }
+            });
 
-                // Mettre en évidence les bonnes réponses
-                document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
-                    goodAnswer.style.backgroundColor = 'green';
-                });
+            // Vérifier que toutes les bonnes réponses sont sélectionnées
+            const allGoodSelected = Array.from(document.querySelectorAll('.bonne-reponse')).every(goodAnswer => {
+                return selectedAnswers.has(goodAnswer.id);
+            });
 
-                // Marquer les mauvaises réponses
-                selectedAnswers.forEach(answerId => {
-                    const answerElement = document.getElementById(answerId);
-                    if (!answerElement.classList.contains('bonne-reponse')) {
-                        answerElement.style.backgroundColor = 'red';
-                    }
-                });
-
-                // Sauvegarder l'état
-                sessionStorage.setItem(`isValidationDone-${questionId}`, true);
-                sessionStorage.setItem(`selectedAnswers-${questionId}`, JSON.stringify(Array.from(selectedAnswers)));
-                sessionStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
-
-                // Transformer le bouton 'Valider' en 'Feedback'
-                transformButtonToFeedback();
-
-                // Afficher le pop-up personnalisé
-                popup.style.display = 'flex';
-                isValidationDone = true;
+            if (allCorrect && allGoodSelected) {
+                popupText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
+                totalPoints += questionPoints;
+                sessionStorage.setItem('points', totalPoints);
+                document.getElementById('points').textContent = `Points : ${totalPoints}`;
+            } else {
+                popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
             }
+
+            // Mettre en évidence les bonnes réponses
+            document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
+                goodAnswer.style.backgroundColor = 'green';
+            });
+
+            // Marquer les mauvaises réponses
+            selectedAnswers.forEach(answerId => {
+                const answerElement = document.getElementById(answerId);
+                if (!answerElement.classList.contains('bonne-reponse')) {
+                    answerElement.style.backgroundColor = 'red';
+                }
+            });
+
+            // Sauvegarder l'état
+            sessionStorage.setItem(`isValidationDone-${questionId}`, true);
+            sessionStorage.setItem(`selectedAnswers-${questionId}`, JSON.stringify(Array.from(selectedAnswers)));
+            sessionStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
+
+            // Transformer le bouton 'Valider' en 'Feedback'
+            transformButtonToFeedback();
+
+            // Afficher le pop-up personnalisé
+            popup.style.display = 'flex';
+            isValidationDone = true;
         } else {
             alert('Veuillez sélectionner une réponse !');
         }
