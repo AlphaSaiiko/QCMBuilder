@@ -32,9 +32,9 @@ public class PanelSaisie extends JPanel
 
 
 	/**
-	 * +--------------+
-	 * | CONSTRUCTEUR |
-	 * +--------------+
+	 * +---------------+
+	 * | CONSTRUCTEURS |
+	 * +---------------+
 	 */
 	
 	public PanelSaisie()
@@ -321,34 +321,48 @@ public class PanelSaisie extends JPanel
 		}
 	}
 
-	
-
-
+/*
 	private void insererImage(File fichier) {
 		try {
-			// Charger l'image
-			Image image = new ImageIcon(fichier.getAbsolutePath()).getImage();
-	
-			// Redimensionner l'image si sa hauteur dépasse 100px
-			int originalWidth = image.getWidth(null);
-			int originalHeight = image.getHeight(null);
-			int maxHeight = 100;
-	
-			if (originalHeight > maxHeight) {
-				double scale = (double) maxHeight / originalHeight;
-				int newWidth = (int) (originalWidth * scale);
-				int newHeight = maxHeight;
-	
-				image = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-			}
-	
-			// Créer une ImageIcon à partir de l'image redimensionnée
-			ImageIcon icone = new ImageIcon(image);
-			texte.insertIcon(icone); // Insérer l'image dans le JTextPane
+			ImageIcon icone = new ImageIcon(fichier.getAbsolutePath());
+			texte.insertIcon(icone); // Utiliser insertIcon pour insérer l'image correctement
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, "Impossible d'insérer l'image : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+*/
+
+
+private void insererImage(File fichier) {
+    try {
+        // Charger l'image à partir du fichier
+        ImageIcon iconeOriginale = new ImageIcon(fichier.getAbsolutePath());
+        Image image = iconeOriginale.getImage();
+
+        // Redimensionner l'image si la hauteur dépasse 100px
+        int originalWidth = image.getWidth(null);
+        int originalHeight = image.getHeight(null);
+        int maxHeight = 100;
+
+        if (originalHeight > maxHeight) {
+            double scale = (double) maxHeight / originalHeight;
+            int newWidth = (int) (originalWidth * scale);
+            int newHeight = maxHeight;
+
+            image = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        }
+
+        // Créer une nouvelle icône redimensionnée, en conservant le chemin en description
+        ImageIcon iconeRedimensionnee = new ImageIcon(image);
+        iconeRedimensionnee.setDescription(fichier.getAbsolutePath()); // Conserver le chemin d'origine
+
+        // Insérer l'image dans le JTextPane
+        texte.insertIcon(iconeRedimensionnee);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Impossible d'insérer l'image : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
 	
 
 
