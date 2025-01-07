@@ -17,13 +17,12 @@ public class CreationHTML {
 
 	public CreationHTML(Evaluation evaluation){
 
+		this.evaluation = evaluation;
 		this.ctrl.ajouterFichier("html");
 
 		this.ecrireCSS();
 
 		this.questionHTML = new CreationQuestionHTML(evaluation);
-
-		this.evaluation = evaluation;
 		this.numQuestion = 1;
 
 		this.questionHTML.ecrireCSSAssociation();
@@ -68,7 +67,7 @@ public class CreationHTML {
 		htmlContent.append("</html>\n");
 
 		// Sauvegarde dans un fichier HTML
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/pageDAccueil.html"))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/pageDAccueil.html"))) {
 			writer.write(htmlContent.toString());
 			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
@@ -292,7 +291,7 @@ public class CreationHTML {
 		
 
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/style.css"))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/style.css"))) {
 			writer.write(cssContent.toString());
 			System.out.println("Le fichier CSS a été généré avec succès !");
 		} catch (IOException e) {
@@ -403,7 +402,7 @@ public class CreationHTML {
 
 
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter("html/pageDeFin.html"))) {
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/pageDeFin.html"))) {
 			writer.write(htmlContent.toString());
 			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
