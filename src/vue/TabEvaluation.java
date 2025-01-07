@@ -20,6 +20,7 @@ public class TabEvaluation extends JFrame
 	private boolean isUpdating = false;
 	private CreerQuestion creerQuestion;
 	private boolean bChrono;
+	private boolean bQuestion;
 
 	public TabEvaluation(Ressource ressource, boolean bChrono) {
 		// Créer la fenêtre principale
@@ -30,6 +31,7 @@ public class TabEvaluation extends JFrame
 		setLocationRelativeTo(null);
 	
 		this.bChrono = bChrono;
+		this.bQuestion = true;
 	
 		// Modèle pour le tableau
 		String[] columnNames = { "Notion", "Sélectionner", "TF", "F", "M", "D" };
@@ -102,8 +104,11 @@ public class TabEvaluation extends JFrame
 
 
 			generateTabEvaluation(ressource);
-			dispose(); // Fermer la fenêtre actuelle
-			new Accueil(); // Ouvrir la page d'accueil
+			if(this.bQuestion)
+			{
+				dispose(); // Fermer la fenêtre actuelle
+				new Accueil(); // Ouvrir la page d'accueil
+			}
 		});
 	
 		bottomPanel.add(generateButton, BorderLayout.CENTER);
@@ -201,6 +206,7 @@ public class TabEvaluation extends JFrame
 				{
 					JOptionPane.showMessageDialog(this, "Veuillez entrer au moins une valeur pour la notion " + notionName + ".", "Erreur",
 							JOptionPane.ERROR_MESSAGE);
+					this.bQuestion = false;
 					return;
 				}
 
@@ -208,6 +214,7 @@ public class TabEvaluation extends JFrame
 				Controleur.recupererQuestion(evaluation, not, tfValue, fValue, mValue, dValue);
 			}
 		}
+		this.bQuestion = true;
 
 		if (selectedNotions.isEmpty())
 		{
