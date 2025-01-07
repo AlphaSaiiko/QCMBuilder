@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gérer la sélection des réponses
     let selectedAnswer = null;
+    window.reponseSelectionnee = [];
     let isValidationDone = sessionStorage.getItem(`isValidationDone-${questionId}`) === 'true';
     if (isValidationDone) {
         restoreState();
@@ -51,12 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 reponse.classList.add('selected');
                 selectedAnswer = reponse;
+                window.reponseSelectionnee = [reponse]; // Mettre à jour window.reponseSelectionnee
             }
         });
     });
 
     // Valider la réponse sélectionnée
-    document.getElementById('valider').addEventListener('click', () => {
+    function valider() {
         if (!isValidationDone) {
             if (selectedAnswer) {
                 const popup = document.getElementById('popup');
@@ -89,6 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 sessionStorage.setItem(`isValidationDone-${questionId}`, true);
                 sessionStorage.setItem(`selectedAnswer-${questionId}`, selectedAnswer.getAttribute('id'));
                 sessionStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
+                // Arrêter le minuteur
+                if (typeof arreterMinuteur === 'function') {
+                    arreterMinuteur();
+                }
             } else {
                 alert('Veuillez sélectionner une réponse.');
             }
@@ -96,7 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const popup = document.getElementById('popup');
             popup.style.display = 'flex';
         }
-    });
+    }
+
+    document.getElementById('valider').addEventListener('click', valider);
 
     function initializeToFeedback() {
         const validerButton = document.getElementById('valider');
@@ -119,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     savedSelectedAnswer.style.backgroundColor = 'red';
                 }
+                window.reponseSelectionnee = [savedSelectedAnswer]; // Mettre à jour window.reponseSelectionnee
             }
         }
         const savedPopupText = sessionStorage.getItem(`popupText-${questionId}`);
@@ -144,6 +153,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const popup = document.getElementById('popup');
         popup.style.display = 'none';
     });
+
+    // Fonction finMinuteur appelée par le timer
+    function finMinuteur() {
+        const popup = document.getElementById('popup');
+        const popupText = document.getElementById('popup-text');
+
+        if (!isValidationDone && window.reponseSelectionnee.length === 0) {
+            // Mettre en évidence les bonnes réponses
+            document.querySelectorAll('.bonne-reponse').forEach(bonneReponse => {
+                bonneReponse.style.backgroundColor = 'green';
+            });
+
+            popupText.innerHTML = '<span style="color: red;">Veuillez sélectionner une réponse. Temps écoulé !</span>';
+            popup.style.display = 'flex';
+
+            // Sauvegarder l'état
+            sessionStorage.setItem(`isValidationDone-${questionId}`, true);
+            sessionStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
+            initializeToFeedback();
+
+            // Arrêter le minuteur
+            if (typeof arreterMinuteur === 'function') {
+                arreterMinuteur();
+            }
+        }
+    }
+
+    // Attacher les fonctions finMinuteur et valider à l'objet window pour les rendre globales
+    window.finMinuteur = finMinuteur;
+    window.valider = valider;
 });
 
 function randomizeOrder(selector, parentSelector) {
