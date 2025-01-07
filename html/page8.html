@@ -3,30 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question à Réponse Unique</title>
-    <link rel="stylesheet" href="styleReponseUnique.css">
+    <title>Association de Mots</title>
+    <link rel="stylesheet" href="styleAssociation.css">
 </head>
 <body>
     <div class="container">
-        <h1>En quelle année l’OM a-t-il remporté la Ligue des Champions ?</h1>
-<p>Question 8/8</p><p>Temps restant : <span id="timer">5</span> secondes</p>        <div id="points">Points : 0</div>
-        <div class="question" id="question" data-points="1" data-question-id="question-8">
-            <div class="reponse mauvaise-reponse">1991</div>
-            <div class="reponse bonne-reponse">1993</div>
-            <div class="reponse mauvaise-reponse">1995</div>
-            <div class="reponse mauvaise-reponse">1997</div>
+        <h1>Associez chaque joueur de l’OM avec son poste principal.</h1>
+		<p>Question 8/8</p>
+<p>Temps restant : <span id="timer">60</span> secondes</p>        <div id="points">Points : 0</div>
+        <div class="columns">
+            <div class="words" id="words">
+                <div class="word" data-id="1">Fabien Barthez</div>
+                <div class="word" data-id="2">Didier Drogba</div>
+                <div class="word" data-id="3">Dimitri Payet</div>
+            </div>
+            <svg id="svg-container"></svg>
+            <div class="definitions" id="definitions">
+                <div class="definition" data-id="1">Gardien de but</div>
+                <div class="definition" data-id="2">Attaquant</div>
+                <div class="definition" data-id="3">Milieu offensif</div>
+            </div>
         </div>
-        <button id="valider">Valider</button>
-        <button onclick="location.href='pageDeFin.html';">Suivant</button>
+        <button class="btn" onclick="validate(8)">Valider</button>
+        <button class="btn" onclick="location.href='pageDeFin.html';">Suivant</button>
     </div>
     <div id="popup" class="popup">
         <div class="popup-content">
             <span class="close" id="popup-close">&times;</span>
             <p id="popup-text"></p>
-            <p></p>
         </div>
     </div>
-    <script src="scriptReponseUnique.js"></script>
+    <script src="scriptAssociation.js"></script>
     <script src="timer.js"></script>
 </body>
 </html>
