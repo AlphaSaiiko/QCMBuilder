@@ -99,43 +99,9 @@ public class TabEvaluation extends JFrame
 		JButton generateButton = new JButton("Générer l'évaluation");
 		generateButton.addActionListener(e -> {
 
-			// Créer une fenêtre de dialogue pour la sélection d'un dossier
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setDialogTitle("Sélectionnez l'emplacement pour créer un dossier");
-			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Limiter la sélection aux dossiers
-			
-			int userSelection = fileChooser.showDialog(null, "Créer un dossier");
-	
-			// Si l'utilisateur a sélectionné un dossier
-			File selectedDirectory = null;
-			if (userSelection == JFileChooser.APPROVE_OPTION) {
-				selectedDirectory = fileChooser.getSelectedFile();
-			} else {
-				// Si l'utilisateur n'a pas sélectionné de dossier, utiliser le répertoire "Documents" de l'utilisateur
-				selectedDirectory = new File(System.getProperty("user.home"), "Documents");
-			}
-	
-			// Demander à l'utilisateur de saisir un nom pour le nouveau dossier
-			String folderName = JOptionPane.showInputDialog("Entrez le nom du dossier :");
-
-			String chemin = "";
-			
-			if (folderName != null && !folderName.trim().isEmpty()) {
-				// Créer le dossier dans l'emplacement choisi
-				File newDirectory = new File(selectedDirectory, folderName);
-				
-				if (newDirectory.mkdir()) { // Utilisation de mkdir() pour créer un dossier
-					JOptionPane.showMessageDialog(null, "Dossier créé avec succès : " + newDirectory.getAbsolutePath());
-					chemin = newDirectory.getAbsolutePath();
-				} else {
-					JOptionPane.showMessageDialog(null, "Échec de la création du dossier. Vérifiez les permissions.");
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Le nom du dossier ne peut pas être vide.");
-			}
 
 
-			generateTabEvaluation(ressource,  chemin);
+			generateTabEvaluation(ressource);
 			dispose(); // Fermer la fenêtre actuelle
 			new Accueil(); // Ouvrir la page d'accueil
 		});
@@ -209,10 +175,11 @@ public class TabEvaluation extends JFrame
 		isUpdating = false;
 	}
 
-	private void generateTabEvaluation(Ressource ressource, String chemin)
+	private void generateTabEvaluation(Ressource ressource)
 	{
 		// Collecter les notions sélectionnées
 		List<Notion> selectedNotions = new ArrayList<>();
+		String chemin ="html";
 		Evaluation evaluation = new Evaluation(ressource, this.bChrono, chemin);
 
 		for (int row = 0; row < model.getRowCount() - 1; row++)
@@ -248,6 +215,43 @@ public class TabEvaluation extends JFrame
 					JOptionPane.ERROR_MESSAGE);
 			return;
 		}
+
+					// Créer une fenêtre de dialogue pour la sélection d'un dossier
+					JFileChooser fileChooser = new JFileChooser();
+					fileChooser.setDialogTitle("Sélectionnez l'emplacement pour créer un dossier");
+					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Limiter la sélection aux dossiers
+					
+					int userSelection = fileChooser.showDialog(null, "Créer un dossier");
+			
+					// Si l'utilisateur a sélectionné un dossier
+					File selectedDirectory = null;
+					if (userSelection == JFileChooser.APPROVE_OPTION) {
+						selectedDirectory = fileChooser.getSelectedFile();
+					} else {
+						// Si l'utilisateur n'a pas sélectionné de dossier, utiliser le répertoire "Documents" de l'utilisateur
+						selectedDirectory = new File(System.getProperty("user.home"), "Documents");
+					}
+			
+					// Demander à l'utilisateur de saisir un nom pour le nouveau dossier
+					String folderName = JOptionPane.showInputDialog("Entrez le nom du dossier :");
+		
+					chemin = "";
+					
+					if (folderName != null && !folderName.trim().isEmpty()) {
+						// Créer le dossier dans l'emplacement choisi
+						File newDirectory = new File(selectedDirectory, folderName);
+						
+						if (newDirectory.mkdir()) { // Utilisation de mkdir() pour créer un dossier
+							JOptionPane.showMessageDialog(null, "Dossier créé avec succès : " + newDirectory.getAbsolutePath());
+							chemin = newDirectory.getAbsolutePath();
+						} else {
+							JOptionPane.showMessageDialog(null, "Échec de la création du dossier. Vérifiez les permissions.");
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "Le nom du dossier ne peut pas être vide.");
+					}
+
+					evaluation.setChemin(chemin);
 
 		//HTML
 		CreationHTML html = new CreationHTML(evaluation);
