@@ -22,7 +22,7 @@ public class CreationQuestionHTML {
 
 	public void integrerComplements(Question question) {
 		// Dossier de destination pour les compléments
-		Path dossierDest = Paths.get("html/complements");
+		Path dossierDest = Paths.get(this.evaluation.getChemin()+"/complements");
 		System.out.println("PATH COMPLEMENT : " + dossierDest);
 	
 		// Créer le dossier "complements" s'il n'existe pas déjà
