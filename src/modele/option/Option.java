@@ -44,9 +44,10 @@ public class Option implements IOption
 	 */
 	public String getEnonce() { return this.enonce; }
 	public String getType()     { return this.type    ; }
-
 	public boolean getEstReponse() { return this.estReponse; }
 	public int getId(){return this.idReponse;}
+
+
 
 
 	/*
@@ -54,19 +55,27 @@ public class Option implements IOption
 	 *  | SETTEURS |
 	 *  +----------+
 	 */
-	public void setEnonce(String enonce) { 
+
+	public void setEnonce(String enonce)
+	{ 
 		this.enonce = enonce;
 		this.modifierReponse();
 	}
-	public void setType    (String type    ) { 
+
+	public void setType(String type)
+	{ 
 		this.type     = type    ;
 		this.modifierReponse();
 	}
 
-	public void setEstReponse(boolean estRep) { 
+	public void setEstReponse(boolean estRep)
+	{ 
 		this.estReponse = estRep;
 		this.modifierReponse();
 	}
+
+
+
 
 	/*
 	 *  +----------+

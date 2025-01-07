@@ -180,55 +180,80 @@ public class PanelSaisie extends JPanel
 	 * +----------+
 	 */
 
-	public String getContenu()
-	{
+	 public String getContenu() {
 		StyledDocument document = texte.getStyledDocument();
-		String contenu = "";
-
-		for (int i = 0; i < document.getLength(); i++)
-		{
-			Element      element = document.getCharacterElement(i)    ;
-			AttributeSet attrs   = element.getAttributes       ()     ;
-			Icon         image   = StyleConstants.getIcon      (attrs);
-
-			if (image != null && image instanceof ImageIcon)
-			{
-				String emplacementImage = ((ImageIcon) image).getDescription();
-
-				contenu += "<img src=\"" + emplacementImage + "\">";
-			}
-			else
-			{
-				try
-				{
-					String caractere = document.getText(i, 1);
-
-					if (caractere.equals("\n"))
-						contenu += "<br>";
-					else
-						contenu += caractere;
+		StringBuilder contenu = new StringBuilder();
+	
+		try {
+			int length = document.getLength();
+			boolean wasBold = false, wasItalic = false, wasUnderline = false;
+	
+			for (int i = 0; i < length; ) {
+				Element element = document.getCharacterElement(i);
+				AttributeSet attrs = element.getAttributes();
+				Icon image = StyleConstants.getIcon(attrs);
+	
+				if (image != null && image instanceof ImageIcon) {
+					// Si l'élément est une image
+					String emplacementImage = ((ImageIcon) image).getDescription();
+					contenu.append("<img src=\"").append(emplacementImage).append("\">");
+					i++;
+				} else {
+					// Si l'élément est du texte
+					int start = element.getStartOffset();
+					int end = element.getEndOffset();
+					String text = document.getText(start, end - start);
+	
+					// Détection des styles actuels
+					boolean isBold = StyleConstants.isBold(attrs);
+					boolean isItalic = StyleConstants.isItalic(attrs);
+					boolean isUnderline = StyleConstants.isUnderline(attrs);
+	
+					// Gestion des transitions de styles
+					if (isBold != wasBold) {
+						contenu.append(isBold ? "<b>" : "</b>");
+						wasBold = isBold;
+					}
+					if (isItalic != wasItalic) {
+						contenu.append(isItalic ? "<i>" : "</i>");
+						wasItalic = isItalic;
+					}
+					if (isUnderline != wasUnderline) {
+						contenu.append(isUnderline ? "<u>" : "</u>");
+						wasUnderline = isUnderline;
+					}
+	
+					// Ajout du texte
+					contenu.append(text.replace("\n", "<br>"));
+	
+					i = end;
 				}
-				catch (BadLocationException e)
-				{
-					e.printStackTrace();
-				}
 			}
+	
+			// Fermeture des styles ouverts
+			if (wasUnderline) contenu.append("</u>");
+			if (wasItalic) contenu.append("</i>");
+			if (wasBold) contenu.append("</b>");
+	
+		} catch (BadLocationException e) {
+			e.printStackTrace();
 		}
-
-		if (!this.listePiecesJointes.isEmpty())
-		{
-			for (File pieceJointe : listePiecesJointes)
-			{
+	
+		// Gestion des pièces jointes
+		if (!listePiecesJointes.isEmpty()) {
+			for (File pieceJointe : listePiecesJointes) {
 				String emplacementFichier = pieceJointe.getAbsolutePath();
-				String nomFichier         = pieceJointe.getName();
-				
-				contenu += "<br><a href=\"file:///" + emplacementFichier + "\" target=\"_blank\">" + nomFichier + "</a>";
+				String nomFichier = pieceJointe.getName();
+				contenu.append("<br><a href=\"file:///").append(emplacementFichier)
+					   .append("\" target=\"_blank\">").append(nomFichier).append("</a>");
 			}
 		}
-
-		return contenu;
+	
+		System.out.println("CONTENU :\n\n" + contenu.toString() + "\n\n");
+		return contenu.toString();
 	}
-
+	
+	
 
 
 
@@ -254,44 +279,48 @@ public class PanelSaisie extends JPanel
 	 * Applique ou retire un style (gras, italique, souligné) sur une sélection de texte.
 	 *
 	 * @param document Le document stylisé (`StyledDocument`) sur lequel appliquer les modifications.
-	 * @param style    L'objet de style à appliquer ou retirer (exemple : `StyleConstants.Bold`, 
+	 * @param style    L'objet de style à appliquer ou retirer (exemple : `StyleConstants.Bold`,
 	 *                 `StyleConstants.Italic`, `StyleConstants.Underline`).
 	 */
-	private void appliquerStyle(StyledDocument document, Object style)
-	{
+	private void appliquerStyle(StyledDocument document, Object style) {
 		int debut = texte.getSelectionStart();
-		int fin   = texte.getSelectionEnd  ();
-	
-		if (debut == fin)
-		{
+		int fin = texte.getSelectionEnd();
+
+		if (debut == fin) {
 			JOptionPane.showMessageDialog(this, "Sélectionnez du texte pour appliquer ou retirer le style.", "Info", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
-	
 
-		// Récupérer les styles actuels
-		AttributeSet stylesActuels = document.getCharacterElement(debut).getAttributes();
-		SimpleAttributeSet nouveauxStyles = new SimpleAttributeSet(stylesActuels);
-	
+		// Parcourir les caractères sélectionnés
+		for (int i = debut; i < fin; ) {
+			Element element = document.getCharacterElement(i);
+			int elementStart = element.getStartOffset();
+			int elementEnd = element.getEndOffset();
 
-		// Basculer l'état du style
-		if (style == StyleConstants.Bold)
-			StyleConstants.setBold(nouveauxStyles, !StyleConstants.isBold(stylesActuels));
-		else
-		{
-			if (style == StyleConstants.Italic)
+			// Limiter la portée au texte sélectionné
+			int start = Math.max(debut, elementStart);
+			int end = Math.min(fin, elementEnd);
+
+			AttributeSet stylesActuels = element.getAttributes();
+			SimpleAttributeSet nouveauxStyles = new SimpleAttributeSet(stylesActuels);
+
+			// Basculer l'état du style
+			if (style == StyleConstants.Bold) {
+				StyleConstants.setBold(nouveauxStyles, !StyleConstants.isBold(stylesActuels));
+			} else if (style == StyleConstants.Italic) {
 				StyleConstants.setItalic(nouveauxStyles, !StyleConstants.isItalic(stylesActuels));
-			else
-			{
-				if (style == StyleConstants.Underline)
-					StyleConstants.setUnderline(nouveauxStyles, !StyleConstants.isUnderline(stylesActuels));
+			} else if (style == StyleConstants.Underline) {
+				StyleConstants.setUnderline(nouveauxStyles, !StyleConstants.isUnderline(stylesActuels));
 			}
-		}
 
-	
-		// Appliquer les nouveaux styles
-		document.setCharacterAttributes(debut, fin - debut, nouveauxStyles, false);
+			// Appliquer les nouveaux styles
+			document.setCharacterAttributes(start, end - start, nouveauxStyles, true);
+
+			// Passer à l'élément suivant
+			i = elementEnd;
+		}
 	}
+
 	
 
 

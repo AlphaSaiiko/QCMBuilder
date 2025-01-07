@@ -123,6 +123,13 @@ public class Question
 		this.mettreAJourQuestions();
 	}
 
+	public void setEnonce(String enonce, boolean majQuestions)
+	{
+		this.enonce = enonce;
+		if (majQuestions)
+			this.mettreAJourQuestions();
+	}
+
 	public void setFeedback(String feedback)
 	{
 		this.feedback = feedback;

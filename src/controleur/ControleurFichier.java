@@ -188,9 +188,10 @@ public class ControleurFichier
 				enonce = gererPiecesJointes(enonce);
 			}
 		}
-			
 
-		String ligneEntiere = qst.getType() + ";" + enonce + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";" + qst.getFeedback() + ";";
+		qst.setEnonce(enonce, false);
+
+		String ligneEntiere = qst.getType() + ";" + qst.getEnonce() + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";" + qst.getFeedback() + ";";
 		if (qst.getEnsOptions() != null)
 		{
 			for (IOption option : qst.getEnsOptions())
@@ -211,7 +212,9 @@ public class ControleurFichier
 					}
 				}
 
-				ligneEntiere += option.getType() + "/" + enonce + "/" + option.getId();
+				option.setEnonce(enonce);
+
+				ligneEntiere += option.getType() + "/" + option.getEnonce() + "/" + option.getId();
 				if (option instanceof OptionElimination)
 				{
 					OptionElimination optionE = (OptionElimination) option;
