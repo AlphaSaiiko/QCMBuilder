@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question à Réponses Multiples</title>
+    <title>Question à Réponse Unique</title>
     <link rel="stylesheet" href="styleReponseUnique.css">
 </head>
 <body>
     <div class="container">
-        <h1>Quels joueurs suivants ont joué pour le PSG ?</h1>
-		<p>Question 2/8</p><p>Temps restant : <span id="timer">5</span> secondes</p>        <div id="points">Points : 0</div>
-        <div class="question" data-points="1" data-question-id="question-2">
-            <div class="reponse bonne-reponse" id="reponse-7">Lionel Messi</div>
-            <div class="reponse bonne-reponse" id="reponse-8">Neymar Jr</div>
-            <div class="reponse mauvaise-reponse" id="reponse-9">Cristiano Ronaldo</div>
-            <div class="reponse mauvaise-reponse" id="reponse-10">Zinedine Zidane</div>
+        <h1>En quelle année l’OM a-t-il remporté la Ligue des Champions ?</h1>
+		<p>Question 2/8</p><p>Temps restant : <span id="timer">60</span> secondes</p>        <div id="points">Points : 0</div>
+        <div class="question" id="question" data-points="1" data-question-id="question-2">
+            <div class="reponse mauvaise-reponse">1991</div>
+            <div class="reponse bonne-reponse">1993</div>
+            <div class="reponse mauvaise-reponse">1995</div>
+            <div class="reponse mauvaise-reponse">1997</div>
         </div>
         <button id="valider">Valider</button>
         <button onclick="location.href='page3.html';">Suivant</button>
@@ -23,10 +23,10 @@
         <div class="popup-content">
             <span class="close" id="popup-close">&times;</span>
             <p id="popup-text"></p>
-            <p>Messi et Neymar !!</p>
+            <p></p>
         </div>
     </div>
-    <script src="scriptReponseMultiple.js"></script>
+    <script src="scriptReponseUnique.js"></script>
     <script src="timer.js"></script>
 </body>
 </html>

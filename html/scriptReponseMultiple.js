@@ -76,13 +76,18 @@ document.addEventListener('DOMContentLoaded', () => {
             isValidationDone = true;
             // Arrêter le minuteur
             arreterMinuteur();
-        } else {
+        } else if (!isValidationDone) {
             alert('Veuillez sélectionner au moins une réponse avant de valider.');
         }
-        activerSelectionReponse();
     }
 
-    document.getElementById('valider').addEventListener('click', valider);
+    document.getElementById('valider').addEventListener('click', () => {
+        if (isValidationDone) {
+            transformerBoutonEnFeedback();
+        } else {
+            valider();
+        }
+    });
 
     function transformerBoutonEnFeedback() {
         const validerButton = document.getElementById('valider');
