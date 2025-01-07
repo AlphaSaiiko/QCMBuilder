@@ -124,7 +124,7 @@ public class Notion
 	public void creerFichierNotion()
 	{
 		ControleurFichier controleurFichier = new ControleurFichier(
-			"lib/ressources/" + ressource.getId()  + 
+			"lib/ressources/" + ressource.getId () + 
 			"_"               + ressource.getNom() +
 			"/"
 		);

@@ -78,9 +78,9 @@ public class Option implements IOption
 	public void ecrireReponse()
 	{
 		ControleurFichier controleurFichier = new ControleurFichier(
-			"lib/ressources/" + question.getNotion().getRessource().getId()  +
-			"_"               + question.getNotion().getRessource().getNom() +
-			"/"               + question.getNotion().getNom()                +
+			"lib/ressources/" + question.getNotion     ().getRessource().getId () +
+			"_"               + question.getNotion     ().getRessource().getNom() +
+			"/"               + question.getNotion     ().getNom      ()          +
 			"/question"       + question.getNumQuestion()
 		);
 

@@ -120,79 +120,86 @@ public class Question
 	 * +----------+
 	 */
 
-	/**
-	 * Crée et enregistre un fichier de question pour la notion courante.
-	 * 
-	 * Cette méthode utilise le contrôleur de fichiers pour générer un répertoire spécifique à la notion et y ajouter
-	 * un fichier pour la question en cours. Elle crée également un fichier RTF et enregistre les informations de la question.
-	 */
-	public void creerFichierQuestion() 
+	public boolean ajouterOption(IOption opt)
 	{
-		String chemin = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion + "/question" + this.numQuestion + ".rtf";
-		File fichier = new File(chemin);
+		if (opt == null)
+			return false;
 
-		// Vérifiez si le fichier existe déjà
-		if (!fichier.exists()) 
+
+		for (IOption optionExistante : this.listeOptions)
 		{
-			ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion);
-			fichierControleur.ajouterFichier("");
-			fichierControleur.ajouterRtf("/question" + this.numQuestion + ".rtf");
-			fichierControleur.ecrireQuestion("/question" + this.numQuestion + ".rtf", this);
-			System.out.println("Fichier créé : " + chemin);
-		} 
-		else 
-		{
-			System.out.println("Le fichier existe déjà : " + chemin);
+			if (optionsSontEgales(optionExistante, opt))
+				return false;
 		}
+
+		this.listeOptions.add(opt);
+		this.mettreAJourQuestions();
+
+		return true;
 	}
 
 
 
-	/**
-	 * Ajoute une option à la question.
-	 * 
-	 * Si l'option est valide (non nulle), elle est ajoutée à la liste des options de la question et la liste des
-	 * questions est mise à jour. Si l'option est nulle, l'ajout échoue.
-	 * 
-	 * @param opt L'option à ajouter.
-	 * @return {@code true} si l'option a été ajoutée avec succès, {@code false} si l'option est nulle.
-	 */
-	public boolean ajouterOption(IOption opt)
+	public boolean supprimerOption(IOption opt)
 	{
-		if (opt == null) {
-			return false;
-		}
-
-		// Vérification de la validité de l'option en comparant les attributs
-		for (IOption optionExistante : this.listeOptions) {
-			if (optionsSontEgales(optionExistante, opt)) {
-				return false;
-			}
-		}
-
-
-		this.listeOptions.add(opt);
+		this.listeOptions.remove(opt);
 		this.mettreAJourQuestions();
 		return true;
 	}
 
-	// Méthode pour comparer deux options en fonction de leurs attributs
-	private boolean optionsSontEgales(IOption opt1, IOption opt2) {
-		if (opt1.getType().equals(opt2.getType()) &&
-			opt1.getEnonce().equals(opt2.getEnonce()))
-			{
 
-			if (opt1 instanceof OptionAssociation && opt2 instanceof OptionAssociation && ((OptionAssociation) opt1).getAssocie() != null && ((OptionAssociation) opt2).getAssocie() != null) {
+
+	public void creerFichierQuestion() 
+	{
+		String chemin = "lib/ressources/" + notion.getRessource().getId () +
+		                "_"               + notion.getRessource().getNom() +
+						"/"               + notion.getNom      ()          +
+						"/question"       + this.numQuestion               +
+						"/question"       + this.numQuestion               +
+						".rtf"                                               ;
+
+		File fichier = new File(chemin);
+
+		if (!fichier.exists()) 
+		{
+			ControleurFichier controleurFichier = new ControleurFichier(
+				"lib/ressources/" + notion.getRessource().getId () +
+				"_"               + notion.getRessource().getNom() +
+				"/"               + notion.getNom      ()          +
+				"/question"       + this.numQuestion
+			);
+
+			controleurFichier.ajouterFichier(""                                           );
+			controleurFichier.ajouterRtf    ("/question" + this.numQuestion + ".rtf"      );
+			controleurFichier.ecrireQuestion("/question" + this.numQuestion + ".rtf", this);
+		}
+	}
+
+
+
+	private boolean optionsSontEgales(IOption opt1, IOption opt2)
+	{
+		if (opt1.getType  ().equals(opt2.getType  ()) &&
+		    opt1.getEnonce().equals(opt2.getEnonce())    )
+		{
+			if (opt1 instanceof OptionAssociation               &&
+			    opt2 instanceof OptionAssociation               &&
+			    ((OptionAssociation) opt1).getAssocie() != null &&
+			    ((OptionAssociation) opt2).getAssocie() != null    )
+			{
 				return ((OptionAssociation) opt1).getAssocie().equals(((OptionAssociation) opt2).getAssocie());
 			}
-			else if (opt1 instanceof OptionElimination && opt2 instanceof OptionElimination) {
+			else if (opt1 instanceof OptionElimination && opt2 instanceof OptionElimination) 
+			{
 				OptionElimination optionE1 = (OptionElimination) opt1;
 				OptionElimination optionE2 = (OptionElimination) opt2;
-				return optionE1.getEstReponse() == optionE2.getEstReponse() &&
-					optionE1.getOrdre() == optionE2.getOrdre() &&
-					optionE1.getNbPointsMoins() == optionE2.getNbPointsMoins();
+
+				return optionE1.getEstReponse   () == optionE2.getEstReponse   () &&
+				       optionE1.getOrdre        () == optionE2.getOrdre        () &&
+				       optionE1.getNbPointsMoins() == optionE2.getNbPointsMoins()    ;
 			}
-			else if (opt1 instanceof Option && opt2 instanceof Option) {
+			else if (opt1 instanceof Option && opt2 instanceof Option)
+			{
 				return ((Option) opt1).getEstReponse() == ((Option) opt2).getEstReponse();
 			}
 			return true;
@@ -202,37 +209,23 @@ public class Question
 
 
 
-
-	/**
-	 * Supprime une option de la question en mettant à jour la liste des questions.
-	 * 
-	 * @param opt L'option à supprimer.
-	 * @return Toujours {@code true}.
-	 */
-	public boolean supprimerOption(IOption opt)
-	{
-		this.listeOptions.remove(opt);
-		this.mettreAJourQuestions();
-		return true;
-	}
-
-
-	/**
-	 * Met à jour les questions en les réécrivant dans le fichier de stockage.
-	 * 
-	 * Cette méthode récupère la liste des questions à l'aide du contrôleur, puis les écrit dans le fichier de stockage
-	 * via le contrôleur de fichiers pour s'assurer que les modifications sont persistées.
-	 */
 	public void mettreAJourQuestions()
 	{
-		String emplacement = "lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/question" + this.numQuestion;
+		String emplacement = "lib/ressources/" + notion.getRessource().getId () +
+		                     "_"               + notion.getRessource().getNom() +
+							 "/"               + notion.getNom      ()          +
+							 "/question"       + this.numQuestion                 ;
 		File fichier = new File(emplacement);
 	
-
-		// Vérifiez si le fichier existe avant de tenter de le modifier
 		if (fichier.exists())
 		{
-			ControleurFichier controleurFichier = new ControleurFichier("lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
+			ControleurFichier controleurFichier = new ControleurFichier(
+				"lib/ressources/" + notion.getRessource().getId () +
+				"_"               + notion.getRessource().getNom() +
+				"/"               + notion.getNom      ()          +
+				"/"
+			);
+
 			controleurFichier.modifierQuestion("question" + this.numQuestion + "/question" + this.numQuestion, this);
 		}
 		else
@@ -241,7 +234,8 @@ public class Question
 
 
 
-	public boolean ajouterComplement(String emplacement) {
+	public boolean ajouterComplement(String emplacement)
+	{
 		if (this.listeComplements.contains(emplacement))
 			return false;
 		
