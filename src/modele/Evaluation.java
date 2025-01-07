@@ -80,6 +80,7 @@ public class Evaluation
 
 	public void setRessource(Ressource ressource) { this.ressource = ressource; }
 	public void setLienEval (String    lienEval ) { this.lienEval  = lienEval ; }
+	public void setChemin(String chemin)		  { this.chemin    = chemin	  ; }
 
 
 
