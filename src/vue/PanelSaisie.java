@@ -324,15 +324,27 @@ public class PanelSaisie extends JPanel
 	
 
 
-	/**
-	 * Insère une image dans le texte à l'emplacement actuel du curseur.
-	 *
-	 * @param file Le fichier image à insérer.
-	 */
 	private void insererImage(File fichier) {
 		try {
-			ImageIcon icone = new ImageIcon(fichier.getAbsolutePath());
-			texte.insertIcon(icone); // Utiliser insertIcon pour insérer l'image correctement
+			// Charger l'image
+			Image image = new ImageIcon(fichier.getAbsolutePath()).getImage();
+	
+			// Redimensionner l'image si sa hauteur dépasse 100px
+			int originalWidth = image.getWidth(null);
+			int originalHeight = image.getHeight(null);
+			int maxHeight = 100;
+	
+			if (originalHeight > maxHeight) {
+				double scale = (double) maxHeight / originalHeight;
+				int newWidth = (int) (originalWidth * scale);
+				int newHeight = maxHeight;
+	
+				image = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+			}
+	
+			// Créer une ImageIcon à partir de l'image redimensionnée
+			ImageIcon icone = new ImageIcon(image);
+			texte.insertIcon(icone); // Insérer l'image dans le JTextPane
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, "Impossible d'insérer l'image : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
 		}
