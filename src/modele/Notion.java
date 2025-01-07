@@ -1,9 +1,10 @@
 package modele;
 
-import controleur.Controleur;
-import controleur.ControleurFichier;
 import java.util.ArrayList;
 import java.util.List;
+
+import controleur.Controleur;
+import controleur.ControleurFichier;
 
 public class Notion
 {
@@ -12,49 +13,49 @@ public class Notion
 	 * | ATTRIBUTS |
 	 * +-----------+
 	 */ 
+
+	private int            questionD     ;
+	private int            questionF     ;
+	private int            questionM     ;
+	private int            questionTf    ;
 	private List<Question> listeQuestions;
-	private String         nom           ;
 	private Ressource      ressource     ;
-	private int questionTresFacile, questionFacile, questionMoyen, questionDifficile;
+	private String         nom           ;
 
 
 
 
 	/**
-	 * +--------------+
-	 * | CONSTRUCTEUR |
-	 * +--------------+
+	 * +-------------------------+
+	 * | CONSTRUCTEUR ET FACTORY |
+	 * +-------------------------+
 	 */
 
 	public Notion(String nom, Ressource ressource)
 	{
-		this.nom       = nom      ;
-		this.ressource = ressource;
+		this.questionD      = 0                ;
+		this.questionF      = 0                ;
+		this.questionM      = 0                ;
+		this.questionTf     = 0                ;
+		this.listeQuestions = new ArrayList<>();
+		this.ressource      = ressource        ;
+		this.nom            = nom              ;
 
 		Controleur.ajouterNotion(this);
 		this.creerFichierNotion();
-		this.listeQuestions = new ArrayList<>();
 		ressource.ajouterNotion(this);
 		Ressource.mettreAJourRessources();
-		this.questionDifficile = this.questionFacile = this.questionMoyen = this.questionTresFacile = 0;
 	}
 
 
 
-	/**
-	 * Crée une nouvelle notion associée à une ressource si elle n'existe pas déjà.
-	 *
-	 * @param nom Le nom de la notion à créer.
-	 * @param ressource La ressource à laquelle la notion est associée.
-	 * @return La notion existante si elle est déjà présente, ou la nouvelle notion créée.
-	 */
 	public static Notion creerNotion(String nom, Ressource ressource)
 	{
 		Notion notion = Notion.trouverNotionParNom(nom, ressource);
+
 		if (notion == null)
-		{
 			notion = new Notion(nom, ressource);
-		}
+
 		else
 			System.out.println("La notion existe déjà dans la ressource: " + ressource.getNom());
 			
@@ -70,15 +71,15 @@ public class Notion
 	 * +----------+
 	 */
 
-	public String         getNom           ()           { return nom                            ; }
-	public Ressource      getRessource     ()           { return this.ressource                 ; }
-	public int            getNbQuestion    ()           { return this.listeQuestions.size()     ; }
-	public List<Question> getListeQuestions()           { return this.listeQuestions            ; }
-	public Question       getQuestion      (int indice) { return this.listeQuestions.get(indice); }
-	public int getNbQuestionTresFacile	   ()			{return this.questionTresFacile			; }
-	public int getNbQuestionFacile		   ()			{return this.questionFacile				; }
-	public int getNbQuestionMoyen		   ()			{return this.questionMoyen				; }
-	public int getNbQuestionDifficile	   ()			{return this.questionDifficile			; }
+	public int            getNbQuestion          ()           { return this.listeQuestions.size()     ; }
+	public int            getNbQuestionDifficile ()           { return this.questionD                 ; }
+	public int            getNbQuestionFacile    ()           { return this.questionF                 ; }
+	public int            getNbQuestionMoyen     ()           { return this.questionM                 ; }
+	public int            getNbQuestionTresFacile()           { return this.questionTf                ; }
+	public List<Question> getListeQuestions      ()           { return this.listeQuestions            ; }
+	public Question       getQuestion            (int indice) { return this.listeQuestions.get(indice); }
+	public Ressource      getRessource           ()           { return this.ressource                 ; }
+	public String         getNom                 ()           { return this.nom                       ; }
 
 
 
@@ -89,13 +90,12 @@ public class Notion
 	 * +----------+
 	 */ 
 
-	public void setNom(String nom)
+	public void setRessource(Ressource ressource) { this.ressource = ressource; }
+	public void setNom      (String nom)
 	{
 		this.nom       = nom      ;
 		Ressource.mettreAJourRessources();
 	}
-
-	public void setRessource(Ressource ressource) { this.ressource = ressource; }
 
 
 
@@ -106,24 +106,6 @@ public class Notion
 	 * +----------+
 	 */
 
-	 /**
-	 * Crée un fichier pour la notion dans le répertoire associé à la ressource.
-	 * Le fichier est ajouté au chemin de la ressource correspondante.
-	 */
-	public void creerFichierNotion()
-	{
-		ControleurFichier fichierControleur = new ControleurFichier("lib/ressources/" + ressource.getId() + "_" + ressource.getNom() + "/");
-		fichierControleur.ajouterFichier(this.getNom());
-	}
-	
-
-
-	/**
-	 * Ajoute une question à l'ensemble des questions associées à la notion.
-	 * Met à jour les notions après l'ajout.
-	 *
-	 * @param question La question à ajouter. Elle ne doit pas être nulle.
-	 */
 	public void ajouterQuestion(Question question)
 	{
 		if (question != null)
@@ -131,30 +113,31 @@ public class Notion
 			this.listeQuestions.add(question);
 			Ressource.mettreAJourRessources();
 
-			switch (question.getDifficulte()) {
-				case 1: this.questionTresFacile++;
-					break;
-				case 2: this.questionFacile++;
-					break;
-				case 3: this.questionMoyen++;
-					break;
-				case 4: this.questionDifficile++;
-					break;
-			
-				default:
-					break;
+			switch (question.getDifficulte())
+			{
+				case 1 -> this.questionTf++;
+				case 2 -> this.questionF ++;
+				case 3 -> this.questionM ++;
+				case 4 -> this.questionD ++;
 			}
 		}
 	}
 
 
 
-	/**
-	 * Supprime une question de l'ensemble des questions associées à la notion.
-	 * Met à jour les notions après la suppression.
-	 *
-	 * @param question La question à supprimer. Elle doit correspondre à une question existante.
-	 */
+	public void creerFichierNotion()
+	{
+		ControleurFichier controleurFichier = new ControleurFichier(
+			"lib/ressources/" + ressource.getId()  + 
+			"_"               + ressource.getNom() +
+			"/"
+		);
+
+		controleurFichier.ajouterFichier(this.getNom());
+	}
+	
+
+	
 	public void supprimerQuestion(Question question)
 	{
 		this.listeQuestions.removeIf(qst -> question.equals(qst));
@@ -163,13 +146,6 @@ public class Notion
 
 
 
-	/**
-	 * Recherche une notion dans une ressource en utilisant son nom.
-	 *
-	 * @param nom Le nom de la notion à rechercher.
-	 * @param ressource La ressource contenant les notions.
-	 * @return La notion correspondante si elle est trouvée, sinon null.
-	 */
 	public static Notion trouverNotionParNom(String nom, Ressource ressource)
 	{
 		for (Notion notion : ressource.getEnsNotions())
