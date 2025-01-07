@@ -55,9 +55,6 @@ public class Notion
 
 		if (notion == null)
 			notion = new Notion(nom, ressource);
-
-		else
-			System.out.println("La notion existe déjà dans la ressource: " + ressource.getNom());
 			
 		return notion;
 	}

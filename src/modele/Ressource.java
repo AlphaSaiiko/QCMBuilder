@@ -47,8 +47,6 @@ public class Ressource
 
 		if (ressource == null)
 			ressource = new Ressource(nom, id);
-		else
-			System.out.println("La ressource existe déjà.");
 
 		return ressource;
 	}

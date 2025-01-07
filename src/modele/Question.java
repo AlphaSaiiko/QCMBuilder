@@ -65,9 +65,6 @@ public class Question
 	{
 		Question question = new Question(nbPoints, temps, notion, difficulte, type);
 
-		if (question != null)
-			System.out.println("La question a été créée avec succès.");
-
 		return question;
 	}
 
