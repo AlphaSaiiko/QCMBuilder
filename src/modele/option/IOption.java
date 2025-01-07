@@ -2,22 +2,25 @@ package modele.option;
 
 public interface IOption
 {
-	/*
+	/**
 	 *  +----------+
 	 *  | GETTEURS |
 	 *  +----------+
-	 */ 
-	public String getEnonce   ();
-	public String getType       ();
-	public int getId();
+	 */
+
+	public int    getId    ();
+	public String getEnonce();
+	public String getType  ();
+
+
 
 	
-	/*
+	/**
 	 *  +----------+
 	 *  | SETTEURS |
 	 *  +----------+
-	 */ 
-	public void setEnonce  (String Enonce);
-	public void setType      (String type    );
+	 */
 
+	public void setEnonce (String Enonce);
+	public void setType   (String type  );
 }

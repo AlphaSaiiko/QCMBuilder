@@ -5,52 +5,58 @@ import modele.*;
 
 public class Option implements IOption
 {
-	/*
-	 *  +------------+
-	 *  | PARAMETRES |
-	 *  +------------+
+	/**
+	 *  +-----------+
+	 *  | ATTRIBUTS |
+	 *  +-----------+
 	 */
-	private String type    ;
-	private String enonce;
 
-	private boolean estReponse;
+	private        boolean  estReponse         ;
+	private static int      compteurReponse = 0;
+	private final  int      idReponse          ;
+	private        Question question           ;
+	private        String   type               ;
+	private        String   enonce             ;
 
-	private Question question;
 
-	private final int idReponse;
-	private static int compteurReponse = 0;
 
-	/*
+
+	/**
 	 *  +--------------+
 	 *  | CONSTRUCTEUR |
 	 *  +--------------+
 	 */
+
 	public Option(String type, String enonce, boolean estReponse, Question question)
 	{
-		this.type       = type      ;
-		this.enonce   = enonce  ;
-		this.estReponse = estReponse;
-		this.question   = question  ;
+		this.estReponse = estReponse              ;
 		this.idReponse  = ++Option.compteurReponse;
+		this.question   = question                ;
+		this.type       = type                    ;
+		this.enonce     = enonce                  ;
 
 		question.ajouterOption(this);
 	}
 
 
-	/*
+
+
+	/**
 	 *  +----------+
 	 *  | GETTEURS |
 	 *  +----------+
 	 */
-	public String getEnonce() { return this.enonce; }
-	public String getType()     { return this.type    ; }
-	public boolean getEstReponse() { return this.estReponse; }
-	public int getId(){return this.idReponse;}
+
+	public boolean  getEstReponse() { return this.estReponse; }
+	public int      getId        () { return this.idReponse ; }
+	public Question getQuestion  () { return this.question  ; }
+	public String   getEnonce    () { return this.enonce    ; }
+	public String   getType      () { return this.type      ; }
 
 
 
 
-	/*
+	/**
 	 *  +----------+
 	 *  | SETTEURS |
 	 *  +----------+
@@ -62,36 +68,49 @@ public class Option implements IOption
 		this.modifierReponse();
 	}
 
-	public void setType(String type)
-	{ 
-		this.type     = type    ;
-		this.modifierReponse();
-	}
-
 	public void setEstReponse(boolean estRep)
 	{ 
 		this.estReponse = estRep;
 		this.modifierReponse();
 	}
 
+	public void setType(String type)
+	{ 
+		this.type = type;
+		this.modifierReponse();
+	}
 
 
 
-	/*
+
+	/**
 	 *  +----------+
 	 *  | METHODES |
 	 *  +----------+
 	 */
 
-	 public void modifierReponse()
-	 {
-		ControleurFichier tmp = new ControleurFichier("lib/ressources/"+question.getNotion().getRessource().getNom()+"/"+question.getNotion().getNom()+"/question"+question.getNumQuestion());
-		tmp.modifierReponse("/question"+question.getNumQuestion(), this);
-	 }
+	public void ecrireReponse()
+	{
+		ControleurFichier controleurFichier = new ControleurFichier(
+			"lib/ressources/" + question.getNotion().getRessource().getId()  +
+			"_"               + question.getNotion().getRessource().getNom() +
+			"/"               + question.getNotion().getNom()                +
+			"/question"       + question.getNumQuestion()
+		);
 
-	 public void ecrireReponse()
-	 {
-		ControleurFichier tmp = new ControleurFichier("lib/ressources/" + question.getNotion().getRessource().getId() + "_" + question.getNotion().getRessource().getNom() + "/" + question.getNotion().getNom() + "/question" + question.getNumQuestion());
-		tmp.modifierQuestion("question" + this.question.getNumQuestion(), question);
-	 }
+		controleurFichier.modifierQuestion("question" + this.question.getNumQuestion(), question);
+	}
+
+
+	
+	public void modifierReponse()
+	{
+		ControleurFichier controleurFichier = new ControleurFichier(
+			"lib/ressources/" + question.getNotion().getRessource().getNom() +
+			"/"               + question.getNotion().getNom()                +
+			"/question"       + question.getNumQuestion()
+		);
+
+		controleurFichier.modifierReponse("/question" + question.getNumQuestion(), this);
+	}
 }
