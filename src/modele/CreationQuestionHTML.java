@@ -137,7 +137,7 @@ public class CreationQuestionHTML {
 		{
 			htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
 		}
-		htmlContent.append("        <button class=\"btn\" onclick=\"validate(").append(numQuestion).append(")\">Valider</button>").append("\n");
+		htmlContent.append("        <button class=\"btn\" onclick=\"valider(").append(numQuestion).append(")\">Valider</button>").append("\n");
 		htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pageSuivante).append(".html';\">Suivant</button>").append("\n");
 		htmlContent.append("    </div>\n");
 		htmlContent.append("    <div id=\"popup\" class=\"popup\">").append("\n");
@@ -952,10 +952,10 @@ public class CreationQuestionHTML {
 		}
 	}
 
-	public void ecrireJsAssociation()
-	{
+	public void ecrireJsAssociation() {
 		StringBuilder jsContent = new StringBuilder();
 	
+		jsContent.append("window.type = 'association';").append("\n");
 		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
 		jsContent.append("    const pointsElem = document.getElementById('points');").append("\n");
 		jsContent.append("    let totalPoints = parseFloat(sessionStorage.getItem('points')) || 0;").append("\n");
@@ -963,11 +963,16 @@ public class CreationQuestionHTML {
 		jsContent.append("\n");
 		jsContent.append("    randomizeOrder('.word', '#words');").append("\n");
 		jsContent.append("    randomizeOrder('.definition', '#definitions');").append("\n");
-		jsContent.append("    \n");
+		jsContent.append("\n");
 		jsContent.append("    const questionId = getQuestionId();").append("\n");
 		jsContent.append("    loadPreviousState(questionId);").append("\n");
 		jsContent.append("    addWordListeners();").append("\n");
 		jsContent.append("    addDefinitionListeners();").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    // Initialisation des variables globales").append("\n");
+		jsContent.append("    window.reponseSelectionnee = [];").append("\n");
+		jsContent.append("    window.associationsFaites = 0;").append("\n");
+		jsContent.append("    window.associationsPossibles = document.querySelectorAll('.word').length;").append("\n");
 		jsContent.append("});").append("\n");
 		jsContent.append("\n");
 		jsContent.append("function getQuestionId() {").append("\n");
@@ -987,15 +992,15 @@ public class CreationQuestionHTML {
 		jsContent.append("let motSelectionne = null;").append("\n");
 		jsContent.append("let connexions = {};").append("\n");
 		jsContent.append("let reverseConnexions = {};").append("\n");
-		jsContent.append("let feedbackClicked = false;").append("\n");
-		jsContent.append("let isValidationDone = false;").append("\n");
+		jsContent.append("let feedbackClic = false;").append("\n");
+		jsContent.append("let validationFaite = false;").append("\n");
 		jsContent.append("\n");
 		jsContent.append("function addWordListeners() {").append("\n");
 		jsContent.append("    document.querySelectorAll('.word').forEach(mot => {").append("\n");
 		jsContent.append("        mot.addEventListener('click', () => {").append("\n");
-		jsContent.append("            if (!isValidationDone) {").append("\n");
+		jsContent.append("            if (!validationFaite) {").append("\n");
 		jsContent.append("                motSelectionne = mot;").append("\n");
-		jsContent.append("                clearSelection();").append("\n");
+		jsContent.append("                effacerSelection();").append("\n");
 		jsContent.append("                mot.style.backgroundColor = '#d3d3d3';").append("\n");
 		jsContent.append("            }").append("\n");
 		jsContent.append("        });").append("\n");
@@ -1005,7 +1010,7 @@ public class CreationQuestionHTML {
 		jsContent.append("function addDefinitionListeners() {").append("\n");
 		jsContent.append("    document.querySelectorAll('.definition').forEach(definition => {").append("\n");
 		jsContent.append("        definition.addEventListener('click', () => {").append("\n");
-		jsContent.append("            if (motSelectionne && !isValidationDone) {").append("\n");
+		jsContent.append("            if (motSelectionne && !validationFaite) {").append("\n");
 		jsContent.append("                let motId = motSelectionne.getAttribute('data-id');").append("\n");
 		jsContent.append("                let defId = definition.getAttribute('data-id');").append("\n");
 		jsContent.append("\n");
@@ -1013,27 +1018,28 @@ public class CreationQuestionHTML {
 		jsContent.append("                    let ancienDefId = connexions[motId];").append("\n");
 		jsContent.append("                    delete reverseConnexions[ancienDefId];").append("\n");
 		jsContent.append("                    delete connexions[motId];").append("\n");
-		jsContent.append("                    removeLine(motSelectionne, document.querySelector(`.definition[data-id='${ancienDefId}']`));").append("\n");
+		jsContent.append("                    retirerLigne(motSelectionne, document.querySelector(`.definition[data-id='${ancienDefId}']`));").append("\n");
 		jsContent.append("                }").append("\n");
 		jsContent.append("\n");
 		jsContent.append("                if (reverseConnexions[defId]) {").append("\n");
 		jsContent.append("                    let ancienMotId = reverseConnexions[defId];").append("\n");
 		jsContent.append("                    delete connexions[ancienMotId];").append("\n");
 		jsContent.append("                    delete reverseConnexions[defId];").append("\n");
-		jsContent.append("                    removeLine(document.querySelector(`.word[data-id='${ancienMotId}']`), definition);").append("\n");
+		jsContent.append("                    retirerLigne(document.querySelector(`.word[data-id='${ancienMotId}']`), definition);").append("\n");
 		jsContent.append("                }").append("\n");
 		jsContent.append("\n");
 		jsContent.append("                connexions[motId] = defId;").append("\n");
 		jsContent.append("                reverseConnexions[defId] = motId;").append("\n");
 		jsContent.append("\n");
-		jsContent.append("                drawLine(motSelectionne, definition, 'black');").append("\n");
-		jsContent.append("                clearSelection();").append("\n");
+		jsContent.append("                dessinerLigne(motSelectionne, definition, 'black');").append("\n");
+		jsContent.append("                effacerSelection();").append("\n");
+		jsContent.append("                window.associationsFaites = Object.keys(connexions).length; // Met à jour les associations faites").append("\n");
 		jsContent.append("            }").append("\n");
 		jsContent.append("        });").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("}").append("\n");
 		jsContent.append("\n");
-		jsContent.append("function drawLine(sujet, proposition, color) {").append("\n");
+		jsContent.append("function dessinerLigne(sujet, proposition, couleur) {").append("\n");
 		jsContent.append("    const svg = document.getElementById('svg-container');").append("\n");
 		jsContent.append("    const sujetRect = sujet.getBoundingClientRect();").append("\n");
 		jsContent.append("    const propositionRect = proposition.getBoundingClientRect();").append("\n");
@@ -1047,7 +1053,7 @@ public class CreationQuestionHTML {
 		jsContent.append("    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');").append("\n");
 		jsContent.append("    const d = `M ${x1},${y1} C ${(x1 + x2) / 2},${y1} ${(x1 + x2) / 2},${y2} ${x2},${y2}`;").append("\n");
 		jsContent.append("    path.setAttribute('d', d);").append("\n");
-		jsContent.append("    path.setAttribute('stroke', color);").append("\n");
+		jsContent.append("    path.setAttribute('stroke', couleur);").append("\n");
 		jsContent.append("    path.setAttribute('stroke-width', '2');").append("\n");
 		jsContent.append("    path.setAttribute('fill', 'none');").append("\n");
 		jsContent.append("    path.setAttribute('class', `line-${sujet.getAttribute('data-id')}-${proposition.getAttribute('data-id')}`);").append("\n");
@@ -1055,7 +1061,7 @@ public class CreationQuestionHTML {
 		jsContent.append("    svg.appendChild(path);").append("\n");
 		jsContent.append("}").append("\n");
 		jsContent.append("\n");
-		jsContent.append("function removeLine(sujet, proposition) {").append("\n");
+		jsContent.append("function retirerLigne(sujet, proposition) {").append("\n");
 		jsContent.append("    const svg = document.getElementById('svg-container');").append("\n");
 		jsContent.append("    const line = svg.querySelector(`.line-${sujet.getAttribute('data-id')}-${proposition.getAttribute('data-id')}`);").append("\n");
 		jsContent.append("    if (line) {").append("\n");
@@ -1063,25 +1069,25 @@ public class CreationQuestionHTML {
 		jsContent.append("    }").append("\n");
 		jsContent.append("}").append("\n");
 		jsContent.append("\n");
-		jsContent.append("function clearSelection() {").append("\n");
+		jsContent.append("function effacerSelection() {").append("\n");
 		jsContent.append("    document.querySelectorAll('.word').forEach(mot => {").append("\n");
 		jsContent.append("        mot.style.backgroundColor = '#e3e3e3';").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("}").append("\n");
 		jsContent.append("\n");
-		jsContent.append("function validate(questionId) {").append("\n");
+		jsContent.append("function valider(questionId) {").append("\n");
 		jsContent.append("    let correct = true;").append("\n");
 		jsContent.append("    let totalAssociations = Object.keys(connexions).length;").append("\n");
 		jsContent.append("    let mots = document.querySelectorAll('.word').length;").append("\n");
 		jsContent.append("\n");
-		jsContent.append("    if (totalAssociations < mots && !isValidationDone) {").append("\n");
-		jsContent.append("        alert('Il manque des associations.'); // Utiliser une alerte").append("\n");
+		jsContent.append("    if (totalAssociations < mots && !validationFaite) {").append("\n");
+		jsContent.append("        alert('Il manque des associations.');").append("\n");
 		jsContent.append("        return;").append("\n");
 		jsContent.append("    }").append("\n");
 		jsContent.append("\n");
 		jsContent.append("    for (let motId in connexions) {").append("\n");
 		jsContent.append("        const isCorrect = connexions[motId] == motId;").append("\n");
-		jsContent.append("        drawLine(").append("\n");
+		jsContent.append("        dessinerLigne(").append("\n");
 		jsContent.append("            document.querySelector(`.word[data-id='${motId}']`),").append("\n");
 		jsContent.append("            document.querySelector(`.definition[data-id='${connexions[motId]}']`),").append("\n");
 		jsContent.append("            isCorrect ? 'green' : 'red'").append("\n");
@@ -1094,7 +1100,7 @@ public class CreationQuestionHTML {
 		jsContent.append("    let popupMessage;").append("\n");
 		jsContent.append("    if (correct) {").append("\n");
 		jsContent.append("        popupMessage = '<span style=\"color: green;\">Bravo! Toutes les associations sont correctes.</span>';").append("\n");
-		jsContent.append("        if (!feedbackClicked && !isValidationDone) {").append("\n");
+		jsContent.append("        if (!feedbackClic && !validationFaite) {").append("\n");
 		jsContent.append("            updatePoints(1);  // Ajouter des points pour les réponses correctes").append("\n");
 		jsContent.append("        }").append("\n");
 		jsContent.append("    } else {").append("\n");
@@ -1103,13 +1109,13 @@ public class CreationQuestionHTML {
 		jsContent.append("\n");
 		jsContent.append("    showPopup(popupMessage);").append("\n");
 		jsContent.append("\n");
-		jsContent.append("    isValidationDone = true;").append("\n");
-		jsContent.append("    feedbackClicked = true;").append("\n");
-		jsContent.append("    sessionStorage.setItem(`isValidationDone-${questionId}`, 'true');").append("\n");
+		jsContent.append("    validationFaite = true;").append("\n");
+		jsContent.append("    feedbackClic = true;").append("\n");
+		jsContent.append("    sessionStorage.setItem(`validationFaite-${questionId}`, 'true');").append("\n");
 		jsContent.append("    sessionStorage.setItem(`connexions-${questionId}`, JSON.stringify(connexions));").append("\n");
 		jsContent.append("    sessionStorage.setItem(`popupMessage-${questionId}`, popupMessage);").append("\n");
 		jsContent.append("\n");
-		jsContent.append("    document.querySelector(`.btn[onclick^=\"validate(${questionId})\"]`).textContent = 'Feedback';").append("\n");
+		jsContent.append("    document.querySelector(`.btn[onclick^=\"valider(${questionId})\"]`).textContent = 'Feedback';").append("\n");
 		jsContent.append("}").append("\n");
 		jsContent.append("\n");
 		jsContent.append("function updatePoints(points) {").append("\n");
@@ -1132,8 +1138,8 @@ public class CreationQuestionHTML {
 		jsContent.append("});").append("\n");
 		jsContent.append("\n");
 		jsContent.append("function loadPreviousState(questionId) {").append("\n");
-		jsContent.append("    if (sessionStorage.getItem(`isValidationDone-${questionId}`) === 'true') {").append("\n");
-		jsContent.append("        isValidationDone = true;").append("\n");
+		jsContent.append("    if (sessionStorage.getItem(`validationFaite-${questionId}`) === 'true') {").append("\n");
+		jsContent.append("        validationFaite = true;").append("\n");
 		jsContent.append("        const savedConnexions = JSON.parse(sessionStorage.getItem(`connexions-${questionId}`));").append("\n");
 		jsContent.append("        let correct = true;").append("\n");
 		jsContent.append("        for (let motId in savedConnexions) {").append("\n");
@@ -1141,7 +1147,7 @@ public class CreationQuestionHTML {
 		jsContent.append("            const mot = document.querySelector(`.word[data-id='${motId}']`);").append("\n");
 		jsContent.append("            const definition = document.querySelector(`.definition[data-id='${defId}']`);").append("\n");
 		jsContent.append("            const isCorrect = motId == defId;").append("\n");
-		jsContent.append("            drawLine(mot, definition, isCorrect ? 'green' : 'red');").append("\n");
+		jsContent.append("            dessinerLigne(mot, definition, isCorrect ? 'green' : 'red');").append("\n");
 		jsContent.append("            connexions[motId] = defId;").append("\n");
 		jsContent.append("            reverseConnexions[defId] = motId;").append("\n");
 		jsContent.append("            if (!isCorrect) {").append("\n");
@@ -1149,16 +1155,37 @@ public class CreationQuestionHTML {
 		jsContent.append("            }").append("\n");
 		jsContent.append("        }").append("\n");
 		jsContent.append("\n");
-		jsContent.append("        const savedPopupMessage = sessionStorage.getItem(`popupMessage-${questionId}`);").append("\n");
-		jsContent.append("        if (savedPopupMessage) {").append("\n");
-		jsContent.append("            document.querySelector(`.btn[onclick^=\"validate(${questionId})\"]`).addEventListener('click', () => {").append("\n");
-		jsContent.append("                showPopup(savedPopupMessage);").append("\n");
+		jsContent.append("        const messagePopupEnregistre = sessionStorage.getItem(`popupMessage-${questionId}`);").append("\n");
+		jsContent.append("        if (messagePopupEnregistre) {").append("\n");
+		jsContent.append("            document.querySelector(`.btn[onclick^=\"valider(${questionId})\"]`).addEventListener('click', () => {").append("\n");
+		jsContent.append("                showPopup(messagePopupEnregistre);").append("\n");
 		jsContent.append("            });").append("\n");
 		jsContent.append("        }").append("\n");
-		jsContent.append("        document.querySelector(`.btn[onclick^=\"validate(${questionId})\"]`).textContent = 'Feedback';").append("\n");
+		jsContent.append("        document.querySelector(`.btn[onclick^=\"valider(${questionId})\"]`).textContent = 'Feedback';").append("\n");
 		jsContent.append("    }").append("\n");
 		jsContent.append("}").append("\n");
-	
+		jsContent.append("\n");
+		jsContent.append("function finMinuteur() {").append("\n");
+		jsContent.append("    // Enlever les associations dessinées").append("\n");
+		jsContent.append("    document.querySelectorAll('path').forEach(ligne => {").append("\n");
+		jsContent.append("        ligne.remove();").append("\n");
+		jsContent.append("    });").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    // Afficher le popup \"Vous n'avez plus de temps\"").append("\n");
+		jsContent.append("    showPopup('<span style=\"color: red;\">Vous n\\\'avez plus de temps.</span>');").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    // Afficher les associations correctes").append("\n");
+		jsContent.append("    document.querySelectorAll('.word').forEach(mot => {").append("\n");
+		jsContent.append("        const motId = mot.getAttribute('data-id');").append("\n");
+		jsContent.append("        const definition = document.querySelector(`.definition[data-id='${motId}']`);").append("\n");
+		jsContent.append("        dessinerLigne(mot, definition, 'green');").append("\n");
+		jsContent.append("    });").append("\n");
+		jsContent.append("\n");
+		jsContent.append("    // Désactiver la création d'associations").append("\n");
+		jsContent.append("    validationFaite = true;").append("\n");
+		jsContent.append("}").append("\n");
+		jsContent.append("\n");
+
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/scriptAssociation.js"))) {
 			writer.write(jsContent.toString());
 			System.out.println("Le fichier JS a été généré avec succès !");

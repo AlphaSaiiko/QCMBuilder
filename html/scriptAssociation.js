@@ -1,3 +1,4 @@
+window.type = 'association';
 document.addEventListener('DOMContentLoaded', () => {
     const pointsElem = document.getElementById('points');
     let totalPoints = parseFloat(sessionStorage.getItem('points')) || 0;
@@ -5,11 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     randomizeOrder('.word', '#words');
     randomizeOrder('.definition', '#definitions');
-    
+
     const questionId = getQuestionId();
     loadPreviousState(questionId);
     addWordListeners();
     addDefinitionListeners();
+
+    // Initialisation des variables globales
+    window.reponseSelectionnee = [];
+    window.associationsFaites = 0;
+    window.associationsPossibles = document.querySelectorAll('.word').length;
 });
 
 function getQuestionId() {
@@ -29,15 +35,15 @@ function randomizeOrder(selector, parentSelector) {
 let motSelectionne = null;
 let connexions = {};
 let reverseConnexions = {};
-let feedbackClicked = false;
-let isValidationDone = false;
+let feedbackClic = false;
+let validationFaite = false;
 
 function addWordListeners() {
     document.querySelectorAll('.word').forEach(mot => {
         mot.addEventListener('click', () => {
-            if (!isValidationDone) {
+            if (!validationFaite) {
                 motSelectionne = mot;
-                clearSelection();
+                effacerSelection();
                 mot.style.backgroundColor = '#d3d3d3';
             }
         });
@@ -47,7 +53,7 @@ function addWordListeners() {
 function addDefinitionListeners() {
     document.querySelectorAll('.definition').forEach(definition => {
         definition.addEventListener('click', () => {
-            if (motSelectionne && !isValidationDone) {
+            if (motSelectionne && !validationFaite) {
                 let motId = motSelectionne.getAttribute('data-id');
                 let defId = definition.getAttribute('data-id');
 
@@ -55,27 +61,28 @@ function addDefinitionListeners() {
                     let ancienDefId = connexions[motId];
                     delete reverseConnexions[ancienDefId];
                     delete connexions[motId];
-                    removeLine(motSelectionne, document.querySelector(`.definition[data-id='${ancienDefId}']`));
+                    retirerLigne(motSelectionne, document.querySelector(`.definition[data-id='${ancienDefId}']`));
                 }
 
                 if (reverseConnexions[defId]) {
                     let ancienMotId = reverseConnexions[defId];
                     delete connexions[ancienMotId];
                     delete reverseConnexions[defId];
-                    removeLine(document.querySelector(`.word[data-id='${ancienMotId}']`), definition);
+                    retirerLigne(document.querySelector(`.word[data-id='${ancienMotId}']`), definition);
                 }
 
                 connexions[motId] = defId;
                 reverseConnexions[defId] = motId;
 
-                drawLine(motSelectionne, definition, 'black');
-                clearSelection();
+                dessinerLigne(motSelectionne, definition, 'black');
+                effacerSelection();
+                window.associationsFaites = Object.keys(connexions).length; // Met à jour les associations faites
             }
         });
     });
 }
 
-function drawLine(sujet, proposition, color) {
+function dessinerLigne(sujet, proposition, couleur) {
     const svg = document.getElementById('svg-container');
     const sujetRect = sujet.getBoundingClientRect();
     const propositionRect = proposition.getBoundingClientRect();
@@ -89,7 +96,7 @@ function drawLine(sujet, proposition, color) {
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     const d = `M ${x1},${y1} C ${(x1 + x2) / 2},${y1} ${(x1 + x2) / 2},${y2} ${x2},${y2}`;
     path.setAttribute('d', d);
-    path.setAttribute('stroke', color);
+    path.setAttribute('stroke', couleur);
     path.setAttribute('stroke-width', '2');
     path.setAttribute('fill', 'none');
     path.setAttribute('class', `line-${sujet.getAttribute('data-id')}-${proposition.getAttribute('data-id')}`);
@@ -97,7 +104,7 @@ function drawLine(sujet, proposition, color) {
     svg.appendChild(path);
 }
 
-function removeLine(sujet, proposition) {
+function retirerLigne(sujet, proposition) {
     const svg = document.getElementById('svg-container');
     const line = svg.querySelector(`.line-${sujet.getAttribute('data-id')}-${proposition.getAttribute('data-id')}`);
     if (line) {
@@ -105,25 +112,25 @@ function removeLine(sujet, proposition) {
     }
 }
 
-function clearSelection() {
+function effacerSelection() {
     document.querySelectorAll('.word').forEach(mot => {
         mot.style.backgroundColor = '#e3e3e3';
     });
 }
 
-function validate(questionId) {
+function valider(questionId) {
     let correct = true;
     let totalAssociations = Object.keys(connexions).length;
     let mots = document.querySelectorAll('.word').length;
 
-    if (totalAssociations < mots && !isValidationDone) {
-        alert('Il manque des associations.'); // Utiliser une alerte
+    if (totalAssociations < mots && !validationFaite) {
+        alert('Il manque des associations.');
         return;
     }
 
     for (let motId in connexions) {
         const isCorrect = connexions[motId] == motId;
-        drawLine(
+        dessinerLigne(
             document.querySelector(`.word[data-id='${motId}']`),
             document.querySelector(`.definition[data-id='${connexions[motId]}']`),
             isCorrect ? 'green' : 'red'
@@ -136,7 +143,7 @@ function validate(questionId) {
     let popupMessage;
     if (correct) {
         popupMessage = '<span style="color: green;">Bravo! Toutes les associations sont correctes.</span>';
-        if (!feedbackClicked && !isValidationDone) {
+        if (!feedbackClic && !validationFaite) {
             updatePoints(1);  // Ajouter des points pour les réponses correctes
         }
     } else {
@@ -145,13 +152,13 @@ function validate(questionId) {
 
     showPopup(popupMessage);
 
-    isValidationDone = true;
-    feedbackClicked = true;
-    sessionStorage.setItem(`isValidationDone-${questionId}`, 'true');
+    validationFaite = true;
+    feedbackClic = true;
+    sessionStorage.setItem(`validationFaite-${questionId}`, 'true');
     sessionStorage.setItem(`connexions-${questionId}`, JSON.stringify(connexions));
     sessionStorage.setItem(`popupMessage-${questionId}`, popupMessage);
 
-    document.querySelector(`.btn[onclick^="validate(${questionId})"]`).textContent = 'Feedback';
+    document.querySelector(`.btn[onclick^="valider(${questionId})"]`).textContent = 'Feedback';
 }
 
 function updatePoints(points) {
@@ -174,8 +181,8 @@ document.getElementById('popup-close').addEventListener('click', () => {
 });
 
 function loadPreviousState(questionId) {
-    if (sessionStorage.getItem(`isValidationDone-${questionId}`) === 'true') {
-        isValidationDone = true;
+    if (sessionStorage.getItem(`validationFaite-${questionId}`) === 'true') {
+        validationFaite = true;
         const savedConnexions = JSON.parse(sessionStorage.getItem(`connexions-${questionId}`));
         let correct = true;
         for (let motId in savedConnexions) {
@@ -183,7 +190,7 @@ function loadPreviousState(questionId) {
             const mot = document.querySelector(`.word[data-id='${motId}']`);
             const definition = document.querySelector(`.definition[data-id='${defId}']`);
             const isCorrect = motId == defId;
-            drawLine(mot, definition, isCorrect ? 'green' : 'red');
+            dessinerLigne(mot, definition, isCorrect ? 'green' : 'red');
             connexions[motId] = defId;
             reverseConnexions[defId] = motId;
             if (!isCorrect) {
@@ -191,12 +198,33 @@ function loadPreviousState(questionId) {
             }
         }
 
-        const savedPopupMessage = sessionStorage.getItem(`popupMessage-${questionId}`);
-        if (savedPopupMessage) {
-            document.querySelector(`.btn[onclick^="validate(${questionId})"]`).addEventListener('click', () => {
-                showPopup(savedPopupMessage);
+        const messagePopupEnregistre = sessionStorage.getItem(`popupMessage-${questionId}`);
+        if (messagePopupEnregistre) {
+            document.querySelector(`.btn[onclick^="valider(${questionId})"]`).addEventListener('click', () => {
+                showPopup(messagePopupEnregistre);
             });
         }
-        document.querySelector(`.btn[onclick^="validate(${questionId})"]`).textContent = 'Feedback';
+        document.querySelector(`.btn[onclick^="valider(${questionId})"]`).textContent = 'Feedback';
     }
 }
+
+function finMinuteur() {
+    // Enlever les associations dessinées
+    document.querySelectorAll('path').forEach(ligne => {
+        ligne.remove();
+    });
+
+    // Afficher le popup "Vous n'avez plus de temps"
+    showPopup('<span style="color: red;">Vous n\'avez plus de temps.</span>');
+
+    // Afficher les associations correctes
+    document.querySelectorAll('.word').forEach(mot => {
+        const motId = mot.getAttribute('data-id');
+        const definition = document.querySelector(`.definition[data-id='${motId}']`);
+        dessinerLigne(mot, definition, 'green');
+    });
+
+    // Désactiver la création d'associations
+    validationFaite = true;
+}
+
