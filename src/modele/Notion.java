@@ -90,12 +90,8 @@ public class Notion
 	 * +----------+
 	 */ 
 
-	public void setRessource(Ressource ressource) { this.ressource = ressource; }
-	public void setNom      (String nom)
-	{
-		this.nom       = nom      ;
-		Ressource.mettreAJourRessources();
-	}
+	public void setRessource(Ressource ressource) { this.ressource = ressource;                                    }
+	public void setNom      (String nom)          { this.nom       = nom      ; Ressource.mettreAJourRessources(); }
 
 
 

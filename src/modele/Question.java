@@ -1,10 +1,11 @@
 package modele;
 
-import controleur.Controleur;
-import controleur.ControleurFichier;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import controleur.Controleur;
+import controleur.ControleurFichier;
 import modele.option.IOption;
 import modele.option.Option;
 import modele.option.OptionAssociation;
@@ -18,42 +19,41 @@ public class Question
 	 * +-----------+
 	 */
 
-	private String        type            ;
-	private String        enonce          ;
-	private String 	      feedback        ;
-	private int           nbPoints        ;
-	private int           temps           ;
-	private int           difficulte      ;
-	private int           numQuestion     ;
-	private List<String>  listeComplements; // Les pièces jointes ou petites images
-	private List<IOption> listeOptions    ;
-	private Notion        notion          ;
-	private final int idQuestion;
-	private static int compteurQuestion = 0;
+	private static int           compteurQuestion = 0;
+	private        int           difficulte          ;
+	private final  int           idQuestion          ;
+	private        int           nbPoints            ;
+	private        int           numQuestion         ;
+	private        int           temps               ;
+	private        List<String>  listeComplements    ;
+	private        List<IOption> listeOptions        ;
+	private        Notion        notion              ;
+	private        String        type                ;
+	private        String        enonce              ;
+	private        String        feedback            ;
 
 
 
 
 	/**
-	 * +--------------+
-	 * | CONSTRUCTEUR |
-	 * +--------------+
+	 * +-------------------------+
+	 * | CONSTRUCTEUR ET FACTORY |
+	 * +-------------------------+
 	 */
 
 	private Question(int nbPoints, int temps, Notion notion, int difficulte, String type)
 	{
-		this.nbPoints   = nbPoints  ;
-		this.temps      = temps     ;
-		this.notion     = notion    ;
-		this.difficulte = difficulte;
-		this.type       = type      ;
+		this.difficulte       = difficulte                  ;
+		this.idQuestion       = ++Question.compteurQuestion ;
+		this.nbPoints         = nbPoints                    ;
+		this.numQuestion      = (notion.getNbQuestion() + 1);
+		this.temps            = temps                       ;
+		this.listeComplements = new ArrayList<>()           ;
+		this.listeOptions     = new ArrayList<>()           ;
+		this.notion           = notion                      ;
+		this.type             = type                        ;
+		this.feedback         = ""                          ;
 
-		this.idQuestion  = ++Question.compteurQuestion;
-		this.feedback = "";
-
-		this.numQuestion = (notion.getNbQuestion() + 1);
-		this.listeComplements = new ArrayList<>();
-		this.listeOptions = new ArrayList<>();
 		this.creerFichierQuestion();
 		notion.ajouterQuestion(this);
 		Controleur.ajouterQuestion(this);
@@ -61,16 +61,6 @@ public class Question
 
 
 
-	/**
-	 * Crée une nouvelle question avec les paramètres spécifiés.
-	 * 
-	 * @param nbPoints Le nombre de points attribués à la question.
-	 * @param temps Le temps limite pour répondre à la question (en secondes).
-	 * @param notion La notion associée à la question.
-	 * @param difficulte Le niveau de difficulté de la question.
-	 * @param type Le type de la question.
-	 * @return La question créée.
-	 */
 	public static Question creerQuestion(int nbPoints, int temps, Notion notion, int difficulte, String type)
 	{
 		Question question = new Question(nbPoints, temps, notion, difficulte, type);
@@ -90,17 +80,17 @@ public class Question
 	 * +----------+
 	 */
 
-	public String        getType       ()        { return type                 ; }
-	public String        getEnonce     ()        { return enonce               ; }
-	public String        getFeedback   ()        { return feedback             ; }
-	public int           getNbPoints   ()        { return nbPoints             ; }
-	public int           getTemps      ()        { return temps                ; }
-	public int           getDifficulte ()        { return difficulte           ; }
-	public Notion        getNotion     ()        { return notion               ; }
-	public List<String>  getComplements()        { return listeComplements     ; }
-	public IOption       getOptions    (int ind) { return listeOptions.get(ind); }
-	public List<IOption> getEnsOptions ()        { return listeOptions         ; }
-	public int           getNumQuestion()        { return this.idQuestion      ; }
+	public IOption       getOptions    (int ind) { return this.listeOptions.get(ind); }
+	public int           getDifficulte ()        { return this.difficulte           ; }
+	public int           getNumQuestion()        { return this.idQuestion           ; }
+	public int           getNbPoints   ()        { return this.nbPoints             ; }
+	public int           getTemps      ()        { return this.temps                ; }
+	public List<String>  getComplements()        { return this.listeComplements     ; }
+	public List<IOption> getEnsOptions ()        { return this.listeOptions         ; }
+	public Notion        getNotion     ()        { return this.notion               ; }
+	public String        getType       ()        { return this.type                 ; }
+	public String        getEnonce     ()        { return this.enonce               ; }
+	public String        getFeedback   ()        { return this.feedback             ; }
 
 
 
@@ -111,58 +101,15 @@ public class Question
 	 * +----------+
 	 */
 
-	public void setType(String type)
-	{
-		this.type = type;
-		this.mettreAJourQuestions();
-	}
-
-	public void setEnonce(String enonce)
-	{
-		this.enonce = enonce;
-		this.mettreAJourQuestions();
-	}
-
-	public void setEnonce(String enonce, boolean majQuestions)
-	{
-		this.enonce = enonce;
-		if (majQuestions)
-			this.mettreAJourQuestions();
-	}
-
-	public void setFeedback(String feedback)
-	{
-		this.feedback = feedback;
-		this.mettreAJourQuestions();
-	}
-
-	public void setNbPoints(int nbPoints)
-	{
-		this.nbPoints = nbPoints;
-	}
-
-	public void setTemps(int temps)
-	{
-		this.temps = temps;
-		this.mettreAJourQuestions();
-	}
-
-	public void setDifficulte(int difficulte)
-	{
-		this.difficulte = difficulte;
-		this.mettreAJourQuestions();
-	}
-
-	public void setComplements(ArrayList<String> complements)
-	{
-		this.listeComplements = complements;
-	}
-
-	public void setNotion(Notion notion)
-	{
-		this.notion = notion;
-		this.mettreAJourQuestions();
-	}
+	public void setType       (String            type)                         { this.type             = type       ;                     this.mettreAJourQuestions();   }
+	public void setEnonce     (String            enonce)                       { this.enonce           = enonce     ;                     this.mettreAJourQuestions();   }
+	public void setEnonce     (String            enonce, boolean majQuestions) { this.enonce           = enonce     ; if (majQuestions) { this.mettreAJourQuestions(); } }
+	public void setFeedback   (String            feedback)                     { this.feedback         = feedback   ;                     this.mettreAJourQuestions();   }
+	public void setNbPoints   (int               nbPoints)                     { this.nbPoints         = nbPoints   ;                                                    }
+	public void setTemps      (int               temps)                        { this.temps            = temps      ;                     this.mettreAJourQuestions();   }
+	public void setDifficulte (int               difficulte)                   { this.difficulte       = difficulte ;                     this.mettreAJourQuestions();   }
+	public void setComplements(ArrayList<String> complements)                  { this.listeComplements = complements;                                                    }
+	public void setNotion     (Notion            notion)                       { this.notion           = notion     ;                     this.mettreAJourQuestions();   }
 
 
 

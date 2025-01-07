@@ -122,18 +122,14 @@ public class Metier
 	 */
 
 	public static void ajouterRessource(Ressource ressource) { Metier.listeRessources.add(ressource); }
-	public static void ajouterNotion   (Notion    notion   ) { Metier.listeNotions.add   (notion)   ; }
-	public static void ajouterQuestion (Question  question ) { Metier.listeQuestions.add (question) ; }
+	public static void ajouterNotion   (Notion    notion   ) { Metier.listeNotions   .add(notion)   ; }
+	public static void ajouterQuestion (Question  question ) { Metier.listeQuestions .add(question) ; }
 
 
 
-	public static void supprimerRessource(Ressource ressource) { Metier.listeRessources.remove(ressource); }
-	public static void supprimerNotion   (Notion    notion   ) { Metier.listeNotions.remove   (notion)   ; }
-	public static void supprimerQuestion (Question  question ) 
-	{
-		question.getNotion().supprimerQuestion(question);
-		Metier.listeQuestions.remove (question);
-	}
+	public static void supprimerRessource(Ressource ressource) {                                                   Metier.listeRessources.remove(ressource); }
+	public static void supprimerNotion   (Notion    notion   ) {                                                   Metier.listeNotions   .remove(notion)   ; }
+	public static void supprimerQuestion (Question  question ) { question.getNotion().supprimerQuestion(question); Metier.listeQuestions .remove(question) ; }
 	
 
 
@@ -153,7 +149,7 @@ public class Metier
 	}
 
 
-	
+
 	public static Ressource trouverRessourceParId(String id)
 	{
 		for (Ressource ressource : Metier.listeRessources)

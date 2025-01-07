@@ -62,23 +62,9 @@ public class Option implements IOption
 	 *  +----------+
 	 */
 
-	public void setEnonce(String enonce)
-	{ 
-		this.enonce = enonce;
-		this.modifierReponse();
-	}
-
-	public void setEstReponse(boolean estRep)
-	{ 
-		this.estReponse = estRep;
-		this.modifierReponse();
-	}
-
-	public void setType(String type)
-	{ 
-		this.type = type;
-		this.modifierReponse();
-	}
+	public void setEstReponse(boolean estRep) { this.estReponse = estRep; this.modifierReponse(); }
+	public void setEnonce    (String enonce ) { this.enonce     = enonce; this.modifierReponse(); }
+	public void setType      (String type   ) { this.type       = type  ; this.modifierReponse(); }
 
 
 
