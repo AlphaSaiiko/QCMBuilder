@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let totalPoints = sessionStorage.getItem('points') ? parseFloat(sessionStorage.getItem('points')) : 0;
     document.getElementById('points').textContent = `Points : ${totalPoints}`;
 
-    // Gérer la sélection des réponses
-    let reponseSelectionnee = null;
+    // Gérer la sélection de la réponse
+    window.reponseSelectionnee = [];
     let isValidationDone = sessionStorage.getItem(`isValidationDone-${questionId}`) === 'true';
     if (isValidationDone) {
         restaurerEtat(questionId);
@@ -20,11 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.reponse').forEach(reponse => {
             reponse.addEventListener('click', () => {
                 if (!isValidationDone) {
-                    if (reponseSelectionnee) {
-                        reponseSelectionnee.classList.remove('selected');
+                    if (window.reponseSelectionnee.length > 0) {
+                        window.reponseSelectionnee[0].classList.remove('selected');
+                        window.reponseSelectionnee = [];
                     }
                     reponse.classList.add('selected');
-                    reponseSelectionnee = reponse;
+                    window.reponseSelectionnee.push(reponse);
                 }
             });
         });
@@ -37,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const popup = document.getElementById('popup');
         const popupTexte = document.getElementById('popup-text');
         const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));
-        if (reponseSelectionnee) {
+        if (window.reponseSelectionnee.length > 0) {
+            const reponseSelectionnee = window.reponseSelectionnee[0];
             if (reponseSelectionnee.classList.contains('bonne-reponse')) {
                 popupTexte.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
                 totalPoints += questionPoints;
@@ -87,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (savedPopupTexte) {
                 popupFeedbackTexte.innerHTML = savedPopupTexte;
             } else {
-                if (reponseSelectionnee && reponseSelectionnee.classList.contains('bonne-reponse')) {
+                if (window.reponseSelectionnee.length > 0 && window.reponseSelectionnee[0].classList.contains('bonne-reponse')) {
                     popupFeedbackTexte.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
                 } else {
                     popupFeedbackTexte.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function finMinuteur() {
-        if (reponseSelectionnee) {
+        if (window.reponseSelectionnee.length > 0) {
             valider(); // Valider la réponse sélectionnée
         } else {
             // Mettre en évidence les bonnes réponses en vert
@@ -127,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attacher les fonctions finMinuteur et valider à l'objet window pour les rendre globales
     window.finMinuteur = finMinuteur;
     window.valider = valider;
-    window.reponseSelectionnee = reponseSelectionnee; // Attacher reponseSelectionnee à window pour la rendre globale
 
     // Fermer le pop-up
     document.getElementById('popup-close').addEventListener('click', () => {
@@ -146,6 +147,8 @@ function restaurerEtat(questionId) {
             } else {
                 reponse.style.backgroundColor = 'red';
             }
+            // Mettre à jour window.reponseSelectionnee
+            window.reponseSelectionnee = [reponse];
         }
     });
 

@@ -16,7 +16,7 @@ function decompte() {
         elementMinuteur.textContent = formaterTemps(tempsRestant);
     } else {
         clearInterval(intervalleMinuteur);
-        if (window.reponseSelectionnee) {
+        if (window.reponseSelectionnee.length > 0) {
             window.valider(); // Valider automatiquement si une réponse est sélectionnée
         } else {
             window.finMinuteur(); // Appeler finMinuteur si aucune réponse n'est sélectionnée

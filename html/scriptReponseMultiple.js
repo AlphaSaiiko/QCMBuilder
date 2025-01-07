@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Arrêter le minuteur
             arreterMinuteur();
         } else {
-            alert('Veuillez sélectionner au moins une réponse avant de valider.'); // Appeler finMinuteur si aucune réponse n'est sélectionnée manuellement
+            alert('Veuillez sélectionner au moins une réponse avant de valider.');
         }
         activerSelectionReponse();
     }

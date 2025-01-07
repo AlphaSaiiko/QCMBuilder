@@ -1,7 +1,6 @@
 package modele;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -484,7 +483,7 @@ public class CreationQuestionHTML {
 		jsContent.append("            // Arrêter le minuteur").append("\n");
 		jsContent.append("            arreterMinuteur();").append("\n");
 		jsContent.append("        } else {").append("\n");
-		jsContent.append("            alert('Veuillez sélectionner au moins une réponse avant de valider.'); // Appeler finMinuteur si aucune réponse n'est sélectionnée manuellement").append("\n");
+		jsContent.append("            alert('Veuillez sélectionner au moins une réponse avant de valider.');").append("\n");
 		jsContent.append("        }").append("\n");
 		jsContent.append("        activerSelectionReponse();").append("\n");
 		jsContent.append("    }").append("\n");
@@ -600,8 +599,8 @@ public class CreationQuestionHTML {
 		jsContent.append("    let totalPoints = sessionStorage.getItem('points') ? parseFloat(sessionStorage.getItem('points')) : 0;").append("\n");
 		jsContent.append("    document.getElementById('points').textContent = `Points : ${totalPoints}`;").append("\n");
 		jsContent.append("\n");
-		jsContent.append("    // Gérer la sélection des réponses").append("\n");
-		jsContent.append("    let reponseSelectionnee = null;").append("\n");
+		jsContent.append("    // Gérer la sélection de la réponse").append("\n");
+		jsContent.append("    window.reponseSelectionnee = [];").append("\n");
 		jsContent.append("    let isValidationDone = sessionStorage.getItem(`isValidationDone-${questionId}`) === 'true';").append("\n");
 		jsContent.append("    if (isValidationDone) {").append("\n");
 		jsContent.append("        restaurerEtat(questionId);").append("\n");
@@ -612,11 +611,12 @@ public class CreationQuestionHTML {
 		jsContent.append("        document.querySelectorAll('.reponse').forEach(reponse => {").append("\n");
 		jsContent.append("            reponse.addEventListener('click', () => {").append("\n");
 		jsContent.append("                if (!isValidationDone) {").append("\n");
-		jsContent.append("                    if (reponseSelectionnee) {").append("\n");
-		jsContent.append("                        reponseSelectionnee.classList.remove('selected');").append("\n");
+		jsContent.append("                    if (window.reponseSelectionnee.length > 0) {").append("\n");
+		jsContent.append("                        window.reponseSelectionnee[0].classList.remove('selected');").append("\n");
+		jsContent.append("                        window.reponseSelectionnee = [];").append("\n");
 		jsContent.append("                    }").append("\n");
 		jsContent.append("                    reponse.classList.add('selected');").append("\n");
-		jsContent.append("                    reponseSelectionnee = reponse;").append("\n");
+		jsContent.append("                    window.reponseSelectionnee.push(reponse);").append("\n");
 		jsContent.append("                }").append("\n");
 		jsContent.append("            });").append("\n");
 		jsContent.append("        });").append("\n");
@@ -629,7 +629,8 @@ public class CreationQuestionHTML {
 		jsContent.append("        const popup = document.getElementById('popup');").append("\n");
 		jsContent.append("        const popupTexte = document.getElementById('popup-text');").append("\n");
 		jsContent.append("        const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));").append("\n");
-		jsContent.append("        if (reponseSelectionnee) {").append("\n");
+		jsContent.append("        if (window.reponseSelectionnee.length > 0) {").append("\n");
+		jsContent.append("            const reponseSelectionnee = window.reponseSelectionnee[0];").append("\n");
 		jsContent.append("            if (reponseSelectionnee.classList.contains('bonne-reponse')) {").append("\n");
 		jsContent.append("                popupTexte.innerHTML = '<span style=\"color: green;\">Bonne réponse!</span>';").append("\n");
 		jsContent.append("                totalPoints += questionPoints;").append("\n");
@@ -679,7 +680,7 @@ public class CreationQuestionHTML {
 		jsContent.append("            if (savedPopupTexte) {").append("\n");
 		jsContent.append("                popupFeedbackTexte.innerHTML = savedPopupTexte;").append("\n");
 		jsContent.append("            } else {").append("\n");
-		jsContent.append("                if (reponseSelectionnee && reponseSelectionnee.classList.contains('bonne-reponse')) {").append("\n");
+		jsContent.append("                if (window.reponseSelectionnee.length > 0 && window.reponseSelectionnee[0].classList.contains('bonne-reponse')) {").append("\n");
 		jsContent.append("                    popupFeedbackTexte.innerHTML = '<span style=\"color: green;\">Bonne réponse!</span>';").append("\n");
 		jsContent.append("                } else {").append("\n");
 		jsContent.append("                    popupFeedbackTexte.innerHTML = '<span style=\"color: red;\">Mauvaise réponse!</span>';").append("\n");
@@ -690,7 +691,7 @@ public class CreationQuestionHTML {
 		jsContent.append("    }").append("\n");
 		jsContent.append("\n");
 		jsContent.append("    function finMinuteur() {").append("\n");
-		jsContent.append("        if (reponseSelectionnee) {").append("\n");
+		jsContent.append("        if (window.reponseSelectionnee.length > 0) {").append("\n");
 		jsContent.append("            valider(); // Valider la réponse sélectionnée").append("\n");
 		jsContent.append("        } else {").append("\n");
 		jsContent.append("            // Mettre en évidence les bonnes réponses en vert").append("\n");
@@ -719,7 +720,6 @@ public class CreationQuestionHTML {
 		jsContent.append("    // Attacher les fonctions finMinuteur et valider à l'objet window pour les rendre globales").append("\n");
 		jsContent.append("    window.finMinuteur = finMinuteur;").append("\n");
 		jsContent.append("    window.valider = valider;").append("\n");
-		jsContent.append("    window.reponseSelectionnee = reponseSelectionnee; // Attacher reponseSelectionnee à window pour la rendre globale").append("\n");
 		jsContent.append("\n");
 		jsContent.append("    // Fermer le pop-up").append("\n");
 		jsContent.append("    document.getElementById('popup-close').addEventListener('click', () => {").append("\n");
@@ -738,6 +738,8 @@ public class CreationQuestionHTML {
 		jsContent.append("            } else {").append("\n");
 		jsContent.append("                reponse.style.backgroundColor = 'red';").append("\n");
 		jsContent.append("            }").append("\n");
+		jsContent.append("            // Mettre à jour window.reponseSelectionnee").append("\n");
+		jsContent.append("            window.reponseSelectionnee = [reponse];").append("\n");
 		jsContent.append("        }").append("\n");
 		jsContent.append("    });").append("\n");
 		jsContent.append("\n");
@@ -1150,7 +1152,7 @@ public class CreationQuestionHTML {
 		jsContent.append("        elementMinuteur.textContent = formaterTemps(tempsRestant);").append("\n");
 		jsContent.append("    } else {").append("\n");
 		jsContent.append("        clearInterval(intervalleMinuteur);").append("\n");
-		jsContent.append("        if (window.reponseSelectionnee) {").append("\n");
+		jsContent.append("        if (window.reponseSelectionnee.length > 0) {").append("\n");
 		jsContent.append("            window.valider(); // Valider automatiquement si une réponse est sélectionnée").append("\n");
 		jsContent.append("        } else {").append("\n");
 		jsContent.append("            window.finMinuteur(); // Appeler finMinuteur si aucune réponse n'est sélectionnée").append("\n");
