@@ -1,125 +1,138 @@
 document.addEventListener('DOMContentLoaded', () => {
     const questionId = document.querySelector('.question').getAttribute('data-question-id');
 
-    // Mélanger les réponses
-    randomizeOrder('.reponse', '.question');
+    // Mélanger les réponses (au cas où)
+    melangerOrdre('.reponse', '.question');
 
     // Initialiser les points à partir du sessionStorage
     let totalPoints = sessionStorage.getItem('points') ? parseFloat(sessionStorage.getItem('points')) : 0;
     document.getElementById('points').textContent = `Points : ${totalPoints}`;
 
     // Gérer la sélection des réponses
-    let selectedAnswers = new Set();
+    window.reponseSelectionnee = [];
     let isValidationDone = sessionStorage.getItem(`isValidationDone-${questionId}`) === 'true';
     if (isValidationDone) {
-        restoreState(questionId);
-        transformButtonToFeedback();
-    } else {
-        enableAnswerSelection();
+        restaurerEtat(questionId);
+        transformerBoutonEnFeedback(); // Assurez-vous d'appeler la fonction ici
     }
 
-    function enableAnswerSelection() {
+    function activerSelectionReponse() {
         document.querySelectorAll('.reponse').forEach(reponse => {
             reponse.addEventListener('click', () => {
                 if (!isValidationDone) {
-                    if (selectedAnswers.has(reponse.id)) {
-                        reponse.classList.remove('selected');
-                        selectedAnswers.delete(reponse.id);
+                    reponse.classList.toggle('selected');
+                    if (reponse.classList.contains('selected')) {
+                        window.reponseSelectionnee.push(reponse);
                     } else {
-                        reponse.classList.add('selected');
-                        selectedAnswers.add(reponse.id);
+                        window.reponseSelectionnee = window.reponseSelectionnee.filter(r => r !== reponse);
                     }
                 }
             });
         });
     }
 
-    // Valider la réponse sélectionnée
-    function validate() {
-        if (isValidationDone) return;  // Si la validation est déjà faite, ne pas continuer
+    activerSelectionReponse();
 
+    // Valider les réponses sélectionnées
+    function valider() {
         const popup = document.getElementById('popup');
-        const popupText = document.getElementById('popup-text');
+        const popupTexte = document.getElementById('popup-text');
         const questionPoints = parseFloat(document.querySelector('.question').getAttribute('data-points'));
 
-        if (selectedAnswers.size > 0) {
-            let allCorrect = true;
+        if (window.reponseSelectionnee.length > 0) {
+            const allCorrect = window.reponseSelectionnee.every(reponse => reponse.classList.contains('bonne-reponse'));
+            const selectedCorrect = document.querySelectorAll('.bonne-reponse.selected').length;
+            const totalCorrect = document.querySelectorAll('.bonne-reponse').length;
 
-            selectedAnswers.forEach(answerId => {
-                const answerElement = document.getElementById(answerId);
-                if (!answerElement.classList.contains('bonne-reponse')) {
-                    allCorrect = false;
-                }
-            });
-
-            // Vérifier que toutes les bonnes réponses sont sélectionnées
-            const allGoodSelected = Array.from(document.querySelectorAll('.bonne-reponse')).every(goodAnswer => {
-                return selectedAnswers.has(goodAnswer.id);
-            });
-
-            if (allCorrect && allGoodSelected) {
-                popupText.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
+            if (allCorrect && selectedCorrect === totalCorrect) {
+                popupTexte.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
                 totalPoints += questionPoints;
                 sessionStorage.setItem('points', totalPoints);
                 document.getElementById('points').textContent = `Points : ${totalPoints}`;
             } else {
-                popupText.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
+                popupTexte.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
+                window.reponseSelectionnee.forEach(reponse => {
+                    if (!reponse.classList.contains('bonne-reponse')) {
+                        reponse.style.backgroundColor = 'red';
+                    }
+                });
             }
 
             // Mettre en évidence les bonnes réponses
-            document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
-                goodAnswer.style.backgroundColor = 'green';
-            });
-
-            // Marquer les mauvaises réponses
-            selectedAnswers.forEach(answerId => {
-                const answerElement = document.getElementById(answerId);
-                if (!answerElement.classList.contains('bonne-reponse')) {
-                    answerElement.style.backgroundColor = 'red';
-                }
+            document.querySelectorAll('.bonne-reponse').forEach(bonneReponse => {
+                bonneReponse.style.backgroundColor = 'green';
             });
 
             // Sauvegarder l'état
             sessionStorage.setItem(`isValidationDone-${questionId}`, true);
-            sessionStorage.setItem(`selectedAnswers-${questionId}`, JSON.stringify(Array.from(selectedAnswers)));
-            sessionStorage.setItem(`popupText-${questionId}`, popupText.innerHTML);
+            sessionStorage.setItem(`reponseSelectionnee-${questionId}`, JSON.stringify(window.reponseSelectionnee.map(r => r.innerHTML)));
+            sessionStorage.setItem(`popupTexte-${questionId}`, popupTexte.innerHTML);
 
             // Transformer le bouton 'Valider' en 'Feedback'
-            transformButtonToFeedback();
+            transformerBoutonEnFeedback();
 
             // Afficher le pop-up personnalisé
             popup.style.display = 'flex';
             isValidationDone = true;
+            // Arrêter le minuteur
+            arreterMinuteur();
         } else {
-            alert('Veuillez sélectionner une réponse !');
+            alert('Veuillez sélectionner au moins une réponse avant de valider.'); // Appeler finMinuteur si aucune réponse n'est sélectionnée manuellement
         }
+        activerSelectionReponse();
+    }
 
-        // Réactiver la sélection des réponses après l'alerte
-        document.querySelectorAll('.reponse').forEach(reponse => {
-            reponse.style.pointerEvents = '';
+    document.getElementById('valider').addEventListener('click', valider);
+
+    function transformerBoutonEnFeedback() {
+        const validerButton = document.getElementById('valider');
+        validerButton.textContent = 'Feedback';
+        validerButton.removeEventListener('click', valider);
+        validerButton.addEventListener('click', () => {
+            const popupFeedback = document.getElementById('popup');
+            const popupFeedbackTexte = document.getElementById('popup-text');
+            const savedPopupTexte = sessionStorage.getItem(`popupTexte-${questionId}`);
+            if (savedPopupTexte) {
+                popupFeedbackTexte.innerHTML = savedPopupTexte;
+            } else {
+                if (window.reponseSelectionnee.every(r => r.classList.contains('bonne-reponse'))) {
+                    popupFeedbackTexte.innerHTML = '<span style="color: green;">Bonne réponse!</span>';
+                } else {
+                    popupFeedbackTexte.innerHTML = '<span style="color: red;">Mauvaise réponse!</span>';
+                }
+            }
+            popupFeedback.style.display = 'flex';
         });
     }
 
-    document.getElementById('valider').addEventListener('click', validate);
+    function finMinuteur() {
+        if (window.reponseSelectionnee.length === 0) {
+            // Mettre en évidence les bonnes réponses en vert
+            document.querySelectorAll('.bonne-reponse').forEach(bonneReponse => {
+                bonneReponse.style.backgroundColor = 'green';
+            });
 
-    function transformButtonToFeedback() {
-        const validerButton = document.getElementById('valider');
-        validerButton.textContent = 'Feedback';
-        validerButton.removeEventListener('click', validate);
-        validerButton.addEventListener('click', showFeedback);
-    }
+            // Afficher le pop-up avec le message de fin de temps
+            const popup = document.getElementById('popup');
+            const popupTexte = document.getElementById('popup-text');
+            popupTexte.innerHTML = '<span style="color: red;">Vous n\'avez plus de temps!</span>';
+            popup.style.display = 'flex';
 
-    function showFeedback() {
-        const popup = document.getElementById('popup');
-        const popupText = document.getElementById('popup-text');
-        const savedPopupText = sessionStorage.getItem(`popupText-${questionId}`);
-        if (savedPopupText) {
-            popupText.innerHTML = savedPopupText;
-        } else {
-            popupText.innerHTML = '<span style="color: red;">Pas de feedback disponible.</span>';
+            // Sauvegarder l'état dans le sessionStorage
+            sessionStorage.setItem(`isValidationDone-${questionId}`, true);
+            sessionStorage.setItem(`popupTexte-${questionId}`, popupTexte.innerHTML);
+
+            // Marquer la validation comme terminée
+            isValidationDone = true;
+
+            // Transformer le bouton 'Valider' en 'Feedback'
+            transformerBoutonEnFeedback();
         }
-        popup.style.display = 'flex';
     }
+
+    // Attacher les fonctions finMinuteur et valider à l'objet window pour les rendre globales
+    window.finMinuteur = finMinuteur;
+    window.valider = valider;
 
     // Fermer le pop-up
     document.getElementById('popup-close').addEventListener('click', () => {
@@ -128,33 +141,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function restoreState(questionId) {
-    const selectedAnswers = JSON.parse(sessionStorage.getItem(`selectedAnswers-${questionId}`));
-    if (selectedAnswers) {
-        selectedAnswers.forEach(answerId => {
-            const reponse = document.getElementById(answerId);
-            if (reponse) {
-                reponse.classList.add('selected');
-                if (reponse.classList.contains('bonne-reponse')) {
-                    reponse.style.backgroundColor = 'green';
-                } else {
-                    reponse.style.backgroundColor = 'red';
-                }
+function restaurerEtat(questionId) {
+    const reponseSelectionneeTexte = JSON.parse(sessionStorage.getItem(`reponseSelectionnee-${questionId}`));
+    document.querySelectorAll('.reponse').forEach(reponse => {
+        if (reponseSelectionneeTexte.includes(reponse.innerHTML)) {
+            reponse.classList.add('selected');
+            if (reponse.classList.contains('bonne-reponse')) {
+                reponse.style.backgroundColor = 'green';
+            } else {
+                reponse.style.backgroundColor = 'red';
             }
-        });
-    }
-    const savedPopupText = sessionStorage.getItem(`popupText-${questionId}`);
-    if (savedPopupText) {
-        document.getElementById('popup-text').innerHTML = savedPopupText;
-    }
-    document.querySelectorAll('.bonne-reponse').forEach(goodAnswer => {
-        goodAnswer.style.backgroundColor = 'green';
+        }
     });
+
+    document.querySelectorAll('.bonne-reponse').forEach(bonneReponse => {
+        bonneReponse.style.backgroundColor = 'green';
+    });
+
+    const savedPopupTexte = sessionStorage.getItem(`popupTexte-${questionId}`);
+    if (savedPopupTexte) {
+        document.getElementById('popup-text').innerHTML = savedPopupTexte;
+    }
 }
 
-function randomizeOrder(selector, parentSelector) {
-    const items = document.querySelectorAll(selector);
-    const parent = document.querySelector(parentSelector);
-    const shuffledItems = Array.from(items).sort(() => Math.random() - 0.5);
-    shuffledItems.forEach(item => parent.appendChild(item));
+function melangerOrdre(selecteur, selecteurParent) {
+    const elements = document.querySelectorAll(selecteur);
+    const parent = document.querySelector(selecteurParent);
+    const elementsMelanges = Array.from(elements).sort(() => Math.random() - 0.5);
+    elementsMelanges.forEach(element => parent.appendChild(element));
 }

@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question à Réponse Unique</title>
-    <link rel="stylesheet" href="styleReponseUnique.css">
+    <title>Question à Élimination</title>
+    <link rel="stylesheet" href="styleElimination.css">
 </head>
 <body>
     <div class="container">
-        <h1>Date de création du PSG ?</h1>
+        <h1>Parmi ces trophées, lequel le PSG n'a jamais remporté ?<br><br></h1>
 		<p>Question 5/8</p><p>Temps restant : <span id="timer">60</span> secondes</p>        <div id="points">Points : 0</div>
-        <div class="question" id="question" data-points="1" data-question-id="question-5">
-            <div class="reponse mauvaise-reponse">1960</div>
-            <div class="reponse bonne-reponse">1970</div>
-            <div class="reponse mauvaise-reponse">1980</div>
-            <div class="reponse mauvaise-reponse">1990</div>
+        <div class="question" id="question-5">
+            <div class="reponse mauvaise-reponse" id="reponse-1" data-order="1" ptselim="-0.25">Ligue 1<br></div>
+            <div class="reponse bonne-reponse" id="reponse-2">Ligue des Champions<br></div>
+            <div class="reponse mauvaise-reponse" id="reponse-3" data-order="2" ptselim="-0.25"> Coupe de France</div>
+            <div class="reponse mauvaise-reponse" id="reponse-4">Trophée des Champions</div>
         </div>
+        <button id="eliminar">Éliminer</button>
         <button id="valider">Valider</button>
         <button onclick="location.href='page6.html';">Suivant</button>
     </div>
     <div id="popup" class="popup">
         <div class="popup-content">
             <span class="close" id="popup-close">&times;</span>
-            <p id="popup-text"></p>
-            <p>En 1970 bien sûr !</p>
+            <p id="popup-text">Jamais la ldc malheureusement</p>
         </div>
     </div>
-    <script src="scriptReponseUnique.js"></script>
+    <script src="scriptElimination.js"></script>
     <script src="timer.js"></script>
 </body>
 </html>
