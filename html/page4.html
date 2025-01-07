@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question à Réponse Unique</title>
+    <title>Question à Réponses Multiples</title>
     <link rel="stylesheet" href="styleReponseUnique.css">
 </head>
 <body>
     <div class="container">
-        <h1>Date de création du PSG ?</h1>
-		<p>Question 4/8</p>        <div id="points">Points : 0</div>
-        <div class="question" id="question" data-points="1" data-question-id="question-4">
-            <div class="reponse mauvaise-reponse">1960</div>
-            <div class="reponse bonne-reponse">1970</div>
-            <div class="reponse mauvaise-reponse">1980</div>
-            <div class="reponse mauvaise-reponse">1990</div>
+        <h1>Quels joueurs suivants ont joué pour le PSG ?</h1>
+		<p>Question 4/8</p><p>Temps restant : <span id="timer">60</span> secondes</p>        <div id="points">Points : 0</div>
+        <div class="question" data-points="1" data-question-id="question-4">
+            <div class="reponse bonne-reponse" id="reponse-11">Lionel Messi</div>
+            <div class="reponse bonne-reponse" id="reponse-12">Neymar Jr</div>
+            <div class="reponse mauvaise-reponse" id="reponse-13">Cristiano Ronaldo</div>
+            <div class="reponse mauvaise-reponse" id="reponse-14">Zinedine Zidane</div>
         </div>
-        <button class="btn" onclick="location.href='page3.html';">Précédent</button>
         <button id="valider">Valider</button>
         <button onclick="location.href='page5.html';">Suivant</button>
     </div>
@@ -24,10 +23,10 @@
         <div class="popup-content">
             <span class="close" id="popup-close">&times;</span>
             <p id="popup-text"></p>
-            <p>En 1970 bien sûr !</p>
+            <p>Messi et Neymar !!</p>
         </div>
     </div>
-    <script src="scriptReponseUnique.js"></script>
+    <script src="scriptReponseMultiple.js"></script>
     <script src="timer.js"></script>
 </body>
 </html>
