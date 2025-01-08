@@ -54,7 +54,7 @@ public class Parametre extends JFrame
 
 		// Création des boutons pour les ressources
 		JButton ajtRessource = new JButton("Ajouter une ressource");
-		ajtRessource.setBackground(Color.GREEN);
+		ajtRessource.setBackground(new Color(144, 238, 144));
 		ajtRessource.setPreferredSize(new Dimension(180, 30));
 		ajtRessource.addActionListener(e ->
 		{
@@ -306,7 +306,7 @@ public class Parametre extends JFrame
 					majListeNotion(selectedRessource);
 		
 					if (selectedRessource != null) {
-						ajtNotion.setBackground(Color.GREEN);
+						ajtNotion.setBackground(new Color(144, 238, 144));
 						ajtNotion.setEnabled(true);
 					} else {
 						ajtNotion.setBackground(Color.GRAY);
