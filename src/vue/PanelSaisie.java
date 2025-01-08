@@ -329,7 +329,17 @@ public class PanelSaisie extends JPanel
 	public void setHauteur(int hauteur) { this.setPreferredSize(new Dimension(this.getPreferredSize().width, hauteur)); }
 	public void setLargeur(int largeur) { this.setPreferredSize(new Dimension(largeur, this.getPreferredSize().height)); }
 	
-
+	public void setContenu(String contenu)
+	{
+		if (contenu != null)
+		{
+			if (! contenu.trim().isEmpty())
+			{
+				this.texte.setText(contenu);
+			}
+		}
+			
+	}
 
 	
 	/**
