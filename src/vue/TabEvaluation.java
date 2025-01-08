@@ -202,9 +202,9 @@ public class TabEvaluation extends JFrame
 				int mValue = model.getValueAt(row, 4) != null && !((String) model.getValueAt(row, 4)).isEmpty() ? Integer.parseInt((String) model.getValueAt(row, 4)) : 0;
 				int dValue = model.getValueAt(row, 5) != null && !((String) model.getValueAt(row, 5)).isEmpty() ? Integer.parseInt((String) model.getValueAt(row, 5)) : 0;
 
-				if (tfValue == 0 && fValue == 0 && mValue == 0 && dValue == 0)
+				if (tfValue <= 0 && fValue <= 0 && mValue <= 0 && dValue <= 0)
 				{
-					JOptionPane.showMessageDialog(this, "Veuillez entrer au moins une valeur pour la notion " + notionName + ".", "Erreur",
+					JOptionPane.showMessageDialog(this, "Veuillez entrer au moins une valeur positive pour la notion " + notionName + ".", "Erreur",
 							JOptionPane.ERROR_MESSAGE);
 					this.bQuestion = false;
 					return;
