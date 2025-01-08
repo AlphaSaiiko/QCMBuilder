@@ -99,8 +99,8 @@ public class CreationQuestionHTML {
 		htmlContent.append("</head>").append("\n");
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
-		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
-		htmlContent.append("		<p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>").append("\n");
+		htmlContent.append("        <p style=\"font-size: 2em;\">").append(question.getEnonce()).append("<br></p>").append("\n");
+		htmlContent.append("        <p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>").append("\n");
 		if (this.evaluation.getChrono())
 		{
 			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
@@ -115,7 +115,7 @@ public class CreationQuestionHTML {
 		for (IOption reponse : banqueDeReponses) {
 			if (reponse.getId() % 2 == 1) { // Vérifie si l'ID est impair (mot)
 				htmlContent.append("                <div class=\"word\" data-id=\"").append(id).append("\">")
-						  .append(reponse.getEnonce()).append("</div>\n");
+							.append(reponse.getEnonce()).append("</div>\n");
 				id++; // Incrémenter l'ID après chaque ajout
 			}
 		}
@@ -127,7 +127,7 @@ public class CreationQuestionHTML {
 		for (IOption reponse : banqueDeReponses) {
 			if (reponse.getId() % 2 == 0) { // Vérifie si l'ID est pair (définition)
 				htmlContent.append("                <div class=\"definition\" data-id=\"").append(id).append("\">")
-						  .append(reponse.getEnonce()).append("</div>\n");
+							.append(reponse.getEnonce()).append("</div>\n");
 				id++; // Incrémenter l'ID après chaque ajout
 			}
 		}
@@ -188,8 +188,8 @@ public class CreationQuestionHTML {
 		htmlContent.append("</head>").append("\n");
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
-		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
-		htmlContent.append("		<p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>");
+		htmlContent.append("        <p style=\"font-size: 2em;\">").append(question.getEnonce()).append("<br></p>").append("\n");
+		htmlContent.append("        <p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>");
 		if (this.evaluation.getChrono())
 		{
 			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
@@ -203,14 +203,14 @@ public class CreationQuestionHTML {
 				String reponseIdStr = "reponse-" + opt.getId();
 				if (opt.getOrdre() != -1) {
 					htmlContent.append("            <div class=\"reponse mauvaise-reponse\" id=\"").append(reponseIdStr).append("\" data-order=\"")
-							   .append(opt.getOrdre()).append("\" ptselim=\"").append(opt.getNbPointsMoins()).append("\">")
-							   .append(opt.getEnonce()).append("</div>").append("\n");
+								.append(opt.getOrdre()).append("\" ptselim=\"").append(opt.getNbPointsMoins()).append("\">")
+								.append(opt.getEnonce()).append("</div>").append("\n");
 				} else if (opt.getEstReponse()) {
 					htmlContent.append("            <div class=\"reponse bonne-reponse\" id=\"").append(reponseIdStr).append("\">")
-							   .append(opt.getEnonce()).append("</div>").append("\n");
+								.append(opt.getEnonce()).append("</div>").append("\n");
 				} else {
 					htmlContent.append("            <div class=\"reponse mauvaise-reponse\" id=\"").append(reponseIdStr).append("\">")
-							   .append(opt.getEnonce()).append("</div>").append("\n");
+								.append(opt.getEnonce()).append("</div>").append("\n");
 				}
 			}
 		}
@@ -242,15 +242,12 @@ public class CreationQuestionHTML {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
 
 	public void pageQuestionUnique(Question question, int numQuestion)
 	{
 		this.integrerComplements(question);
 		StringBuilder htmlContent = new StringBuilder();
-	
+
 		String pageSuivante;
 		String pagePrecedente;
 		if (numQuestion < this.evaluation.getNbQuestion()) {
@@ -258,13 +255,13 @@ public class CreationQuestionHTML {
 		} else {
 			pageSuivante = "pageDeFin";
 		}
-	
+
 		if (numQuestion > 1) {
 			pagePrecedente = "page" + (numQuestion - 1);
 		} else {
 			pagePrecedente = "pageDAccueil";
 		}
-	
+
 		htmlContent.append("<!DOCTYPE html>").append("\n");
 		htmlContent.append("<html lang=\"fr\">").append("\n");
 		htmlContent.append("<head>").append("\n");
@@ -275,11 +272,10 @@ public class CreationQuestionHTML {
 		htmlContent.append("</head>").append("\n");
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
-		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
-		htmlContent.append("		<p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>");
-		if (this.evaluation.getChrono())
-		{
-			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
+		htmlContent.append("        <p style=\"font-size: 2em;\">").append(question.getEnonce()).append("<br></p>").append("\n");
+		htmlContent.append("        <p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>");
+		if (this.evaluation.getChrono()) {
+			htmlContent.append("<p>Temps restant : <span id=\"timer\">").append(question.getTemps()).append("</span> secondes</p>");
 		}
 		htmlContent.append("        <div id=\"points\">Points : 0</div>").append("\n");
 		htmlContent.append("        <div class=\"question\" id=\"question\" data-points=\"").append(question.getNbPoints()).append("\" data-question-id=\"question-").append(numQuestion).append("\">").append("\n");
@@ -294,8 +290,7 @@ public class CreationQuestionHTML {
 			}
 		}
 		htmlContent.append("        </div>").append("\n");
-		if(!this.evaluation.getChrono())
-		{
+		if (!this.evaluation.getChrono()) {
 			htmlContent.append("        <button class=\"btn\" onclick=\"location.href='").append(pagePrecedente).append(".html';\">Précédent</button>").append("\n");
 		}
 		htmlContent.append("        <button id=\"valider\">Valider</button>").append("\n");
@@ -312,16 +307,14 @@ public class CreationQuestionHTML {
 		htmlContent.append("    <script src=\"timer.js\"></script>").append("\n");
 		htmlContent.append("</body>").append("\n");
 		htmlContent.append("</html>").append("\n");
-	
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/page" + numQuestion + ".html"))) {
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin() + "/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
 			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-
 
 	public void pageQuestionMultiple(Question question, int numQuestion)
 	{
@@ -352,8 +345,8 @@ public class CreationQuestionHTML {
 		htmlContent.append("</head>").append("\n");
 		htmlContent.append("<body>").append("\n");
 		htmlContent.append("    <div class=\"container\">").append("\n");
-		htmlContent.append("        <h1>").append(question.getEnonce()).append("</h1>").append("\n");
-		htmlContent.append("		<p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>");
+		htmlContent.append("        <p style=\"font-size: 2em;\">").append(question.getEnonce()).append("<br></p>").append("\n");
+		htmlContent.append("        <p>Question " + numQuestion + "/" + this.evaluation.getNbQuestion() + "</p>");
 		if (this.evaluation.getChrono())
 		{
 			htmlContent.append("<p>Temps restant : <span id=\"timer\">"+question.getTemps()+"</span> secondes</p>");
@@ -401,7 +394,8 @@ public class CreationQuestionHTML {
 		}
 	}
 
-	public void ecrireJsReponseMultiple() {
+	public void ecrireJsReponseMultiple()
+	{
 		StringBuilder jsContent = new StringBuilder();
 	
 		jsContent.append("document.addEventListener('DOMContentLoaded', () => {").append("\n");
@@ -1249,7 +1243,7 @@ public class CreationQuestionHTML {
 	
 		cssContent.append("body {").append("\n");
 		cssContent.append("    font-family: Arial, sans-serif;").append("\n");
-		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    display: grid;").append("\n");
 		cssContent.append("    justify-content: center;").append("\n");
 		cssContent.append("    align-items: center;").append("\n");
 		cssContent.append("    height: 100vh;").append("\n");
@@ -1345,6 +1339,11 @@ public class CreationQuestionHTML {
 		cssContent.append("    cursor: pointer;").append("\n");
 		cssContent.append("    color: #333;").append("\n"); // Couleur du texte
 		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+		cssContent.append("img {").append("\n");
+		cssContent.append("    height: 100px;").append("\n");
+		cssContent.append("    width: auto;").append("\n");
+		cssContent.append("}").append("\n");
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/styleAssociation.css"))) {
 			writer.write(cssContent.toString());
@@ -1361,7 +1360,7 @@ public class CreationQuestionHTML {
 	
 		cssContent.append("body {").append("\n");
 		cssContent.append("    font-family: Arial, sans-serif;").append("\n");
-		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    display: grid;").append("\n");
 		cssContent.append("    justify-content: center;").append("\n");
 		cssContent.append("    align-items: center;").append("\n");
 		cssContent.append("    height: 100vh;").append("\n");
@@ -1402,7 +1401,7 @@ public class CreationQuestionHTML {
 		cssContent.append("\n");
 	
 		cssContent.append(".reponse.selected {").append("\n");
-		cssContent.append("    background-color: #b3d9ff; /* Highlight selected answer */").append("\n");
+		cssContent.append("    background-color: #b3d9ff;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
 	
@@ -1442,8 +1441,8 @@ public class CreationQuestionHTML {
 		cssContent.append("    border-radius: 5px;").append("\n");
 		cssContent.append("    text-align: center;").append("\n");
 		cssContent.append("    position: relative;").append("\n");
-		cssContent.append("    width: 50%;").append("\n"); // Ajout pour centrer et ajuster la taille
-		cssContent.append("    margin: 0 auto;").append("\n"); // Ajout pour centrer et ajuster la taille
+		cssContent.append("    width: 50%;").append("\n");
+		cssContent.append("    margin: 0 auto;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
 	
@@ -1451,9 +1450,15 @@ public class CreationQuestionHTML {
 		cssContent.append("    position: absolute;").append("\n");
 		cssContent.append("    top: 10px;").append("\n");
 		cssContent.append("    right: 10px;").append("\n");
-		cssContent.append("    font-size: 20px;").append("\n"); // Ajusté pour être plus petit
+		cssContent.append("    font-size: 20px;").append("\n");
 		cssContent.append("    cursor: pointer;").append("\n");
-		cssContent.append("    color: #333;").append("\n"); // Couleur du texte
+		cssContent.append("    color: #333;").append("\n");
+		cssContent.append("}").append("\n");
+		cssContent.append("\n");
+	
+		cssContent.append("img {").append("\n");
+		cssContent.append("    height: 100px;").append("\n");
+		cssContent.append("    width: auto;").append("\n");
 		cssContent.append("}").append("\n");
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/styleElimination.css"))) {
@@ -1473,7 +1478,7 @@ public class CreationQuestionHTML {
 
 		cssContent.append("body {").append("\n");
 		cssContent.append("    font-family: Arial, sans-serif;").append("\n");
-		cssContent.append("    display: flex;").append("\n");
+		cssContent.append("    display: grid;").append("\n");
 		cssContent.append("    justify-content: center;").append("\n");
 		cssContent.append("    align-items: center;").append("\n");
 		cssContent.append("    height: 100vh;").append("\n");
@@ -1488,17 +1493,13 @@ public class CreationQuestionHTML {
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
 
-		cssContent.append(".question {").append("\n");
-		cssContent.append("    display: flex;").append("\n");
-		cssContent.append("    flex-direction: column;").append("\n");
-		cssContent.append("    justify-content: center;").append("\n");
-		cssContent.append("    align-items: center;").append("\n");
-		cssContent.append("    width: 50%;").append("\n");
-		cssContent.append("    margin: 0 auto;").append("\n");
+		cssContent.append(".question p {").append("\n");
+		cssContent.append("    font-size: 2em;").append("\n");
 		cssContent.append("    padding: 20px;").append("\n");
 		cssContent.append("    border: 1px solid #ccc;").append("\n");
 		cssContent.append("    border-radius: 5px;").append("\n");
 		cssContent.append("    background-color: #fff;").append("\n");
+		cssContent.append("    margin-bottom: 20px;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
 
@@ -1513,7 +1514,7 @@ public class CreationQuestionHTML {
 		cssContent.append("\n");
 
 		cssContent.append(".reponse.selected {").append("\n");
-		cssContent.append("    background-color: #b3d9ff; /* Highlight selected answer */").append("\n");
+		cssContent.append("    background-color: #b3d9ff;").append("\n");
 		cssContent.append("}").append("\n");
 		cssContent.append("\n");
 
@@ -1564,6 +1565,11 @@ public class CreationQuestionHTML {
 		cssContent.append("    font-size: 20px;").append("\n");
 		cssContent.append("    cursor: pointer;").append("\n");
 		cssContent.append("    color: #333;").append("\n");
+		cssContent.append("}").append("\n");
+
+		cssContent.append("img {").append("\n");
+		cssContent.append("    width: auto;").append("\n");
+		cssContent.append("    height: 100px;").append("\n");
 		cssContent.append("}").append("\n");
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/styleReponseUnique.css"))) {
