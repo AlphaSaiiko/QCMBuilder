@@ -202,9 +202,9 @@ public class TabEvaluation extends JFrame
 				int mValue = model.getValueAt(row, 4) != null && !((String) model.getValueAt(row, 4)).isEmpty() ? Integer.parseInt((String) model.getValueAt(row, 4)) : 0;
 				int dValue = model.getValueAt(row, 5) != null && !((String) model.getValueAt(row, 5)).isEmpty() ? Integer.parseInt((String) model.getValueAt(row, 5)) : 0;
 
-				if (tfValue == 0 && fValue == 0 && mValue == 0 && dValue == 0)
+				if (tfValue <= 0 && fValue <= 0 && mValue <= 0 && dValue <= 0)
 				{
-					JOptionPane.showMessageDialog(this, "Veuillez entrer au moins une valeur pour la notion " + notionName + ".", "Erreur",
+					JOptionPane.showMessageDialog(this, "Veuillez entrer au moins une valeur positive pour la notion " + notionName + ".", "Erreur",
 							JOptionPane.ERROR_MESSAGE);
 					this.bQuestion = false;
 					return;
@@ -214,7 +214,6 @@ public class TabEvaluation extends JFrame
 				Controleur.recupererQuestion(evaluation, not, tfValue, fValue, mValue, dValue);
 			}
 		}
-		this.bQuestion = true;
 
 		if (selectedNotions.isEmpty())
 		{
@@ -229,6 +228,10 @@ public class TabEvaluation extends JFrame
 					fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY); // Limiter la sélection aux dossiers
 					
 					int userSelection = fileChooser.showDialog(null, "Créer un dossier");
+
+					if (userSelection != JFileChooser.APPROVE_OPTION) {
+						this.bQuestion = false;
+					}
 			
 					// Si l'utilisateur a sélectionné un dossier
 					File selectedDirectory = null;
@@ -243,6 +246,10 @@ public class TabEvaluation extends JFrame
 					String folderName = JOptionPane.showInputDialog("Entrez le nom du dossier :");
 		
 					chemin = "";
+
+					if (folderName == null) {
+						return;
+					}
 					
 					if (folderName != null && !folderName.trim().isEmpty()) {
 						// Créer le dossier dans l'emplacement choisi
@@ -253,12 +260,18 @@ public class TabEvaluation extends JFrame
 							chemin = newDirectory.getAbsolutePath();
 						} else {
 							JOptionPane.showMessageDialog(null, "Échec de la création du dossier. Vérifiez les permissions.");
+							this.bQuestion = false;
+							return;
 						}
 					} else {
 						JOptionPane.showMessageDialog(null, "Le nom du dossier ne peut pas être vide.");
+						this.bQuestion = false;
+						return;
 					}
 
 					evaluation.setChemin(chemin);
+
+					this.bQuestion = true;
 
 		//HTML
 		CreationHTML html = new CreationHTML(evaluation);
