@@ -76,6 +76,51 @@ public class PanelSaisie extends JPanel
 		btnSouligne.addActionListener(e -> appliquerStyle(document, StyleConstants.Underline));
 		
 
+
+
+
+		// Liste des couleurs
+		String[] couleurs = { "Noir", "Rouge", "Vert", "Bleu", "Jaune" };
+		Color[] valeursCouleurs = { Color.BLACK, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW };
+
+		// Liste déroulante de couleurs
+		JComboBox<String> listeCouleurs = new JComboBox<>(couleurs);
+		listeCouleurs.setMaximumSize(new Dimension(100, 30)); // Limite la taille de la liste déroulante
+		barreOutils.add(listeCouleurs);
+
+		// Gestion de l'événement de sélection
+		listeCouleurs.addActionListener(e -> {
+			int indexCouleur = listeCouleurs.getSelectedIndex();
+			if (indexCouleur < 0) return; // Aucune couleur sélectionnée
+
+			Color couleur = valeursCouleurs[indexCouleur];
+
+			// Vérifiez s'il y a une sélection dans le JTextPane
+			int debut = texte.getSelectionStart();
+			int fin = texte.getSelectionEnd();
+
+			if (debut == fin) {
+				// Aucun texte sélectionné : changer la couleur par défaut pour les futures saisies
+				SimpleAttributeSet attrs = new SimpleAttributeSet();
+				StyleConstants.setForeground(attrs, couleur);
+				texte.setCharacterAttributes(attrs, false);
+			} else {
+				// Texte sélectionné : appliquer la couleur au texte
+				StyledDocument doc = texte.getStyledDocument();
+				SimpleAttributeSet attrs = new SimpleAttributeSet();
+				StyleConstants.setForeground(attrs, couleur);
+				doc.setCharacterAttributes(debut, fin - debut, attrs, false);
+			}
+
+			// Redessiner pour appliquer les changements visuellement
+			texte.repaint();
+		});
+
+
+
+
+
+
 		// Ajout des boutons à la barre d'outils
 		barreOutils.add(btnGras);
 		barreOutils.add(btnItalique);
@@ -180,75 +225,93 @@ public class PanelSaisie extends JPanel
 	 * +----------+
 	 */
 
-	 public String getContenu() {
+	public String getContenu()
+	{
 		StyledDocument document = texte.getStyledDocument();
-		StringBuilder contenu = new StringBuilder();
-	
-		try {
-			int length = document.getLength();
-			boolean wasBold = false, wasItalic = false, wasUnderline = false;
-	
-			for (int i = 0; i < length; ) {
-				Element element = document.getCharacterElement(i);
-				AttributeSet attrs = element.getAttributes();
-				Icon image = StyleConstants.getIcon(attrs);
-	
-				if (image != null && image instanceof ImageIcon) {
-					// Si l'élément est une image
+		StringBuilder  contenu  = new StringBuilder      ();
+
+		try
+		{
+			int     length        = document.getLength();
+			boolean wasBold       = false               ;
+			boolean wasItalic     = false               ;
+			boolean wasUnderline  = false               ;
+			Color   previousColor = null                ;
+
+			for (int i = 0; i < length; )
+			{
+				Element      element = document      .getCharacterElement(i)    ;
+				AttributeSet attrs   = element       .getAttributes      ()     ;
+				Icon         image   = StyleConstants.getIcon            (attrs);
+
+				if (image != null && image instanceof ImageIcon)
+				{
 					String emplacementImage = ((ImageIcon) image).getDescription();
+
 					contenu.append("<img src=\"").append(emplacementImage).append("\">");
 					i++;
-				} else {
-					// Si l'élément est du texte
-					int start = element.getStartOffset();
-					int end = element.getEndOffset();
-					String text = document.getText(start, end - start);
+				}
+				else
+				{
+					int     start        = element       .getStartOffset()                  ;
+					int     end          = element       .getEndOffset  ()                  ;
+					String  text         = document      .getText       (start, end - start);
+					boolean isBold       = StyleConstants.isBold        (attrs)             ;
+					boolean isItalic     = StyleConstants.isItalic      (attrs)             ;
+					boolean isUnderline  = StyleConstants.isUnderline   (attrs)             ;
+					Color   currentColor = StyleConstants.getForeground (attrs)             ;
 	
-					// Détection des styles actuels
-					boolean isBold = StyleConstants.isBold(attrs);
-					boolean isItalic = StyleConstants.isItalic(attrs);
-					boolean isUnderline = StyleConstants.isUnderline(attrs);
-	
-					// Gestion des transitions de styles
-					if (isBold != wasBold) {
-						contenu.append(isBold ? "<b>" : "</b>");
-						wasBold = isBold;
+					if (isBold      != wasBold     ) { contenu.append(isBold      ? "<b>" : "</b>"); wasBold      = isBold     ; }
+					if (isItalic    != wasItalic   ) { contenu.append(isItalic    ? "<i>" : "</i>"); wasItalic    = isItalic   ; }
+					if (isUnderline != wasUnderline) { contenu.append(isUnderline ? "<u>" : "</u>"); wasUnderline = isUnderline; }
+
+					if (!currentColor.equals(previousColor))
+					{
+						if (isBold               ) { contenu.append("</b>"   ); }
+						if (isItalic             ) { contenu.append("</i>"   ); }
+						if (isUnderline          ) { contenu.append("</u>"   ); }
+						if (previousColor != null) { contenu.append("</span>"); }
+
+						String colorHex = String.format(
+							"#%02x%02x%02x" , 
+							currentColor.getRed  (), 
+							currentColor.getGreen(), 
+							currentColor.getBlue ()
+						);
+						
+						contenu.append("<span style=\"color: ").append(colorHex).append("\">");
+
+						if (isBold               ) { contenu.append("<b>"   ); }
+						if (isItalic             ) { contenu.append("<i>"   ); }
+						if (isUnderline          ) { contenu.append("<u>"   ); }
+
+						previousColor = currentColor;
 					}
-					if (isItalic != wasItalic) {
-						contenu.append(isItalic ? "<i>" : "</i>");
-						wasItalic = isItalic;
-					}
-					if (isUnderline != wasUnderline) {
-						contenu.append(isUnderline ? "<u>" : "</u>");
-						wasUnderline = isUnderline;
-					}
-	
-					// Ajout du texte
+
 					contenu.append(text.replace("\n", "<br>"));
-	
 					i = end;
 				}
 			}
-	
-			// Fermeture des styles ouverts
-			if (wasUnderline) contenu.append("</u>");
-			if (wasItalic) contenu.append("</i>");
-			if (wasBold) contenu.append("</b>");
-	
-		} catch (BadLocationException e) {
+			if (wasUnderline         ) { contenu.append("</u>"   ); }
+			if (wasItalic            ) { contenu.append("</i>"   ); }
+			if (wasBold              ) { contenu.append("</b>"   ); }
+			if (previousColor != null) { contenu.append("</span>"); }
+		}
+		catch (BadLocationException e)
+		{
 			e.printStackTrace();
 		}
-	
-		// Gestion des pièces jointes
-		if (!listePiecesJointes.isEmpty()) {
-			for (File pieceJointe : listePiecesJointes) {
+
+		if (!listePiecesJointes.isEmpty())
+		{
+			for (File pieceJointe : listePiecesJointes) 
+			{
 				String emplacementFichier = pieceJointe.getAbsolutePath();
-				String nomFichier = pieceJointe.getName();
-				contenu.append("<br><a href=\"file:///").append(emplacementFichier)
-					   .append("\" target=\"_blank\">").append(nomFichier).append("</a>");
+				String nomFichier         = pieceJointe.getName        ();
+
+				contenu.append("<br><a href=\"file:///").append(emplacementFichier).append("\" target=\"_blank\">").append(nomFichier).append("</a>");
 			}
 		}
-	
 		System.out.println("CONTENU :\n\n" + contenu.toString() + "\n\n");
 		return contenu.toString();
 	}
