@@ -31,7 +31,6 @@ public class CreerQuestion extends JFrame implements ActionListener
 
 
 	 public CreerQuestion(Question questionAModifier) 
-	 
 	 {
 		this.questionAModifier = questionAModifier;
 		
@@ -238,10 +237,10 @@ public class CreerQuestion extends JFrame implements ActionListener
 		{
 			String type = switch (questionAModifier.getType()) 
 			{
-				case "QCMRM" -> "Réponses Multiples";
-				case "QAE"   -> "Association";
-				case "QAEPR" -> "Elimination";
-				default      -> "Réponses Uniques";
+				case "QCMRM" -> "Question à choix multiple à réponse multiple";
+				case "QAE"   -> "Question à association d’éléments";
+				case "QAEPR" -> "Question avec élimination de propositions de réponses";
+				default      -> "Question à choix multiple à réponse unique";
 			};
 			listeTypes.setSelectedItem(type);
 		}
@@ -265,9 +264,17 @@ public class CreerQuestion extends JFrame implements ActionListener
 			try 
 			{
 				nbPoints = Integer.parseInt(((JTextArea) panelPoints.getComponent(1)).getText());
-			} catch (Exception ex) 
+
+				if (nbPoints < 1)
+				{
+					erreurs = "Veuillez ajouter un nombre de points au dessus de zéro.\n";
+				}
+			} catch (NullPointerException ex) 
 			{
-				erreurs = "Veuillez rajouter le nombre de points.\n";
+				erreurs += "Veuillez rajouter le nombre de points.\n";
+			} catch (NumberFormatException ex) 
+			{
+				erreurs += "Veuillez ne pas mettre un nombre trop grand (au dessus de 2^31).\n";
 			}
 	
 			try 
@@ -322,28 +329,57 @@ public class CreerQuestion extends JFrame implements ActionListener
 			String typeSelectionne = (String) listeTypes.getSelectedItem();
 			if (notion != null && typeSelectionne != null && difficulte != 0 && erreurs.isEmpty()) 
 			{
+				// new QRU (Question qst, boolean estAModifier)
 				if ("Question à choix multiple à réponse unique".equals(typeSelectionne)) 
 				{
-					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRU");
-					new QuestionReponseUnique(tmp);
+					if (questionAModifier == null) 
+					{
+						Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRU");
+						new QuestionReponseUnique(tmp);
+					}
+					else 
+					{
+						new QuestionReponseUnique(questionAModifier);
+					}
 					dispose();
 				} 
 				else if ("Question à choix multiple à réponse multiple".equals(typeSelectionne)) 
 				{
-					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRM");
-					new QuestionReponsesMultiples(tmp);
+					if (questionAModifier == null) 
+					{
+						Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QCMRM");
+						new QuestionReponsesMultiples(tmp);
+					}
+					else 
+					{
+						new QuestionReponsesMultiples(questionAModifier);
+					}
 					dispose();
 				} 
 				else if ("Question à association d’éléments".equals(typeSelectionne)) 
 				{
-					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAE");
-					new QuestionAssociation(tmp);
+					if (questionAModifier == null) 
+					{
+						Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAE");
+						new QuestionAssociation(tmp);
+					}
+					else 
+					{
+						new QuestionAssociation(questionAModifier);
+					}
 					dispose();
 				} 
 				else if ("Question avec élimination de propositions de réponses".equals(typeSelectionne)) 
 				{
-					Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAEPR");
-					new QuestionElimination(tmp);
+					if (questionAModifier == null) 
+					{
+						Question tmp = Question.creerQuestion(nbPoints, tempsReponse, notion, difficulte, "QAEPR");
+						new QuestionElimination(tmp);
+					}
+					else 
+					{
+						new QuestionElimination(questionAModifier);
+					}
 					dispose();
 				}
 			}
@@ -376,7 +412,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 			gbc.gridx = 0;
 			gbc.gridy = 0;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
-			if (questionAModifier == null) panelPrincipal.add(panelBtnMenu, gbc);
+			panelPrincipal.add(panelBtnMenu, gbc);
 
 			gbc.gridy = 1;
 			gbc.fill = GridBagConstraints.BOTH;
@@ -396,7 +432,6 @@ public class CreerQuestion extends JFrame implements ActionListener
 			else                           this.setTitle("Modifier une question");
 			this.setSize(700, 330);
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			if (questionAModifier != null) this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			this.setLocationRelativeTo(null);
 			this.setVisible(true);
 

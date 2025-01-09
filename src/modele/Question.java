@@ -46,7 +46,7 @@ public class Question
 		this.difficulte       = difficulte                  ;
 		this.idQuestion       = ++Question.compteurQuestion ;
 		this.nbPoints         = nbPoints                    ;
-		this.numQuestion      = (notion.getNbQuestion() + 1);
+		this.numQuestion      = notion.getNbQuestion()    ;
 		this.temps            = temps                       ;
 		this.listeComplements = new ArrayList<>()           ;
 		this.listeOptions     = new ArrayList<>()           ;
@@ -54,7 +54,6 @@ public class Question
 		this.type             = type                        ;
 		this.feedback         = ""                          ;
 
-		this.creerFichierQuestion();
 		notion.ajouterQuestion(this);
 		Controleur.ajouterQuestion(this);
 	}

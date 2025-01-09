@@ -116,21 +116,73 @@ public class ControleurFichier
 
 	public void ecrireQuestion(String emplacement, Question qst)
 	{
-		if (!emplacement.endsWith(".rtf"))
+		
+
+		if (!emplacement.endsWith(".rtf")) 
 		{
 			emplacement += ".rtf";
 		}
 		emplacement = this.emplacement + emplacement;
-		try
+
+		File fichier = new File(emplacement);
+
+		// Vérifie si le fichier existe
+		if (!fichier.exists()) 
 		{
-			PrintWriter pw = new PrintWriter(new FileOutputStream(emplacement, false));
-			pw.println(qst.getType() + ";" + qst.getEnonce() + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom());
-			pw.close();
-			System.out.println("Fichier RTF créé : " + emplacement);
+			return;
 		}
-		catch (Exception e)
+
+
+		String enonce;
+
+		enonce = qst.getEnonce();
+
+
+		String ligneEntiere = qst.getType() + ";" + enonce + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";" + qst.getFeedback() + ";";
+		
+		if (qst.getEnsOptions() != null)
 		{
-			e.printStackTrace();
+			for (IOption option : qst.getEnsOptions())
+			{
+				enonce = option.getEnonce();
+				/*if (aImage(option.getEnonce(), emplacement))
+				{
+					int indexDernierSlash = emplacement.lastIndexOf("/");
+					new File(emplacement.substring(0, indexDernierSlash + 1) + File.separator + "complements").mkdirs();
+
+					List<String> listeComplements = getImages(enonce);
+					for (String image : listeComplements)
+					{
+						File fichierSource = new File(image);
+						copierImage(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+						enonce = gererPiecesJointes(enonce, emplacement.substring(0, indexDernierSlash + 1) + "complements/");
+					}
+				}*/
+
+				ligneEntiere += option.getType() + "/" + enonce + "/" + option.getId();
+				if (option instanceof OptionElimination)
+				{
+					OptionElimination optionE = (OptionElimination) option;
+					ligneEntiere += "/" + optionE.getEstReponse() + "/" + optionE.getOrdre() + "/" + optionE.getNbPointsMoins();
+				}
+				
+				if (option instanceof Option) 
+				{
+					Option optionO = (Option) option;
+					ligneEntiere += "/" + optionO.getEstReponse();
+				}
+				ligneEntiere += "|";
+			}
+
+			try {
+				PrintWriter pw = new PrintWriter(new FileOutputStream(emplacement, false));
+				pw.println(ligneEntiere);
+				pw.close();
+				System.out.println("Fichier RTF créé : " + emplacement);
+			} catch (Exception e) {
+				System.err.println("Erreur dans la création du rtf");
+			}
+			
 		}
 	}
 
@@ -220,7 +272,8 @@ public class ControleurFichier
 					OptionElimination optionE = (OptionElimination) option;
 					ligneEntiere += "/" + optionE.getEstReponse() + "/" + optionE.getOrdre() + "/" + optionE.getNbPointsMoins();
 				}
-				if (option instanceof Option) {
+				if (option instanceof Option) 
+				{
 					Option optionO = (Option) option;
 					ligneEntiere += "/" + optionO.getEstReponse();
 				}
@@ -232,7 +285,8 @@ public class ControleurFichier
 			// Lire toutes les lignes du fichier
 			List<String> lignes = Files.readAllLines(Paths.get(emplacement));
 
-			if (!lignes.isEmpty()) {
+			if (!lignes.isEmpty()) 
+			{
 				lignes.set(0, ligneEntiere);
 			}
 
@@ -429,7 +483,7 @@ public class ControleurFichier
 		// Vérifie si le fichier existe
 		if (!fichier.exists())
 		{
-			System.out.println("Le fichier n'existe pas.");
+			System.out.println("Le fichier n'existe pas. :" + emplacement);
 			return;
 		}
 

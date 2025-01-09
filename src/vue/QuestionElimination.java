@@ -1,11 +1,17 @@
 package vue;
 
 import controleur.Controleur;
+import controleur.ControleurFichier;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+
+import modele.Notion;
 import modele.Question;
+import modele.option.IOption;
+import modele.option.Option;
 import modele.option.OptionElimination;
 
 public class QuestionElimination extends JFrame
@@ -21,7 +27,8 @@ public class QuestionElimination extends JFrame
 	private       JPanel      panelBoutons          ;
 	private       JPanel      panelOptions          ;
 	private       PanelSaisie panelEnonce           ;
-	private       PanelSaisie panelFeedback      ;
+	private       PanelSaisie panelFeedback         ;
+	private       ButtonGroup groupeBtnsRadio       ;
 	private       int         nbOptions        = 0  ;
 	private final int         nbMaxOptions     = 6  ;
 	private final int         HAUTEUR_OPTIONS  = 150;
@@ -40,6 +47,15 @@ public class QuestionElimination extends JFrame
 	{
 		this.question = question;
 
+		final Question ancienneQst;
+		if (question.getEnsOptions().size() > 0)
+		{
+			ancienneQst = question;
+		}
+		else
+		{
+			ancienneQst = null;
+		}
 
 		// Panel principal
 		JPanel panelPrincipal = new JPanel();
@@ -112,7 +128,7 @@ public class QuestionElimination extends JFrame
 
 
 		// Initialiser le groupe de boutons radio
-		ButtonGroup groupeBtnsRadio = new ButtonGroup();
+		groupeBtnsRadio = new ButtonGroup();
 
 
 		// Ajouter un ActionListener au bouton "Ajouter"
@@ -122,152 +138,7 @@ public class QuestionElimination extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				// Cas ou il y a trop d'options
-				if (nbOptions >= nbMaxOptions)
-				{
-					JOptionPane.showMessageDialog(
-						null,
-						"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
-						"Erreur",
-						JOptionPane.ERROR_MESSAGE
-					);
-
-					return;
-				}
-				
-
-				// Panel contenant l'option
-				JPanel panelOption = new JPanel(new GridBagLayout());
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.insets = new Insets(5, 5, 5, 5);
-
-
-				// Bouton "Supprimer"
-				ImageIcon iconeSupprimer = new ImageIcon(
-					new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
-				);
-
-				JButton btnSupprimer = new JButton(iconeSupprimer);
-				btnSupprimer.setPreferredSize(new Dimension(40, 40));
-				btnSupprimer.setBorderPainted(false);
-				btnSupprimer.setContentAreaFilled(false);
-				btnSupprimer.setFocusPainted(false);
-				btnSupprimer.setOpaque(false);
-
-				gbc.gridx = 0;
-				gbc.gridy = 0;
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.fill = GridBagConstraints.NONE;
-				panelOption.add(btnSupprimer, gbc);
-
-				btnSupprimer.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						panelOptions.remove(panelOption);
-						nbOptions--;
-						panelOptions.revalidate();
-						panelOptions.repaint();
-					}
-				});
-
-
-				// Panel de saisie pour l'option
-				PanelSaisie panelSaisieOption = new PanelSaisie(false);
-				panelSaisieOption.setHauteur(HAUTEUR_OPTIONS);
-				panelSaisieOption.setLargeur(LARGEUR_OPTIONS);
-
-				gbc.gridx = 1;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.weightx = 1.0;
-				panelOption.add(panelSaisieOption, gbc);
-
-
-				// Label "Ordre :"
-				JLabel labelOrdre = new JLabel("Ordre :");
-
-				gbc.gridx = 2;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				panelOption.add(labelOrdre, gbc);
-
-
-				// JTextField pour l'ordre
-				JTextField texteOrdre = new JTextField();
-				texteOrdre.setPreferredSize(new Dimension(30, 30));
-
-				gbc.gridx = 3;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				panelOption.add(texteOrdre, gbc);
-
-				texteOrdre.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						majLegalite();
-					}
-				});
-
-
-				// Label "Points :"
-				JLabel labelPoints = new JLabel("Points :");
-
-				gbc.gridx = 4;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				panelOption.add(labelPoints, gbc);
-
-
-				// JTextField pour les points
-				JTextField textePoints = new JTextField();
-				textePoints.setPreferredSize(new Dimension(30, 30));
-
-				gbc.gridx = 5;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				panelOption.add(textePoints, gbc);
-
-				textePoints.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						majLegalite();
-					}
-				});
-
-
-				// Bouton radio pour sélectionner la bonne réponse
-				JRadioButton btnRadio = new JRadioButton();
-				btnRadio.setPreferredSize(new Dimension(30, 30));
-
-				gbc.gridx = 6;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				groupeBtnsRadio.add(btnRadio);
-				panelOption.add(btnRadio, gbc);
-
-				btnRadio.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						majLegalite();
-					}
-				});
-
-
-				// Ajout du Panel de l'option au panel des options
-				panelOptions.add(panelOption);
-				nbOptions++;
-				panelOptions.revalidate();
-				panelOptions.repaint();
+				ajouterOption(null);
 			}
 		});
 
@@ -324,6 +195,9 @@ public class QuestionElimination extends JFrame
 
 				if (erreurs.trim().isEmpty())
 				{
+					
+					
+
 					// Enregistrer l'énoncé	
 					question.setEnonce(panelEnonce.getContenu());
 
@@ -363,6 +237,18 @@ public class QuestionElimination extends JFrame
 						question.ajouterOption(option);
 					}
 					
+
+					Notion notionActuelle = question.getNotion();
+
+					ControleurFichier ctrlFichier = new ControleurFichier(
+							"lib/ressources/" + notionActuelle.getRessource().getId() + "_"
+									+ notionActuelle.getRessource().getNom() + "/"
+									+ notionActuelle.getNom() + "/");
+
+					// Enregistrer la question dans un fichier
+					if (ancienneQst == null) question.creerFichierQuestion();
+					else                     ctrlFichier.ecrireQuestion("question" + question.getNumQuestion() + "/question" + question.getNumQuestion(), question);
+					
 					
 					// Fermer la fenêtre
 					QuestionElimination.this.dispose();
@@ -383,6 +269,33 @@ public class QuestionElimination extends JFrame
 		panelPrincipal.add(scrollPaneQuestion);
 		panelPrincipal.add(panelBoutons, BorderLayout.SOUTH);
 
+
+		// Modifications si la question n'est pas nouvelle, est à modifier
+		if (ancienneQst != null)
+		{
+			// Placer l'enoncé de la question et du feedback
+			if (ancienneQst.getEnonce() != null)
+				if (! ancienneQst.getEnonce().trim().isEmpty())
+					this.panelEnonce.setContenu(ancienneQst.getEnonce());
+
+			if (ancienneQst.getFeedback() != null)
+				if (! ancienneQst.getFeedback().trim().isEmpty())
+					this.panelFeedback.setContenu(ancienneQst.getFeedback());
+
+			// Ajouter les options de la question
+			if (ancienneQst.getEnsOptions() != null)
+			{
+				for (IOption opt : ancienneQst.getEnsOptions())
+				{
+					if (opt instanceof OptionElimination && ancienneQst.getType().equals("QAEPR"))
+					{
+						this.ajouterOption((OptionElimination) opt);
+					}
+				}
+			}
+			
+			majLegalite();
+		}
 
 		// Ajout du panel principal à la frame et configuration de cette dernière
 		this.add(panelPrincipal, BorderLayout.CENTER);
@@ -440,4 +353,160 @@ public class QuestionElimination extends JFrame
 
 	}
 
+	
+	public void ajouterOption(OptionElimination opt)
+	{
+		// Cas ou il y a trop d'options
+		if (nbOptions >= nbMaxOptions && opt == null)
+		{
+			JOptionPane.showMessageDialog(
+				null,
+				"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
+				"Erreur",
+				JOptionPane.ERROR_MESSAGE
+			);
+
+			return;
+		}
+		
+
+		// Panel contenant l'option
+		JPanel panelOption = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 5);
+
+
+		// Bouton "Supprimer"
+		ImageIcon iconeSupprimer = new ImageIcon(
+			new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
+		);
+
+		JButton btnSupprimer = new JButton(iconeSupprimer);
+		btnSupprimer.setPreferredSize(new Dimension(40, 40));
+		btnSupprimer.setBorderPainted(false);
+		btnSupprimer.setContentAreaFilled(false);
+		btnSupprimer.setFocusPainted(false);
+		btnSupprimer.setOpaque(false);
+
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.NONE;
+		panelOption.add(btnSupprimer, gbc);
+
+		btnSupprimer.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				panelOptions.remove(panelOption);
+				nbOptions--;
+				panelOptions.revalidate();
+				panelOptions.repaint();
+			}
+		});
+
+
+		// Panel de saisie pour l'option
+		PanelSaisie panelSaisieOption = new PanelSaisie(false);
+		panelSaisieOption.setHauteur(HAUTEUR_OPTIONS);
+		panelSaisieOption.setLargeur(LARGEUR_OPTIONS);
+		if (opt != null) panelSaisieOption.setContenu(opt.getEnonce());
+
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weightx = 1.0;
+		panelOption.add(panelSaisieOption, gbc);
+
+
+		// Label "Ordre :"
+		JLabel labelOrdre = new JLabel("Ordre :");
+
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		panelOption.add(labelOrdre, gbc);
+
+
+		// JTextField pour l'ordre
+		JTextField texteOrdre = new JTextField();
+		texteOrdre.setPreferredSize(new Dimension(30, 30));
+		if (opt != null) texteOrdre.setText(String.valueOf(opt.getOrdre()));
+
+		gbc.gridx = 3;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		panelOption.add(texteOrdre, gbc);
+
+		texteOrdre.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				majLegalite();
+			}
+		});
+
+
+		// Label "Points :"
+		JLabel labelPoints = new JLabel("Points :");
+
+		gbc.gridx = 4;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		panelOption.add(labelPoints, gbc);
+
+
+		// JTextField pour les points
+		JTextField textePoints = new JTextField();
+		textePoints.setPreferredSize(new Dimension(30, 30));
+		if (opt != null) textePoints.setText(String.valueOf(opt.getNbPointsMoins()));
+
+		gbc.gridx = 5;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		panelOption.add(textePoints, gbc);
+
+		textePoints.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				majLegalite();
+			}
+		});
+
+
+		// Bouton radio pour sélectionner la bonne réponse
+		JRadioButton btnRadio = new JRadioButton();
+		btnRadio.setPreferredSize(new Dimension(30, 30));
+		if (opt != null) 
+			if (opt.getEstReponse())
+				btnRadio.setSelected(true);
+
+		gbc.gridx = 6;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		groupeBtnsRadio.add(btnRadio);
+		panelOption.add(btnRadio, gbc);
+
+		btnRadio.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				majLegalite();
+			}
+		});
+
+
+		// Ajout du Panel de l'option au panel des options
+		panelOptions.add(panelOption);
+		nbOptions++;
+		panelOptions.revalidate();
+		panelOptions.repaint();
+	}
 }

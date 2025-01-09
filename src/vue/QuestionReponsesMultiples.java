@@ -1,11 +1,16 @@
 package vue;
 
 import controleur.Controleur;
+import controleur.ControleurFichier;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+
+import modele.Notion;
 import modele.Question;
+import modele.option.IOption;
 import modele.option.Option;
 
 public class QuestionReponsesMultiples extends JFrame
@@ -39,6 +44,16 @@ public class QuestionReponsesMultiples extends JFrame
 	public QuestionReponsesMultiples(Question question)
 	{
 		this.question = question;
+
+		final Question ancienneQst;
+		if (question.getEnsOptions().size() > 0)
+		{
+			ancienneQst = question;
+		}
+		else
+		{
+			ancienneQst = null;
+		}
 
 
 		// Panel principal
@@ -118,85 +133,7 @@ public class QuestionReponsesMultiples extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				// Cas ou il y a trop d'options
-				if (nbOptions >= nbMaxOptions)
-				{
-					JOptionPane.showMessageDialog(
-						null,
-						"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
-						"Erreur",
-						JOptionPane.ERROR_MESSAGE
-					);
-
-					return;
-				}
-				
-
-				// Panel contenant l'option
-				JPanel panelOption = new JPanel(new GridBagLayout());
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.insets = new Insets(5, 5, 5, 5);
-
-
-				// Bouton "Supprimer"
-				ImageIcon iconeSupprimer = new ImageIcon(
-					new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
-				);
-
-				JButton btnSupprimer = new JButton(iconeSupprimer);
-				btnSupprimer.setPreferredSize(new Dimension(40, 40));
-				btnSupprimer.setBorderPainted(false);
-				btnSupprimer.setContentAreaFilled(false);
-				btnSupprimer.setFocusPainted(false);
-				btnSupprimer.setOpaque(false);
-
-				gbc.gridx = 0;
-				gbc.gridy = 0;
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.fill = GridBagConstraints.NONE;
-				panelOption.add(btnSupprimer, gbc);
-
-				btnSupprimer.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						panelOptions.remove(panelOption);
-						nbOptions--;
-						panelOptions.revalidate();
-						panelOptions.repaint();
-					}
-				});
-
-
-				// Panel de saisie pour l'option
-				PanelSaisie panelSaisieOption = new PanelSaisie(false);
-				panelSaisieOption.setHauteur(HAUTEUR_OPTIONS);
-				panelSaisieOption.setLargeur(LARGEUR_OPTIONS);
-
-				gbc.gridx = 1;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.weightx = 1.0;
-				panelOption.add(panelSaisieOption, gbc);
-
-
-				// Ajouter une case à cocher
-				JCheckBox caseACocher = new JCheckBox();
-				caseACocher.setPreferredSize(new Dimension(30, 30));
-				panelOption.add(caseACocher, gbc);
-
-				gbc.gridx = 2;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				panelOption.add(caseACocher, gbc);
-
-				// Ajout du Panel de l'option au panel des options
-				panelOptions.add(panelOption);
-				nbOptions++;
-				panelOptions.revalidate();
-				panelOptions.repaint();
+				ajouterOption(null);
 			}
 		});
 
@@ -246,7 +183,6 @@ public class QuestionReponsesMultiples extends JFrame
 				String erreurs = "";
 
 				if (nbReponses == 0)                                                          { erreurs += "N'oubliez pas de sélectionner des réponses.\n"                                                                                        ; }
-				if (nbReponses == 1)                                                          { erreurs += "Sélectionnez au moins deux réponses, si vous souhaitez une seule,\n nous vous demanderons d'utiliser une question à réponse unique.\n"; }
 				if (! reponsesRemplies)                                                       { erreurs += "N'oubliez pas de remplir toutes les réponses.\n"                                                                                      ; }
 				if (nbOptions < 2)                                                            { erreurs += "Vous devez avoir au moins deux options. \n"                                                                                           ; }
 				if (nbOptions > nbMaxOptions)                                                 { erreurs += "Vous ne pouvez avoir que six options maximum. \n"                                                                                     ; }
@@ -254,6 +190,8 @@ public class QuestionReponsesMultiples extends JFrame
 
 				if (erreurs.trim().isEmpty())
 				{
+					
+					
 					// Enregistrer l'énoncé
 					question.setEnonce(panelEnonce.getContenu());
 
@@ -282,6 +220,17 @@ public class QuestionReponsesMultiples extends JFrame
 					}
 
 
+					Notion notionActuelle = question.getNotion();
+
+					ControleurFichier ctrlFichier = new ControleurFichier(
+							"lib/ressources/" + notionActuelle.getRessource().getId() + "_"
+									+ notionActuelle.getRessource().getNom() + "/"
+									+ notionActuelle.getNom() + "/");
+
+					// Enregistrer la question dans un fichier
+					if (ancienneQst == null) question.creerFichierQuestion();
+					else                     ctrlFichier.ecrireQuestion("question" + question.getNumQuestion() + "/question" + question.getNumQuestion(), question);
+					
 					// Fermer la fenêtre
 					QuestionReponsesMultiples.this.dispose();
 					new Accueil();
@@ -305,12 +254,131 @@ public class QuestionReponsesMultiples extends JFrame
 		panelPrincipal.add(panelBoutons, BorderLayout.SOUTH);
 
 
+		// Modifications si la question n'est pas nouvelle, est à modifier
+		if (ancienneQst != null)
+		{
+			// Placer l'enoncé de la question et du feedback
+			if (ancienneQst.getEnonce() != null)
+				if (! ancienneQst.getEnonce().trim().isEmpty())
+					this.panelEnonce.setContenu(ancienneQst.getEnonce());
+
+			if (ancienneQst.getFeedback() != null)
+				if (! ancienneQst.getFeedback().trim().isEmpty())
+					this.panelFeedback.setContenu(ancienneQst.getFeedback());
+
+			// Ajouter les options de la question
+			if (ancienneQst.getEnsOptions() != null)
+			{
+				for (IOption opt : ancienneQst.getEnsOptions())
+				{
+					if (opt instanceof Option && ancienneQst.getType().equals("QCMRM"));
+					{
+						this.ajouterOption((Option) opt);
+					}
+				}
+			}
+		}
+
 		// Ajout du panel principal à la frame et configuration de cette dernière
 		this.add(panelPrincipal, BorderLayout.CENTER);
-		this.setTitle("Question Elimination");
+		this.setTitle("Question à réponses multiples");
 		this.setSize(1000, 800);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+	}
+
+
+	public void ajouterOption(Option opt)
+	{
+		// Cas ou il y a trop d'options
+		if (nbOptions >= nbMaxOptions && opt == null)
+		{
+			JOptionPane.showMessageDialog(
+				null,
+				"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
+				"Erreur",
+				JOptionPane.ERROR_MESSAGE
+			);
+
+			return;
+		}
+
+
+		// Panel contenant l'option
+		JPanel panelOption = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 5);
+
+
+		// Bouton "Supprimer"
+		ImageIcon iconeSupprimer = new ImageIcon(
+			new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
+		);
+
+		JButton btnSupprimer = new JButton(iconeSupprimer);
+		btnSupprimer.setPreferredSize(new Dimension(40, 40));
+		btnSupprimer.setBorderPainted(false);
+		btnSupprimer.setContentAreaFilled(false);
+		btnSupprimer.setFocusPainted(false);
+		btnSupprimer.setOpaque(false);
+
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.NONE;
+		panelOption.add(btnSupprimer, gbc);
+
+		btnSupprimer.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				panelOptions.remove(panelOption);
+				nbOptions--;
+				panelOptions.revalidate();
+				panelOptions.repaint();
+			}
+		});
+
+
+		// Panel de saisie pour l'option
+		PanelSaisie panelSaisieOption = new PanelSaisie(false);
+		panelSaisieOption.setHauteur(HAUTEUR_OPTIONS);
+		panelSaisieOption.setLargeur(LARGEUR_OPTIONS);
+		if (opt != null)  panelSaisieOption.setContenu(opt.getEnonce());
+
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weightx = 1.0;
+		panelOption.add(panelSaisieOption, gbc);
+
+		// Ajouter un bouton radio
+		JCheckBox btnRadio = new JCheckBox();
+		btnRadio.setPreferredSize(new Dimension(30, 30));
+		panelOption.add(btnRadio, gbc);
+
+		// Si la question est une modifiable, et que l'option est correcte
+		if (opt != null)
+		{
+			if (opt.getEstReponse())
+			{
+				btnRadio.setSelected(true);
+			}
+		}
+
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		panelOption.add(btnRadio, gbc);
+
+
+		// Ajout du Panel de l'option au panel des options
+		panelOptions.add(panelOption);
+		nbOptions++;
+		panelOptions.revalidate();
+		panelOptions.repaint();
 	}
 }
