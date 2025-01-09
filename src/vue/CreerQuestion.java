@@ -7,6 +7,10 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import modele.Notion;
 import modele.Question;
+import vue.questions.QuestionAssociation;
+import vue.questions.QuestionElimination;
+import vue.questions.QuestionReponseUnique;
+import vue.questions.QuestionReponsesMultiples;
 
 public class CreerQuestion extends JFrame implements ActionListener
 {

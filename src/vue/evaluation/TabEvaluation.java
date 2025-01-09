@@ -1,4 +1,4 @@
-package vue;
+package vue.evaluation;
 
 import controleur.Controleur;
 import java.awt.*;
@@ -13,6 +13,8 @@ import modele.CreationHTML;
 import modele.Evaluation;
 import modele.Notion;
 import modele.Ressource;
+import vue.Accueil;
+import vue.CreerQuestion;
 
 public class TabEvaluation extends JFrame
 {

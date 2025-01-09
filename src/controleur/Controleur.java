@@ -7,6 +7,7 @@ import modele.option.Option;
 import modele.option.OptionAssociation;
 import modele.option.OptionElimination;
 import vue.*;
+import vue.evaluation.CreerEvaluation;
 
 public class Controleur
 {

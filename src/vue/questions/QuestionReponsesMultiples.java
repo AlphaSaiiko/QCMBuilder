@@ -1,4 +1,4 @@
-package vue;
+package vue.questions;
 
 import controleur.Controleur;
 import controleur.ControleurFichier;
@@ -12,6 +12,8 @@ import modele.Notion;
 import modele.Question;
 import modele.option.IOption;
 import modele.option.Option;
+import vue.Accueil;
+import vue.PanelSaisie;
 
 public class QuestionReponsesMultiples extends JFrame
 {

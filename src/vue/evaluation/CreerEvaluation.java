@@ -1,4 +1,4 @@
-package vue;
+package vue.evaluation;
 
 import controleur.Controleur;
 import java.awt.*;
