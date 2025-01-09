@@ -300,7 +300,6 @@ public class PanelSaisie extends JPanel
 				contenu.append("<br><a href=\"file:///").append(emplacementFichier).append("\" target=\"_blank\">").append(nomFichier).append("</a>");
 			}
 		}
-		System.out.println("CONTENU :\n\n" + contenu.toString() + "\n\n");
 		return contenu.toString();
 	}
 	
@@ -316,48 +315,42 @@ public class PanelSaisie extends JPanel
 	public void setHauteur(int hauteur) { this.setPreferredSize(new Dimension(this.getPreferredSize().width, hauteur)); }
 	public void setLargeur(int largeur) { this.setPreferredSize(new Dimension(largeur, this.getPreferredSize().height)); }
 	
-	public void setContenu(String contenu) {
+	public void setContenu(String contenu)
+	{
 		StyledDocument document = texte.getStyledDocument();
 		document.setCharacterAttributes(0, document.getLength(), document.getStyle("regular"), true);
-		try {
+
+		try
+		{
 			document.remove(0, document.getLength());
-		} catch (BadLocationException e) {
+		}
+		catch (BadLocationException e)
+		{
 			e.printStackTrace();
 		}
 	
-		SimpleAttributeSet attrs = new SimpleAttributeSet();
-		Color currentColor = Color.BLACK;
+		SimpleAttributeSet attrs        = new SimpleAttributeSet();
+		Color              currentColor = Color.BLACK             ;
 	
 		int i = 0;
-		while (i < contenu.length()) {
-			if (contenu.startsWith("<b>", i)) {
-				StyleConstants.setBold(attrs, true);
-				i += 3;
-			} else if (contenu.startsWith("</b>", i)) {
-				StyleConstants.setBold(attrs, false);
-				i += 4;
-			} else if (contenu.startsWith("<i>", i)) {
-				StyleConstants.setItalic(attrs, true);
-				i += 3;
-			} else if (contenu.startsWith("</i>", i)) {
-				StyleConstants.setItalic(attrs, false);
-				i += 4;
-			} else if (contenu.startsWith("<u>", i)) {
-				StyleConstants.setUnderline(attrs, true);
-				i += 3;
-			} else if (contenu.startsWith("</u>", i)) {
-				StyleConstants.setUnderline(attrs, false);
-				i += 4;
-			}
+		while (i < contenu.length())
+		{
+			if      (contenu.startsWith("<b>" , i)) { StyleConstants.setBold     (attrs, true ); i += 3; }
+			else if (contenu.startsWith("</b>", i)) { StyleConstants.setBold     (attrs, false); i += 4; }
+			else if (contenu.startsWith("<i>" , i)) { StyleConstants.setItalic   (attrs, true ); i += 3; }
+			else if (contenu.startsWith("</i>", i)) { StyleConstants.setItalic   (attrs, false); i += 4; }
+			else if (contenu.startsWith("<u>" , i)) { StyleConstants.setUnderline(attrs, true ); i += 3; }
+			else if (contenu.startsWith("</u>", i)) { StyleConstants.setUnderline(attrs, false); i += 4; }
+
 			else if (contenu.startsWith("<span style=\"color: ", i))
 			{
-				int endColorIndex = contenu.indexOf("\">", i);
-				String colorHex = contenu.substring(i + 21, endColorIndex);
+				int    endColorIndex = contenu.indexOf  ("\">" , i            );
+				String colorHex      = contenu.substring(i + 21, endColorIndex);
 				try
 				{
 					if (!colorHex.startsWith("#"))
 						colorHex = "#" + colorHex;
-					System.out.println(colorHex);
+
 					currentColor = Color.decode(colorHex);
 				}
 				catch (NumberFormatException e)
@@ -365,43 +358,61 @@ public class PanelSaisie extends JPanel
 					System.err.println("Invalid color format: " + colorHex);
 					currentColor = Color.BLACK;
 				}
+
 				StyleConstants.setForeground(attrs, currentColor);
 				i = endColorIndex + 2;
-			} else if (contenu.startsWith("</span>", i)) {
+			}
+
+			else if (contenu.startsWith("</span>", i))
+			{
 				currentColor = Color.BLACK;
 				StyleConstants.setForeground(attrs, currentColor);
 				i += 7;
-			} else if (contenu.startsWith("<img src=\"", i)) {
+			}
+
+			else if (contenu.startsWith("<img src=\"complements/", i))
+			{
 				int endSrcIndex = contenu.indexOf("\">", i);
-				String imagePath = contenu.substring(i + 10, endSrcIndex);
-				ImageIcon icon = new ImageIcon(imagePath);
-				texte.setCaretPosition(document.getLength());
-				texte.insertIcon(icon);
-				i = endSrcIndex + 2;
-			} else if (contenu.startsWith("<br>", i)) {
+				int endCommentIndex = contenu.indexOf("-->", i);
+				String imagePath = contenu.substring(endSrcIndex + 6, endCommentIndex);
+				File   image  = new File(imagePath)                                      ;
+				System.out.println(imagePath);
+				insererImage(image);
+				i=endCommentIndex+3;
+			}
+
+			else if (contenu.startsWith("<br>", i))
+			{
 				try {
 					document.insertString(document.getLength(), "\n", attrs);
 				} catch (BadLocationException e) {
 					e.printStackTrace();
 				}
 				i += 4;
-			} else if (contenu.startsWith("<a href=\"file:///", i)) {
-				int endHrefIndex = contenu.indexOf("\" target=\"_blank\">", i);
-				int endLinkIndex = contenu.indexOf("</a>", endHrefIndex);
-				String filePath = contenu.substring(i + 17, endHrefIndex);
-				String fileName = contenu.substring(endHrefIndex + 18, endLinkIndex);
-				File pieceJointe = new File(filePath);
-				listePiecesJointes.add(pieceJointe);
-				try {
-					document.insertString(document.getLength(), fileName, attrs);
-				} catch (BadLocationException e) {
-					e.printStackTrace();
-				}
+			}
+			
+			else if (contenu.startsWith("<a href=\"complements/", i))
+			{
+				int    endHrefIndex = contenu.indexOf  (" target=\"_blank\"><!--", i           );
+				int endLinkIndex = contenu.indexOf  ("</a>", i           );
+				int    endCommentIndex = contenu.indexOf  ("-->"                 , endHrefIndex);
+				String filePath     = contenu.substring(i + 21                 , endCommentIndex);
+				File   pieceJointe  = new File(filePath)                                      ;
+
+				ajouterPieceJointe(pieceJointe);
+
+
 				i = endLinkIndex + 4;
-			} else {
-				try {
+			}
+
+			else
+			{
+				try
+				{
 					document.insertString(document.getLength(), String.valueOf(contenu.charAt(i)), attrs);
-				} catch (BadLocationException e) {
+				} 
+				catch (BadLocationException e)
+				{
 					e.printStackTrace();
 				}
 				i++;
@@ -434,7 +445,7 @@ public class PanelSaisie extends JPanel
 			JOptionPane.showMessageDialog(this, "Sélectionnez du texte pour appliquer ou retirer le style.", "Info", JOptionPane.INFORMATION_MESSAGE);
 			// TEST SETTEXT POUR LA MODIFICATION DE QUESTION, DEBUT DE LA ZONE A MODIFIER 
 
-			String texteASet = "<span style=\"color: #333333\">dtjnijb</span><span style=\"color: #ff0000\">njeb<i>rebvub</i>hdvhbv<u>hjr</u></span><span style=\"color: #00ff00\"><u>bvbejhbvr<i>beuryt</i>gbuhfdjfghjr</u></span><span style=\"color: #0000ff\"><u>hs</u>guyshvhhdb<u>vdni</u></span><span style=\"color: #ffff00\"><u>hbduh</u>fbufbhusbhbvhsv</span>";
+			String texteASet = "<b></b><span style=\"color: #333333\"><b>nfj</b>snd<u>ifnd</u></span><span style=\"color: #ff0000\"><u>r<b>njdn<i>gjsdh</b></i>kjsdvjbh</u></span><span style=\"color: #00ff00\"><u>kjb</u>ndsj<i>kbjsbjvb</i>sdh<u>vq</u></span><span style=\"color: #0000ff\"><u>doibi</u>oiozz<b>nndvndwk</b></span><span style=\"color: #ffff00\"><b>ds6518</b>18s91<u>9sd1vsd<img src=\"complements/ciel.jpg\"><!--lib/ressources/R1.01_Initiation au développement/Algorithmique/question3/complements/ciel.jpg--></u></span><span style=\"color: #333333\"><br><br><b>vdsqvjvbqd</b>d         fdbfdb<br>d<img src=\"complements/ciel.jpg\"><!--lib/ressources/R1.01_Initiation au développement/Algorithmique/question3/complements/ciel.jpg-->dfbdf<img src=\"complements/soleil.png\"><!--lib/ressources/R1.01_Initiation au développement/Algorithmique/question3/complements/soleil.png-->yovfbdhvb</span><br><a href=\"complements/soleil.pdf\" target=\"_blank\"><!--lib/ressources/R1.01_Initiation au développement/Algorithmique/question3/complements/soleil.pdf-->soleil.pdf</a><br><a href=\"complements/test.html\" target=\"_blank\"><!--lib/ressources/R1.01_Initiation au développement/Algorithmique/question3/complements/test.html-->test.html</a><br><a href=\"complements/soleil.pdf\" target=\"_blank\"><!--lib/ressources/R1.01_Initiation au développement/Algorithmique/question3/complements/soleil.pdf-->soleil.pdf</a><br><a href=\"complements/prompt.txt\" target=\"_blank\"><!--lib/ressources/R1.01_Initiation au développement/Algorithmique/question3/complements/prompt.txt-->prompt.txt</a>";
 
 			setContenu(texteASet);
 
@@ -521,7 +532,7 @@ public class PanelSaisie extends JPanel
 
 			if (originalHeight > maxHeight)
 			{
-				double scale  = (double) (maxHeight     / originalHeight);
+				double scale  = (double)  maxHeight     / originalHeight ;
 				int newWidth  = (int)    (originalWidth * scale         );
 				int newHeight = maxHeight                                ;
 
@@ -549,48 +560,53 @@ public class PanelSaisie extends JPanel
 		if (returnValue == JFileChooser.APPROVE_OPTION)
 		{
 			File fichier = fileChooser.getSelectedFile();
-			this.listePiecesJointes.add(fichier);
-	
-			JPanel panelPieceJointe = new JPanel(new FlowLayout(FlowLayout.LEFT));
-			panelPieceJointe.setBorder(new LineBorder(Color.BLACK, 1));
-
-			JLabel nomPieceJointe = new JLabel(fichier.getName());
-	
-			ImageIcon iconeSupprimer = new ImageIcon(
-				new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)
-			);
-
-			JButton btnSupprimer = new JButton(iconeSupprimer);
-			btnSupprimer.setPreferredSize    (new Dimension(25, 25));
-			btnSupprimer.setBorderPainted    (false                             );
-			btnSupprimer.setContentAreaFilled(false                             );
-			btnSupprimer.setFocusPainted     (false                             );
-			btnSupprimer.setOpaque           (false                             );
-	
-			btnSupprimer.addActionListener(e ->
-			{
-				this.listePiecesJointes.remove(fichier);
-				panelPiecesJointes.remove(panelPieceJointe);
-	
-				if (this.listePiecesJointes.isEmpty())
-					this.remove(scrollPanePiecesJointes);
-		
-				this.revalidate();
-				this.repaint();
-			});
-	
-			panelPieceJointe.add(nomPieceJointe);
-			panelPieceJointe.add(btnSupprimer  );
-
-			panelPiecesJointes.add       (panelPieceJointe);
-			panelPiecesJointes.revalidate()                ;
-			panelPiecesJointes.repaint   ()                ;
-
-			if (!this.isAncestorOf(scrollPanePiecesJointes))
-				this.add(scrollPanePiecesJointes, BorderLayout.SOUTH);
-
-			this.revalidate();
-			this.repaint   ();
+			ajouterPieceJointe(fichier);
 		}
+	}
+
+	private void ajouterPieceJointe(File fichier)
+	{
+		this.listePiecesJointes.add(fichier);
+	
+		JPanel panelPieceJointe = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panelPieceJointe.setBorder(new LineBorder(Color.BLACK, 1));
+
+		JLabel nomPieceJointe = new JLabel(fichier.getName());
+
+		ImageIcon iconeSupprimer = new ImageIcon(
+			new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(25, 25, Image.SCALE_SMOOTH)
+		);
+
+		JButton btnSupprimer = new JButton(iconeSupprimer);
+		btnSupprimer.setPreferredSize    (new Dimension(25, 25));
+		btnSupprimer.setBorderPainted    (false                             );
+		btnSupprimer.setContentAreaFilled(false                             );
+		btnSupprimer.setFocusPainted     (false                             );
+		btnSupprimer.setOpaque           (false                             );
+
+		btnSupprimer.addActionListener(e ->
+		{
+			this.listePiecesJointes.remove(fichier);
+			panelPiecesJointes.remove(panelPieceJointe);
+
+			if (this.listePiecesJointes.isEmpty())
+				this.remove(scrollPanePiecesJointes);
+	
+			this.revalidate();
+			this.repaint();
+		});
+
+		panelPieceJointe.add(nomPieceJointe);
+		panelPieceJointe.add(btnSupprimer  );
+
+		panelPiecesJointes.add       (panelPieceJointe);
+		panelPiecesJointes.revalidate()                ;
+		panelPiecesJointes.repaint   ()                ;
+
+		if (!this.isAncestorOf(scrollPanePiecesJointes))
+			this.add(scrollPanePiecesJointes, BorderLayout.SOUTH);
+
+		this.revalidate();
+		this.repaint   ();
 	}
 }

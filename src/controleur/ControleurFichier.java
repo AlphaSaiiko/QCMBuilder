@@ -222,7 +222,7 @@ public class ControleurFichier
 				File fichierSource = new File(image);
 				copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
 				qst.ajouterComplement(emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
-				enonce = gererImages(enonce);
+				enonce = gererImage(enonce, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName(), fichierSource.getName());
 			}
 		}
 
@@ -237,7 +237,7 @@ public class ControleurFichier
 				File fichierSource = new File(pieceJointe);
 				copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
 				qst.ajouterComplement(emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
-				enonce = gererPiecesJointes(enonce);
+				enonce = gererPiecesJointe(enonce, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName(), fichierSource.getName());
 			}
 		}
 
@@ -260,7 +260,7 @@ public class ControleurFichier
 						File fichierSource = new File(image);
 						copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
 						qst.ajouterComplement(emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
-						enonce = gererImages(enonce);
+						enonce = gererImage(enonce, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName(), fichierSource.getName());
 					}
 				}
 
@@ -400,69 +400,86 @@ public class ControleurFichier
 
 
 
-	public static String gererImages(String enonce) {
-		// Expression régulière pour détecter les balises <img> avec un attribut src
-		String regex = "<img\\s+[^>]*src\\s*=\\s*\"([^\"]+)\"";
+	public static String gererImage(String enonce, String cheminAppli, String nomFichierAppli) {
+		String regex = "(<img\\s+[^>]*src\\s*=\\s*\"([^\"]+)\"[^>]*>)(<!--" + Pattern.quote(cheminAppli) + "-->)?";
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(enonce);
-	
-		// Construire le nouveau contenu avec les chemins mis à jour
 		StringBuffer resultat = new StringBuffer();
 	
 		while (matcher.find()) {
-			// Chemin d'origine de l'image
-			String cheminOrigine = matcher.group(1);
+			String baliseImg = matcher.group(1);
+			String cheminOrigine = matcher.group(2);
+			String commentaireExistant = matcher.group(3);
 	
-			// Extraire uniquement le nom du fichier
 			String nomFichier = cheminOrigine.substring(
 				Math.max(cheminOrigine.lastIndexOf("/"), cheminOrigine.lastIndexOf("\\")) + 1
 			);
 	
-			// Nouveau chemin relatif : ici on suppose que toutes les images vont dans le dossier "images/"
-			String nouveauChemin = "complements/" + nomFichier;
-	
-			// Remplacer le chemin d'origine par le nouveau chemin dans la balise <img>
-			matcher.appendReplacement(resultat, matcher.group(0).replace(cheminOrigine, nouveauChemin));
+			String replacement = baliseImg;
+			if (nomFichier.equals(nomFichierAppli)) {
+				String nouveauChemin = "complements/" + nomFichier;
+				replacement = baliseImg.replace(cheminOrigine, nouveauChemin);
+				
+				if (commentaireExistant == null) {
+					replacement += "<!--" + cheminAppli + "-->";
+				} else {
+					replacement += commentaireExistant;
+				}
+			} else if (commentaireExistant != null) {
+				replacement += commentaireExistant;
+			}
+			
+			matcher.appendReplacement(resultat, Matcher.quoteReplacement(replacement));
 		}
 	
-		// Ajouter le reste du texte après la dernière correspondance
 		matcher.appendTail(resultat);
-	
 		return resultat.toString();
 	}
 	
+	
+	
+	
+	
 
 
-	public static String gererPiecesJointes(String enonce) {
-		// Expression régulière pour détecter les balises <a> avec un attribut href
-		String regex = "<a\\s+[^>]*href\\s*=\\s*\"([^\"]+)\"";
+	public static String gererPiecesJointe(String enonce, String cheminAppli, String nomFichierAppli) {
+		String regex = "(<a\\s+[^>]*href\\s*=\\s*\"([^\"]+)\"[^>]*>)(<!--" + Pattern.quote(cheminAppli) + "-->)?";
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		Matcher matcher = pattern.matcher(enonce);
-	
-		// Construire le nouveau contenu avec les chemins mis à jour
 		StringBuffer resultat = new StringBuffer();
 	
 		while (matcher.find()) {
-			// Chemin d'origine de la pièce jointe
-			String cheminOrigine = matcher.group(1);
+			String baliseA = matcher.group(1);
+			String cheminOrigine = matcher.group(2);
+			String commentaireExistant = matcher.group(3);
 	
-			// Extraire uniquement le nom du fichier en prenant en compte les deux types de séparateurs
 			String nomFichier = cheminOrigine.substring(
 				Math.max(cheminOrigine.lastIndexOf("/"), cheminOrigine.lastIndexOf("\\")) + 1
 			);
 	
-			// Nouveau chemin relatif : ici on suppose que toutes les pièces jointes vont dans le dossier "images/"
-			String nouveauChemin = "complements/" + nomFichier;
-	
-			// Remplacer le chemin d'origine par le nouveau chemin dans la balise <a>
-			matcher.appendReplacement(resultat, matcher.group(0).replace(cheminOrigine, nouveauChemin));
+			String replacement = baliseA;
+			if (nomFichier.equals(nomFichierAppli)) {
+				String nouveauChemin = "complements/" + nomFichier;
+				replacement = baliseA.replace(cheminOrigine, nouveauChemin);
+				
+				if (commentaireExistant == null) {
+					replacement += "<!--" + cheminAppli + "-->";
+				} else {
+					replacement += commentaireExistant;
+				}
+			} else if (commentaireExistant != null) {
+				replacement += commentaireExistant;
+			}
+			
+			matcher.appendReplacement(resultat, Matcher.quoteReplacement(replacement));
 		}
 	
-		// Ajouter le reste du texte après la dernière correspondance
 		matcher.appendTail(resultat);
-	
 		return resultat.toString();
 	}
+	
+	
+	
 	
 	
 	
