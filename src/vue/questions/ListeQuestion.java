@@ -219,12 +219,8 @@ public class ListeQuestion extends JFrame implements ActionListener
 				System.out.println(question);
 			}
 
-			try {
-				if (notion.getNbQuestion() > 0)
-					lstQuestion.setSelectedValue(notion.getQuestion(0).getEnonce(), true);
-			} catch(Exception e) {
-
-			}
+			if (lstQuestion.getModel().getSize() > 0)
+				lstQuestion.setSelectedIndex(0);
 			
 		}
 
