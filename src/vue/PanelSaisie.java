@@ -10,10 +10,11 @@ import java.io.File;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.text.*;
+import javax.swing.text.html.HTMLEditorKit;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import modele.Question;
+import java.util.Stack;
 
 public class PanelSaisie extends JPanel
 {
@@ -49,8 +50,8 @@ public class PanelSaisie extends JPanel
 		this.setLayout(new BorderLayout());
 		
 		texte = new JTextPane();
+		texte.setStyledDocument(new DefaultStyledDocument()); // Utilise StyledDocument		
 		StyledDocument document = texte.getStyledDocument();
-		
 
 		// Toolbar
 		JToolBar barreOutils = new JToolBar();
@@ -315,17 +316,106 @@ public class PanelSaisie extends JPanel
 	public void setHauteur(int hauteur) { this.setPreferredSize(new Dimension(this.getPreferredSize().width, hauteur)); }
 	public void setLargeur(int largeur) { this.setPreferredSize(new Dimension(largeur, this.getPreferredSize().height)); }
 	
-	public void setContenu(String contenu)
-	{
-		if (contenu != null)
-		{
-			if (! contenu.trim().isEmpty())
+	public void setContenu(String contenu) {
+		StyledDocument document = texte.getStyledDocument();
+		document.setCharacterAttributes(0, document.getLength(), document.getStyle("regular"), true);
+		try {
+			document.remove(0, document.getLength());
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+	
+		SimpleAttributeSet attrs = new SimpleAttributeSet();
+		Color currentColor = Color.BLACK;
+	
+		int i = 0;
+		while (i < contenu.length()) {
+			if (contenu.startsWith("<b>", i)) {
+				StyleConstants.setBold(attrs, true);
+				i += 3;
+			} else if (contenu.startsWith("</b>", i)) {
+				StyleConstants.setBold(attrs, false);
+				i += 4;
+			} else if (contenu.startsWith("<i>", i)) {
+				StyleConstants.setItalic(attrs, true);
+				i += 3;
+			} else if (contenu.startsWith("</i>", i)) {
+				StyleConstants.setItalic(attrs, false);
+				i += 4;
+			} else if (contenu.startsWith("<u>", i)) {
+				StyleConstants.setUnderline(attrs, true);
+				i += 3;
+			} else if (contenu.startsWith("</u>", i)) {
+				StyleConstants.setUnderline(attrs, false);
+				i += 4;
+			}
+			else if (contenu.startsWith("<span style=\"color: ", i))
 			{
-				this.texte.setText(contenu);
+				int endColorIndex = contenu.indexOf("\">", i);
+				String colorHex = contenu.substring(i + 21, endColorIndex);
+				try
+				{
+					if (!colorHex.startsWith("#"))
+						colorHex = "#" + colorHex;
+					System.out.println(colorHex);
+					currentColor = Color.decode(colorHex);
+				}
+				catch (NumberFormatException e)
+				{
+					System.err.println("Invalid color format: " + colorHex);
+					currentColor = Color.BLACK;
+				}
+				StyleConstants.setForeground(attrs, currentColor);
+				i = endColorIndex + 2;
+			} else if (contenu.startsWith("</span>", i)) {
+				currentColor = Color.BLACK;
+				StyleConstants.setForeground(attrs, currentColor);
+				i += 7;
+			} else if (contenu.startsWith("<img src=\"", i)) {
+				int endSrcIndex = contenu.indexOf("\">", i);
+				String imagePath = contenu.substring(i + 10, endSrcIndex);
+				ImageIcon icon = new ImageIcon(imagePath);
+				texte.setCaretPosition(document.getLength());
+				texte.insertIcon(icon);
+				i = endSrcIndex + 2;
+			} else if (contenu.startsWith("<br>", i)) {
+				try {
+					document.insertString(document.getLength(), "\n", attrs);
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+				i += 4;
+			} else if (contenu.startsWith("<a href=\"file:///", i)) {
+				int endHrefIndex = contenu.indexOf("\" target=\"_blank\">", i);
+				int endLinkIndex = contenu.indexOf("</a>", endHrefIndex);
+				String filePath = contenu.substring(i + 17, endHrefIndex);
+				String fileName = contenu.substring(endHrefIndex + 18, endLinkIndex);
+				File pieceJointe = new File(filePath);
+				listePiecesJointes.add(pieceJointe);
+				try {
+					document.insertString(document.getLength(), fileName, attrs);
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+				i = endLinkIndex + 4;
+			} else {
+				try {
+					document.insertString(document.getLength(), String.valueOf(contenu.charAt(i)), attrs);
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+				i++;
 			}
 		}
-			
 	}
+	
+	
+	
+
+	
+	
+	
+
 
 	
 
@@ -335,41 +425,88 @@ public class PanelSaisie extends JPanel
 	 * | METHODES |
 	 * +----------+
 	 */
-	
-	private void appliquerStyle(StyledDocument document, Object style)
-	{
+			
+	private void appliquerStyle(StyledDocument document, Object style) {
 		int debut = texte.getSelectionStart();
-		int fin   = texte.getSelectionEnd  ();
-
-		if (debut == fin)
-		{
+		int fin = texte.getSelectionEnd();
+	
+		if (debut == fin) {
 			JOptionPane.showMessageDialog(this, "Sélectionnez du texte pour appliquer ou retirer le style.", "Info", JOptionPane.INFORMATION_MESSAGE);
+			// TEST SETTEXT POUR LA MODIFICATION DE QUESTION, DEBUT DE LA ZONE A MODIFIER 
+
+			String texteASet = "<span style=\"color: #333333\">dtjnijb</span><span style=\"color: #ff0000\">njeb<i>rebvub</i>hdvhbv<u>hjr</u></span><span style=\"color: #00ff00\"><u>bvbejhbvr<i>beuryt</i>gbuhfdjfghjr</u></span><span style=\"color: #0000ff\"><u>hs</u>guyshvhhdb<u>vdni</u></span><span style=\"color: #ffff00\"><u>hbduh</u>fbufbhusbhbvhsv</span>";
+
+			setContenu(texteASet);
+
+			// FIN DE LA ZONE A MODIFIER
+			
 			return;
 		}
-
-		for (int i = debut; i < fin; )
-		{
-			Element element      = document.getCharacterElement(i);
-			int     elementStart = element .getStartOffset     () ;
-			int     elementEnd   = element .getEndOffset       () ;
-
+	
+		// Compteurs pour le style
+		int avecStyle = 0;
+		int sansStyle = 0;
+	
+		// Première passe : compter les caractères avec et sans le style
+		for (int i = debut; i < fin; ) {
+			Element element = document.getCharacterElement(i);
+			int elementStart = element.getStartOffset();
+			int elementEnd = element.getEndOffset();
+	
 			int start = Math.max(debut, elementStart);
-			int end   = Math.min(fin  , elementEnd  );
-
-			AttributeSet       stylesActuels  = element.getAttributes ()             ;
+			int end = Math.min(fin, elementEnd);
+	
+			AttributeSet stylesActuels = element.getAttributes();
+	
+			boolean hasStyle = false;
+			if (style == StyleConstants.Bold) {
+				hasStyle = StyleConstants.isBold(stylesActuels);
+			} else if (style == StyleConstants.Italic) {
+				hasStyle = StyleConstants.isItalic(stylesActuels);
+			} else if (style == StyleConstants.Underline) {
+				hasStyle = StyleConstants.isUnderline(stylesActuels);
+			}
+	
+			if (hasStyle) {
+				avecStyle += end - start;
+			} else {
+				sansStyle += end - start;
+			}
+	
+			i = elementEnd;
+		}
+	
+		// Déterminer l'action à effectuer
+		boolean appliquerStyle = sansStyle >= avecStyle;
+	
+		// Deuxième passe : appliquer ou retirer le style
+		for (int i = debut; i < fin; ) {
+			Element element = document.getCharacterElement(i);
+			int elementStart = element.getStartOffset();
+			int elementEnd = element.getEndOffset();
+	
+			int start = Math.max(debut, elementStart);
+			int end = Math.min(fin, elementEnd);
+	
+			AttributeSet stylesActuels = element.getAttributes();
 			SimpleAttributeSet nouveauxStyles = new SimpleAttributeSet(stylesActuels);
-
-			if      (style == StyleConstants.Bold     ) { StyleConstants.setBold     (nouveauxStyles, !StyleConstants.isBold     (stylesActuels)); }
-			else if (style == StyleConstants.Italic   ) { StyleConstants.setItalic   (nouveauxStyles, !StyleConstants.isItalic   (stylesActuels)); }
-			else if (style == StyleConstants.Underline) { StyleConstants.setUnderline(nouveauxStyles, !StyleConstants.isUnderline(stylesActuels)); }
-
+	
+			if (style == StyleConstants.Bold) {
+				StyleConstants.setBold(nouveauxStyles, appliquerStyle);
+			} else if (style == StyleConstants.Italic) {
+				StyleConstants.setItalic(nouveauxStyles, appliquerStyle);
+			} else if (style == StyleConstants.Underline) {
+				StyleConstants.setUnderline(nouveauxStyles, appliquerStyle);
+			}
+	
 			document.setCharacterAttributes(start, end - start, nouveauxStyles, true);
-
+	
 			i = elementEnd;
 		}
 	}
-
-
+			
+				
+	
 
 	private void insererImage(File fichier)
 	{
