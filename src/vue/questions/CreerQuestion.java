@@ -93,7 +93,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 	
 		// Creation d'une JComboBox pour les ressources et matières
 		this.listeRessources = new JComboBox<String>(Controleur.getIDsNomsRessources());
-		this.listeRessources.setPreferredSize(new Dimension(150, 30));
+		this.listeRessources.setPreferredSize(new Dimension(450, 30));
 		this.listeRessources.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 10)); // Espacement
 		if (questionAModifier != null) this.listeRessources.setSelectedItem(questionAModifier.getNotion().getRessource().getNom());
 
@@ -329,6 +329,13 @@ public class CreerQuestion extends JFrame implements ActionListener
 			String typeSelectionne = (String) listeTypes.getSelectedItem();
 			if (notion != null && typeSelectionne != null && difficulte != 0 && erreurs.isEmpty()) 
 			{
+				if (questionAModifier != null)
+				{
+					questionAModifier.setNbPoints  (nbPoints);
+					questionAModifier.setTemps     (tempsReponse);
+					questionAModifier.setDifficulte(difficulte);
+				}
+				
 				// new QRU (Question qst, boolean estAModifier)
 				if ("Question à choix multiple à réponse unique".equals(typeSelectionne)) 
 				{
@@ -430,7 +437,7 @@ public class CreerQuestion extends JFrame implements ActionListener
 			this.add(panelPrincipal);
 			if (questionAModifier == null) this.setTitle("Créer une question");
 			else                           this.setTitle("Modifier une question");
-			this.setSize(700, 330);
+			this.setSize(1000, 330);
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			this.setLocationRelativeTo(null);
 			this.setVisible(true);

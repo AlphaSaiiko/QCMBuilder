@@ -207,6 +207,9 @@ public class QuestionReponseUnique extends JFrame
 					if (! panelFeedback.getContenu().trim().isEmpty())
 						question.setFeedback(panelFeedback.getContenu());
 
+
+					if (ancienneQst != null) question.supprimerAllOptions();
+
 					//Enregistrer les réponses
 					for (int i = 0; i < panelOptions.getComponentCount(); i++)
 					{

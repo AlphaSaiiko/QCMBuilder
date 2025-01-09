@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import modele.Notion;
@@ -159,17 +158,17 @@ public class ControleurFichier
 					}
 				}*/
 
-				ligneEntiere += option.getType() + "/" + enonce + "/" + option.getId();
+				ligneEntiere += option.getType() + "~" + enonce + "~" + option.getId();
 				if (option instanceof OptionElimination)
 				{
 					OptionElimination optionE = (OptionElimination) option;
-					ligneEntiere += "/" + optionE.getEstReponse() + "/" + optionE.getOrdre() + "/" + optionE.getNbPointsMoins();
+					ligneEntiere += "~" + optionE.getEstReponse() + "~" + optionE.getOrdre() + "~" + optionE.getNbPointsMoins();
 				}
 				
 				if (option instanceof Option) 
 				{
 					Option optionO = (Option) option;
-					ligneEntiere += "/" + optionO.getEstReponse();
+					ligneEntiere += "~" + optionO.getEstReponse();
 				}
 				ligneEntiere += "|";
 			}
@@ -178,7 +177,6 @@ public class ControleurFichier
 				PrintWriter pw = new PrintWriter(new FileOutputStream(emplacement, false));
 				pw.println(ligneEntiere);
 				pw.close();
-				System.out.println("Fichier RTF créé : " + emplacement);
 			} catch (Exception e) {
 				System.err.println("Erreur dans la création du rtf");
 			}
@@ -266,16 +264,16 @@ public class ControleurFichier
 
 				option.setEnonce(enonce);
 
-				ligneEntiere += option.getType() + "/" + option.getEnonce() + "/" + option.getId();
+				ligneEntiere += option.getType() + "~" + option.getEnonce() + "~" + option.getId();
 				if (option instanceof OptionElimination)
 				{
 					OptionElimination optionE = (OptionElimination) option;
-					ligneEntiere += "/" + optionE.getEstReponse() + "/" + optionE.getOrdre() + "/" + optionE.getNbPointsMoins();
+					ligneEntiere += "~" + optionE.getEstReponse() + "~" + optionE.getOrdre() + "~" + optionE.getNbPointsMoins();
 				}
 				if (option instanceof Option) 
 				{
 					Option optionO = (Option) option;
-					ligneEntiere += "/" + optionO.getEstReponse();
+					ligneEntiere += "~" + optionO.getEstReponse();
 				}
 				ligneEntiere += "|";
 			}
@@ -503,6 +501,8 @@ public class ControleurFichier
 			System.out.println("Le fichier n'existe pas. :" + emplacement);
 			return;
 		}
+
+		System.out.println("rere ça passe ici");
 
 		String texte ="";
 
