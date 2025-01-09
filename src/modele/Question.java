@@ -237,5 +237,10 @@ public class Question
 		
 		return this.listeComplements.add(emplacement);
 	}
+
+	public void supprimerAllOptions()
+	{
+		if (this.listeOptions != null) this.listeOptions = new ArrayList<>();
+	}
 }
 	

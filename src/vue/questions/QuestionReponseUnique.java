@@ -223,6 +223,7 @@ public class QuestionReponseUnique extends JFrame
 
 						Option option = Controleur.creerReponse(panelSaisieOption.getContenu(), btnRadio.isSelected(), question);
 
+						if (ancienneQst != null) question.supprimerAllOptions();
 						question.ajouterOption(option);
 					}
 
