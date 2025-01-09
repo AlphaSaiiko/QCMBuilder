@@ -485,6 +485,8 @@ public class ControleurFichier
 			return;
 		}
 
+		System.out.println("rere ça passe ici");
+
 		String texte ="";
 
 		if(opt instanceof Option){texte = this.stringOption((Option)opt);}

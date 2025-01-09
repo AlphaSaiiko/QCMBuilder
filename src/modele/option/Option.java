@@ -92,11 +92,11 @@ public class Option implements IOption
 	public void modifierReponse()
 	{
 		ControleurFichier controleurFichier = new ControleurFichier(
-			"lib/ressources/" + question.getNotion().getRessource().getNom() +
+			"lib/ressources/" + question.getNotion().getRessource().getId()+"_"+question.getNotion().getRessource().getNom() +
 			"/"               + question.getNotion().getNom()                +
-			"/question"       + question.getNumQuestion()
+			"/question"       + (question.getNumQuestion()-1)
 		);
 
-		controleurFichier.modifierReponse("/question" + question.getNumQuestion(), this);
+		controleurFichier.modifierReponse("/question" + (question.getNumQuestion()-1), this);
 	}
 }
