@@ -91,7 +91,6 @@ public class Parametre extends JFrame
 				{
 					id  = nomRessource[0];
 					nom = nomRessource[1];
-					System.out.println("Nom: " + nom + " ID: " + id);
 				}
 				
 				Ressource ressource = Controleur.trouverRessourceParId(id);

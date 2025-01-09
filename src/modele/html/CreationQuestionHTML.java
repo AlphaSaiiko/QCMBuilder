@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-
 import modele.Evaluation;
 import modele.Question;
 import modele.option.*;
@@ -156,7 +155,6 @@ public class CreationQuestionHTML {
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -240,7 +238,6 @@ public class CreationQuestionHTML {
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -313,7 +310,6 @@ public class CreationQuestionHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin() + "/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -391,7 +387,6 @@ public class CreationQuestionHTML {
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/page" + numQuestion + ".html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -581,7 +576,6 @@ public class CreationQuestionHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/scriptReponseMultiple.js"))) {
 			writer.write(jsContent.toString());
-			System.out.println("Le fichier JS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -765,7 +759,6 @@ public class CreationQuestionHTML {
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/scriptReponseUnique.js"))) {
 			writer.write(jsContent.toString());
-			System.out.println("Le fichier JS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -943,7 +936,6 @@ public class CreationQuestionHTML {
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/scriptElimination.js"))) {
 			writer.write(jsContent.toString());
-			System.out.println("Le fichier JS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1185,7 +1177,6 @@ public class CreationQuestionHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/scriptAssociation.js"))) {
 			writer.write(jsContent.toString());
-			System.out.println("Le fichier JS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1234,7 +1225,6 @@ public class CreationQuestionHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/timer.js"))) {
 			writer.write(jsContent.toString());
-			System.out.println("Le fichier JS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1350,7 +1340,6 @@ public class CreationQuestionHTML {
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/styleAssociation.css"))) {
 			writer.write(cssContent.toString());
-			System.out.println("Le fichier CSS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1466,7 +1455,6 @@ public class CreationQuestionHTML {
 	
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/styleElimination.css"))) {
 			writer.write(cssContent.toString());
-			System.out.println("Le fichier CSS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1577,7 +1565,6 @@ public class CreationQuestionHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/styleReponseUnique.css"))) {
 			writer.write(cssContent.toString());
-			System.out.println("Le fichier CSS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

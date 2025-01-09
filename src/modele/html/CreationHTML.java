@@ -1,14 +1,13 @@
 package modele.html;
 
 import controleur.*;
-import modele.Evaluation;
-import modele.Notion;
-import modele.Question;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import modele.Evaluation;
+import modele.Notion;
+import modele.Question;
 
 public class CreationHTML {
 
@@ -39,7 +38,6 @@ public class CreationHTML {
 		this.questionHTML.ecrireJsReponseUnique();
 		this.questionHTML.ecrireJsTimer();
 
-		System.out.println("liste question : " + this.evaluation.getListeQuestions()) ;
 
 		htmlContent.append("<!DOCTYPE html>\n");
 		htmlContent.append("<html lang=\"fr\">\n");
@@ -73,7 +71,6 @@ public class CreationHTML {
 		// Sauvegarde dans un fichier HTML
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/pageDAccueil.html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -297,7 +294,6 @@ public class CreationHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/style.css"))) {
 			writer.write(cssContent.toString());
-			System.out.println("Le fichier CSS a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -408,7 +404,6 @@ public class CreationHTML {
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.evaluation.getChemin()+"/pageDeFin.html"))) {
 			writer.write(htmlContent.toString());
-			System.out.println("Le fichier HTML a été généré avec succès !");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

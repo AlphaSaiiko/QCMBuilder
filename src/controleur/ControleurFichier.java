@@ -11,7 +11,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import modele.Notion;
@@ -178,7 +177,6 @@ public class ControleurFichier
 				PrintWriter pw = new PrintWriter(new FileOutputStream(emplacement, false));
 				pw.println(ligneEntiere);
 				pw.close();
-				System.out.println("Fichier RTF créé : " + emplacement);
 			} catch (Exception e) {
 				System.err.println("Erreur dans la création du rtf");
 			}
