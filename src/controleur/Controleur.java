@@ -149,7 +149,7 @@ public class Controleur
 								case "QCMRM":
 									String[] reponsesQCM = reponses.split("\\|");
 									for (String reponseQCM : reponsesQCM) {
-										String[] reponse = reponseQCM.split("/");
+										String[] reponse = reponseQCM.split("~");
 										Option o = Controleur.creerReponse(reponse[1], Boolean.parseBoolean(reponse[3]), tmp);
 										tmp.ajouterOption(o);
 										System.out.println("Réponse créée : " + reponseQCM);
@@ -160,7 +160,7 @@ public class Controleur
 									String[] reponsesQAE = reponses.split("\\|");
 									OptionAssociation previousOption = null;
 									for (String reponseQAE : reponsesQAE) {
-										String[] reponse = reponseQAE.split("/");
+										String[] reponse = reponseQAE.split("~");
 										OptionAssociation currentOption = Controleur.creerReponseAssociation(reponse[1], tmp);
 	
 										if (previousOption != null) {
@@ -184,7 +184,7 @@ public class Controleur
 								case "QAEPR":
 									String[] reponsesQAEPR = reponses.split("\\|");
 									for (String reponseQAEPR : reponsesQAEPR) {
-										String[] reponse = reponseQAEPR.split("/");
+										String[] reponse = reponseQAEPR.split("~");
 										OptionElimination o = Controleur.creerReponseElimination(reponse[1], Integer.parseInt(reponse[4]), Double.parseDouble(reponse[5]), Boolean.parseBoolean(reponse[3]), tmp);
 										tmp.ajouterOption(o);
 										System.out.println("Réponse créée : " + reponseQAEPR);

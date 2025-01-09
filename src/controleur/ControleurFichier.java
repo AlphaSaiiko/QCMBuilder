@@ -158,17 +158,17 @@ public class ControleurFichier
 					}
 				}*/
 
-				ligneEntiere += option.getType() + "/" + enonce + "/" + option.getId();
+				ligneEntiere += option.getType() + "~" + enonce + "~" + option.getId();
 				if (option instanceof OptionElimination)
 				{
 					OptionElimination optionE = (OptionElimination) option;
-					ligneEntiere += "/" + optionE.getEstReponse() + "/" + optionE.getOrdre() + "/" + optionE.getNbPointsMoins();
+					ligneEntiere += "~" + optionE.getEstReponse() + "~" + optionE.getOrdre() + "~" + optionE.getNbPointsMoins();
 				}
 				
 				if (option instanceof Option) 
 				{
 					Option optionO = (Option) option;
-					ligneEntiere += "/" + optionO.getEstReponse();
+					ligneEntiere += "~" + optionO.getEstReponse();
 				}
 				ligneEntiere += "|";
 			}
@@ -264,16 +264,16 @@ public class ControleurFichier
 
 				option.setEnonce(enonce);
 
-				ligneEntiere += option.getType() + "/" + option.getEnonce() + "/" + option.getId();
+				ligneEntiere += option.getType() + "~" + option.getEnonce() + "~" + option.getId();
 				if (option instanceof OptionElimination)
 				{
 					OptionElimination optionE = (OptionElimination) option;
-					ligneEntiere += "/" + optionE.getEstReponse() + "/" + optionE.getOrdre() + "/" + optionE.getNbPointsMoins();
+					ligneEntiere += "~" + optionE.getEstReponse() + "~" + optionE.getOrdre() + "~" + optionE.getNbPointsMoins();
 				}
 				if (option instanceof Option) 
 				{
 					Option optionO = (Option) option;
-					ligneEntiere += "/" + optionO.getEstReponse();
+					ligneEntiere += "~" + optionO.getEstReponse();
 				}
 				ligneEntiere += "|";
 			}
