@@ -1,11 +1,16 @@
 package vue;
 
 import controleur.Controleur;
+import controleur.ControleurFichier;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+
+import modele.Notion;
 import modele.Question;
+import modele.option.IOption;
 import modele.option.Option;
 
 public class QuestionReponseUnique extends JFrame
@@ -21,8 +26,9 @@ public class QuestionReponseUnique extends JFrame
 	private       JPanel      panelBoutons          ;
 	private       JPanel      panelOptions          ;
 	private       PanelSaisie panelEnonce           ;
-	private       PanelSaisie panelFeedback      ;
+	private       PanelSaisie panelFeedback         ;
 	private       JFrame      frameExplication      ;
+	private       ButtonGroup groupeBtnsRadio       ;
 	private       int         nbOptions        = 0  ;
 	private final int         nbMaxOptions     = 6  ;
 	private final int         HAUTEUR_OPTIONS  = 150;
@@ -41,7 +47,15 @@ public class QuestionReponseUnique extends JFrame
 	{
 		this.question = question;
 
-		boolean aModifier = (question.getEnsOptions().size()>0);
+		final Question ancienneQst;
+		if (question.getEnsOptions().size() > 0)
+		{
+			ancienneQst = question;
+		}
+		else
+		{
+			ancienneQst = null;
+		}
 
 
 		// Panel principal
@@ -54,7 +68,8 @@ public class QuestionReponseUnique extends JFrame
 
 		btnRetour.addActionListener(e ->
 		{
-			Controleur.ouvrirCreerQuestion();
+			if (ancienneQst == null) Controleur.ouvrirCreerQuestion();
+			else                     Controleur.ouvrirCreerQuestion(question);
 			dispose();
 		});
 
@@ -115,7 +130,7 @@ public class QuestionReponseUnique extends JFrame
 
 
 		// Initialiser le groupe de boutons radio
-		ButtonGroup groupeBtnsRadio = new ButtonGroup();
+		this.groupeBtnsRadio = new ButtonGroup();
 
 
 		// Ajouter un ActionListener au bouton "Ajouter"
@@ -125,87 +140,7 @@ public class QuestionReponseUnique extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				// Cas ou il y a trop d'options
-				if (nbOptions >= nbMaxOptions)
-				{
-					JOptionPane.showMessageDialog(
-						null,
-						"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
-						"Erreur",
-						JOptionPane.ERROR_MESSAGE
-					);
-
-					return;
-				}
-				
-
-				// Panel contenant l'option
-				JPanel panelOption = new JPanel(new GridBagLayout());
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.insets = new Insets(5, 5, 5, 5);
-
-
-				// Bouton "Supprimer"
-				ImageIcon iconeSupprimer = new ImageIcon(
-					new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
-				);
-
-				JButton btnSupprimer = new JButton(iconeSupprimer);
-				btnSupprimer.setPreferredSize(new Dimension(40, 40));
-				btnSupprimer.setBorderPainted(false);
-				btnSupprimer.setContentAreaFilled(false);
-				btnSupprimer.setFocusPainted(false);
-				btnSupprimer.setOpaque(false);
-
-				gbc.gridx = 0;
-				gbc.gridy = 0;
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.fill = GridBagConstraints.NONE;
-				panelOption.add(btnSupprimer, gbc);
-
-				btnSupprimer.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						panelOptions.remove(panelOption);
-						nbOptions--;
-						panelOptions.revalidate();
-						panelOptions.repaint();
-					}
-				});
-
-
-				// Panel de saisie pour l'option
-				PanelSaisie panelSaisieOption = new PanelSaisie(false);
-				panelSaisieOption.setHauteur(HAUTEUR_OPTIONS);
-				panelSaisieOption.setLargeur(LARGEUR_OPTIONS);
-
-				gbc.gridx = 1;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.weightx = 1.0;
-				panelOption.add(panelSaisieOption, gbc);
-
-				
-				// Ajouter un bouton radio
-				JRadioButton btnRadio = new JRadioButton();
-				btnRadio.setPreferredSize(new Dimension(30, 30));
-				panelOption.add(btnRadio, gbc);
-
-				gbc.gridx = 2;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				groupeBtnsRadio.add(btnRadio);
-				panelOption.add(btnRadio, gbc);
-				
-
-				// Ajout du Panel de l'option au panel des options
-				panelOptions.add(panelOption);
-				nbOptions++;
-				panelOptions.revalidate();
-				panelOptions.repaint();
+				ajouterOption(null);
 			}
 		});
 		
@@ -261,7 +196,9 @@ public class QuestionReponseUnique extends JFrame
 
 				if (erreurs.trim().isEmpty())
 				{
-					// Enregistrer la question dans un fichier
+
+					
+					// Enregistrer l'énoncé de la question
 					question.setEnonce(panelEnonce.getContenu());
 					
 					// Enregistrer l'explication
@@ -288,6 +225,19 @@ public class QuestionReponseUnique extends JFrame
 					}
 
 
+
+					Notion notionActuelle = question.getNotion();
+
+					ControleurFichier ctrlFichier = new ControleurFichier(
+							"lib/ressources/" + notionActuelle.getRessource().getId() + "_"
+									+ notionActuelle.getRessource().getNom() + "/"
+									+ notionActuelle.getNom() + "/");
+
+					// Enregistrer la question dans un fichier
+					if (ancienneQst == null) question.creerFichierQuestion();
+					else                     ctrlFichier.ecrireQuestion("question" + question.getNumQuestion() + "/question" + question.getNumQuestion(), question);
+					
+
 					// Fermer la fenêtre
 					QuestionReponseUnique.this.dispose();
 					new Accueil();
@@ -310,13 +260,130 @@ public class QuestionReponseUnique extends JFrame
 		panelPrincipal.add(scrollPaneQuestion);
 		panelPrincipal.add(panelBoutons, BorderLayout.SOUTH);
 
+		// Modifications si la question n'est pas nouvelle, est à modifier
+		if (ancienneQst != null)
+		{
+			// Placer l'enoncé de la question et du feedback
+			if (ancienneQst.getEnonce() != null)
+				if (! ancienneQst.getEnonce().trim().isEmpty())
+					this.panelEnonce.setContenu(ancienneQst.getEnonce());
+
+			if (ancienneQst.getFeedback() != null)
+				if (! ancienneQst.getFeedback().trim().isEmpty())
+					this.panelFeedback.setContenu(ancienneQst.getFeedback());
+
+			// Ajouter les options de la question
+			if (ancienneQst.getEnsOptions() != null)
+			{
+				for (IOption opt : ancienneQst.getEnsOptions())
+				{
+					if (opt instanceof Option && ancienneQst.getType().equals("QCMRU"))
+					{
+						this.ajouterOption((Option) opt);
+					}
+				}
+			}
+		}
 
 		// Ajout du panel principal à la frame et configuration de cette dernière
 		this.add(panelPrincipal, BorderLayout.CENTER);
-		this.setTitle("Question Elimination");
+		this.setTitle("Question à réponse unique");
 		this.setSize(1000, 800);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+	}
+
+	public void ajouterOption(Option opt)
+	{
+		// Cas ou il y a trop d'options
+		if (nbOptions >= nbMaxOptions && opt == null)
+		{
+			JOptionPane.showMessageDialog(
+				null,
+				"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
+				"Erreur",
+				JOptionPane.ERROR_MESSAGE
+			);
+
+			return;
+		}
+
+
+		// Panel contenant l'option
+		JPanel panelOption = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 5);
+
+
+		// Bouton "Supprimer"
+		ImageIcon iconeSupprimer = new ImageIcon(
+			new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
+		);
+
+		JButton btnSupprimer = new JButton(iconeSupprimer);
+		btnSupprimer.setPreferredSize(new Dimension(40, 40));
+		btnSupprimer.setBorderPainted(false);
+		btnSupprimer.setContentAreaFilled(false);
+		btnSupprimer.setFocusPainted(false);
+		btnSupprimer.setOpaque(false);
+
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.NONE;
+		panelOption.add(btnSupprimer, gbc);
+
+		btnSupprimer.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				panelOptions.remove(panelOption);
+				nbOptions--;
+				panelOptions.revalidate();
+				panelOptions.repaint();
+			}
+		});
+
+
+		// Panel de saisie pour l'option
+		PanelSaisie panelSaisieOption = new PanelSaisie(false);
+		panelSaisieOption.setHauteur(HAUTEUR_OPTIONS);
+		panelSaisieOption.setLargeur(LARGEUR_OPTIONS);
+		if (opt != null)  panelSaisieOption.setContenu(opt.getEnonce());
+
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weightx = 1.0;
+		panelOption.add(panelSaisieOption, gbc);
+		// Ajouter un bouton radio
+		JRadioButton btnRadio = new JRadioButton();
+		btnRadio.setPreferredSize(new Dimension(30, 30));
+		panelOption.add(btnRadio, gbc);
+
+		// Si la question est une modifiable, et que l'option est correcte
+		if (opt != null)
+		{
+			if (opt.getEstReponse())
+			{
+				btnRadio.setSelected(true);
+			}
+		}
+
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		groupeBtnsRadio.add(btnRadio);
+		panelOption.add(btnRadio, gbc);
+
+
+		// Ajout du Panel de l'option au panel des options
+		panelOptions.add(panelOption);
+		nbOptions++;
+		panelOptions.revalidate();
+		panelOptions.repaint();
 	}
 }

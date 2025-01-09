@@ -12,7 +12,6 @@ import controleur.ControleurFichier;
 import modele.Notion;
 import modele.Question;
 import modele.Ressource;
-import vue.question.*;
 
 public class ListeQuestion extends JFrame implements ActionListener 
 {
@@ -145,7 +144,9 @@ public class ListeQuestion extends JFrame implements ActionListener
 			}
 
 			if (this.questionActuelle != null)
+			{
 				this.voirQuestion = new VoirQuestion(this.questionActuelle);
+			}	
 
 		});
 
@@ -160,7 +161,10 @@ public class ListeQuestion extends JFrame implements ActionListener
 			}
 
 			if (this.questionActuelle != null)
+			{
 				this.modificationQst = Controleur.ouvrirCreerQuestion(this.questionActuelle);
+				this.dispose();
+			}
 
 		});
 
@@ -180,7 +184,7 @@ public class ListeQuestion extends JFrame implements ActionListener
 								+ notionActuelle.getRessource().getNom() + "/"
 								+ notionActuelle.getNom() + "/");
 
-				ctrlFichier.supprimerRtf("question" + this.questionActuelle.getNumQuestion() + "/question" + this.questionActuelle.getNumQuestion());
+				ctrlFichier.supprimerRtf("question" + (this.questionActuelle.getNumQuestion()-1) + "/question" + (this.questionActuelle.getNumQuestion()-1));
 				majListeQuestion(notionActuelle.getNom());
 			}
 

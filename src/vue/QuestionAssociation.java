@@ -1,12 +1,19 @@
 package vue;
 
 import controleur.Controleur;
+import controleur.ControleurFichier;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+
+import modele.Notion;
 import modele.Question;
+import modele.option.IOption;
+import modele.option.Option;
 import modele.option.OptionAssociation;
+import modele.option.OptionElimination;
 
 public class QuestionAssociation extends JFrame
 {
@@ -18,8 +25,9 @@ public class QuestionAssociation extends JFrame
 
 		private       Question    question              ;
 		private       JPanel      panelQuestion         ;
+		private       JPanel      panelOptions          ;
 		private       PanelSaisie panelEnonce           ;
-		private       PanelSaisie panelFeedback      ;
+		private       PanelSaisie panelFeedback         ;
 		private       int         nbOptions        = 0  ;
 		private final int         nbMaxOptions     = 6  ;
 		private final int         HAUTEUR_OPTIONS  = 150;
@@ -34,6 +42,16 @@ public class QuestionAssociation extends JFrame
 	public QuestionAssociation(Question question)
 	{
 		this.question = question;
+
+		final Question ancienneQst;
+		if (question.getEnsOptions().size() > 0)
+		{
+			ancienneQst = question;
+		}
+		else
+		{
+			ancienneQst = null;
+		}
 
 		// Panel principal
 		JPanel panelPrincipal = new JPanel();
@@ -87,7 +105,7 @@ public class QuestionAssociation extends JFrame
 		panelQuestion.add(panelFeedbackWrapper, BorderLayout.CENTER);
 
 		// Panel pour les options
-		JPanel panelOptions = new JPanel();
+		panelOptions = new JPanel();
 		panelOptions.setLayout(new BoxLayout(panelOptions, BoxLayout.Y_AXIS));
 		panelQuestion.add(panelOptions, BorderLayout.SOUTH);
 
@@ -102,80 +120,7 @@ public class QuestionAssociation extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				// Cas ou il y a trop d'options
-				if (nbOptions >= nbMaxOptions)
-				{
-					JOptionPane.showMessageDialog(
-						null,
-						"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
-						"Erreur",
-						JOptionPane.ERROR_MESSAGE
-					);
-
-					return;
-				}
-
-				// Panel contenant l'option
-				JPanel panelOption = new JPanel(new GridBagLayout());
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.insets = new Insets(5, 5, 5, 5);
-
-				// Bouton "Supprimer"
-				ImageIcon iconeSupprimer = new ImageIcon(
-					new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
-				);
-
-				JButton btnSupprimer = new JButton(iconeSupprimer);
-				btnSupprimer.setPreferredSize(new Dimension(40, 40));
-				btnSupprimer.setBorderPainted(false);
-				btnSupprimer.setContentAreaFilled(false);
-				btnSupprimer.setFocusPainted(false);
-				btnSupprimer.setOpaque(false);
-
-				gbc.gridx = 0;
-				gbc.gridy = 0;
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.fill = GridBagConstraints.NONE;
-				panelOption.add(btnSupprimer, gbc);
-
-				btnSupprimer.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						panelOptions.remove(panelOption);
-						nbOptions--;
-						panelOptions.revalidate();
-						panelOptions.repaint();
-					}
-				});
-
-				// Premier élément
-				PanelSaisie element1 = new PanelSaisie(false);
-				element1.setHauteur(HAUTEUR_OPTIONS);
-
-				gbc.gridx = 1;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.weightx = 1.0;
-				panelOption.add(element1, gbc);
-
-				// Second élément
-				PanelSaisie element2 = new PanelSaisie(false);
-				element2.setHauteur(HAUTEUR_OPTIONS);
-
-				gbc.gridx = 2;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-				gbc.anchor = GridBagConstraints.CENTER;
-				gbc.weightx = 1.0;
-				panelOption.add(element2, gbc);
-
-				// Ajout du Panel de l'option au panel des options
-				panelOptions.add(panelOption);
-				nbOptions++;
-				panelOptions.revalidate();
-				panelOptions.repaint();
+				ajouterOption(null);
 			}
 		});
 
@@ -225,6 +170,9 @@ public class QuestionAssociation extends JFrame
 
 				if (erreurs.trim().isEmpty())
 				{
+					
+					
+
 					// Enregistrer l'énoncé
 					question.setEnonce(panelEnonce.getContenu());
 
@@ -277,6 +225,18 @@ public class QuestionAssociation extends JFrame
 						}
 					}
 
+
+					Notion notionActuelle = question.getNotion();
+
+					ControleurFichier ctrlFichier = new ControleurFichier(
+							"lib/ressources/" + notionActuelle.getRessource().getId() + "_"
+									+ notionActuelle.getRessource().getNom() + "/"
+									+ notionActuelle.getNom() + "/");
+
+					// Enregistrer la question dans un fichier
+					if (ancienneQst == null) question.creerFichierQuestion();
+					else                     ctrlFichier.ecrireQuestion("question" + question.getNumQuestion() + "/question" + question.getNumQuestion(), question);
+					
 					// Fermer la fenêtre
 					QuestionAssociation.this.dispose();
 					new Accueil();
@@ -296,6 +256,32 @@ public class QuestionAssociation extends JFrame
 		panelPrincipal.add(scrollPaneQuestion);
 		panelPrincipal.add(panelBoutons, BorderLayout.SOUTH);
 
+		// Modifications si la question n'est pas nouvelle, est à modifier
+		if (ancienneQst != null)
+		{
+			// Placer l'enoncé de la question et du feedback
+			if (ancienneQst.getEnonce() != null)
+				if (! ancienneQst.getEnonce().trim().isEmpty())
+					this.panelEnonce.setContenu(ancienneQst.getEnonce());
+
+			if (ancienneQst.getFeedback() != null)
+				if (! ancienneQst.getFeedback().trim().isEmpty())
+					this.panelFeedback.setContenu(ancienneQst.getFeedback());
+
+			// Ajouter les options de la question
+			if (ancienneQst.getEnsOptions() != null)
+			{
+				for (IOption opt : ancienneQst.getEnsOptions())
+				{
+					if (opt instanceof OptionAssociation && ancienneQst.getType().equals("QAE") && (opt.getId()%2==0))
+					{
+						this.ajouterOption((OptionAssociation) opt);
+					}
+				}
+			}
+		}
+
+
 		// Ajout du panel principal à la frame et configuration de cette dernière
 		this.add(panelPrincipal, BorderLayout.CENTER);
 		this.setTitle("Question Association");
@@ -303,5 +289,86 @@ public class QuestionAssociation extends JFrame
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
+	}
+
+
+	public void ajouterOption(OptionAssociation opt)
+	{
+		// Cas ou il y a trop d'options
+		if (nbOptions >= nbMaxOptions && opt == null)
+		{
+			JOptionPane.showMessageDialog(
+				null,
+				"Le nombre maximum de réponses est atteint (" + nbMaxOptions + ").",
+				"Erreur",
+				JOptionPane.ERROR_MESSAGE
+			);
+
+			return;
+		}
+
+		// Panel contenant l'option
+		JPanel panelOption = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(5, 5, 5, 5);
+
+		// Bouton "Supprimer"
+		ImageIcon iconeSupprimer = new ImageIcon(
+			new ImageIcon("./lib/icones/delete.png").getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)
+		);
+
+		JButton btnSupprimer = new JButton(iconeSupprimer);
+		btnSupprimer.setPreferredSize(new Dimension(40, 40));
+		btnSupprimer.setBorderPainted(false);
+		btnSupprimer.setContentAreaFilled(false);
+		btnSupprimer.setFocusPainted(false);
+		btnSupprimer.setOpaque(false);
+
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.fill = GridBagConstraints.NONE;
+		panelOption.add(btnSupprimer, gbc);
+
+		btnSupprimer.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				panelOptions.remove(panelOption);
+				nbOptions--;
+				panelOptions.revalidate();
+				panelOptions.repaint();
+			}
+		});
+
+		// Premier élément
+		PanelSaisie element1 = new PanelSaisie(false);
+		element1.setHauteur(HAUTEUR_OPTIONS);
+		if (opt != null) element1.setContenu(opt.getEnonce());
+
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weightx = 1.0;
+		panelOption.add(element1, gbc);
+
+		// Second élément
+		PanelSaisie element2 = new PanelSaisie(false);
+		element2.setHauteur(HAUTEUR_OPTIONS);
+		if (opt != null) element2.setContenu(opt.getAssocie().getEnonce());
+
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.CENTER;
+		gbc.weightx = 1.0;
+		panelOption.add(element2, gbc);
+
+		// Ajout du Panel de l'option au panel des options
+		panelOptions.add(panelOption);
+		nbOptions++;
+		panelOptions.revalidate();
+		panelOptions.repaint();
 	}
 }
