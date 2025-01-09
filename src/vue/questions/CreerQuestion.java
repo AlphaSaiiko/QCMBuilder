@@ -329,6 +329,13 @@ public class CreerQuestion extends JFrame implements ActionListener
 			String typeSelectionne = (String) listeTypes.getSelectedItem();
 			if (notion != null && typeSelectionne != null && difficulte != 0 && erreurs.isEmpty()) 
 			{
+				if (questionAModifier != null)
+				{
+					questionAModifier.setNbPoints  (nbPoints);
+					questionAModifier.setTemps     (tempsReponse);
+					questionAModifier.setDifficulte(difficulte);
+				}
+				
 				// new QRU (Question qst, boolean estAModifier)
 				if ("Question à choix multiple à réponse unique".equals(typeSelectionne)) 
 				{
