@@ -1,4 +1,4 @@
-package vue;
+package vue.notionetressource;
 
 import controleur.Controleur;
 import java.awt.*;

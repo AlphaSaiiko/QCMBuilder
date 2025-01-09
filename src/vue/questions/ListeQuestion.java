@@ -1,4 +1,4 @@
-package vue;
+package vue.questions;
 
 import java.awt.*;
 import java.awt.event.*;

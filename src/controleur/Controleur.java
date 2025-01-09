@@ -8,6 +8,9 @@ import modele.option.OptionAssociation;
 import modele.option.OptionElimination;
 import vue.*;
 import vue.evaluation.CreerEvaluation;
+import vue.notionetressource.Parametre;
+import vue.questions.CreerQuestion;
+import vue.questions.ListeQuestion;
 
 public class Controleur
 {

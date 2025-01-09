@@ -9,12 +9,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import modele.CreationHTML;
 import modele.Evaluation;
 import modele.Notion;
 import modele.Ressource;
+import modele.html.CreationHTML;
 import vue.Accueil;
-import vue.CreerQuestion;
+import vue.questions.CreerQuestion;
 
 public class TabEvaluation extends JFrame
 {

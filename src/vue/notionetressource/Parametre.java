@@ -1,4 +1,4 @@
-package vue;
+package vue.notionetressource;
 
 import controleur.Controleur;
 import java.awt.*;
@@ -9,6 +9,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import modele.Notion;
 import modele.Ressource;
+import vue.Accueil;
 
 public class Parametre extends JFrame
 {

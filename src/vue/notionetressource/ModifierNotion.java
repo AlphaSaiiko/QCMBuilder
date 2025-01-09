@@ -1,4 +1,4 @@
-package vue;
+package vue.notionetressource;
 
 import java.awt.*;
 import java.io.File;

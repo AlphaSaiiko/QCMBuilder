@@ -1,4 +1,4 @@
-package modele;
+package modele.html;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -8,6 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+
+import modele.Evaluation;
+import modele.Question;
 import modele.option.*;
 
 public class CreationQuestionHTML {

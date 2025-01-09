@@ -1,4 +1,4 @@
-package vue;
+package vue.notionetressource;
 
 import controleur.Controleur;
 import java.awt.*;
@@ -66,29 +66,6 @@ public class CreerRessource extends JFrame
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-    }
-
-    /**
-     * +----------+
-     * | METHODES |
-     * +----------+
-     */
-
-    /**
-     * Crée un bouton rond personnalisé avec une couleur et un texte spécifiques.
-     *
-     * @param couleur la couleur de fond du bouton
-     * @param texte   le texte affiché sur le bouton
-     * @return un objet {@link RoundButton} configuré avec les propriétés spécifiées
-     */
-    public static BoutonRond creerBoutonRond(Color couleur, String texte)
-    {
-        BoutonRond btnRond = new BoutonRond(texte);
-        btnRond.setPreferredSize(new Dimension(45, 45));
-        btnRond.setBackground(couleur);
-        btnRond.setOpaque(false);
-        btnRond.setBorderPainted(false);
-        return btnRond;
     }
 
     // Main

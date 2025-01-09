@@ -1,4 +1,4 @@
-package vue;
+package vue.questions;
 
 import controleur.Controleur;
 

@@ -1,6 +1,10 @@
-package modele;
+package modele.html;
 
 import controleur.*;
+import modele.Evaluation;
+import modele.Notion;
+import modele.Question;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
