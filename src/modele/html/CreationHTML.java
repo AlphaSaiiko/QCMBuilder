@@ -322,10 +322,19 @@ public class CreationHTML {
 			htmlContent.append("\t\t<h1>Évaluation</h1>").append("\n");
 		}
 		htmlContent.append("\t\t<p><strong>Ressource :</strong> "+ressource+"</p>").append("\n");
+		htmlContent.append("\t\t<p><strong>Notion(s) :</strong> ");
+		int cpt=0;
 		for (Notion n : notion)
 		{
-			htmlContent.append("\t\t<p><strong>Notion(s) :</strong> "+n.getNom()+"</p>").append("\n");
+			cpt++;
+			htmlContent.append(n.getNom());
+			if (cpt<notion.size())
+			{
+				htmlContent.append(", ");
+			}
+			else{htmlContent.append(".");}
 		}
+		htmlContent.append("</p>").append("\n");
 		htmlContent.append("\t\t<p><strong>Nombre de questions :</strong> "+(tf+f+m+d)+" dont ");
 		if (tf>0){htmlContent.append("\t\t "+tf+" Très Facile  ");}
 		if (f>0){htmlContent.append("\t\t  "+f+" Facile  ");}
@@ -376,10 +385,19 @@ public class CreationHTML {
 		htmlContent.append("        <h1>Évaluation Terminée ! </h1>").append("\n");
 		htmlContent.append("        <p> <span class=\"bold-texte\"> Ressource : </span> "+ this.evaluation.getRessource().getNom() + "</p>").append("\n");
 
+		htmlContent.append("\t\t<p><strong>Notion(s) :</strong> ");
+		int cpt=0;
 		for (Notion n : this.evaluation.getListeNotions())
 		{
-			htmlContent.append("        <p><span class=\"bold-texte\"> Notion(s) : </span> "+n.getNom()+"</p>").append("\n");
+			cpt++;
+			htmlContent.append(n.getNom());
+			if (cpt<this.evaluation.getListeNotions().size())
+			{
+				htmlContent.append(", ");
+			}
+			else{htmlContent.append(".");}
 		}
+		htmlContent.append("</p>").append("\n");
 		htmlContent.append("        <p> <span class=\"bold-texte\"> Nombre de questions : </span> "+this.evaluation.getNbQuestion()+" dont ");
 		if (tf>0){htmlContent.append(tf+"<span class=\"cercleTresFacile\">TF</span> ");}
 		if (f>0){htmlContent.append(f+"<span class=\"cercleFacile\">F</span> ");}
