@@ -2,6 +2,7 @@ package controleur;
 
 import java.io.*;
 import java.util.*;
+
 import modele.*;
 import modele.option.Option;
 import modele.option.OptionAssociation;
@@ -15,38 +16,46 @@ import vue.questions.ListeQuestion;
 public class Controleur
 {
 	/*
-	 * +------------+
-	 * | PARAMETRES |
-	 * +------------+
+	 * +-----------+
+	 * | ATTRIBUTS |
+	 * +-----------+
 	 */
 
-	private static Accueil acc;
-	private static Metier metier;
+	private static Accueil acc   ;
+	private static Metier  metier;
+
+
+
 
 	/*
 	 * +--------------+
 	 * | CONSTRUCTEUR |
 	 * +--------------+
 	 */
+
 	public Controleur()
 	{
 		Controleur.metier = new Metier(this);
 	}
+
+
+
 
 	/*
 	 * +-------------------------------+
 	 * | CHARGER RESSOURCES ET NOTIONS |
 	 * +-------------------------------+
 	 */
+
 	public static void chargerRessourcesEtNotion()
 	{
 		try 
 		{
 			Scanner scRes = new Scanner(new FileInputStream("./RessourceEtNotion.csv"));
 
-			String nomRessource;
-			String idRessource;
-			Ressource ressource;
+			String    nomRessource;
+			String    idRessource ;
+			Ressource ressource   ;
 
 			while (scRes.hasNextLine())
 			{
@@ -54,19 +63,15 @@ public class Controleur
 
 				boolean aNotion = !(ligne.indexOf("notions:") == -1);
 
-				idRessource  = ligne.substring(3, ligne.indexOf("nom:")-1);
-				if (aNotion) nomRessource = ligne.substring(ligne.indexOf("nom:")+4, ligne.indexOf("notions:")-1);
-				else         nomRessource = ligne.substring(ligne.indexOf("nom:")+4);
+				idRessource = ligne.substring(3, ligne.indexOf("nom:") - 1);
+				if   (aNotion) nomRessource = ligne.substring(ligne.indexOf("nom:") + 4, ligne.indexOf("notions:") - 1);
+				else           nomRessource = ligne.substring(ligne.indexOf("nom:") + 4);
 				
-
-
 				ressource = Ressource.creerRessource(nomRessource, idRessource);
-
 
 				if (aNotion)
 				{
 					Notion notion;
-
 					
 					ligne = ligne.substring(ligne.indexOf("notions:")+8);
 					String[] ligneQuestion = ligne.split(",");
@@ -74,14 +79,9 @@ public class Controleur
 					for (int cpt = 0; cpt < ligneQuestion.length; cpt++)
 					{
 						notion = Notion.creerNotion(ligneQuestion[cpt], ressource);
-							
 						Controleur.chargerQuestion(notion);
 					}
 				}
-				
-				
-
-				
 			}
 
 		} catch (Exception e) 
@@ -89,20 +89,21 @@ public class Controleur
 			System.err.println("Erreur lors du chargement des ressources et des notions : " );
 			e.printStackTrace();
 		}
-		
-
-
 	}
+
+
+
 
 	/*
 	 * +--------------------+
 	 * | CHARGER QUESTIONS  |
 	 * +--------------------+
 	 */
+
 	public static void chargerQuestion(Notion notion) 
 	{
-		int cpt = 0; // Boucle pour chaque question
-		int numQuestion = -1; // Pour vérifier si il y a un décalage entre la dernière question et cpt, en cas de suppression de questions
+		int cpt = 0;
+		int numQuestion = -1;
 		File dir = new File("./lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
 	
 		if (!dir.exists() || !dir.isDirectory()) 
@@ -118,7 +119,6 @@ public class Controleur
 			return;
 		}
 	
-		// Trier les dossiers par nom pour assurer un ordre cohérent
 		Arrays.sort(dossiers);
 	
 		for (File dossier : dossiers) 
@@ -126,7 +126,6 @@ public class Controleur
 			if (dossier.listFiles() != null) 
 			{
 				File fichierRTF = new File(dossier, dossier.getName() + ".rtf");
-				System.out.println("Dossier : " + dossier.getName());
 	
 				try (Scanner sc = new Scanner(new FileInputStream(fichierRTF))) 
 				{
@@ -141,41 +140,42 @@ public class Controleur
 							continue;
 						}
 	
-						String type = String.valueOf(ligne[0]);
-						String intitule = String.valueOf(ligne[1]);
-						int nbPoints = Integer.parseInt(String.valueOf(ligne[2]));
-						int temps = Integer.parseInt(String.valueOf(ligne[3]));
-						int difficulte = Integer.parseInt(String.valueOf(ligne[4]));
-						String feedback = String.valueOf(ligne[6]);
+						String type       = String .valueOf (               ligne[0] );
+						String intitule   = String .valueOf (               ligne[1] );
+						int    nbPoints   = Integer.parseInt(String.valueOf(ligne[2]));
+						int    temps      = Integer.parseInt(String.valueOf(ligne[3]));
+						int    difficulte = Integer.parseInt(String.valueOf(ligne[4]));
+						String feedback   = String .valueOf (               ligne[6] );
 
 						numQuestion = Integer.valueOf(dossier.getName().trim().substring(8));
 	
 						Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
-						tmp.setEnonce(intitule);
-						tmp.setFeedback(feedback);
+						tmp.setEnonce     (intitule   );
+						tmp.setFeedback   (feedback   );
 						tmp.setNumQuestion(numQuestion);
-						System.out.println("Question créée : " + tmp.getEnonce());
 	
 						if (ligne.length > 7) 
 						{
 							String reponses = String.valueOf(ligne[7]);
+
 							switch (tmp.getType()) 
 							{
 								case "QCMRU":
 								case "QCMRM":
 									String[] reponsesQCM = reponses.split("\\|");
+
 									for (String reponseQCM : reponsesQCM) 
 									{
 										String[] reponse = reponseQCM.split("~");
 										Option o = Controleur.creerReponse(reponse[1], Boolean.parseBoolean(reponse[3]), tmp);
 										tmp.ajouterOption(o);
-										System.out.println("Réponse créée : " + reponseQCM);
 									}
 									break;
 	
 								case "QAE":
 									String[] reponsesQAE = reponses.split("\\|");
 									OptionAssociation previousOption = null;
+
 									for (String reponseQAE : reponsesQAE) 
 									{
 										String[] reponse = reponseQAE.split("~");
@@ -190,26 +190,25 @@ public class Controleur
 											tmp.ajouterOption(currentOption);
 	
 											previousOption = null;
-										} else 
+										}
+										else 
 										{
 											previousOption = currentOption;
 										}
 									}
 	
 									if (previousOption != null) 
-									{
 										System.err.println("Attention : une réponse reste non associée.");
-									}
 									break;
 	
 								case "QAEPR":
 									String[] reponsesQAEPR = reponses.split("\\|");
+
 									for (String reponseQAEPR : reponsesQAEPR) 
 									{
 										String[] reponse = reponseQAEPR.split("~");
 										OptionElimination o = Controleur.creerReponseElimination(reponse[1], Integer.parseInt(reponse[4]), Double.parseDouble(reponse[5]), Boolean.parseBoolean(reponse[3]), tmp);
 										tmp.ajouterOption(o);
-										System.out.println("Réponse créée : " + reponseQAEPR);
 									}
 									break;
 	
@@ -219,13 +218,15 @@ public class Controleur
 							}
 						}
 					}
-					if (numQuestion != cpt) { notion.setNbQuestion(numQuestion + 1); System.out.println(numQuestion + "!=" + cpt); }
-					else System.out.println(numQuestion + "=" + cpt);
-				} catch (FileNotFoundException e) 
+					if (numQuestion != cpt)
+						notion.setNbQuestion(numQuestion + 1);
+				}
+				catch (FileNotFoundException e) 
 				{
 					System.err.println("Erreur : Fichier non trouvé - " + fichierRTF.getPath());
 					e.printStackTrace();
-				} catch (Exception e) 
+				}
+				catch (Exception e) 
 				{
 					System.err.println("Erreur lors du chargement des questions.");
 					e.printStackTrace();
@@ -236,169 +237,76 @@ public class Controleur
 	}
 	
 	
+
 	
+	/*
+	 * +----------+
+	 * | GETTEURS |
+	 * +----------+
+	 */
+
+	public static List<Notion>    getListNotion       () { return Metier.getListeNotions     (); }
+	public static List<Question>  getListQuestion     () { return Metier.getListeQuestions   (); }
+	public static List<Ressource> getListRessource    () { return Metier.getListeRessources  (); }
+	public static String[]        getIDsNomsRessources() { return Metier.getIDsNomsRessources(); }
+	public static String[]        getNomsNotions      () { return Metier.getNomsNotions      (); }
+	public static String[]        getNomsRessources   () { return Metier.getNomsRessources   (); }
 
 
 		
+
 	/*
-	 * +-------------------+
-	 * | METHODES D'ACTION |
-	 * +-------------------+
+	 * +----------+
+	 * | METHODES |
+	 * +----------+
 	 */
 	
-	public static void creerEvaluation()
-	{
-		new CreerEvaluation();
-	}
-
-	public static void ouvrirCreerQuestion()
-	{
-		new CreerQuestion(null);
-	}
-
-	public static CreerQuestion ouvrirCreerQuestion(Question qstAModifier)
-	{
-		return (new CreerQuestion(qstAModifier));
-	}
-
-	public static void ouvrirCreerEvaluation()
-	{
-		new CreerEvaluation();
-	}
-
-	public static void ouvrirListeQuestion()
-	{
-		new ListeQuestion();
-	}
-
-	public static void ouvrirParametres()
-	{
-		new Parametre();
-	}
-
-	public static void ouvrirAccueil()
-	{
-		new Accueil();
-	}
-
-	public static void recupererQuestion(Evaluation eval, Notion notion, int tf, int f, int m, int d)
-	{
-		eval.recupererQuestion(notion, tf, f, m, d);
-	}
-
-	public static void creerNotion(String titreNotion, Ressource ressource)
-	{
-		Notion.creerNotion(titreNotion, ressource);
-	}
-
-	public static void creerRessource(String titreRessource, String idRessource)
-	{
-		Ressource.creerRessource(titreRessource, idRessource);
-	}
-
-	public static OptionElimination creerReponseElimination(String texte, int ordre, double points, boolean correct, Question question)
-	{
-		return new OptionElimination("QAEPR", texte, correct, ordre, points, question);
-	}
-
-	public static OptionAssociation creerReponseAssociation( String enonce, Question question)
-	{
-		return new OptionAssociation("QAE", enonce, question);
-	}
-
-	public static Option creerReponse(String enonce, boolean validite, Question question)
-	{
-		return new Option("QCM", enonce, validite, question);
-	}
+	public static void              creerEvaluation        ()                                                                                             {        new CreerEvaluation  ()                                                              ; }
+	public static void              creerNotion            (String titreNotion   , Ressource ressource                                                  ) { Notion    .creerNotion      (titreNotion   , ressource                                     ); }
+	public static void              creerRessource         (String titreRessource, String idRessource                                                   ) { Ressource .creerRessource   (titreRessource, idRessource                                   ); }
+	public static OptionElimination creerReponseElimination(String texte         , int ordre         , double points, boolean correct, Question question) { return new OptionElimination("QAEPR"       , texte      , correct , ordre, points, question); }
+	public static OptionAssociation creerReponseAssociation(String enonce        , Question question                                                    ) { return new OptionAssociation("QAE"         , enonce     , question                         ); }
+	public static Option            creerReponse           (String enonce        , boolean validite  , Question question                                ) { return new Option           ("QCM"         , enonce     , validite, question               ); }
 
 
-	/*
-	 * +-----------------+
-	 * | METHODES METIER |
-	 * +-----------------+
-	 */
+
+	public static void          ouvrirCreerQuestion  ()                      {         new CreerQuestion  (null)       ; }
+	public static void          ouvrirCreerEvaluation()                      {         new CreerEvaluation()           ; }
+	public static void          ouvrirListeQuestion  ()                      {         new ListeQuestion  ()           ; }
+	public static void          ouvrirParametres     ()                      {         new Parametre      ()           ; }
+	public static void          ouvrirAccueil        ()                      {         new Accueil        ()           ; }
+	public static CreerQuestion ouvrirCreerQuestion  (Question qstAModifier) { return (new CreerQuestion(qstAModifier)); }
+
+
+
+	public static void recupererQuestion(Evaluation eval, Notion notion, int tf, int f, int m, int d) { eval.recupererQuestion(notion, tf, f, m, d); }
+
 	
 
-	public static Ressource trouverRessourceParId(String id)
-	{
-		return Metier.trouverRessourceParId(id);
-	}
+	public static Ressource trouverRessourceParId(String id ) { return Metier.trouverRessourceParId(id) ; }
+	public static Notion    trouverNotionParNom  (String nom) { return Metier.trouverNotionParNom  (nom); }
 
-	public static Notion trouverNotionParNom(String nom)
-	{
-		return Metier.trouverNotionParNom(nom);
-	}
 
-	public static String[] getNomsRessources()
-	{
-		return Metier.getNomsRessources();
-	}
 
-	public static String[] getIDsNomsRessources()
-	{
-		return Metier.getIDsNomsRessources();
-	}
+    public static void ajouterRessource(Ressource ressource) { Metier.ajouterRessource(ressource); }
+	public static void ajouterNotion   (Notion    notion   ) { Metier.ajouterNotion   (notion   ); }
+	public static void ajouterQuestion (Question  question ) { Metier.ajouterQuestion (question ); }
 
-	public static String[] getNomsNotions()
-	{
-		return Metier.getNomsNotions();
-	}
 
-	public static List<Ressource> getListRessource()
-	{
-		return Metier.getListeRessources();
-	}
 
-	public static List<Notion> getListNotion()
-	{
-		return Metier.getListeNotions();
-	}
+	public static void supprRessource(Ressource ressource               ) { Metier.supprimerRessource(ressource);                                          Ressource.mettreAJourRessources(); }
+	public static void supprNotion   (Ressource ressource, Notion notion) { Metier.supprimerNotion   (notion   ); Metier.retirerNotion(ressource, notion); Ressource.mettreAJourRessources(); }
+	public static void supprQuestion (Question  question                ) { Metier.supprimerQuestion (question );                                          question .mettreAJourQuestions (); }
 
-	public static List<Question> getListQuestion()
-	{
-		return Metier.getListeQuestions();
-	}
 
-    public static void ajouterRessource(Ressource ressource)
-    
-	{
-        Metier.ajouterRessource(ressource);
-    }
 
-	public static void ajouterNotion(Notion notion)
-	{
-		Metier.ajouterNotion(notion);
-	}
-
-	public static void ajouterQuestion(Question question)
-	{
-		Metier.ajouterQuestion(question);
-	}
-
-	public static void supprRessource(Ressource ressource)
-	{
-		Metier.supprimerRessource(ressource);
-		Ressource.mettreAJourRessources();
-	}
-
-	public static void supprNotion(Ressource ressource, Notion notion)
-	{
-		Metier.supprimerNotion(notion);
-		Metier.retirerNotion(ressource, notion);
-		Ressource.mettreAJourRessources();
-	}
-
-	public static void supprQuestion(Question question)
-	{
-		Metier.supprimerQuestion(question);
-		question.mettreAJourQuestions();
-	}
 
 	/*
-	 * +-------+
-	 * | MAIN  |
-	 * +-------+
+	 * +------+
+	 * | MAIN |
+	 * +------+
 	 */
+
 	public static void main(String[] args)
 	{
 		Controleur controleur = new Controleur();
