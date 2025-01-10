@@ -173,6 +173,7 @@ public class Question
 			controleurFichier.ajouterFichier(""                                           );
 			controleurFichier.ajouterRtf    ("/question" + this.numQuestion + ".rtf"      );
 			controleurFichier.ecrireQuestion("/question" + this.numQuestion + ".rtf", this);
+			controleurFichier.modifierQuestion("/question" + this.numQuestion + ".rtf", this);
 		}
 	}
 

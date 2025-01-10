@@ -239,7 +239,11 @@ public class QuestionReponseUnique extends JFrame
 									+ notionActuelle.getNom() + "/");
 
 					// Enregistrer la question dans un fichier
-					if (ancienneQst == null) question.creerFichierQuestion();
+					if (ancienneQst == null) 
+					{
+						question.creerFichierQuestion();
+						ctrlFichier.modifierQuestion("question" + question.getIdQuestion() + "/question" + question.getIdQuestion(), question);
+					}
 					else 
 					{
 						ctrlFichier.ecrireQuestion("question" + question.getIdQuestion() + "/question" + question.getIdQuestion(), question);
