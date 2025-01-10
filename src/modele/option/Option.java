@@ -81,10 +81,10 @@ public class Option implements IOption
 			"lib/ressources/" + question.getNotion     ().getRessource().getId () +
 			"_"               + question.getNotion     ().getRessource().getNom() +
 			"/"               + question.getNotion     ().getNom      ()          +
-			"/question"       + question.getNumQuestion()
+			"/question"       + question.getIdQuestion()
 		);
 
-		controleurFichier.modifierQuestion("question" + this.question.getNumQuestion(), question);
+		controleurFichier.modifierQuestion("question" + this.question.getIdQuestion(), question);
 	}
 
 
@@ -94,9 +94,9 @@ public class Option implements IOption
 		ControleurFichier controleurFichier = new ControleurFichier(
 			"lib/ressources/" + question.getNotion().getRessource().getId()+"_"+question.getNotion().getRessource().getNom() +
 			"/"               + question.getNotion().getNom()                +
-			"/question"       + (question.getNumQuestion()-1)
+			"/question"       + (question.getIdQuestion()-1)
 		);
 
-		controleurFichier.modifierReponse("/question" + (question.getNumQuestion()-1), this);
+		controleurFichier.modifierReponse("/question" + (question.getIdQuestion()-1), this);
 	}
 }

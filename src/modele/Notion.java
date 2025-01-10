@@ -96,6 +96,9 @@ public class Notion
 	public void setRessource(Ressource ressource) { this.ressource = ressource;                                    }
 	public void setNom      (String nom)          { this.nom       = nom      ; Ressource.mettreAJourRessources(); }
 
+	// à utiliser quand l'ordre des fichiers ne suit pas un ordre naturel (0, 1, 2, 3 etc..)
+	public void setNbQuestion(int nbQuestion)     { this.nbQuestion = nbQuestion;                                  }
+
 
 
 

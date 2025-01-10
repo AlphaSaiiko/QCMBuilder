@@ -286,10 +286,6 @@ public class ControleurFichier
 
 
 
-
-
-
-
 		String ligneEntiere = qst.getType() + ";" + qst.getEnonce() + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";" + qst.getFeedback() + ";";
 		if (qst.getEnsOptions() != null)
 		{
@@ -591,7 +587,7 @@ public class ControleurFichier
 
 	private String stringOptionAssociation(OptionAssociation opt)
 	{
-		return opt.getId() + ";" + opt.getType() + ";" + opt.getEnonce()  + "; question" + opt.getQuestion().getNumQuestion();
+		return opt.getId() + ";" + opt.getType() + ";" + opt.getEnonce()  + "; question" + opt.getQuestion().getIdQuestion();
 	}
 
 	private String stringOptionElimination(OptionElimination opt)

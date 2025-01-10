@@ -233,7 +233,7 @@ public class QuestionReponsesMultiples extends JFrame
 
 					// Enregistrer la question dans un fichier
 					if (ancienneQst == null) question.creerFichierQuestion();
-					else                     ctrlFichier.ecrireQuestion("question" + question.getNumQuestion() + "/question" + question.getNumQuestion(), question);
+					else                     ctrlFichier.ecrireQuestion("question" + question.getIdQuestion() + "/question" + question.getIdQuestion(), question);
 					
 					// Fermer la fenêtre
 					QuestionReponsesMultiples.this.dispose();

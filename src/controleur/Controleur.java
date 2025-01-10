@@ -40,7 +40,8 @@ public class Controleur
 	 */
 	public static void chargerRessourcesEtNotion()
 	{
-		try {
+		try 
+		{
 			Scanner scRes = new Scanner(new FileInputStream("./RessourceEtNotion.csv"));
 
 			String nomRessource;
@@ -83,7 +84,8 @@ public class Controleur
 				
 			}
 
-		} catch (Exception e) {
+		} catch (Exception e) 
+		{
 			System.err.println("Erreur lors du chargement des ressources et des notions : " );
 			e.printStackTrace();
 		}
@@ -97,17 +99,21 @@ public class Controleur
 	 * | CHARGER QUESTIONS  |
 	 * +--------------------+
 	 */
-	public static void chargerQuestion(Notion notion) {
+	public static void chargerQuestion(Notion notion) 
+	{
 		int cpt = 0; // Boucle pour chaque question
+		int numQuestion = -1; // Pour vérifier si il y a un décalage entre la dernière question et cpt, en cas de suppression de questions
 		File dir = new File("./lib/ressources/" + notion.getRessource().getId() + "_" + notion.getRessource().getNom() + "/" + notion.getNom() + "/");
 	
-		if (!dir.exists() || !dir.isDirectory()) {
+		if (!dir.exists() || !dir.isDirectory()) 
+		{
 			System.err.println("Erreur : Le répertoire spécifié n'existe pas ou n'est pas un répertoire.");
 			return;
 		}
 	
 		File[] dossiers = dir.listFiles();
-		if (dossiers == null) {
+		if (dossiers == null) 
+		{
 			System.err.println("Erreur : Le répertoire est vide ou inaccessible.");
 			return;
 		}
@@ -115,17 +121,22 @@ public class Controleur
 		// Trier les dossiers par nom pour assurer un ordre cohérent
 		Arrays.sort(dossiers);
 	
-		for (File dossier : dossiers) {
-			if (dossier.listFiles() != null) {
+		for (File dossier : dossiers) 
+		{
+			if (dossier.listFiles() != null) 
+			{
 				File fichierRTF = new File(dossier, dossier.getName() + ".rtf");
 				System.out.println("Dossier : " + dossier.getName());
 	
-				try (Scanner sc = new Scanner(new FileInputStream(fichierRTF))) {
-					if (sc.hasNextLine()) {
+				try (Scanner sc = new Scanner(new FileInputStream(fichierRTF))) 
+				{
+					if (sc.hasNextLine()) 
+					{
 						String ligneQuestion = sc.nextLine();
 						Object[] ligne = ligneQuestion.split(";");
 	
-						if (ligne.length < 6) {
+						if (ligne.length < 6) 
+						{
 							System.err.println("Erreur : la ligne ne contient pas assez d'éléments.");
 							continue;
 						}
@@ -136,19 +147,25 @@ public class Controleur
 						int temps = Integer.parseInt(String.valueOf(ligne[3]));
 						int difficulte = Integer.parseInt(String.valueOf(ligne[4]));
 						String feedback = String.valueOf(ligne[6]);
+
+						numQuestion = Integer.valueOf(dossier.getName().trim().substring(8));
 	
 						Question tmp = Question.creerQuestion(nbPoints, temps, notion, difficulte, type);
 						tmp.setEnonce(intitule);
 						tmp.setFeedback(feedback);
+						tmp.setNumQuestion(numQuestion);
 						System.out.println("Question créée : " + tmp.getEnonce());
 	
-						if (ligne.length > 7) {
+						if (ligne.length > 7) 
+						{
 							String reponses = String.valueOf(ligne[7]);
-							switch (tmp.getType()) {
+							switch (tmp.getType()) 
+							{
 								case "QCMRU":
 								case "QCMRM":
 									String[] reponsesQCM = reponses.split("\\|");
-									for (String reponseQCM : reponsesQCM) {
+									for (String reponseQCM : reponsesQCM) 
+									{
 										String[] reponse = reponseQCM.split("~");
 										Option o = Controleur.creerReponse(reponse[1], Boolean.parseBoolean(reponse[3]), tmp);
 										tmp.ajouterOption(o);
@@ -159,11 +176,13 @@ public class Controleur
 								case "QAE":
 									String[] reponsesQAE = reponses.split("\\|");
 									OptionAssociation previousOption = null;
-									for (String reponseQAE : reponsesQAE) {
+									for (String reponseQAE : reponsesQAE) 
+									{
 										String[] reponse = reponseQAE.split("~");
 										OptionAssociation currentOption = Controleur.creerReponseAssociation(reponse[1], tmp);
 	
-										if (previousOption != null) {
+										if (previousOption != null) 
+										{
 											previousOption.setAssocie(currentOption);
 											currentOption.setAssocie(previousOption);
 	
@@ -171,19 +190,22 @@ public class Controleur
 											tmp.ajouterOption(currentOption);
 	
 											previousOption = null;
-										} else {
+										} else 
+										{
 											previousOption = currentOption;
 										}
 									}
 	
-									if (previousOption != null) {
+									if (previousOption != null) 
+									{
 										System.err.println("Attention : une réponse reste non associée.");
 									}
 									break;
 	
 								case "QAEPR":
 									String[] reponsesQAEPR = reponses.split("\\|");
-									for (String reponseQAEPR : reponsesQAEPR) {
+									for (String reponseQAEPR : reponsesQAEPR) 
+									{
 										String[] reponse = reponseQAEPR.split("~");
 										OptionElimination o = Controleur.creerReponseElimination(reponse[1], Integer.parseInt(reponse[4]), Double.parseDouble(reponse[5]), Boolean.parseBoolean(reponse[3]), tmp);
 										tmp.ajouterOption(o);
@@ -197,10 +219,14 @@ public class Controleur
 							}
 						}
 					}
-				} catch (FileNotFoundException e) {
+					if (numQuestion != cpt) { notion.setNbQuestion(numQuestion + 1); System.out.println(numQuestion + "!=" + cpt); }
+					else System.out.println(numQuestion + "=" + cpt);
+				} catch (FileNotFoundException e) 
+				{
 					System.err.println("Erreur : Fichier non trouvé - " + fichierRTF.getPath());
 					e.printStackTrace();
-				} catch (Exception e) {
+				} catch (Exception e) 
+				{
 					System.err.println("Erreur lors du chargement des questions.");
 					e.printStackTrace();
 				}
@@ -334,7 +360,8 @@ public class Controleur
 	}
 
     public static void ajouterRessource(Ressource ressource)
-    {
+    
+	{
         Metier.ajouterRessource(ressource);
     }
 

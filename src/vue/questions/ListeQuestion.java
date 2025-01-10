@@ -106,18 +106,26 @@ public class ListeQuestion extends JFrame implements ActionListener
 		lstQuestion.addListSelectionListener(new ListSelectionListener() 
 		{
 			public void valueChanged(ListSelectionEvent e) 
-			{
+		{
+				Notion not = Controleur.trouverNotionParNom(String.valueOf(ListeQuestion.this.lstNotions.getSelectedItem()));
+
 				if (!e.getValueIsAdjusting()) 
 				{
-					Notion not = Controleur.trouverNotionParNom(String.valueOf(ListeQuestion.this.lstNotions.getSelectedItem()));
-
-					for (Question qst : not.getListeQuestions()) 
+					if (not != null)
 					{
-						if (qst.getEnonce() == ListeQuestion.this.lstQuestion.getSelectedValue()) 
+						for (Question qst : not.getListeQuestions()) 
 						{
-							ListeQuestion.this.questionActuelle = qst;
+							if (qst.getEnonce() == ListeQuestion.this.lstQuestion.getSelectedValue()) 
+							{
+								ListeQuestion.this.questionActuelle = qst;
+							}
 						}
 					}
+					else
+					{
+						System.err.println("Erreur : Notion non trouvée");
+					}
+					
 				}
 			}
 		});
@@ -183,8 +191,18 @@ public class ListeQuestion extends JFrame implements ActionListener
 						"lib/ressources/" + notionActuelle.getRessource().getId() + "_"
 								+ notionActuelle.getRessource().getNom() + "/"
 								+ notionActuelle.getNom() + "/");
+								
+				if (this.questionActuelle.getComplements().size() > 0)
+				{
+					for (String fichier : this.questionActuelle.getComplements())
+					{
+						(new ControleurFichier("")).supprimerFichier(fichier);
+					}
+				}
 
-				ctrlFichier.supprimerRtf("question" + (this.questionActuelle.getNumQuestion()-1) + "/question" + (this.questionActuelle.getNumQuestion()-1));
+				ctrlFichier.supprimerRtf("question" + this.questionActuelle.getNumQuestion() + "/question" + this.questionActuelle.getNumQuestion());
+
+
 				majListeQuestion(notionActuelle.getNom());
 			}
 

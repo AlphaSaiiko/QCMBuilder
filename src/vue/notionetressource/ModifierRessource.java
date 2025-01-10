@@ -49,7 +49,7 @@ public class ModifierRessource extends JFrame
 		panelPrincipal.add(texteId, gbc);
 
 		// Label pour le nom de la ressource
-		JLabel labelNom = new JLabel("Nom :");
+		JLabel labelNom = new JLabel("Titre :");
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 1;
