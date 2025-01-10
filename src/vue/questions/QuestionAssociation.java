@@ -238,8 +238,11 @@ public class QuestionAssociation extends JFrame
 
 					// Enregistrer la question dans un fichier
 					if (ancienneQst == null) question.creerFichierQuestion();
-					else                     ctrlFichier.ecrireQuestion("question" + question.getIdQuestion() + "/question" + question.getIdQuestion(), question);
-					
+					else 
+					{
+						ctrlFichier.ecrireQuestion("question" + question.getIdQuestion() + "/question" + question.getIdQuestion(), question);
+						ctrlFichier.modifierQuestion("question" + question.getIdQuestion() + "/question" + question.getIdQuestion(), question);
+					}
 					// Fermer la fenêtre
 					QuestionAssociation.this.dispose();
 					new Accueil();
