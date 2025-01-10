@@ -1,13 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 
-REM Vérifier si un argument est fourni
-if "%1"=="" (
-    echo Erreur : Vous devez fournir le nom de la classe a tester.
-    echo Exemple : test.bat [nom de la classe a tester]
-    exit /b 1
-)
-
 REM Définir les répertoires des sources et des binaires
 set SRC_DIR=src
 set BIN_DIR=bin
@@ -38,14 +31,5 @@ if errorlevel 1 (
     exit /b 1
 )
 
-REM Normaliser le nom de la classe a tester
-set CLASS_TO_TEST=%1
-
-REM Exécuter la classe de test
-echo Execution de la classe de test : %CLASS_TO_TEST%
-java -cp "%BIN_DIR%" test.%CLASS_TO_TEST%
-
-if errorlevel 1 (
-    echo Erreur : Impossible d'executer la classe %CLASS_TO_TEST%.
-    exit /b 1
-)
+REM Exécution de Controleur.class
+java -cp bin controleur.Controleur
