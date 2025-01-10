@@ -609,4 +609,9 @@ public class PanelSaisie extends JPanel
 		this.revalidate();
 		this.repaint   ();
 	}
+
+	public void activerSaisie(boolean b)
+	{
+		this.texte.setEnabled(b);
+	}
 }
