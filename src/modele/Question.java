@@ -97,15 +97,16 @@ public class Question
 	 * +----------+
 	 */
 
-	public void setType       (String            type)                         { this.type             = type       ;                     this.mettreAJourQuestions();   }
-	public void setEnonce     (String            enonce)                       { this.enonce           = enonce     ;                     this.mettreAJourQuestions();   }
-	public void setEnonce     (String            enonce, boolean majQuestions) { this.enonce           = enonce     ; if (majQuestions) { this.mettreAJourQuestions(); } }
-	public void setFeedback   (String            feedback)                     { this.feedback         = feedback   ;                     this.mettreAJourQuestions();   }
-	public void setNbPoints   (int               nbPoints)                     { this.nbPoints         = nbPoints   ;                                                    }
-	public void setTemps      (int               temps)                        { this.temps            = temps      ;                     this.mettreAJourQuestions();   }
-	public void setDifficulte (int               difficulte)                   { this.difficulte       = difficulte ;                     this.mettreAJourQuestions();   }
-	public void setComplements(ArrayList<String> complements)                  { this.listeComplements = complements;                                                    }
-	public void setNotion     (Notion            notion)                       { this.notion           = notion     ;                     this.mettreAJourQuestions();   }
+	public void setType       (String            type                          ) { this.type             = type       ;                     this.mettreAJourQuestions();   }
+	public void setEnonce     (String            enonce                        ) { this.enonce           = enonce     ;                     this.mettreAJourQuestions();   }
+	public void setEnonce     (String            enonce  , boolean majQuestions) { this.enonce           = enonce     ; if (majQuestions) { this.mettreAJourQuestions(); } }
+	public void setFeedback   (String            feedback                      ) { this.feedback         = feedback   ;                     this.mettreAJourQuestions();   }
+	public void setFeedback   (String            feedback, boolean majQuestions) { this.feedback         = feedback   ; if (majQuestions) { this.mettreAJourQuestions(); } }
+	public void setNbPoints   (int               nbPoints                      ) { this.nbPoints         = nbPoints   ;                                                    }
+	public void setTemps      (int               temps                         ) { this.temps            = temps      ;                     this.mettreAJourQuestions();   }
+	public void setDifficulte (int               difficulte                    ) { this.difficulte       = difficulte ;                     this.mettreAJourQuestions();   }
+	public void setComplements(ArrayList<String> complements                   ) { this.listeComplements = complements;                                                    }
+	public void setNotion     (Notion            notion                        ) { this.notion           = notion     ;                     this.mettreAJourQuestions();   }
 
 
 

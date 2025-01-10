@@ -241,6 +241,55 @@ public class ControleurFichier
 
 		qst.setEnonce(enonce, false);
 
+
+
+
+
+
+
+		String feedback;
+
+		feedback = qst.getFeedback();
+		if (aImage(qst.getFeedback(), emplacement))
+		{
+			int indexDernierSlash = emplacement.lastIndexOf("/");
+			new File(emplacement.substring(0, indexDernierSlash + 1) + File.separator + "complements").mkdirs();
+
+			List<String> listeImages = getImages(feedback);
+			for (String image : listeImages)
+			{
+				File fichierSource = new File(image);
+				copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+				qst.ajouterComplement(emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+				feedback = gererImage(feedback, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName(), fichierSource.getName());
+			}
+		}
+
+		if (aPieceJointe(qst.getFeedback(), emplacement))
+		{
+			int indexDernierSlash = emplacement.lastIndexOf("/");
+			new File(emplacement.substring(0, indexDernierSlash + 1) + File.separator + "complements").mkdirs();
+
+			List<String> listePiecesJointes = getPiecesJointes(feedback);
+			for (String pieceJointe : listePiecesJointes)
+			{
+				File fichierSource = new File(pieceJointe);
+				copierFichier(fichierSource, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+				qst.ajouterComplement(emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName());
+				feedback = gererPiecesJointe(feedback, emplacement.substring(0, indexDernierSlash + 1) + "complements/" + fichierSource.getName(), fichierSource.getName());
+			}
+		}
+
+		qst.setFeedback(feedback, false);
+
+
+
+
+
+
+
+
+
 		String ligneEntiere = qst.getType() + ";" + qst.getEnonce() + ";" + qst.getNbPoints() + ";" + qst.getTemps() + ";" + qst.getDifficulte() + ";" + qst.getNotion().getNom() + ";" + qst.getFeedback() + ";";
 		if (qst.getEnsOptions() != null)
 		{
