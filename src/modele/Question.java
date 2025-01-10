@@ -1,11 +1,10 @@
 package modele;
 
+import controleur.Controleur;
+import controleur.ControleurFichier;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import controleur.Controleur;
-import controleur.ControleurFichier;
 import modele.option.IOption;
 import modele.option.Option;
 import modele.option.OptionAssociation;
@@ -23,11 +22,11 @@ public class Question
 	private        int           difficulte          ;
 	private final  int           idQuestion          ;
 	private        int           nbPoints            ;
-	private        int           numQuestion         ;
 	private        int           temps               ;
 	private        List<String>  listeComplements    ;
 	private        List<IOption> listeOptions        ;
 	private        Notion        notion              ;
+	private        String        numQuestion         ;
 	private        String        type                ;
 	private        String        enonce              ;
 	private        String        feedback            ;
@@ -46,13 +45,17 @@ public class Question
 		this.difficulte       = difficulte                  ;
 		this.idQuestion       = ++Question.compteurQuestion ;
 		this.nbPoints         = nbPoints                    ;
-		this.numQuestion      = notion.getNbQuestion()      ;
 		this.temps            = temps                       ;
 		this.listeComplements = new ArrayList<>()           ;
 		this.listeOptions     = new ArrayList<>()           ;
 		this.notion           = notion                      ;
 		this.type             = type                        ;
 		this.feedback         = ""                          ;
+
+		if (notion.getNbQuestion() < 10)
+			this.numQuestion = "0" + notion.getNbQuestion();
+		else
+			this.numQuestion = "" + notion.getNbQuestion();
 
 		notion.ajouterQuestion(this);
 		Controleur.ajouterQuestion(this);
@@ -79,12 +82,12 @@ public class Question
 	public IOption       getOptions    (int ind) { return this.listeOptions.get(ind); }
 	public int           getDifficulte ()        { return this.difficulte           ; }
 	public int           getIdQuestion ()        { return this.idQuestion           ; }
-	public int           getNumQuestion()        { return this.numQuestion          ; }
 	public int           getNbPoints   ()        { return this.nbPoints             ; }
 	public int           getTemps      ()        { return this.temps                ; }
 	public List<String>  getComplements()        { return this.listeComplements     ; }
 	public List<IOption> getEnsOptions ()        { return this.listeOptions         ; }
 	public Notion        getNotion     ()        { return this.notion               ; }
+	public String        getNumQuestion()        { return this.numQuestion          ; }
 	public String        getType       ()        { return this.type                 ; }
 	public String        getEnonce     ()        { return this.enonce               ; }
 	public String        getFeedback   ()        { return this.feedback             ; }
@@ -110,7 +113,12 @@ public class Question
 	public void setNotion     (Notion            notion     )                    { this.notion           = notion     ;                     this.mettreAJourQuestions();   }
 
 	// à utiliser quand l'ordre des fichiers ne suit pas un ordre naturel (0, 1, 2, 3 etc..)
-	public void setNumQuestion(int numQuestion) { this.numQuestion = numQuestion; }
+	public void setNumQuestion(int numQuestion) { 
+		if (numQuestion < 10)
+			this.numQuestion = "0" + numQuestion;
+		else
+			this.numQuestion = "" + numQuestion;
+	}
 
 
 

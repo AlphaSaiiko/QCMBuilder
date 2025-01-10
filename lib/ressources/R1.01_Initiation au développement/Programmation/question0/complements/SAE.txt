@@ -1,0 +1,113 @@
+ROUND 1
+
+Introduction
+
+Bonjour, et merci de nous accueillir aujourd'hui.
+Nous somme l’équipe 6, notre équipe est constitué de Ethan, Quentin , Antonin ,
+Nahel et Antoine (moi), nous sommes étudiant en deuxième année de BUT
+Informatique, et nous avons répondu à votre appel d'offre concernant le
+développement de l'application pédagogique numérique pour les étudiants de
+l'IUT du Havre qui se nomme PromInfo .
+
+Nous sommes particulièrement enthousiastes à l'idée de travailler sur ce projet,
+car il correspond parfaitement à nos compétences en matière de
+développement d'outils interactifs et éducatifs. Nous avons bien compris que
+votre objectif est de favoriser l'auto-évaluation et l'engagement des étudiants
+dans leur processus de révision, et nous avons déjà des idées pour créer une
+solution innovante, intuitive et adaptée à leurs besoins.
+
+Aujourd'hui, nous aimerions vous présenter notre approche, discuter de vos
+attentes spécifiques, et voir comment nous pouvons collaborer pour atteindre
+vos objectifs dans les délais fixés.
+
+
+
+
+
+
+
+
+Contexte et objectifs du projet
+
+Quel est l'objectif principal de l'application ?
+
+Quels sont les problèmes ou les besoins que l'application doit résoudre ?
+
+Quelles sont les attentes de l'entreprise vis-à-vis du projet ? (Succès à court
+terme et long terme)
+
+Qui sont les utilisateurs cibles ? (Profil des utilisateurs : étudiants, enseignants,
+autres personnels)
+
+Y a-t-il des concurrents ou des applications similaires ? Si oui, que faut-il en
+tirer ?
+
+
+Fonctionnalités et exigences fonctionnelles
+
+Quelles sont les fonctionnalités clés que l'application doit proposer ?
+
+Comment ces fonctionnalités doivent-elles être priorisées ? (Fonctionnalités
+essentielles vs secondaires)
+
+De quelle manière souhaitez-vous que les utilisateurs interagissent avec 
+votre application ?
+
+Quelles sont les fonctionnalités spécifiques liées à l'auto-évaluation des
+étudiants ?
+
+
+Ergonomie et expérience utilisateur (UX/UI)
+
+Y a-t-il des attentes particulières en termes de design de l’interface utilisateur ?
+
+L'application doit-elle suivre des standards ou des chartes graphiques
+spécifiques ?
+
+L’interface doit-elle être adaptable à plusieurs dispositifs ? (Responsivité pour
+mobile, tablette, PC)
+
+Y a-t-il des préférences pour le type de navigation ? (Menu classique,
+navigation à onglets, etc.)
+
+
+Spécifications techniques
+
+Quel langage de programmation ou framework est préféré pour le
+développement ?
+
+Comment les mises à jour et les évolutions futures du projet seront-elles gérées
+?
+
+
+ROUND 2
+
+présentation orale
+
+Choisir le nombre de réponse souhaitée plusieurs obligatoires ou une seule
+Les questions peuvent avoir des timers différents comme sans timer
+Faire un bilan des points reçus.
+
+Enseignants : Java
+Elèves : HTML/CSS/JS
+
+Organiser les idées
+donner des exemples concrets
+Attention au vocabulaire
+
+ROUND 3
+
+RTF Rich text format, le texte devra être justifié ou aligner à gauche.
+Ajouter des photos / vidéos lors des questions, des réponses et des explications (pdf).
+Ajouter un timer sur chaque question et à partir de la création du questionnaire décider si on prend ou non en compte le timer associé.
+Le questionnaire est généré automatiquement à partir des ressources, de leur chapitre et finalement de leur niveau de difficulté.
+Chaque question a un niveau de difficultés qui sera indiqué à chaque question (4). ex : très facile, facile, moyen, difficile.
+Bouton radio = 1 réponse, Cases à cocher = plusieurs réponses.
+RAPPEL : Soit toutes les réponses sont bonnes soit c'est tout faux.
+Résumé des résultats : le score doit rester affiché en haut de la page au fur et à mesure du défilement.
+Garder les questions à ordonner.
+Enlever le tableau Vrai/Faux et les questions avec menu déroulant.
+Ajouter des indices par questions, indices qui sont paramétrés lors de la création de la question, au même moment décide du nombre de points qui s'enlève.
+
+
+

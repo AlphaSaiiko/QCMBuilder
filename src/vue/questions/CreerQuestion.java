@@ -286,8 +286,6 @@ public class CreerQuestion extends JFrame implements ActionListener
 				
 				int minute = Integer.parseInt(chaineTemps.substring(0, chaineTemps.indexOf(":")));
 				int seconde = Integer.parseInt(chaineTemps.substring(chaineTemps.indexOf(":") + 1, chaineTemps.length()));
-
-				System.out.println(chaineTemps + " = " + minute+":"+seconde);
 	
 				tempsReponse = minute * 60 + seconde;
 			} catch (Exception ex) 
