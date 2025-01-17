@@ -27,7 +27,7 @@
 3. Voici quelques sreen du projet : 
 
 ### Page d'accueil
-![page d'acceuil](image.png)
+![page d'acceuil](Accueil.png)
 
 
 
